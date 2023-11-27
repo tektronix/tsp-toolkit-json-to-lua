@@ -1,6 +1,6 @@
 {
-  "name": "@trebuchet/jsonToLuaParser",
-  "version": "0.6.0",
+  "name": "@trebuchet/keithley_instrument_libraries",
+  "version": "0.10.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.keithley.com/trebuchet/teaspoon/jsontoluaparser.git"
+    "url": "git+https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua.git"
   },
   "author": "",
   "license": "ISC"
