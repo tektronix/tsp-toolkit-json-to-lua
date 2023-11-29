@@ -7,6 +7,7 @@ namespace jsonToLuaParser
 {
     class Utility
     {
+
         public class Example_Info
         {
             public string example { get; set; }
@@ -16,13 +17,13 @@ namespace jsonToLuaParser
         {
             public string Name { get; set; }
             public string Description { get; set; }
+            public string enums { get; set; }
             public string Type { get; set; }
         }
         public class CommandEnum
         {
             public string enum_number { get; set; }
             public string enum_member { get; set; }
-            public string enum_desc { get; set; }
         }
         public enum CommandType
         {
@@ -35,19 +36,20 @@ namespace jsonToLuaParser
         public class CommandInfo
         {
             public string name { get; set; }
+            public string webhelpfile { get; set; }
             public string signature { get; set; }
             public string command_return { get; set; }
             public string description { get; set; }
             public CommandType command_type { get; set; }
             public string[] usage { get; set; }
-            public CommandEnum[] command_enum { get; set; }
             public string default_value { get; set; }
             public string details { get; set; }
             public Example_Info[] example_info { get; set; }
             public string related_commands { get; set; }
             public ParamInfo[] param_info { get; set; }
             public string[] overloads { get; set; }
-            public string supportedModels { get; set; } 
+            public string supportedModels { get; set; }
+            public string tsplink_supported { get; set; }
         }
 
         public class TriggerEventIdInfo
@@ -64,18 +66,16 @@ namespace jsonToLuaParser
             return cmds;
         }
 
-        public static IList<CommandInfo> PopulateCommands(ref JObject obj)
+        public static IList<CommandInfo> PopulateCommands(ref JObject obj, string feild)
         {
-            /* IList<string> keys = obj.Properties().Select(p => p.Name).ToList();
-            IEnumerable<JToken> prop =  obj.Properties().Select(p =>p.First());
-            foreach (var key in keys){} */
-
-            IList<CommandInfo> cmdList = obj["commands"].ToArray().Select(p => new CommandInfo
+            IList<CommandInfo> cmdList = obj[feild].ToArray().Select(p => new CommandInfo
             {
                 name = (string)p["name"],
+                webhelpfile = (string)p["webhelpfile"],
                 signature = (string)p["signature"],
+                tsplink_supported = (string)p["tsp_link"],
                 description = (string)p["description"],
-                command_type = ((string)p["type"] == "Function\n" ? CommandType.Function : ((string)p["type"] == "Attribute (RW)\n" ? CommandType.Attribute_RW : CommandType.Attribute_RO)),
+                command_type = ((string)p["type"] == "Function\n" ? CommandType.Function : ((string)p["type"] == "Attribute (RW)\n" ? CommandType.Attribute_RW : ((string)p["type"] == "Attribute (Ro)\n") ? CommandType.Attribute_RO : CommandType.Attribute_WO)),
                 default_value = (string)p["default_value"],
                 usage = p["usage"].ToObject<string[]>(),
                 overloads = p["overloads"].ToObject<string[]>(),
@@ -91,209 +91,222 @@ namespace jsonToLuaParser
                 {
                     Name = pi["name"].ToString(),
                     Description = pi["description"].ToString(),
-                    Type = pi["type"].ToString()
-                }).ToArray(),
-                command_enum = p["enum_data"].ToArray().Select(pi => new CommandEnum
-                {
-                    enum_number = (string)pi["enum number"],
-                    enum_member = (string)pi["enum"],
-                    enum_desc = (string)pi["enum_desc"],
+                    enums = pi["enum"].ToString(),
+                    Type = pi["type"].ToString(),
                 }).ToArray(),
                 related_commands = "TODO",
                 supportedModels = (string)p["supported_models"]
-            }).ToList();
 
+            }).ToList();
 
             return cmdList;
         }
 
-        public static IList<TriggerEventIdInfo> PopulateTriggerEventID(ref JObject obj)
+        public static bool arrayCheck(string[] arr, string str, string type_name, out string table)
         {
-            IList<TriggerEventIdInfo> trigger_eventId = obj["trigger_eventId"].ToArray().Select(p => new TriggerEventIdInfo
+            table = "";
+            foreach (var item in arr)
             {
-                event_id = (string)p["event_id"],
-                event_desc = (string)p["desc"],
-            }).ToList();
-
-            return trigger_eventId;
+                if (str.Contains(item))
+                {
+                    table = str.Replace(item, type_name);
+                    return true;
+                }
+                else
+                    return false;
+            }
+            return false;
         }
-
-        public static void PrintFields(int depth, ref Dictionary<string, Dictionary<string, CommandInfo>>[] instrTable, ref string outStr, string item)
+        public static void PrintFields(int depth, string help_file_path, ref Dictionary<string, Dictionary<string, CommandInfo>>[] instrTable, ref string outStr, ref string tsplinkStr, ref string[] arrList, string item)
         {
+            string table_name = "";
+            string type_name = "";
             for (int i = 0; i < depth; i++)
             {
                 foreach (var keyValuePair in instrTable[i])
                 {
-                    foreach (var keyvalue in keyValuePair.Value)
+                    string class_data = "";
+                    if (item != "null")
                     {
-                        if (!keyvalue.Value.supportedModels.Contains(item))
+                        foreach (var keyvalue in keyValuePair.Value)
                         {
-                            return;
+                            bool a = keyvalue.Value.supportedModels.Contains(item);
+                            if (a == true && !item.Contains("-L") && (item.Contains("2604B") || item.Contains("2614B") || item.Contains("2634B")))
+                            {
+                                return;
+                            }
+                            continue;
                         }
                     }
-                    string table_name = "";
 
-                    if (keyValuePair.Key.Contains("N"))
-                        table_name = keyValuePair.Key.Remove(keyValuePair.Key.Length - 3, 3);
-                    else
-                        table_name = keyValuePair.Key;
-
-                    outStr += "---\n";
-
-                    if (table_name == "digio.trigger")
-                    {
-                        outStr += "---@type DigioTrigger[]" + "\n";
-                        outStr += table_name + " = {}\n";
+                    if (keyValuePair.Key.Contains("localnode.settimme()"))
                         continue;
-                    }
-                    else if (table_name == "trigger.blender")
+                    //Handling Arrays in commands
+                    if (keyValuePair.Key.Contains("[N]") || keyValuePair.Key.Contains("[Y]") || keyValuePair.Key.Contains("[slot]") || keyValuePair.Key.Contains("[1]") || keyValuePair.Key.Contains("[X]"))
                     {
-                        outStr += "---@type TriggerBlender[]" + "\n";
-                        outStr += table_name + " = {}\n";
-                        continue;
-                    }
-                    else if (table_name == "trigger.timer")
-                    {
-                        outStr += "---@type TriggerTimer[]" + "\n";
-                        outStr += table_name + " = {}\n";
-                        continue;
-                    }
-                    else if (table_name == "trigger.generator")
-                    {
-                        outStr += "---@type TriggerGenerator[]" + "\n";
-                        outStr += table_name + " = {}\n";
-                        continue;
-                    }
-                    else if (table_name == "lan.trigger")
-                    {
-                        outStr += "---@type LanTrigger[]" + "\n";
-                        outStr += table_name + " = {}\n";
-                        continue;
-                    }
-                    else if (table_name == "tsplink.trigger")
-                    {
-                        outStr += "---@type TspLinkTrigger[]" + "\n";
-                        outStr += table_name + " = {}\n";
-                        continue;
-                    }
-
-                    outStr += "---\n";
-                    if (table_name == "digio" || table_name == "tsplink" || table_name == "lan")
-                    {
-                        continue;
-                    }
-
-                    if (!table_name.Contains("bufferVar"))
-                    {
-                        outStr += "---@class " + table_name + "\n";
-                        if (i == 0)
-                            outStr += table_name + " = {}\n";
+                        if (keyValuePair.Key.Contains("[N]"))
+                        {
+                            table_name = keyValuePair.Key.Replace("[N]", "");
+                            type_name = keyValuePair.Key.Replace("[N]", "|").Split('|')[0].Replace(".", "") + "Arr";
+                        }
+                        else if (keyValuePair.Key.Contains("[Y]"))
+                        {
+                            table_name = keyValuePair.Key.Replace("[Y]", "");
+                            type_name = keyValuePair.Key.Replace("[Y]", "|").Split('|')[0].Replace(".", "") + "Arr";
+                        }
+                        else if (keyValuePair.Key.Contains("[1]"))
+                        {
+                            table_name = keyValuePair.Key.Replace("[1]", "");
+                            type_name = keyValuePair.Key.Replace("[1]", "|").Split('|')[0].Replace(".", "") + "Arr";
+                        }
+                        else if (keyValuePair.Key.Contains("[slot]"))
+                        {
+                            table_name = keyValuePair.Key.Replace("[slot]", "");
+                            type_name = keyValuePair.Key.Replace("[slot]", "|").Split('|')[0].Replace(".", "") + "Arr";
+                        }
                         else
-                            outStr += table_name + " = {}\n";
-                    }
+                        {
+                            table_name = keyValuePair.Key.Replace("[X]", "");
+                            type_name = keyValuePair.Key.Replace("[X]", "|").Split('|')[0].Replace(".", "") + "Arr";
+                        }
 
+                        if (!arrList.Contains(type_name))
+                        {
+                            arrList = arrList.Append(type_name).ToArray();
+                            class_data += "---@class " + type_name + "\n";
+                            class_data += type_name + " = {}\n\n";
+
+                            class_data += "---@type " + type_name + "[]\n";
+                            class_data += table_name + " = {}\n";
+                        }
+                        else
+                        {
+                            class_data += "---@type " + type_name + "[]\n";
+                            string rem = "";
+                            if (keyValuePair.Key.Contains("[N]"))
+                                rem = keyValuePair.Key.Replace("[N]", "|").Split('|')[1];
+                            else if (keyValuePair.Key.Contains("[Y]"))
+                                rem = keyValuePair.Key.Replace("[Y]", "|").Split('|')[1];
+                            else if (keyValuePair.Key.Contains("[1]"))
+                                rem = keyValuePair.Key.Replace("[1]", "|").Split('|')[1];
+                            else if (keyValuePair.Key.Contains("[X]"))
+                                rem = keyValuePair.Key.Replace("[X]", "|").Split('|')[1];
+                            else
+                                rem = keyValuePair.Key.Replace("[slot]", "|").Split('|')[1];
+                            class_data += type_name + rem + " = {}\n";
+                        }
+
+                    }
+                    else
+                    {
+                        //table_name = keyValuePair.Key.Replace("[1]",""); //DMM6500 slot[1]
+                        table_name = keyValuePair.Key;
+                        if (!table_name.Contains("bufferVar") && !table_name.Contains(".setblock()"))
+                        {
+                            class_data += "---@class " + table_name + "\n";
+                            if (i == 0)
+                                class_data += table_name + " = {}\n";
+                            else
+                                class_data += table_name + " = {}\n";
+                        }
+                    }
+                    outStr += class_data;
+                    outStr += "\n\n";
+
+                    bool class_data_populated = false;
                     foreach (var keyvalue in keyValuePair.Value)
                     {
-                        HelpContent(keyvalue.Value, ref outStr, keyValuePair.Key, keyvalue.Key);
-                        /* if(cmdinfo.command_type != CommandType.Function)                        
-                            outStr += table + "." + attr + " = 0\n";                         
-                        else{
-                            foreach (var param in cmdinfo.param_info)                            
-                                outStr += "---@param " + param.Name + " any " + param.Description + "\n";                            
-                            outStr += "function " +  cmdinfo.signature + " end\n";
-                        } */
+                        HelpContent(keyvalue.Value, help_file_path, ref outStr, ref tsplinkStr, class_data, class_data_populated, keyValuePair.Key, keyvalue.Key, false);
+                        class_data_populated = true;
                     }
-
                 }
             }
         }
 
-        public static void PrintFunctions(ref IList<CommandInfo> cmdList, ref string outStr, string item)
+        public static void HelpContent(CommandInfo cmd, string help_file_path, ref string outStr, ref string tsplinkStr, string class_data, bool class_data_populated, string table, string attr, bool directCall)
         {
-            foreach (var cmd in cmdList)
-            {
-                if (!cmd.supportedModels.Contains(item))
-                {
-                    return;
-                }
-                // if (cmd.name.Contains("digio.trigger[N]") || cmd.name.Contains("tsplink.trigger[N]") || cmd.name.Contains("lan.trigger[N]")) //priv
-                if (cmd.name.Contains("[N]"))
-                    continue;
-                if(cmd.name.Contains("display.loadmenu.catalog()"))
-                    continue;
-                /* if(cmd.name.Contains("script.factory.catalog()"))
-                    continue;
-                if(cmd.name.Contains("script.user.catalog()"))
-                    continue;
-                if(cmd.name.Contains("userstring.catalog()"))
-                    continue;    */ 
+            string command_help = "";
+            if (cmd.name.Contains("node[N].execute()"))
+                System.Console.WriteLine(cmd.name);
 
-                //HelpContent(cmd,ref outStr, "","");
-                if (cmd.command_type == CommandType.Function)
-                {
-                    HelpContent(cmd, ref outStr, "", "");
-                }
-            }
-        }
-
-        public static void HelpContent(CommandInfo cmd, ref string outStr, string table, string attr)
-        {
             string[] example = new string[] { };
-            string example_description = "";
-            string enum_class ="";
-            if (cmd.command_type != CommandType.Function)
+            string[] enum_class = new string[] { };
+
+            #region Enum_Population
+            foreach (var param in cmd.param_info)
             {
-                enum_class = cmd.name.Replace(".", "");
-                if (cmd.command_enum.Length > 0 && (table !="format" && table !="localnode" && table !="serial" && table !="display.smua" && table !="display.smub"))
-                {                    
-                    outStr += "\n";
-                    foreach (var ele in cmd.command_enum)
-                    {                        
-                        ele.enum_member = ele.enum_member.Remove(0,1);
-                        if(ele.enum_desc != "")
-                            ele.enum_desc = ele.enum_desc.Remove(0,1);
-                        ele.enum_number = ele.enum_number.Remove(ele.enum_number.Length-1,1);
-                        outStr += ele.enum_member + " = " + ele.enum_number + "\n";
-                    }                    
-                    outStr += "---@alias " + enum_class +"\n";
-                    foreach (var ele in cmd.command_enum)
+                if (cmd.usage.Length == 0)
+                    continue;
+                else if ((cmd.command_type == CommandType.Attribute_RW) && (cmd.usage.Length == 1) && (!cmd.usage[0].Contains(param.Name)))
+                    continue;
+                else if ((cmd.command_type == CommandType.Attribute_RW) && (cmd.usage.Length > 1) && (!cmd.usage[0].Contains(param.Name) || !cmd.usage[1].Contains(param.Name)))
+                    continue;
+                else if ((cmd.command_type == CommandType.Attribute_RO) && (!cmd.usage[0].Contains(param.Name)))
+                    continue;
+                else if ((cmd.command_type == CommandType.Function) && ((!cmd.signature.Contains(param.Name) && !cmd.command_return.Contains(param.Name))) && cmd.name != "eventlog.suppress()")
+                    continue;
+                else if (param.enums != "")
+                {
+                    string[] enum_data = param.enums.Split('|');
+                    command_help += "\n";
+                    foreach (var data in enum_data)
                     {
-                        outStr += "---|`" + ele.enum_member + "` #" + ele.enum_desc + "\n";
+                        command_help += data.Split(' ')[0] + " = " + data.Split(' ')[1] + "\n";
                     }
+                    command_help += "\n---@alias " + param.Type + "\n";
+                    foreach (var data in enum_data)
+                    {
+                        command_help += "---|`" + data.Split(' ')[0] + "`\n";
+                    }
+                    command_help += "\n";
                 }
             }
-            outStr += "\n";
+            //}
+            command_help += "\n";
+            #endregion            
+
+            var helpFilePath = $@"{help_file_path}/{cmd.webhelpfile}";
+            command_help += "\n--- **" + cmd.description + "**\n---\n"
+            + "--- *Type:*  " + cmd.command_type + "\n---\n"
+            + "--- *Details:*<br>\n--- " + cmd.details + "\n---\n"
+            + "---[command help](command:kic.viewHelpDocument?[\"" + helpFilePath + "\"])" + "\n---\n"
+            + "---<br>*Examples:*<br>\n"
+            + "--- ```lua\n";
 
             foreach (var x in cmd.example_info)
             {
-                string example1 = x.example;
-                example = example1.Split(';');
-                example_description = x.description;
+                var exmp = x.example.Split(";");
+                foreach (var item in exmp)
+                {
+                    command_help += "--- " + item + "\n";
+                }
+                //outStr += "--- " + x.example + "\n"
+                command_help += "--- --" + x.description;
+            }
+            command_help += "--- ```\n";
+
+            if (cmd.name.Contains("trigger.BLOCK_"))
+            {
+                command_help += "--- Additional paramteres are:\n";
+                foreach (var param in cmd.param_info)
+                {                    
+                    if (param.Name != "blockNumber" && param.Name != cmd.name)
+                    {
+                        command_help +="--- - *"+ param.Name +"*: " + param.Description +"<br>\n";
+                        if (param.enums != "")
+                        {
+                            string[] enum_data = param.enums.Split('|');
+                            //command_help += "---\n--- This has a paraamter **" + param.Name + "** , that accepets following enum inputs:\n";
+                            foreach (var data in enum_data)
+                            {
+                                command_help += "---    ```" + data.Split(' ')[0] + "```<br>\n";
+                            }
+                        }
+                    }
+                }
             }
 
-            outStr += "\n--- **" + cmd.description + "**\n---\n"
-                        + "--- *Type:*  " + cmd.command_type + "\n---\n"
-                        + "--- *Details:*<br>\n--- " + cmd.details + "\n---\n"
-                        + "---<br>*Examples:*<br>\n"
-                        + "--- ```lua";
-
-            foreach (var x in example)
-                outStr += "\n--- " + x;
-            outStr += " --" + example_description;
-            outStr += "\n--- ```\n";
-
-            string[] string_param_list = new string[] { };
-
-            /* if(cmd.signature.Contains("\""))
-            {
-                int start = cmd.signature.IndexOf("(") +1;
-                int end = cmd.signature.IndexOf(")",start);
-                string_param_list = cmd.signature.Split('\"','\"');
-
-                cmd.signature =  cmd.signature.Replace("\"","");
-            } */
-
-            if (table.Contains("bufferVar"))
+            /* if (table.Contains("bufferVar"))
             {
                 if (cmd.signature.Contains("[N]"))
                 {
@@ -302,166 +315,308 @@ namespace jsonToLuaParser
                 }
                 else
                 {
-                    outStr += "bufferMethods." + attr + "= 0\n";
+                    if (cmd.command_type == CommandType.Function)
+                        outStr += "function bufferMethods." + attr + "end \n";
+                    else
+                        outStr += "bufferMethods." + attr + "= 0\n";
                 }
-                return;
-            }
-            /* if(cmd.name.Contains("bufferVar"))
-            {
-                outStr += "---@type smua_buffers | buffer_return\n";
-                outStr += "local "+ attr + " = {}\n";
                 return;
             } */
 
             if (cmd.command_type == CommandType.Function)
-            {                
+            {
                 foreach (var param in cmd.param_info)
                 {
                     int start = cmd.signature.IndexOf("(") + 1;
                     int end = cmd.signature.IndexOf(")", start);
-                    string[] s = cmd.signature.Substring(start, end - start).Replace(" ","").Split(',');
-                    if (s.Contains(param.Name) || (param.Name == "X" && s.Contains("smuX")))
+                    string[] s;
+                    try
+                    {
+                        s = cmd.signature.Substring(start, end - start).Replace(" ", "").Split(',');
+                    }
+                    catch (System.Exception)
+                    {
+                        s = new string[] { };
+                    }
+                    if (s.Contains(param.Name))
                     {
                         string temp = "\"" + param.Name + "\"";
+                        command_help += "---@param " + param.Name;
+
                         if (s.Contains(temp))
-                        {
-                            outStr += "---@param " + param.Name +" " +param.Type+" " + param.Description + "\n";
-                            continue;
-                        }
-                        if (param.Name.Contains("bufferVar"))
-                        {
-                            outStr += "---@param " + param.Name + " bufferMethods " + param.Description + "\n";
-                            continue;
-                        }   
-                        if(param.Name.Contains("X"))
-                        {
-                            outStr += "---@param smu" + param.Name + " "+param.Type+" " + param.Description + "\n";
-                            continue;
-                        }                     
-                        //outStr += "---@param " + param.Name + " string " + param.Description + "\n";
-                        outStr += "---@param " + param.Name + " "+param.Type+" " + param.Description + "\n";
-                        //cmd.signature =  cmd.signature.Replace("\"","");
-                        //continue;
+                            command_help += " " + param.Type + " ";
+                        //else
+                        command_help += " " + param.Type + " ";
+                        command_help += param.Description + "\n";
                     }
                     else if (cmd.command_return.Contains(param.Name))
                     {
-                        if (param.Name.Contains("fileVar"))
-                        {
-                            outStr += "---@return " + "io_object " + param.Name + " " + param.Description + "\n";
-                            continue;
-                        }
+                        command_help += "---@return ";
+
+                        if (param.Name.Contains("fileNumber"))
+                            command_help += "file_object ";
                         else if (param.Name.Contains("scriptVar"))
-                        {
-                            outStr += "---@return " + "script_object " + param.Name + " " + param.Description + "\n";
-                            continue;
-                        }
-                        outStr += "---@return " + param.Type +" " + param.Name + " " + param.Description + "\n";
+                            command_help += "script_object ";
+                        else if (param.Name.Contains("bufferName") || param.Name.Contains("bufferVar"))
+                            command_help += "bufferMethods ";
+                        else if (param.Name.Contains("connectionID"))
+                            command_help += "tsplinkConnectionID ";
+                        else
+                            command_help += param.Type + " ";
+
+                        command_help += param.Name + " " + param.Description + "\n";
                     }
+                    else if (cmd.name == "display.input.option()")
+                    {
+                        command_help += "---@return displayInputOption displayOption";
+                    }
+                    /* else if(cmd.name == "eventlog.suppress()")
+                    {
+                        outStr += "---@param eventType eventlogsuppresseventType\n";
+                    } */
                 }
                 cmd.signature = cmd.signature.Replace("\"", "");
-                /* // process command signuture which is not format as signature in help file
-                // example :for name in script.factory.catalog() do body end
-                if (cmd.signature.Contains(".catalog()"))
-                {
-                    System.Console.WriteLine(cmd.signature);
-                    cmd.signature = cmd.signature.Split(' ')[3];
-                }
-                outStr += "function " + cmd.signature + " end\n"; */
             }
 
-            
-            if (cmd.command_type != CommandType.Function)
-            {               
-                if (cmd.command_enum.Length > 0 && (table !="format" && table !="localnode"))
+            if (cmd.command_type != CommandType.Function && (cmd.command_type != CommandType.Attribute_WO && !cmd.name.Contains(" trigger.BLOCK_")))
+            {
+                foreach (var parm in cmd.param_info)
                 {
-                    outStr += "---@type " + enum_class + "\n";
+                    if (parm.enums != "")
+                    {
+                        if (cmd.usage[0].Contains(parm.Name))// || cmd.usage[1].Contains(parm.Name))
+                            command_help += "---@type " + parm.Type + "\n";
+                    }
                 }
-                if (table.Contains("scriptVar"))
+
+                if (table.Contains("[N]") || table.Contains("[Y]") || table.Contains("[slot]") || table.Contains("[1]") || table.Contains("[X]"))
                 {
-                    outStr += "script_object" + "." + attr + " = 0\n";
+                    string[] a = table.Split('[');
+                    string type_name = a[0].Replace(".", "") + "Arr";
+                    if (table.Contains("[N]"))
+                    {
+                        a[1] = a[1].Replace("N]", "");
+                    }
+                    if (table.Contains("[Y]"))
+                    {
+                        a[1] = a[1].Replace("Y]", "");
+                    }
+                    if (table.Contains("[slot]"))
+                    {
+                        a[1] = a[1].Replace("slot]", "");
+                    }
+                    if (table.Contains("[1]"))
+                    {
+                        a[1] = a[1].Replace("1]", "");
+                    }
+                    if (table.Contains("[X]"))
+                    {
+                        a[1] = a[1].Replace("X]", "");
+                    }
+
+                    if (a[1] != "")
+                    {
+                        if (attr.Contains("stimulus") && !attr.Contains("["))
+                        {
+                            command_help += "---@type eventID|0\n";
+                        }
+                        command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+                    }
+                    else
+                    {
+                        if (attr.Contains("stimulus["))
+                        {
+                            command_help += "---@type eventID[]|0\n";
+                            attr = attr.Remove(attr.Length - 3, 3);
+                            command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+                        }
+                        else if (attr.Contains("stimulus") && !attr.Contains("["))
+                        {
+                            command_help += "---@type eventID|0\n";
+                            command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+                        }
+                        else
+                            command_help += type_name + "." + attr + "= 0\n\n";
+                    }
+
+                }
+                else if (table.Contains("bufferVar") || table.Contains("bufferName"))
+                {
+                    if (cmd.signature.Contains("[N]"))
+                    {
+                        command_help += "---@type integer[]\n";
+                        command_help += "bufferMethods." + attr + "= {}\n";
+                    }
+                    else
+                    {
+                        outStr += "bufferMethods." + attr + "= 0\n";
+                    }
+                    //outStr += "bufferMethods" + "." + attr + " = 0\n\n";
+                }
+                else if (table.Contains("scriptVar"))
+                {
+                    command_help += "script_object" + "." + attr + " = 0\n\n";
                 }
                 else if (attr.Contains("address[N]"))
                 {
-                    outStr += "---@type integer[]\n";
-                    attr = attr.Replace("[N]","");
-                    outStr += table + "." + attr + " = 0\n";
-                }       
-                else if(attr.Contains("stimulus"))
+                    command_help += "---@type integer[]\n";
+                    attr = attr.Replace("[N]", "");
+                    command_help += table + "." + attr + " = 0\n\n";
+                }
+                else if (attr.Contains("stimulus"))
                 {
-                    outStr += "---@type eventID|0\n";
-                    outStr += table + "." + attr + "= 0\n";
-                }  
-                else if(attr.Contains("EVENT_ID"))   
+                    command_help += "---@type triggerEvents|0\n";
+                    command_help += table + "." + attr + "= 0\n\n";
+                }
+                else if (attr.Contains("[N]"))
                 {
-                    outStr += "---@type eventID\n";
-                    outStr += table + "." + attr + "= nil\n";
-                }    
+                    command_help += "---@type integer[]\n";
+                    attr = attr.Remove(attr.Length - 3, 3);
+                    command_help += table + "." + attr + "= 0\n\n";
+                }
+                else if (attr.Contains("level") && table.Contains("smu.source.protect")) //2461
+                {
+                    command_help += "---@type smuSourceProtectionLevel\n";
+                    command_help += table + "." + attr + " = 0\n\n";
+                }
+                else if (attr.Contains("EVENT_ID"))
+                {
+                    command_help += "---@type eventID\n";
+                    command_help += table + "." + attr + "= nil\n";
+                }
                 else
                 {
-                    outStr += table + "." + attr + " = 0\n";
+                    if (directCall)
+                    {
+                        cmd.name = cmd.name.Replace("*", "star_");
+                        command_help += cmd.name + "= 0\n\n";
+                    }
+                    else
+                        command_help += table + "." + attr + " = 0\n\n";
                 }
             }
-            else
+            else if (cmd.command_type == CommandType.Function || (cmd.command_type == CommandType.Attribute_WO && cmd.name.Contains(" trigger.BLOCK_")))
             {
-                if (cmd.overloads.Length > 0)
+                if (cmd.overloads.Length > 0 && !cmd.name.Contains("trigger.BLOCK_"))
                 {
                     // System.Console.WriteLine(cmd.signature);
                     foreach (var sig in cmd.overloads)
                     {
                         System.Console.WriteLine(sig);
-                        var overlad_sig = sig.Split('(')[1];
-                        outStr += "---@overload fun(" + overlad_sig + "\n";
-                    }
+                        int startIndex = sig.IndexOf("(") + 1;
+                        int endIndex = sig.IndexOf(")", startIndex);
+                        var overlad_params = sig.Substring(startIndex, endIndex - startIndex).Split(',').Select(str => str.Trim()).ToList();
+                        IList<string> overload_sig_and_type = new List<string>();
+                        var returnType = "";
+                        foreach (var param in cmd.param_info)
+                        {
+                            if (cmd.command_return.Contains(param.Name))
+                                returnType = $":{param.Type}";
+                            if (overlad_params.Contains(param.Name))
+                            {
+                                overload_sig_and_type.Add($"{param.Name}:{param.Type}");
+                            }
+                        }
 
+                        System.Console.WriteLine(overload_sig_and_type);
+                        command_help += getOverloadDoc($"({string.Join(",", overload_sig_and_type)}){returnType}") + "\n";
+                    }
+                }
+                else
+                {
+                    if (cmd.name.Contains("trigger.BLOCK_") && cmd.overloads.Length > 0)
+                        command_help += "--\n--- Overloads are:\n";
+                    foreach (var sig in cmd.overloads)
+                    {
+                        command_help += "--- - " + sig + "\n";
+                    }
                 }
 
-                if (cmd.signature.Contains("scriptVar"))
+                if (table.Contains("[N]") || table.Contains("[Y]") || table.Contains("[slot]") || table.Contains("[X]"))
+                {
+                    string[] a = cmd.signature.Split('[');
+                    //string[] a = table.Split('[');
+                    string type_name = a[0].Replace(".", "") + "Arr";
+                    if (table.Contains("[N]"))
+                    {
+                        a[1] = a[1].Replace("N]", "");
+                    }
+                    if (table.Contains("[Y]"))
+                    {
+                        a[1] = a[1].Replace("Y]", "");
+                    }
+                    if (table.Contains("[slot]"))
+                    {
+                        a[1] = a[1].Replace("slot]", "");
+                    }
+                    if (table.Contains("[X]"))
+                    {
+                        a[1] = a[1].Replace("X]", "");
+                    }
+
+                    command_help += "function " + type_name + a[1] + " end\n\n";
+                }
+                else if (cmd.signature.Contains("scriptVar"))
                 {
                     string sig = cmd.signature.Replace("scriptVar", "script_object");
-                    outStr += "function " + sig + " end\n";
+                    command_help += "function " + sig + " end\n";
                 }
                 else if (cmd.signature.Contains("fileVar"))
                 {
-                    string sig = cmd.signature.Replace("fileVar", "io_object");
-                    outStr += "function " + sig + " end\n";
+                    string sig = cmd.signature.Replace("fileVar", "file_object");
+                    command_help += "function " + sig + " end\n";
                 }
                 else if (cmd.signature.Contains(".catalog()"))
                 {
-                    cmd.signature = cmd.signature.Split(' ')[3];
-                    outStr += "function " + cmd.signature + " end\n";
+                    try
+                    {
+                        if (cmd.signature.Contains("display.loadmenu"))
+                            cmd.signature = cmd.signature.Split(' ')[4];
+                        else
+                            cmd.signature = cmd.signature.Split(' ')[3];
+                        command_help += "function " + cmd.signature + " end\n";
+                    }
+                    catch
+                    {
+                        command_help += "function " + cmd.signature + " end\n";
+                    }
+                }
+                else if (cmd.signature.Contains("bufferName."))
+                {
+                    string sig = cmd.signature.Replace("bufferName.", "bufferMethods.");
+                    command_help += "function " + sig + " end\n";
                 }
                 else if (cmd.signature.Contains("bufferVar."))
                 {
                     string sig = cmd.signature.Replace("bufferVar.", "bufferMethods.");
-                    outStr += "function " + sig + " end\n";
+                    command_help += "function " + sig + " end\n";
                 }
-                else if (cmd.signature.Contains("smub.nvbufferY"))
-                {
-                    string sig = cmd.signature.Replace("smub.nvbufferY", "buffer");
-                    outStr +="---@param buffer bufferMethods\n";
-                    outStr += "function " + sig + " end\n";
-                }
-                else if (cmd.signature.Contains("smua.nvbufferY"))
-                {
-                    string sig = cmd.signature.Replace("smua.nvbufferY", "buffer");
-                    outStr +="---@param buffer bufferMethods\n";
-                    outStr += "function " + sig + " end\n";
-                }
-                /* else if(cmd.signature.Contains("bufferVar"))
-                {
-                    string sig = cmd.signature.Replace("bufferVar","bufferMethods");
-                    outStr += "function " + sig + " end\n";
-                } */
                 else
                 {
-                    outStr += "function " + cmd.signature + " end\n";
+                    if (cmd.command_type == CommandType.Function)
+                        command_help += "function " + cmd.signature + " end\n";
+                    else
+                        command_help += table + "." + attr + " = 0\n\n";
                 }
+            }
+
+            if (cmd.tsplink_supported.Contains("Yes"))
+            {
+                if (class_data_populated == false)
+                    tsplinkStr += class_data;
+                outStr += command_help;
+                tsplinkStr += command_help;
+            }
+            if (cmd.tsplink_supported.Contains("No"))
+            {
+                outStr += command_help;
             }
         }
 
-        /* public static string cleanParam(CommandInfo cmd, ref string outStr)
+        public static string getOverloadDoc(string signature)
         {
-
-        } */
+            var outPut = $@"---@overload fun{signature}";
+            return outPut;
+        }
     }
 }
