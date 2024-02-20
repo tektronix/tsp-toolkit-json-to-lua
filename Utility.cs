@@ -31,6 +31,7 @@ namespace jsonToLuaParser
             Attribute_RO,
             Attribute_WO,
             Attribute_RW,
+            Constant
         }
 
         public class CommandInfo
@@ -75,7 +76,7 @@ namespace jsonToLuaParser
                 signature = (string)p["signature"],
                 tsplink_supported = (string)p["tsp_link"],
                 description = (string)p["description"],
-                command_type = ((string)p["type"] == "Function\n" ? CommandType.Function : ((string)p["type"] == "Attribute (RW)\n" ? CommandType.Attribute_RW : ((string)p["type"] == "Attribute (Ro)\n") ? CommandType.Attribute_RO : CommandType.Attribute_WO)),
+                command_type = ((string)p["type"] == "Function" ? CommandType.Function : ((string)p["type"] == "Attribute (RW)" ? CommandType.Attribute_RW : ((string)p["type"] == "Attribute (R)") ? CommandType.Attribute_RO : ((string)p["type"] == "Attribute (Ro)") ? CommandType.Attribute_RO :(string)p["type"]== "Constant" ? CommandType.Constant: CommandType.Attribute_WO)),
                 default_value = (string)p["default_value"],
                 usage = p["usage"].ToObject<string[]>(),
                 overloads = p["overloads"].ToObject<string[]>(),
@@ -174,7 +175,7 @@ namespace jsonToLuaParser
                         {
                             arrList = arrList.Append(type_name).ToArray();
                             class_data += "---@class " + type_name + "\n";
-                            class_data += type_name + " = {}\n\n";
+                            class_data += "local "+type_name + " = {}\n\n";
 
                             class_data += "---@type " + type_name + "[]\n";
                             class_data += table_name + " = {}\n";
@@ -265,7 +266,7 @@ namespace jsonToLuaParser
             command_help += "\n";
             #endregion            
 
-            var helpFilePath = $@"{help_file_path}/{cmd.webhelpfile}";
+            var helpFilePath = $@"{(help_file_path.Contains("26") ? "Commands_26XX":"Commands_"+help_file_path)}/{cmd.webhelpfile}";
             command_help += "\n--- **" + cmd.description + "**\n---\n"
             + "--- *Type:*  " + cmd.command_type + "\n---\n"
             + "--- *Details:*<br>\n--- " + cmd.details + "\n---\n"
@@ -275,7 +276,7 @@ namespace jsonToLuaParser
 
             foreach (var x in cmd.example_info)
             {
-                var exmp = x.example.Split(";");
+                var exmp = x.example.Split(';');
                 foreach (var item in exmp)
                 {
                     command_help += "--- " + item + "\n";
@@ -378,7 +379,7 @@ namespace jsonToLuaParser
                 cmd.signature = cmd.signature.Replace("\"", "");
             }
 
-            if (cmd.command_type != CommandType.Function && (cmd.command_type != CommandType.Attribute_WO && !cmd.name.Contains(" trigger.BLOCK_")))
+            if (cmd.command_type != CommandType.Function && !cmd.name.Contains(" trigger.BLOCK_"))
             {
                 foreach (var parm in cmd.param_info)
                 {
@@ -449,7 +450,7 @@ namespace jsonToLuaParser
                     }
                     else
                     {
-                        outStr += "bufferMethods." + attr + "= 0\n";
+                        command_help += "bufferMethods." + attr + " = 0\n";
                     }
                     //outStr += "bufferMethods" + "." + attr + " = 0\n\n";
                 }
@@ -617,6 +618,25 @@ namespace jsonToLuaParser
         {
             var outPut = $@"---@overload fun{signature}";
             return outPut;
+        }
+
+        public static void append_nvbuffer_type(ref string outStr, string subString)
+        {
+            int index = outStr.IndexOf(subString);
+            if (index != -1)
+            {
+                string modifiedString = outStr.Insert(index, "\n---@type bufferMethods\n");
+                outStr = modifiedString;
+            }
+        }
+
+        public static void append_defbuffer1_defbuffer2_defination(ref string outStr)
+        {
+            outStr += "\n"+@"---@type bufferMethods
+defbuffer1 = {}
+
+---@type bufferMethods
+defbuffer2 = {}";
         }
     }
 }

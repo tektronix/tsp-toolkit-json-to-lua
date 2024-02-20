@@ -1,7 +1,7 @@
 ---@meta
 
----@class Commands_2636B
-Commands_2636B = {settime = settime,
+---@class 2636B
+2636B = {settime = settime,
  beeper = beeper,
  dataqueue = dataqueue,
  digio = digio,
@@ -18,6 +18,7 @@ Commands_2636B = {settime = settime,
  setup = setup,
  smua = smua,
  smub = smub,
+ bufferVar = bufferVar,
  tspnet = tspnet,
  timer = timer,
  tsplink = tsplink,

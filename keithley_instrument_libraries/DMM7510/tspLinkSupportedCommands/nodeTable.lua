@@ -1,7 +1,7 @@
 ---@meta
 
----@class Commands_DMM7510
-Commands_DMM7510 = {dataqueue = dataqueue,
+---@class DMM7510
+DMM7510 = {dataqueue = dataqueue,
  fs = fs,
  lan = lan,
  localnode = localnode,
@@ -10,6 +10,7 @@ Commands_DMM7510 = {dataqueue = dataqueue,
  dmm = dmm,
  channel = channel,
  buffer = buffer,
+ bufferVar = bufferVar,
  eventlog = eventlog,
  display = display,
  beeper = beeper,

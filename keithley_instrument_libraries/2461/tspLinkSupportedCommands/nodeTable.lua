@@ -1,7 +1,7 @@
 ---@meta
 
----@class Commands_2461
-Commands_2461 = {dataqueue = dataqueue,
+---@class 2461
+2461 = {dataqueue = dataqueue,
  fs = fs,
  lan = lan,
  localnode = localnode,
@@ -9,6 +9,7 @@ Commands_2461 = {dataqueue = dataqueue,
  trigger = trigger,
  smu = smu,
  buffer = buffer,
+ bufferVar = bufferVar,
  eventlog = eventlog,
  display = display,
  beeper = beeper,
