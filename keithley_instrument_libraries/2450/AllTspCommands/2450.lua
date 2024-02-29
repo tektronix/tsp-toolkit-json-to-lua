@@ -432,28 +432,28 @@ tspnet.timeout = 0
 ---@param inputString string The string to be written
 function tspnet.write(connectionID, inputString) end
 
-tspnet.TERM_LFCR = nil
 tspnet.TERM_CRLF = nil
-tspnet.TERM_CR = nil
 tspnet.TERM_LF = nil
+tspnet.TERM_LFCR = nil
+tspnet.TERM_CR = nil
 
 ---@alias tspnetterminationtype
----|`tspnet.TERM_LFCR`
 ---|`tspnet.TERM_CRLF`
----|`tspnet.TERM_CR`
 ---|`tspnet.TERM_LF`
+---|`tspnet.TERM_LFCR`
+---|`tspnet.TERM_CR`
 
 
-tspnet.TERM_LFCR = nil
 tspnet.TERM_CRLF = nil
-tspnet.TERM_CR = nil
 tspnet.TERM_LF = nil
+tspnet.TERM_LFCR = nil
+tspnet.TERM_CR = nil
 
 ---@alias tspnetterminationtermSequence
----|`tspnet.TERM_LFCR`
 ---|`tspnet.TERM_CRLF`
----|`tspnet.TERM_CR`
 ---|`tspnet.TERM_LF`
+---|`tspnet.TERM_LFCR`
+---|`tspnet.TERM_CR`
 
 
 
@@ -913,12 +913,12 @@ lan = {}
 lan.lxidomain = 0
 
 
-lan.MODE_MANUAL = nil
 lan.MODE_AUTO = nil
+lan.MODE_MANUAL = nil
 
 ---@alias lanipconfigmethod
----|`lan.MODE_MANUAL`
 ---|`lan.MODE_AUTO`
+---|`lan.MODE_MANUAL`
 
 
 
@@ -1116,16 +1116,16 @@ localnode.model = 0
 ---@overload fun()
 function localnode.settime(year, month, day, hour, minute, second) end
 
+eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 
 ---@alias localnodeshoweventserrorMode
+---|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 
 
 
@@ -1233,15 +1233,15 @@ localnode.linefreq = 0
 
 
 localnode.ACCESS_LOCKOUT = nil
-localnode.ACCESS_PROTECTED = nil
 localnode.ACCESS_EXCLUSIVE = nil
 localnode.ACCESS_FULL = nil
+localnode.ACCESS_PROTECTED = nil
 
 ---@alias localnodeaccessaccessType
 ---|`localnode.ACCESS_LOCKOUT`
----|`localnode.ACCESS_PROTECTED`
 ---|`localnode.ACCESS_EXCLUSIVE`
 ---|`localnode.ACCESS_FULL`
+---|`localnode.ACCESS_PROTECTED`
 
 
 
@@ -1468,10 +1468,10 @@ function tsplink.writeport(data) end
 --- --Example output if two nodes are found:Nodes found = 2
 --- --Example output if fewer nodes are found and if localnode.showevents = 7:1219, TSP-Link found fewer nodes than expectedNodes found = 1
 --- ```
----@return any nodesFound The number of nodes found on the system, including the node on which the command is running
----@overload fun():any
----@overload fun(expectedNodes:any):any
-function tsplink.initialize() end
+---@param expectedNodes any The number of nodes expected on the system (1 to 32)
+---@overload fun()
+---@overload fun()
+function tsplink.initialize(expectedNodes) end
 
 
 --- **This attribute reads the node number assigned to the master node.**
@@ -1569,12 +1569,12 @@ function trigger.wait(timeout) end
 trigger.BLOCK_BUFFER_CLEAR = 0
 
 
-trigger.CLEAR_ENTER = nil
 trigger.CLEAR_NEVER = nil
+trigger.CLEAR_ENTER = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_WAITclear
----|`trigger.CLEAR_ENTER`
 ---|`trigger.CLEAR_NEVER`
+---|`trigger.CLEAR_ENTER`
 
 
 trigger.WAIT_AND = nil
@@ -1604,8 +1604,8 @@ trigger.WAIT_OR = nil
 --- Additional paramteres are:
 --- - *event*: The event that must occur before the trigger block allows trigger execution to continue (see Details)<br>
 --- - *clear*: To clear previously detected trigger events when entering the wait block<br>
----    ```trigger.CLEAR_ENTER```<br>
 ---    ```trigger.CLEAR_NEVER```<br>
+---    ```trigger.CLEAR_ENTER```<br>
 --- - *logic*: If each event must occur before the trigger model continues<br>
 ---    ```trigger.WAIT_AND```<br>
 ---    ```trigger.WAIT_OR```<br>
@@ -1617,14 +1617,14 @@ trigger.WAIT_OR = nil
 trigger.BLOCK_WAIT = 0
 
 
+trigger.COUNT_AUTO = nil
 trigger.COUNT_INFINITE = nil
 trigger.COUNT_STOP = nil
-trigger.COUNT_AUTO = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_MEASURE_DIGITIZEcount
+---|`trigger.COUNT_AUTO`
 ---|`trigger.COUNT_INFINITE`
 ---|`trigger.COUNT_STOP`
----|`trigger.COUNT_AUTO`
 
 
 
@@ -1697,9 +1697,9 @@ trigger.COUNT_AUTO = nil
 --- Additional paramteres are:
 --- - *bufferName*: The name of the buffer, which must be an existing buffer; if no buffer is defined, defbuffer1 is used<br>
 --- - *count*: The number of measure or digitize readings to make before moving to the next block in the trigger model; set to<br>
+---    ```trigger.COUNT_AUTO```<br>
 ---    ```trigger.COUNT_INFINITE```<br>
 ---    ```trigger.COUNT_STOP```<br>
----    ```trigger.COUNT_AUTO```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_MEASURE_DIGITIZE)
@@ -1707,12 +1707,12 @@ trigger.COUNT_AUTO = nil
 trigger.BLOCK_MEASURE_DIGITIZE = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_SOURCE_OUTPUTstate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -1733,8 +1733,8 @@ smu.OFF = nil
 --- ```
 --- Additional paramteres are:
 --- - *state*: Turn the source off<br>
----    ```smu.ON```<br>
 ---    ```smu.OFF```<br>
+---    ```smu.ON```<br>
 trigger.BLOCK_SOURCE_OUTPUT = 0
 
 
@@ -2224,16 +2224,16 @@ trigger.BLOCK_BRANCH_LIMIT_DYNAMIC = 0
 trigger.BLOCK_DELAY_CONSTANT = 0
 
 
-trigger.LOG_ERROR = nil
+trigger.LOG_WARN_ABORT = nil
 trigger.LOG_WARN = nil
 trigger.LOG_INFO = nil
-trigger.LOG_WARN_ABORT = nil
+trigger.LOG_ERROR = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_LOG_EVENTeventNumber
----|`trigger.LOG_ERROR`
+---|`trigger.LOG_WARN_ABORT`
 ---|`trigger.LOG_WARN`
 ---|`trigger.LOG_INFO`
----|`trigger.LOG_WARN_ABORT`
+---|`trigger.LOG_ERROR`
 
 
 
@@ -2255,10 +2255,10 @@ trigger.LOG_WARN_ABORT = nil
 --- ```
 --- Additional paramteres are:
 --- - *eventNumber*: The event number<br>
----    ```trigger.LOG_ERROR```<br>
+---    ```trigger.LOG_WARN_ABORT```<br>
 ---    ```trigger.LOG_WARN```<br>
 ---    ```trigger.LOG_INFO```<br>
----    ```trigger.LOG_WARN_ABORT```<br>
+---    ```trigger.LOG_ERROR```<br>
 --- - *message*: A string up to 31 characters<br>
 trigger.BLOCK_LOG_EVENT = 0
 
@@ -2322,14 +2322,14 @@ trigger.BLOCK_NOP = 0
 trigger.BLOCK_RESET_BRANCH_COUNT = 0
 
 
-trigger.CONT_RESTART = nil
 trigger.CONT_OFF = nil
 trigger.CONT_AUTO = nil
+trigger.CONT_RESTART = nil
 
 ---@alias triggercontinuoussetting
----|`trigger.CONT_RESTART`
 ---|`trigger.CONT_OFF`
 ---|`trigger.CONT_AUTO`
+---|`trigger.CONT_RESTART`
 
 
 
@@ -2424,12 +2424,12 @@ smu = {}
 
 
 
-smu.TERMINALS_REAR = nil
 smu.TERMINALS_FRONT = nil
+smu.TERMINALS_REAR = nil
 
 ---@alias smuterminalsterminals
----|`smu.TERMINALS_REAR`
 ---|`smu.TERMINALS_FRONT`
+---|`smu.TERMINALS_REAR`
 
 
 
@@ -2513,18 +2513,18 @@ buffer = {}
 ---@overload fun(bufferVar:bufferMethods,relStartTime:number,relEndTime:number):statsVar
 function buffer.getstats(bufferVar, absStartTime, absStartFractional, absEndTime, absEndFractional) end
 
-buffer.STYLE_WRITABLE = nil
 buffer.STYLE_WRITABLE_FULL = nil
+buffer.STYLE_FULL = nil
+buffer.STYLE_WRITABLE = nil
 buffer.STYLE_STANDARD = nil
 buffer.STYLE_COMPACT = nil
-buffer.STYLE_FULL = nil
 
 ---@alias buffermakestyle
----|`buffer.STYLE_WRITABLE`
 ---|`buffer.STYLE_WRITABLE_FULL`
+---|`buffer.STYLE_FULL`
+---|`buffer.STYLE_WRITABLE`
 ---|`buffer.STYLE_STANDARD`
 ---|`buffer.STYLE_COMPACT`
----|`buffer.STYLE_FULL`
 
 
 
@@ -2714,124 +2714,6 @@ function buffer.delete(bufferName) end
 ---@overload fun()
 function buffer.clearstats(bufferVar) end
 
-buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_NONE = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_DAC = nil
-buffer.UNIT_TOT = nil
-buffer.UNIT_AMP = nil
-buffer.UNIT_VOLT_AC = nil
-buffer.UNIT_HERTZ = nil
-buffer.UNIT_CUSTOM1 = nil
-buffer.UNIT_OHM = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_CELSIUS = nil
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_X = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_DECIBEL = nil
-buffer.UNIT_FARAD = nil
-buffer.UNIT_SECOND = nil
-buffer.UNIT_RATIO = nil
-buffer.UNIT_WATT = nil
-buffer.UNIT_RECIPROCAL = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_PERCENT = nil
-
----@alias buffermathunit
----|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_NONE`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_DAC`
----|`buffer.UNIT_TOT`
----|`buffer.UNIT_AMP`
----|`buffer.UNIT_VOLT_AC`
----|`buffer.UNIT_HERTZ`
----|`buffer.UNIT_CUSTOM1`
----|`buffer.UNIT_OHM`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_X`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_FARAD`
----|`buffer.UNIT_SECOND`
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_WATT`
----|`buffer.UNIT_RECIPROCAL`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_PERCENT`
-
-
-
---- **This function allows you to run a mathematical expression on a measurement. The expression is applied when the measurement is placed in the reading buffer.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- 
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/73595.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- reset()
---- mathExp = buffer.make(200, buffer.STYLE_FULL)
---- smu.measure.func = smu.FUNC_DC_VOLTAGE
----  
---- buffer.math(mathExp, buffer.UNIT_NONE, buffer.EXPR_MULTIPLY)
---- for x = 1, 3 do 
----      print("Reading: ", smu.measure.read(mathExp))
---- end
----  
---- display.changescreen(display.SCREEN_READING_TABLE)
----  
---- print("Extra value reading 1: ", mathExp.extravalues[1])
---- print("Extra value reading 2: ", mathExp.extravalues[2])
---- print("Extra value reading 3: ", mathExp.extravalues[3])
---- 
---- --Reset the instrument.
---- --Make a buffer named mathExp set to hold 200 readings with a buffer style of FULL.
---- --Set the measure function to DC voltage.
---- --Set the buffer math expression to multiply readings against the previous readings.
---- --Make three readings.
---- --Display the reading table on the front panel of the instrument, where you can view the extra readings.
---- --Print the extra values (the calculated values).
---- --Example output:
---- --Reading: 6.3863430578e-05
---- --Reading: 6.7818055872e-05
---- --Reading: 1.9871571784e-05
---- --Extra value reading 1: 6.3863430578e-05
---- --Extra value reading 2: 4.3310937031e-09
---- --Extra value reading 3: 1.3476513655e-09
---- ```
----@param readingBuffer bufferMethods The name of the reading buffer; the reading buffer selected must be set to the style FULL
----@param unit buffermathunit The units to be applied to the value generated by the expression
----@param constant0 number The constant to be used for c0 in the expression
----@param constant1 number The constant to be used for c1 in the expression
----@param constant2 number The constant to be used for c2 in the expression
----@param constant3 number The constant to be used for c3 in the expression
----@param constant4 number The constant to be used for c4 in the expression
----@param constant5 number The constant to be used for c5 in the expression
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit)
----@overload fun(readingBuffer:bufferMethods,unit:buffermathunit,constant0:number)
-function buffer.math(readingBuffer, unit, EXPR_POLY, constant0, constant1, constant2, constant3, constant4, constant5) end
-
 
 --- **This function allows you to create up to three custom units of measure for use in buffers.**
 ---
@@ -2945,7 +2827,8 @@ bufferMethods.n = 0
 --- --+00.0028 nA, +00.0039 nA, +00.0040 nA
 --- -- 
 --- ```
-bufferMethods.formattedreadings = 0
+---@type integer[]
+bufferMethods.formattedreadings= {}
 
 
 --- **This attribute contains the unit of measure that is stored with readings in the reading buffer.**
@@ -2984,7 +2867,8 @@ bufferMethods.formattedreadings = 0
 --- --Output:
 --- --Volt DC, Volt DC, Volt DC
 --- ```
-bufferMethods.units = 0
+---@type integer[]
+bufferMethods.units= {}
 
 
 --- **This attribute sets the number of readings a buffer can store.**
@@ -3074,7 +2958,8 @@ bufferMethods.capacity = 0
 --- --Output:
 --- --Volt DC, Volt DC, Volt DC
 --- ```
-bufferMethods.sourceunits = 0
+---@type integer[]
+bufferMethods.sourceunits= {}
 
 
 --- **This attribute contains the timestamps, in seconds, when each reading occurred, relative to the timestamp of the first entry in the reading buffer.**
@@ -3105,7 +2990,8 @@ bufferMethods.sourceunits = 0
 --- --Example output:
 --- --0, 0.383541, 0.772005
 --- ```
-bufferMethods.relativetimestamps = 0
+---@type integer[]
+bufferMethods.relativetimestamps= {}
 
 
 --- **This attribute contains the timestamp of a reading in seconds, in UTC format.**
@@ -3131,7 +3017,8 @@ bufferMethods.relativetimestamps = 0
 --- --Example output:
 --- --1362261492, 1362261492, 1362261493, 1362261493, 1362261493, 1362261494
 --- ```
-bufferMethods.seconds = 0
+---@type integer[]
+bufferMethods.seconds= {}
 
 
 --- **This attribute contains the time when the instrument made the reading.**
@@ -3161,7 +3048,8 @@ bufferMethods.seconds = 0
 --- --Output:
 --- --23:09:43, 23:09:43, 23:09:43
 --- ```
-bufferMethods.times = 0
+---@type integer[]
+bufferMethods.times= {}
 
 
 --- **This attribute contains the timestamp when each reading saved in the specified reading buffer occurred.**
@@ -3192,7 +3080,8 @@ bufferMethods.times = 0
 --- --Output:
 --- --03/01/2018 14:46:07.71461483803/01/2018 14:46:08.10046883803/01/2018 14:46:08.487631838
 --- ```
-bufferMethods.timestamps = 0
+---@type integer[]
+bufferMethods.timestamps= {}
 
 
 --- **This function clears all readings and statistics from the specified buffer.**
@@ -3260,14 +3149,15 @@ function bufferMethods.clear() end
 --- --Example output:
 --- --11/27/2017, 11/27/2017, 11/27/2017
 --- ```
-bufferMethods.dates = 0
+---@type integer[]
+bufferMethods.dates= {}
 
-buffer.FILL_ONCE = nil
 buffer.FILL_CONTINUOUS = nil
+buffer.FILL_ONCE = nil
 
 ---@alias bufferVarfillmodefillMode
----|`buffer.FILL_ONCE`
 ---|`buffer.FILL_CONTINUOUS`
+---|`buffer.FILL_ONCE`
 
 
 
@@ -3323,7 +3213,8 @@ bufferMethods.fillmode = 0
 --- --Example output:
 --- ---00.00041 mV, +00.00010 mV, -00.00033 mV, +00.00003 mV, -00.00028 mV, -00.00045 mV
 --- ```
-bufferMethods.sourceformattedvalues = 0
+---@type integer[]
+bufferMethods.sourceformattedvalues= {}
 
 
 --- **This attribute contains the fractional second portion of the timestamp of each reading in the reading buffer.**
@@ -3353,7 +3244,8 @@ bufferMethods.sourceformattedvalues = 0
 --- --Example output:
 --- --0.647118937, 0.064543, 0.48196127, 0.89938724, 0.316800064, 0.734218263
 --- ```
-bufferMethods.fractionalseconds = 0
+---@type integer[]
+bufferMethods.fractionalseconds= {}
 
 
 --- **This attribute contains the readings stored in a specified reading buffer.**
@@ -3381,7 +3273,8 @@ bufferMethods.fractionalseconds = 0
 --- ---4.5509945811872e-10, 2, 0.277194856
 --- ---9.1078204006445e-12, 2, 0.569614783
 --- ```
-bufferMethods.readings = 0
+---@type integer[]
+bufferMethods.readings= {}
 
 
 --- **This attribute contains the source levels being output when readings in the reading buffer were acquired.**
@@ -3411,7 +3304,8 @@ bufferMethods.readings = 0
 --- --Example output:
 --- --9.9999874692e-07, 1.0000017028e-06, 1.0000054544e-06
 --- ```
-bufferMethods.sourcevalues = 0
+---@type integer[]
+bufferMethods.sourcevalues= {}
 
 buffer.OFF = nil
 buffer.ON = nil
@@ -3472,22 +3366,23 @@ bufferMethods.logstate = 0
 --- --64, 64
 --- --Indicating that the status is buffer.STAT_LIMIT1_LOW.
 --- ```
-bufferMethods.statuses = 0
+---@type integer[]
+bufferMethods.statuses= {}
 
 buffer.STAT_OUTPUT = nil
 buffer.STAT_READBACK = nil
-buffer.STAT_OVER_TEMP = nil
 buffer.STAT_PROTECTION = nil
-buffer.STAT_LIMIT = nil
+buffer.STAT_OVER_TEMP = nil
 buffer.STAT_SENSE = nil
+buffer.STAT_LIMIT = nil
 
 ---@alias bufferVarsourcestatusesstatusInfo
 ---|`buffer.STAT_OUTPUT`
 ---|`buffer.STAT_READBACK`
----|`buffer.STAT_OVER_TEMP`
 ---|`buffer.STAT_PROTECTION`
----|`buffer.STAT_LIMIT`
+---|`buffer.STAT_OVER_TEMP`
 ---|`buffer.STAT_SENSE`
+---|`buffer.STAT_LIMIT`
 
 
 
@@ -3518,7 +3413,8 @@ buffer.STAT_SENSE = nil
 --- --Indicating that the status is buffer.STAT_READBACK and buffer.STAT_OUTPUT.
 --- ```
 ---@type bufferVarsourcestatusesstatusInfo
-bufferMethods.sourcestatuses = 0
+---@type integer[]
+bufferMethods.sourcestatuses= {}
 
 
 --- **This attribute contains the additional values in a reading buffer.**
@@ -3550,7 +3446,8 @@ bufferMethods.sourcestatuses = 0
 --- --Output:
 --- --1, Watt DC, 7, Watt DC, 2, Watt DC, 8, Watt DC, 3, Watt DC, 9, Watt DC, 4, Watt DC, 10, Watt DC, 5, Watt DC, 11, Watt DC, 6, Watt DC, 12, Watt DC
 --- ```
-bufferMethods.extravalues = 0
+---@type integer[]
+bufferMethods.extravalues= {}
 
 
 --- **This attribute indicates the starting index in a reading buffer.**
@@ -3645,7 +3542,8 @@ bufferMethods.endindex = 0
 --- --Extra value reading 2: 	+50.741880 p
 --- --Extra value reading 3: 	+51.727043 p
 --- ```
-bufferMethods.extraformattedvalues = 0
+---@type integer[]
+bufferMethods.extraformattedvalues= {}
 
 
 --- **This attribute contains the units of the additional values in a reading buffer.**
@@ -3677,7 +3575,8 @@ bufferMethods.extraformattedvalues = 0
 --- --Output:
 --- --1, Watt DC, 2, Watt DC, 3, Watt DC, 4, Watt DC, 5, Watt DC, 6, Watt DC
 --- ```
-bufferMethods.extravalueunits = 0
+---@type integer[]
+bufferMethods.extravalueunits= {}
 ---@class timer
 timer = {}
 
@@ -3742,16 +3641,16 @@ eventlog = {}
 
 
 
+eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 
 ---@alias eventlogsaveeventType
+---|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 
 
 
@@ -3790,16 +3689,16 @@ function eventlog.save(filename, eventType) end
 --- ```
 function eventlog.clear() end
 
+eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 
 ---@alias eventlognexteventType
+---|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 
 
 
@@ -3830,16 +3729,16 @@ eventlog.SEV_ALL = nil
 ---@overload fun():any
 function eventlog.next(eventType) end
 
+eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 
 ---@alias eventloggetcounteventType
+---|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 
 
 
@@ -3899,16 +3798,16 @@ eventlog.SEV_WARN = nil
 ---@overload fun(message:string)
 function eventlog.post(message, eventType) end
 
+eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 
 ---@alias eventlogsuppresseventType
+---|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 
 
 
@@ -3935,12 +3834,12 @@ display = {}
 
 
 
-display.FORMAT_EXPONENT = nil
 display.FORMAT_PREFIX = nil
+display.FORMAT_EXPONENT = nil
 
 ---@alias displayreadingformatformat
----|`display.FORMAT_EXPONENT`
 ---|`display.FORMAT_PREFIX`
+---|`display.FORMAT_EXPONENT`
 
 
 
@@ -3963,12 +3862,12 @@ display.FORMAT_PREFIX = nil
 display.readingformat = 0
 
 
-display.TEXT1 = nil
 display.TEXT2 = nil
+display.TEXT1 = nil
 
 ---@alias displaysettextDisplayText
----|`display.TEXT1`
 ---|`display.TEXT2`
+---|`display.TEXT1`
 
 
 
@@ -4019,30 +3918,30 @@ function display.settext(DisplayText, Text) end
 --- ```
 function display.clear() end
 
-display.SCREEN_HISTOGRAM = nil
 display.SCREEN_SOURCE_SWIPE = nil
-display.SCREEN_READING_TABLE = nil
-display.SCREEN_HOME = nil
-display.SCREEN_STATS_SWIPE = nil
 display.SCREEN_HOME_LARGE_READING = nil
 display.SCREEN_GRAPH = nil
 display.SCREEN_GRAPH_SWIPE = nil
+display.SCREEN_READING_TABLE = nil
+display.SCREEN_HOME = nil
 display.SCREEN_SETTINGS_SWIPE = nil
-display.SCREEN_USER_SWIPE = nil
 display.SCREEN_PROCESSING = nil
+display.SCREEN_USER_SWIPE = nil
+display.SCREEN_STATS_SWIPE = nil
+display.SCREEN_HISTOGRAM = nil
 
 ---@alias displaychangescreenscreenName
----|`display.SCREEN_HISTOGRAM`
 ---|`display.SCREEN_SOURCE_SWIPE`
----|`display.SCREEN_READING_TABLE`
----|`display.SCREEN_HOME`
----|`display.SCREEN_STATS_SWIPE`
 ---|`display.SCREEN_HOME_LARGE_READING`
 ---|`display.SCREEN_GRAPH`
 ---|`display.SCREEN_GRAPH_SWIPE`
+---|`display.SCREEN_READING_TABLE`
+---|`display.SCREEN_HOME`
 ---|`display.SCREEN_SETTINGS_SWIPE`
----|`display.SCREEN_USER_SWIPE`
 ---|`display.SCREEN_PROCESSING`
+---|`display.SCREEN_USER_SWIPE`
+---|`display.SCREEN_STATS_SWIPE`
+---|`display.SCREEN_HISTOGRAM`
 
 
 
@@ -4070,20 +3969,20 @@ display.SCREEN_PROCESSING = nil
 ---@param screenName displaychangescreenscreenName The screen to display
 function display.changescreen(screenName) end
 
-display.BUTTONS_YESNO = nil
-display.BUTTONS_CANCEL = nil
+display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_OK = nil
+display.BUTTONS_CANCEL = nil
 display.BUTTONS_NONE = nil
 display.BUTTONS_YESNOCANCEL = nil
-display.BUTTONS_OKCANCEL = nil
+display.BUTTONS_YESNO = nil
 
 ---@alias displaypromptbuttonID
----|`display.BUTTONS_YESNO`
----|`display.BUTTONS_CANCEL`
+---|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_OK`
+---|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_NONE`
 ---|`display.BUTTONS_YESNOCANCEL`
----|`display.BUTTONS_OKCANCEL`
+---|`display.BUTTONS_YESNO`
 
 
 
@@ -4124,15 +4023,15 @@ display.BUTTONS_OKCANCEL = nil
 function display.prompt(buttonID, promptText) end
 
 display.BUTTON_YES = nil
-display.BUTTON_OK = nil
-display.BUTTON_NO = nil
 display.BUTTON_CANCEL = nil
+display.BUTTON_NO = nil
+display.BUTTON_OK = nil
 
 ---@alias displaywaiteventsubID
 ---|`display.BUTTON_YES`
----|`display.BUTTON_OK`
----|`display.BUTTON_NO`
 ---|`display.BUTTON_CANCEL`
+---|`display.BUTTON_NO`
+---|`display.BUTTON_OK`
 
 
 
@@ -4173,20 +4072,20 @@ display.BUTTON_CANCEL = nil
 ---@overload fun():displaywaiteventsubID
 function display.waitevent(timeout) end
 
-display.STATE_LCD_50 = nil
-display.STATE_LCD_OFF = nil
 display.STATE_LCD_75 = nil
-display.STATE_LCD_25 = nil
 display.STATE_BLACKOUT = nil
+display.STATE_LCD_25 = nil
+display.STATE_LCD_OFF = nil
 display.STATE_LCD_100 = nil
+display.STATE_LCD_50 = nil
 
 ---@alias displaylightstatebrightness
----|`display.STATE_LCD_50`
----|`display.STATE_LCD_OFF`
 ---|`display.STATE_LCD_75`
----|`display.STATE_LCD_25`
 ---|`display.STATE_BLACKOUT`
+---|`display.STATE_LCD_25`
+---|`display.STATE_LCD_OFF`
 ---|`display.STATE_LCD_100`
+---|`display.STATE_LCD_50`
 
 
 
@@ -4274,13 +4173,13 @@ file = {}
 function file.mkdir(path) end
 
 file.MODE_APPEND = nil
-file.MODE_WRITE = nil
 file.MODE_READ = nil
+file.MODE_WRITE = nil
 
 ---@alias fileopenaccessType
 ---|`file.MODE_APPEND`
----|`file.MODE_WRITE`
 ---|`file.MODE_READ`
+---|`file.MODE_WRITE`
 
 
 
@@ -4309,13 +4208,13 @@ file.MODE_READ = nil
 function file.open(fileName, accessType) end
 
 file.READ_ALL = nil
-file.READ_NUMBER = nil
 file.READ_LINE = nil
+file.READ_NUMBER = nil
 
 ---@alias filereadreadAction
 ---|`file.READ_ALL`
----|`file.READ_NUMBER`
 ---|`file.READ_LINE`
+---|`file.READ_NUMBER`
 
 
 
@@ -4502,12 +4401,12 @@ format = {}
 
 
 
-format.BIGENDIAN = nil
 format.LITTLEENDIAN = nil
+format.BIGENDIAN = nil
 
 ---@alias formatbyteorderorder
----|`format.BIGENDIAN`
 ---|`format.LITTLEENDIAN`
+---|`format.BIGENDIAN`
 
 
 
@@ -4563,14 +4462,14 @@ format.byteorder = 0
 format.asciiprecision = 0
 
 
-format.REAL64 = nil
-format.ASCII = nil
 format.REAL32 = nil
+format.ASCII = nil
+format.REAL64 = nil
 
 ---@alias formatdatavalue
----|`format.REAL64`
----|`format.ASCII`
 ---|`format.REAL32`
+---|`format.ASCII`
+---|`format.REAL64`
 
 
 
@@ -5272,14 +5171,14 @@ smu.measure = {}
 
 
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smumeasurefuncmFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -5369,16 +5268,16 @@ smu.SENSE_2WIRE = nil
 smu.measure.sense = 0
 
 
-smu.DIGITS_5_5 = nil
-smu.DIGITS_6_5 = nil
 smu.DIGITS_4_5 = nil
 smu.DIGITS_3_5 = nil
+smu.DIGITS_5_5 = nil
+smu.DIGITS_6_5 = nil
 
 ---@alias smumeasuredisplaydigitsdigits
----|`smu.DIGITS_5_5`
----|`smu.DIGITS_6_5`
 ---|`smu.DIGITS_4_5`
 ---|`smu.DIGITS_3_5`
+---|`smu.DIGITS_5_5`
+---|`smu.DIGITS_6_5`
 
 
 
@@ -5423,12 +5322,12 @@ smu.measure.displaydigits = 0
 smu.measure.nplc = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasureoffsetcompensationstate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -5458,12 +5357,12 @@ smu.OFF = nil
 smu.measure.offsetcompensation = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasureautorangeautoRange
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -5532,14 +5431,14 @@ smu.measure.range = 0
 smu.measure.autorangelow = 0
 
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smumeasureautorangehighmeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -5660,16 +5559,16 @@ smu.measure.autorangehigh = 0
 smu.measure.count = 0
 
 
-smu.UNIT_WATT = nil
+smu.UNIT_VOLT = nil
 smu.UNIT_AMP = nil
 smu.UNIT_OHM = nil
-smu.UNIT_VOLT = nil
+smu.UNIT_WATT = nil
 
 ---@alias smumeasureunitunitOfMeasure
----|`smu.UNIT_WATT`
+---|`smu.UNIT_VOLT`
 ---|`smu.UNIT_AMP`
 ---|`smu.UNIT_OHM`
----|`smu.UNIT_VOLT`
+---|`smu.UNIT_WATT`
 
 
 
@@ -5748,12 +5647,12 @@ smu.measure.userdelay= 0
 ---@overload fun(bufferName:bufferMethods):number
 function smu.measure.readwithtime() end
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasureautorangereboundstate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -5780,14 +5679,14 @@ smu.OFF = nil
 smu.measure.autorangerebound = 0
 
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smumeasuregetattributemeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -5814,17 +5713,17 @@ smu.FUNC_DC_VOLTAGE = nil
 --- ```
 ---@return number value The attribute value
 ---@param measFunction smumeasuregetattributemeasFunction The measurement function
----@param setting functionAttributes | functions The attribute for the function; refer to smu.measure.setattribute() for available settings
+---@param setting smuMeasuresetFunctionattribute The attribute for the function; refer to smu.measure.setattribute() for available settings
 function smu.measure.getattribute(measFunction, setting) end
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smumeasuresetattributemeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -5850,7 +5749,7 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --Store the settings for the DC Voltage function in MyMeasList at index 1.
 --- ```
 ---@param measFunction smumeasuresetattributemeasFunction The measurement function
----@param setting functionAttributes | functions The attribute for the function; refer to Details and the tables following the examples
+---@param setting smuMeasuresetFunctionattribute The attribute for the function; refer to Details and the tables following the examples
 ---@param value number The attribute value
 function smu.measure.setattribute(measFunction, setting, value) end
 ---@class trigger.model
@@ -5876,24 +5775,24 @@ trigger.model = {}
 --- ```
 function trigger.model.abort() end
 
+trigger.STATE_EMPTY = nil
+trigger.STATE_WAITING = nil
+trigger.STATE_FAILED = nil
 trigger.STATE_ABORTED = nil
+trigger.STATE_IDLE = nil
+trigger.STATE_RUNNING = nil
 trigger.STATE_ABORTING = nil
 trigger.STATE_BUILDING = nil
-trigger.STATE_IDLE = nil
-trigger.STATE_FAILED = nil
-trigger.STATE_WAITING = nil
-trigger.STATE_EMPTY = nil
-trigger.STATE_RUNNING = nil
 
 ---@alias triggermodelstatestatus
+---|`trigger.STATE_EMPTY`
+---|`trigger.STATE_WAITING`
+---|`trigger.STATE_FAILED`
 ---|`trigger.STATE_ABORTED`
+---|`trigger.STATE_IDLE`
+---|`trigger.STATE_RUNNING`
 ---|`trigger.STATE_ABORTING`
 ---|`trigger.STATE_BUILDING`
----|`trigger.STATE_IDLE`
----|`trigger.STATE_FAILED`
----|`trigger.STATE_WAITING`
----|`trigger.STATE_EMPTY`
----|`trigger.STATE_RUNNING`
 
 
 
@@ -5989,384 +5888,6 @@ function trigger.model.getbranchcount(blockNumber) end
 function trigger.model.initiate() end
 
 
---- **This function loads a trigger-model template configuration that makes continuous measurements for a specified amount of time.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- When you load this trigger-model template, you can specify amount of time to make a measurement and the length of the delay before the measurement.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/30588.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- reset()
----  
---- -- Set up measure function
---- smu.measure.func = smu.FUNC_DC_CURRENT
----  
---- -- Set up source function
---- smu.source.func = smu.FUNC_DC_VOLTAGE
---- smu.source.level = 5
----  
---- -- Turn on output, initiate readings, and store them in defbuffer1
---- trigger.model.load("DurationLoop", 10, 0.01, defbuffer1)
---- trigger.model.initiate()
---- 
---- --Reset the instrument. Set the instrument to source voltage at 5 V. Set to measure current.
---- --Load the duration loop trigger model to take measurements for 10 s with a 10 ms delay before each measurement.
---- --Start the trigger model.
---- ```
----@param DurationLoop loadFunConstParam load function constant param
----@param duration number The amount of time for which to make measurements (167 ns to 100 ks)
----@param delay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1
----@overload fun(DurationLoop:loadFunConstParam,duration:number)
----@overload fun(DurationLoop:loadFunConstParam,duration:number,delay:number)
-function trigger.model.load(DurationLoop, duration, delay, bufferName) end
-
-
---- **This function loads a trigger-model template configuration that uses source and measure configuration lists.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This trigger-model template incorporates a source configuration list and measure configuration list. You must set up the configuration lists before loading the trigger model. If the configuration lists change, you must resend this command.You can also set a delay and change the reading buffer.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/35126.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- reset()
---- smu.source.configlist.create("SOURCE_LIST")
---- smu.measure.configlist.create("MEASURE_LIST")
---- smu.source.level = 1
---- smu.source.configlist.store("SOURCE_LIST")
---- smu.measure.range = 1e-3
---- smu.measure.configlist.store("MEASURE_LIST")
---- smu.source.level = 5
---- smu.source.configlist.store("SOURCE_LIST")
---- smu.measure.range = 10e-3
---- smu.measure.configlist.store("MEASURE_LIST")
---- smu.source.level = 10
---- smu.source.configlist.store("SOURCE_LIST")
---- smu.measure.range = 100e-3
---- smu.measure.configlist.store("MEASURE_LIST")
---- trigger.model.load("ConfigList", "MEASURE_LIST", "SOURCE_LIST")
---- trigger.model.initiate()
---- 
---- --Set up a source configuration list named SOURCE_LIST and a measurement configuration list named MEASURE_LIST. Load the configuration list trigger model, using these two configuration lists. Start the trigger model.
---- ```
----@param ConfigList loadFunConstParam load function constant param
----@param measureConfigList string A string that contains the name of the measurement configuration list to use
----@param sourceConfigList string A string that contains the name of the source configuration list to use
----@param delay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1.
----@overload fun(ConfigList:loadFunConstParam,measureConfigList:string,sourceConfigList:string)
----@overload fun(ConfigList:loadFunConstParam,measureConfigList:string,sourceConfigList:string,delay:number)
-function trigger.model.load(ConfigList, measureConfigList, sourceConfigList, delay, bufferName) end
-
-
---- **This function clears the trigger model.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- When you load this trigger-model template, any blocks that have been defined in the trigger model are cleared so the trigger model has no blocks defined.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/35127.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- trigger.model.load("Empty")
---- print(trigger.model.getblocklist())
---- 
---- --Clear the trigger model to have no blocks defined.
---- --Output:
---- --EMPTY
---- ```
----@param Empty loadFunConstParam load function constant param
-function trigger.model.load(Empty) end
-
-trigger.CLEAR_ENTER = nil
-trigger.CLEAR_NEVER = nil
-
----@alias triggermodelloadLogicTriggerclear
----|`trigger.CLEAR_ENTER`
----|`trigger.CLEAR_NEVER`
-
-
-
---- **This function loads a trigger-model template configuration that sets up a logic trigger through the digital I/O.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This trigger model waits for a digital input event to occur, makes a measurement, and issues a notify event. The notify event asserts a digital output line.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.This command replaces the trigger.model.load() — ExternalTrigger command, which is deprecated. Note that the clear parameter is not available for ExternalTrigger.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/35128.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- trigger.model.load("LogicTrigger", 1, 2, 10, 0.001, defbuffer1)
---- 
---- --Set up the template to use the digital in line and wait for a pulse from digital in line 1 to trigger measurements.
---- --Pulse digital out line 2 when the measurement is complete.
---- --Make 10 measurements, with a delay of 1 ms before each measurement.
---- --Store the measurements in defbuffer1.
---- ```
----@param LogicTrigger loadFunConstParam load function constant param
----@param digInLine number The digital input line (1 to 6); also, the event that the trigger model will wait on in block 1
----@param digOutLine number The digital output line (1 to 6)
----@param count number The number of measurements the instrument will make
----@param clear triggermodelloadLogicTriggerclear To clear previously detected trigger events when entering the wait block
----@param delay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1
----@overload fun(LogicTrigger:loadFunConstParam,digInLine:number,digOutLine:number,count:number,clear:triggermodelloadLogicTriggerclear)
----@overload fun(LogicTrigger:loadFunConstParam,digInLine:number,digOutLine:number,count:number,clear:triggermodelloadLogicTriggerclear,delay:number)
-function trigger.model.load(LogicTrigger, digInLine, digOutLine, count, clear, delay, bufferName) end
-
-
---- **This function loads a predefined trigger model configuration that does a specified number of measurements.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This command sets up a loop that sets a delay, makes a measurement, and then repeats the loop the number of times you define in the count parameter.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/35129.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- reset()
----  
---- --set up measure function
---- smu.measure.func = smu.FUNC_DC_CURRENT
---- smu.measure.terminals = smu.TERMINALS_REAR
---- smu.measure.autorange = smu.ON
---- smu.measure.nplc = 1
----  
---- --set up source function
---- smu.source.func = smu.FUNC_DC_VOLTAGE
---- smu.source.ilimit.level = 0.1
---- smu.source.level = 20
---- smu.source.delay = 0.1
---- smu.source.highc = smu.OFF
----  
---- --turn on output and initiate readings
---- smu.source.output = smu.ON
---- trigger.model.load("SimpleLoop", 200)
---- trigger.model.initiate()
---- waitcomplete()
----  
---- --Parse index and data into three columns
---- print("Rdg #", "Time (s)", "Current (A)")
---- for i = 1, defbuffer1.n do
----       print(i, defbuffer1.relativetimestamps[i], defbuffer1[i])
---- end
----  
---- --Discharge the capacitor to 0 V and turn off the output
---- smu.source.level = 0
---- delay(2)
---- smu.source.output = smu.OFF
---- 
---- --This example uses the Simple Loop trigger model template to do a capacitor test. This example produces 200 readings that have output similar to the following example:
---- --Rdg #	Time (s)	Current (A)
---- --1	0             8.5718931952528e-11
---- --2	0.151875      1.6215984111057e-10
---- --3	0.303727      1.5521139928865e-10
---- --. . .
---- --198	29.91579194	1.5521250951167e-10
---- --199	30.067648716	1.4131290582142e-10
---- --200	30.219497716	1.5521067764368e-10
---- ```
----@overload fun()
----@overload fun()
-function trigger.model.load(SimpleLoop, count, delay, bufferName) end
-
-
---- **This function loads a trigger-model template configuration that makes a specific number of measurements.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This command sets up a loop that sets a delay, makes a measurement, and then repeats the loop the number of times you define in the Count parameter.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger-model blocks in a list format.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/46034.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- reset()
----  
---- -- Set up measure function
---- smu.measure.func = smu.FUNC_DC_CURRENT
---- smu.terminals = smu.TERMINALS_REAR
---- smu.measure.autorange = smu.ON
---- smu.measure.nplc = 1
----  
---- -- Set up source function
---- smu.source.func = smu.FUNC_DC_VOLTAGE
---- smu.source.ilimit.level = 0.1
---- smu.source.level = 20
---- smu.source.delay = 0.1
---- smu.source.highc = smu.OFF
----  
---- -- Turn on output and initiate readings
---- smu.source.output = smu.ON
---- trigger.model.load("SimpleLoop", 200)
---- trigger.model.initiate()
---- waitcomplete()
----  
---- -- Parse index and data into three columns
---- print("Rdg #", "Time (s)", "Current (A)")
---- for i = 1, defbuffer1.n do
----       print(i, defbuffer1.relativetimestamps[i], defbuffer1[i])
---- end
----  
---- -- Discharge the capacitor to 0 V and turn off the output
---- smu.source.level = 0
---- delay(2)
---- smu.source.output = smu.OFF
---- 
---- --This example uses the SimpleLoop trigger-model template to do a capacitor test. This example produces 200 readings that have output similar to the following example:
---- --Rdg #   Time (s)   Current (A)
---- --1   0             8.5718931952528e-11
---- --2   0.151875      1.6215984111057e-10
---- --3   0.303727      1.5521139928865e-10
---- --. . .
---- --198   29.91579194   1.5521250951167e-10
---- --199   30.067648716   1.4131290582142e-10
---- --200   30.219497716   1.5521067764368e-10
---- ```
----@param SimpleLoop loadFunConstParam load function constant param
----@param count number The number of measurements the instrument will make
----@param delay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param bufferName bufferMethods Indicates the reading buffer to use; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, defbuffer1 is used
----@overload fun(SimpleLoop:loadFunConstParam,count:number)
----@overload fun(SimpleLoop:loadFunConstParam,count:number,delay:number)
-function trigger.model.load(SimpleLoop, count, delay, bufferName) end
-
-trigger.CLEAR_ENTER = nil
-trigger.CLEAR_NEVER = nil
-
----@alias triggermodelloadLoopUntilEventclear
----|`trigger.CLEAR_ENTER`
----|`trigger.CLEAR_NEVER`
-
-
-
---- **This function loads a trigger-model template configuration that makes continuous measurements until the specified event occurs.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- The event constant is the event that ends infinite triggering or ends readings set to occur before the trigger and start post-trigger readings. The trigger model makes readings until it detects the event constant. After the event, it makes a finite number of readings, based on the setting of the trigger position.The position marks the location in the reading buffer where the trigger will occur. The position is set as a percentage of the buffer capacity. The buffer captures measurements until a trigger occurs. When the trigger occurs, the buffer retains the percentage of readings specified by the position, then captures remaining readings until 100 percent of the buffer is filled. For example, if this is set to 75 for a reading buffer that holds 10,000 readings, the trigger model makes 2500 readings after it detects the source event. There are 7500 pre-trigger readings and 2500 post-trigger readings.The instrument makes two sets of readings. The first set is made until the trigger event occurs. The second set is made after the trigger event occurs, up to the number of readings calculated by the position parameter.You cannot have the event constant set at none when you run this trigger-model template.The following table lists the options that are available for triggerEvent.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/46040.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- reset()
----  
---- -- Set up measure function
---- smu.measure.func = smu.FUNC_DC_CURRENT
----  
---- -- Initiate readings
---- trigger.model.load("LoopUntilEvent", trigger.EVENT_DISPLAY, 50)
---- trigger.model.initiate()
---- 
---- --Reset the instrument.
---- --Set the instrument to measure current.
---- --Load the LoopUntilEvent trigger model to make measurements until the front panel trigger key is pressed, then continue to make measurements equal to 50% of the reading buffer size.
---- --Start the trigger model.
---- ```
----@param LoopUntilEvent loadFunConstParam load function constant param
----@param triggerEvent triggerEventsForFunctionParam The event that ends infinite triggering or readings set to occur before the trigger; see Details
----@param position number The number of readings to make in relation to the size of the reading buffer; enter as a percentage (0% to 100%)
----@param clear triggermodelloadLoopUntilEventclear To clear previously detected trigger events when entering the wait block (default)
----@param delay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1
----@overload fun(LoopUntilEvent:loadFunConstParam,triggerEvent:triggerEventsForFunctionParam,position:number,clear:triggermodelloadLoopUntilEventclear)
----@overload fun(LoopUntilEvent:loadFunConstParam,triggerEvent:triggerEventsForFunctionParam,position:number,clear:triggermodelloadLoopUntilEventclear,delay:number)
-function trigger.model.load(LoopUntilEvent, triggerEvent, position, clear, delay, bufferName) end
-
-
---- **This function loads a trigger-model template configuration that sets up a grading operation.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This trigger-model template allows you to grade components and place them into up to four bins, based on the comparison to limits.To set a limit as unused, set the high value for the limit to be less than the low limit.All limit patterns and the pass pattern are sent on digital I/O lines 1 to 4, where 1 is the least significant bit.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/46058.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ```
----@param GradeBinning loadFunConstParam load function constant param
----@param components number The number of components to measure (1 to 268,435,455)
----@param startInLine number The input line that starts the test; 5 for digital line 5, 6 for digital line 6; default is 5
----@param startDelay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param endPointDelay any The delay time after the measurement (167 ns to 10 ks); default is 0 for no delay
----@param limit1Pattern number The bit pattern that is sent when the measurement fails limit 1; range 1 to 15; default is 1
----@param limit2Pattern number The bit pattern that is sent when the measurement fails limit 2; range 1 to 15; default is 2
----@param limit3Pattern number The bit pattern that is sent when the measurement fails limit 3; range 1 to 15; default is 4
----@param limit4Pattern number The bit pattern that is sent when the measurement fails limit 4; range 1 to 15; default is 8
----@param allPattern number The bit pattern that is sent when all limits have passed; 1 to 15; default is 15
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,allPattern:number)
----@overload fun(GradeBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,limit4Pattern:number,allPattern:number)
-function trigger.model.load(GradeBinning, components, startInLine, startDelay, endPointDelay, limit1High, limit1Low, limit1Pattern, allPattern, limit2High, limit2Low, limit2Pattern, limit3High, limit3Low, limit3Pattern, limit4High, limit4Low, limit4Pattern, bufferName) end
-
-
---- **This function loads a trigger-model template configuration that sets up a sorting operation.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This trigger-model template allows you to sort components and place them into up to four bins, based on the comparison to limits.To set a limit as unused, set the high value for the limit to be less than the low limit.All limit patterns and the all fail pattern are sent on digital I/O lines 1 to 4, where 1 is the least significant bit.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
----
----[command help](command:kic.viewHelpDocument?["Commands_2450/46066.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ```
----@param SortBinning loadFunConstParam load function constant param
----@param components number The number of components to measure (1 to 268,435,455)
----@param limit1Pattern number The bit pattern that is sent when the measurement passes limit 1; range 1 to 15; default is 1
----@param limit2Pattern number The bit pattern that is sent when the measurement passes limit 2; range 1 to 15; default is 2
----@param limit3Pattern number The bit pattern that is sent when the measurement passes limit 3; range 1 to 15; default is 4
----@param limit4Pattern number The bit pattern that is sent when the measurement passes limit 4; range 1 to 15; default is 8
----@param allPattern number The bit pattern that is sent when all limits have failed; 1 to 15; default is 15
----@param startInLine number The input line that starts the test; 5 for digital line 5, 6 for digital line 6; default is 5
----@param startDelay number The delay time before each measurement (167 ns to 10 ks); default is 0 for no delay
----@param endPointDelay any The delay time after the measurement (167 ns to 10 ks); default is 0 for no delay
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1
----@overload fun(SortBinning:loadFunConstParam,components:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
----@overload fun(SortBinning:loadFunConstParam,components:number,limit1Pattern:number,limit2Pattern:number,limit3Pattern:number,limit4Pattern:number,allPattern:number,startInLine:number,startDelay:number,endPointDelay:any)
-function trigger.model.load(SortBinning, components, startInLine, startDelay, endPointDelay, limit1High, limit1Low, limit1Pattern, allPattern, limit2High, limit2Low, limit2Pattern, limit3High, limit3Low, limit3Pattern, limit4High, limit4Low, limit4Pattern, bufferName) end
-
-
 --- **This function pauses a running trigger model.**
 ---
 --- *Type:*  Function
@@ -6432,12 +5953,12 @@ smu.source = {}
 
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourceoutputsourceOutput
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6480,16 +6001,16 @@ smu.source.output = 0
 smu.source.delay = 0
 
 
-smu.OFFMODE_ZERO = nil
-smu.OFFMODE_HIGHZ = nil
 smu.OFFMODE_NORMAL = nil
+smu.OFFMODE_HIGHZ = nil
 smu.OFFMODE_GUARD = nil
+smu.OFFMODE_ZERO = nil
 
 ---@alias smusourceoffmodesourceOffMode
----|`smu.OFFMODE_ZERO`
----|`smu.OFFMODE_HIGHZ`
 ---|`smu.OFFMODE_NORMAL`
+---|`smu.OFFMODE_HIGHZ`
 ---|`smu.OFFMODE_GUARD`
+---|`smu.OFFMODE_ZERO`
 
 
 
@@ -6512,12 +6033,12 @@ smu.OFFMODE_GUARD = nil
 smu.source.offmode = 0
 
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smusourcefuncsFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -6563,12 +6084,12 @@ smu.source.func = 0
 smu.source.range = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourceautorangesourceAutorange
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6625,30 +6146,30 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
+smu.RANGE_AUTO = nil
 smu.RANGE_BEST = nil
 smu.RANGE_FIXED = nil
-smu.RANGE_AUTO = nil
 
 ---@alias smusourcesweeplinearrangeType
+---|`smu.RANGE_AUTO`
 ---|`smu.RANGE_BEST`
 ---|`smu.RANGE_FIXED`
----|`smu.RANGE_AUTO`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplinearfailAbort
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplineardual
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6709,30 +6230,30 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
+smu.RANGE_AUTO = nil
 smu.RANGE_BEST = nil
 smu.RANGE_FIXED = nil
-smu.RANGE_AUTO = nil
 
 ---@alias smusourcesweeplinearsteprangeType
+---|`smu.RANGE_AUTO`
 ---|`smu.RANGE_BEST`
 ---|`smu.RANGE_FIXED`
----|`smu.RANGE_AUTO`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplinearstepfailAbort
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplinearstepdual
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6791,30 +6312,30 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
+smu.RANGE_AUTO = nil
 smu.RANGE_BEST = nil
 smu.RANGE_FIXED = nil
-smu.RANGE_AUTO = nil
 
 ---@alias smusourcesweeplograngeType
+---|`smu.RANGE_AUTO`
 ---|`smu.RANGE_BEST`
 ---|`smu.RANGE_FIXED`
----|`smu.RANGE_AUTO`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplogfailAbort
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplogdual
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6865,12 +6386,12 @@ smu.OFF = nil
 ---@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay,count:smusourcesweeplogcount,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort,dual:smusourcesweeplogdual,bufferName:bufferMethods)
 function smu.source.sweeplog(configListName, start, stop, points, sDelay, count, rangeType, failAbort, dual, bufferName, asymptote) end
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcereadbackstate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6912,12 +6433,12 @@ smu.OFF = nil
 smu.source.readback = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcehighcstate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -6946,12 +6467,12 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourcesweeplistfailAbort
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -7016,12 +6537,12 @@ smu.OFF = nil
 ---@overload fun(configListName:string,index:number,sDelay:number,count:smusourcesweeplistcount,failAbort:smusourcesweeplistfailAbort)
 function smu.source.sweeplist(configListName, index, sDelay, count, failAbort, bufferName) end
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourceautodelaystate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -7076,12 +6597,12 @@ smu.source.autodelay = 0
 smu.source.userdelay= 0
 
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smusourcesetattributemeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -7107,12 +6628,12 @@ smu.FUNC_DC_VOLTAGE = nil
 ---@param value number The function or setting value
 function smu.source.setattribute(measFunction, setting, value) end
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smusourcegetattributemeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -7133,7 +6654,7 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --Example return:
 --- --1.05e-07
 --- ```
----@return number value The attribute value
+---@return any value The attribute value
 ---@param measFunction smusourcegetattributemeasFunction The source function
 ---@param setting smuSourceGetSetAttributes The setting of the attribute; refer to smu.source.setattribute() for the list of attributes
 function smu.source.getattribute(measFunction, setting) end
@@ -7142,12 +6663,12 @@ smu.interlock = {}
 
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smuinterlocktrippedinterlockStatus
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -7171,12 +6692,12 @@ smu.OFF = nil
 smu.interlock.tripped = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smuinterlockenablestate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -7725,24 +7246,24 @@ digio.STATE_LOW = nil
 digiolineArr.state= 0
 
 
-digio.MODE_DIGITAL_OPEN_DRAIN = nil
-digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
-digio.MODE_DIGITAL_OUT = nil
-digio.MODE_DIGITAL_IN = nil
 digio.MODE_TRIGGER_OPEN_DRAIN = nil
-digio.MODE_TRIGGER_OUT = nil
-digio.MODE_SYNCHRONOUS_MASTER = nil
+digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
 digio.MODE_TRIGGER_IN = nil
+digio.MODE_SYNCHRONOUS_MASTER = nil
+digio.MODE_DIGITAL_OPEN_DRAIN = nil
+digio.MODE_DIGITAL_OUT = nil
+digio.MODE_TRIGGER_OUT = nil
+digio.MODE_DIGITAL_IN = nil
 
 ---@alias digiolinemodelineMode
----|`digio.MODE_DIGITAL_OPEN_DRAIN`
----|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
----|`digio.MODE_DIGITAL_OUT`
----|`digio.MODE_DIGITAL_IN`
 ---|`digio.MODE_TRIGGER_OPEN_DRAIN`
----|`digio.MODE_TRIGGER_OUT`
----|`digio.MODE_SYNCHRONOUS_MASTER`
+---|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
 ---|`digio.MODE_TRIGGER_IN`
+---|`digio.MODE_SYNCHRONOUS_MASTER`
+---|`digio.MODE_DIGITAL_OPEN_DRAIN`
+---|`digio.MODE_DIGITAL_OUT`
+---|`digio.MODE_TRIGGER_OUT`
+---|`digio.MODE_DIGITAL_IN`
 
 
 
@@ -7807,13 +7328,13 @@ trigger.digin = {}
 
 
 
-trigger.EDGE_EITHER = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_EITHER = nil
 trigger.EDGE_FALLING = nil
 
 ---@alias triggerdiginedgedetectedEdge
----|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_FALLING`
 
 
@@ -8013,13 +7534,13 @@ triggerlanoutArr.ipaddress= 0
 
 
 lan.PROTOCOL_TCP = nil
-lan.PROTOCOL_MULTICAST = nil
 lan.PROTOCOL_UDP = nil
+lan.PROTOCOL_MULTICAST = nil
 
 ---@alias triggerlanoutprotocolprotocol
 ---|`lan.PROTOCOL_TCP`
----|`lan.PROTOCOL_MULTICAST`
 ---|`lan.PROTOCOL_UDP`
+---|`lan.PROTOCOL_MULTICAST`
 
 
 
@@ -8135,12 +7656,12 @@ tsplinklineArr.mode= 0
 function tsplinklineArr.reset() end
 
 
-tsplink.STATE_LOW = nil
 tsplink.STATE_HIGH = nil
+tsplink.STATE_LOW = nil
 
 ---@alias tsplinklinestatelineState
----|`tsplink.STATE_LOW`
 ---|`tsplink.STATE_HIGH`
+---|`tsplink.STATE_LOW`
 
 
 
@@ -8173,13 +7694,13 @@ trigger.tsplinkin = {}
 
 
 
-trigger.EDGE_EITHER = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_EITHER = nil
 trigger.EDGE_FALLING = nil
 
 ---@alias triggertsplinkinedgedetectedEdge
----|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_FALLING`
 
 
@@ -8388,15 +7909,15 @@ display.input = {}
 
 
 
+display.NFORMAT_PREFIX = nil
 display.NFORMAT_INTEGER = nil
 display.NFORMAT_DECIMAL = nil
-display.NFORMAT_PREFIX = nil
 display.NFORMAT_EXPONENT = nil
 
 ---@alias displayinputnumbernumberFormat
+---|`display.NFORMAT_PREFIX`
 ---|`display.NFORMAT_INTEGER`
 ---|`display.NFORMAT_DECIMAL`
----|`display.NFORMAT_PREFIX`
 ---|`display.NFORMAT_EXPONENT`
 
 
@@ -8459,29 +7980,29 @@ function display.input.number(dialogTitle, numberFormat, defaultValue, minimumVa
 function display.input.option(dialogTitle, buttonTitle1, buttonTitle2, buttonTitleN, ...) end
 
 display.BUTTON_YES = nil
+display.BUTTON_CANCEL = nil
 display.BUTTON_OK = nil
 display.BUTTON_NO = nil
-display.BUTTON_CANCEL = nil
 
 ---@alias displayinputpromptbuttonReturn
 ---|`display.BUTTON_YES`
+---|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_OK`
 ---|`display.BUTTON_NO`
----|`display.BUTTON_CANCEL`
 
 
-display.BUTTONS_YESNO = nil
-display.BUTTONS_CANCEL = nil
-display.BUTTONS_OK = nil
-display.BUTTONS_YESNOCANCEL = nil
 display.BUTTONS_OKCANCEL = nil
+display.BUTTONS_OK = nil
+display.BUTTONS_CANCEL = nil
+display.BUTTONS_YESNOCANCEL = nil
+display.BUTTONS_YESNO = nil
 
 ---@alias displayinputpromptbuttonSet
----|`display.BUTTONS_YESNO`
----|`display.BUTTONS_CANCEL`
----|`display.BUTTONS_OK`
----|`display.BUTTONS_YESNOCANCEL`
 ---|`display.BUTTONS_OKCANCEL`
+---|`display.BUTTONS_OK`
+---|`display.BUTTONS_CANCEL`
+---|`display.BUTTONS_YESNOCANCEL`
+---|`display.BUTTONS_YESNO`
 
 
 
@@ -8510,16 +8031,16 @@ display.BUTTONS_OKCANCEL = nil
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 63 characters
 function display.input.prompt(buttonSet, dialogTitle) end
 
-display.SFORMAT_UPPER_LOWER = nil
-display.SFORMAT_ANY = nil
 display.SFORMAT_UPPER = nil
+display.SFORMAT_UPPER_LOWER = nil
 display.SFORMAT_BUFFER_NAME = nil
+display.SFORMAT_ANY = nil
 
 ---@alias displayinputstringtextFormat
----|`display.SFORMAT_UPPER_LOWER`
----|`display.SFORMAT_ANY`
 ---|`display.SFORMAT_UPPER`
+---|`display.SFORMAT_UPPER_LOWER`
 ---|`display.SFORMAT_BUFFER_NAME`
+---|`display.SFORMAT_ANY`
 
 
 
@@ -8551,47 +8072,47 @@ buffer.write = {}
 
 
 
-buffer.UNIT_FAHRENHEIT = nil
+buffer.UNIT_CUSTOM3 = nil
 buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_AMP_AC = nil
 buffer.UNIT_DBM = nil
 buffer.UNIT_DECIBEL = nil
+buffer.UNIT_CELSIUS = nil
+buffer.UNIT_AMP = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_FAHRENHEIT = nil
+buffer.UNIT_FARAD = nil
 buffer.UNIT_CUSTOM2 = nil
 buffer.UNIT_DAC = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_CELSIUS = nil
-buffer.UNIT_FARAD = nil
-buffer.UNIT_AMP = nil
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_CUSTOM3 = nil
 
 ---@alias bufferwriteformatunits
----|`buffer.UNIT_FAHRENHEIT`
+---|`buffer.UNIT_CUSTOM3`
 ---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_AMP_AC`
 ---|`buffer.UNIT_DBM`
 ---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_CELSIUS`
+---|`buffer.UNIT_AMP`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_FAHRENHEIT`
+---|`buffer.UNIT_FARAD`
 ---|`buffer.UNIT_CUSTOM2`
 ---|`buffer.UNIT_DAC`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_FARAD`
----|`buffer.UNIT_AMP`
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_CUSTOM3`
 
 
-buffer.DIGITS_7_5 = nil
-buffer.DIGITS_5_5 = nil
 buffer.DIGITS_3_5 = nil
 buffer.DIGITS_8_5 = nil
+buffer.DIGITS_7_5 = nil
 buffer.DIGITS_6_5 = nil
+buffer.DIGITS_5_5 = nil
 buffer.DIGITS_4_5 = nil
 
 ---@alias bufferwriteformatdisplayDigits
----|`buffer.DIGITS_7_5`
----|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_3_5`
 ---|`buffer.DIGITS_8_5`
+---|`buffer.DIGITS_7_5`
 ---|`buffer.DIGITS_6_5`
+---|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_4_5`
 
 
@@ -8717,12 +8238,12 @@ smu.measure.math = {}
 
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasuremathenablevalue
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -8829,12 +8350,12 @@ smu.measure.rel = {}
 ---@return number relativeValue The internal measurement acquired for the relative offset value
 function smu.measure.rel.acquire() end
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasurerelenablerelEnable
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -8887,12 +8408,12 @@ smu.measure.limit = {}
 
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasurelimitautoclearvalue
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -8936,16 +8457,16 @@ smumeasurelimitArr.autoclear= 0
 function smumeasurelimitArr.clear() end
 
 
-smu.FAIL_NONE = nil
-smu.FAIL_HIGH = nil
 smu.FAIL_LOW = nil
+smu.FAIL_HIGH = nil
 smu.FAIL_BOTH = nil
+smu.FAIL_NONE = nil
 
 ---@alias smumeasurelimitfailresult
----|`smu.FAIL_NONE`
----|`smu.FAIL_HIGH`
 ---|`smu.FAIL_LOW`
+---|`smu.FAIL_HIGH`
 ---|`smu.FAIL_BOTH`
+---|`smu.FAIL_NONE`
 
 
 
@@ -9017,12 +8538,12 @@ smu.FAIL_BOTH = nil
 smumeasurelimitArr.fail= 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasurelimitenablestate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -9046,14 +8567,14 @@ smu.OFF = nil
 smumeasurelimitArr.enable= 0
 
 
+smu.AUDIBLE_FAIL = nil
 smu.AUDIBLE_PASS = nil
 smu.AUDIBLE_NONE = nil
-smu.AUDIBLE_FAIL = nil
 
 ---@alias smumeasurelimitaudiblestate
+---|`smu.AUDIBLE_FAIL`
 ---|`smu.AUDIBLE_PASS`
 ---|`smu.AUDIBLE_NONE`
----|`smu.AUDIBLE_FAIL`
 
 
 
@@ -9193,7 +8714,7 @@ function smu.measure.configlist.query(listName, index, fieldSeparator) end
 ---@param listName string A string that represents the name of a measure configuration list
 ---@param index number A number that defines a specific configuration index in the measure configuration list
 ---@param sourceListName number A string that represents the name of a source configuration list
----@param sourceIndex any A number that defines a specific configuration index in the source configuration list
+---@param sourceIndex number A number that defines a specific configuration index in the source configuration list
 ---@overload fun(listName:string)
 ---@overload fun(listName:string,index:number)
 ---@overload fun(listName:string,index:number,sourceListName:number)
@@ -9263,14 +8784,14 @@ function smu.measure.configlist.store(listName, index) end
 ---@param listName string A string that represents the name of a measure configuration list
 function smu.measure.configlist.size(listName) end
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smumeasureconfigliststorefuncmeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -9470,16 +8991,17 @@ function smu.source.configlist.size(listName) end
 ---@param index number A number that defines a specific configuration index in the source configuration list
 ---@param measureListName string A string that represents the name of a measure configuration list
 ---@param measureIndex number A number that defines a specific configuration index in the measure configuration list
+---@overload fun(listName:string)
 ---@overload fun(listName:string,index:number)
 ---@overload fun(listName:string,index:number,measureListName:string)
 function smu.source.configlist.recall(listName, index, measureListName, measureIndex) end
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smusourceconfigliststorefuncmeasFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -9510,12 +9032,12 @@ smu.measure.autozero = {}
 
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasureautozeroenablestate
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -9561,6 +9083,36 @@ smu.source.protect = {}
 
 
 
+smu.PROTECT_80V = nil
+smu.PROTECT_120V = nil
+smu.PROTECT_60V = nil
+smu.PROTECT_160V = nil
+smu.PROTECT_5V = nil
+smu.PROTECT_180V = nil
+smu.PROTECT_100V = nil
+smu.PROTECT_20V = nil
+smu.PROTECT_10V = nil
+smu.PROTECT_NONE = nil
+smu.PROTECT_2V = nil
+smu.PROTECT_140V = nil
+smu.PROTECT_40V = nil
+
+---@alias smusourceprotectlevelx
+---|`smu.PROTECT_80V`
+---|`smu.PROTECT_120V`
+---|`smu.PROTECT_60V`
+---|`smu.PROTECT_160V`
+---|`smu.PROTECT_5V`
+---|`smu.PROTECT_180V`
+---|`smu.PROTECT_100V`
+---|`smu.PROTECT_20V`
+---|`smu.PROTECT_10V`
+---|`smu.PROTECT_NONE`
+---|`smu.PROTECT_2V`
+---|`smu.PROTECT_140V`
+---|`smu.PROTECT_40V`
+
+
 
 --- **This attribute sets the overvoltage protection setting of the source output.**
 ---
@@ -9578,16 +9130,16 @@ smu.source.protect = {}
 --- 
 --- --Sets the maximum voltage limit of the instrument to 40 V.
 --- ```
----@type smuSourceProtectionLevel
+---@type smusourceprotectlevelx
 smu.source.protect.level = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smusourceprotecttrippedvalue
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -9672,12 +9224,12 @@ smu.FILTER_REPEAT_AVG = nil
 smu.measure.filter.type = 0
 
 
-smu.ON = nil
 smu.OFF = nil
+smu.ON = nil
 
 ---@alias smumeasurefilterenablefilterState
----|`smu.ON`
 ---|`smu.OFF`
+---|`smu.ON`
 
 
 
@@ -9829,8 +9381,8 @@ triggertimerArr.start.seconds= 0
 --- ```
 triggertimerArr.start.fractionalseconds= 0
 
----@class smu.source.xlimit
-smu.source.xlimit = {}
+---@class smu.source.ilimit
+smu.source.ilimit = {}
 
 
 
@@ -9851,7 +9403,7 @@ smu.source.xlimit = {}
 --- 
 --- --Set the source function to voltage with the current limit set to 1 A.
 --- ```
-smu.source.xlimit.level = 0
+smu.source.ilimit.level = 0
 
 
 
@@ -9871,7 +9423,51 @@ smu.source.xlimit.level = 0
 --- --Check the state of the source limit for voltage. If the limit was exceeded, the output is:
 --- --smu.ON
 --- ```
-smu.source.xlimit.tripped = 0
+smu.source.ilimit.tripped = 0
+
+---@class smu.source.vlimit
+smu.source.vlimit = {}
+
+
+
+
+--- **This attribute selects the source limit for measurements.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This command sets the source limit for measurements. The values that can be set for this command are limited by the setting for the overvoltage protection limit.The Model 2450 cannot source levels that exceed this limit.If you change the measure range to a range that is not appropriate for this limit, the instrument changes the source limit to a limit that is appropriate to the range and a warning is generated. Depending on the source range, your actual maximum limit value could be lower. The instrument makes adjustments to stay in the operating boundaries.This value can also be limited by the measurement range. If a specific measurement range is set, the limit must be 10.6% or higher of the measurement range. If you set the measurement range to be automatically selected, the measurement range does not affect the limit.Limits are absolute values.You can use smu.source.xlimit.tripped to check the limit state of the source output.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/30561.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smu.source.func = smu.FUNC_DC_VOLTAGE
+--- smu.source.ilimit.level = 1
+--- 
+--- --Set the source function to voltage with the current limit set to 1 A.
+--- ```
+smu.source.vlimit.level = 0
+
+
+
+--- **This attribute indicates if the source exceeded the limits that were set for the selected measurements.**
+---
+--- *Type:*  Attribute_RO
+---
+--- *Details:*<br>
+--- You can use this command to check the limit state of the source.If the limits were exceeded, the instrument clamps the source to keep the source within the set limits.If you check the limit for the source that is not presently selected, nil is returned.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/30562.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- print(smu.source.vlimit.tripped)
+--- 
+--- --Check the state of the source limit for voltage. If the limit was exceeded, the output is:
+--- --smu.ON
+--- ```
+smu.source.vlimit.tripped = 0
 
 ---@type smumeasurelimitArr[]
 smumeasurelimitArr.high = {}
@@ -10095,7 +9691,7 @@ function exit() end
 ---@param startIndex number Beginning index of the buffer to print; this must be more than one and less than endIndex
 ---@param endPointIndex any Ending index of the buffer to print; this must be more than startIndex and less than the index of the last entry in the tables
 ---@param bufferVar bufferMethods Name of first table or reading buffer subtable to print; may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
----@param bufferVar2 any Second table or reading buffer subtable to print; may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
+---@param bufferVar2 bufferMethods Second table or reading buffer subtable to print; may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
 ---@overload fun(startIndex:number,endPointIndex:any,bufferVar:bufferMethods)
 ---@overload fun(startIndex:number,endPointIndex:any,bufferVar:bufferMethods,...:any)
 function printbuffer(startIndex, endPointIndex, bufferVar, bufferVar2) end
@@ -10244,9 +9840,388 @@ function createconfigscript(scriptName) end
 --- ```
 ---@return boolean presence If the functionality is present, returns true; if not, returns false
 function available(functionality) end
+---This is generic function, This function loads a trigger-model template configuration
+---
+---**trigger.model.load() - DurationLoop**
+----
+--- **This function loads a trigger-model template configuration that makes continuous measurements for a specified amount of time.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- When you load this trigger-model template, you can specify amount of time to make a measurement and the length of the delay before the measurement.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/30588.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- reset()
+---  
+--- -- Set up measure function
+--- smu.measure.func = smu.FUNC_DC_CURRENT
+---  
+--- -- Set up source function
+--- smu.source.func = smu.FUNC_DC_VOLTAGE
+--- smu.source.level = 5
+---  
+--- -- Turn on output, initiate readings, and store them in defbuffer1
+--- trigger.model.load("DurationLoop", 10, 0.01, defbuffer1)
+--- trigger.model.initiate()
+--- 
+--- --Reset the instrument. Set the instrument to source voltage at 5 V. Set to measure current.
+--- --Load the duration loop trigger model to take measurements for 10 s with a 10 ms delay before each measurement.
+--- --Start the trigger model.
+--- ```
+---**trigger.model.load() - ConfigList**
+----
+--- **This function loads a trigger-model template configuration that uses source and measure configuration lists.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- This trigger-model template incorporates a source configuration list and measure configuration list. You must set up the configuration lists before loading the trigger model. If the configuration lists change, you must resend this command.You can also set a delay and change the reading buffer.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/35126.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- reset()
+--- smu.source.configlist.create("SOURCE_LIST")
+--- smu.measure.configlist.create("MEASURE_LIST")
+--- smu.source.level = 1
+--- smu.source.configlist.store("SOURCE_LIST")
+--- smu.measure.range = 1e-3
+--- smu.measure.configlist.store("MEASURE_LIST")
+--- smu.source.level = 5
+--- smu.source.configlist.store("SOURCE_LIST")
+--- smu.measure.range = 10e-3
+--- smu.measure.configlist.store("MEASURE_LIST")
+--- smu.source.level = 10
+--- smu.source.configlist.store("SOURCE_LIST")
+--- smu.measure.range = 100e-3
+--- smu.measure.configlist.store("MEASURE_LIST")
+--- trigger.model.load("ConfigList", "MEASURE_LIST", "SOURCE_LIST")
+--- trigger.model.initiate()
+--- 
+--- --Set up a source configuration list named SOURCE_LIST and a measurement configuration list named MEASURE_LIST. Load the configuration list trigger model, using these two configuration lists. Start the trigger model.
+--- ```
+---**trigger.model.load() - Empty**
+----
+--- **This function clears the trigger model.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- When you load this trigger-model template, any blocks that have been defined in the trigger model are cleared so the trigger model has no blocks defined.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/35127.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- trigger.model.load("Empty")
+--- print(trigger.model.getblocklist())
+--- 
+--- --Clear the trigger model to have no blocks defined.
+--- --Output:
+--- --EMPTY
+--- ```
+---**trigger.model.load() - LogicTrigger**
+----
+--- **This function loads a trigger-model template configuration that sets up a logic trigger through the digital I/O.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- This trigger model waits for a digital input event to occur, makes a measurement, and issues a notify event. The notify event asserts a digital output line.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.This command replaces the trigger.model.load() — ExternalTrigger command, which is deprecated. Note that the clear parameter is not available for ExternalTrigger.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/35128.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- trigger.model.load("LogicTrigger", 1, 2, 10, 0.001, defbuffer1)
+--- 
+--- --Set up the template to use the digital in line and wait for a pulse from digital in line 1 to trigger measurements.
+--- --Pulse digital out line 2 when the measurement is complete.
+--- --Make 10 measurements, with a delay of 1 ms before each measurement.
+--- --Store the measurements in defbuffer1.
+--- ```
+---**trigger.model.load() — Simple Loop**
+----
+--- **This function loads a predefined trigger model configuration that does a specified number of measurements.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- This command sets up a loop that sets a delay, makes a measurement, and then repeats the loop the number of times you define in the count parameter.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/35129.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- reset()
+---  
+--- --set up measure function
+--- smu.measure.func = smu.FUNC_DC_CURRENT
+--- smu.measure.terminals = smu.TERMINALS_REAR
+--- smu.measure.autorange = smu.ON
+--- smu.measure.nplc = 1
+---  
+--- --set up source function
+--- smu.source.func = smu.FUNC_DC_VOLTAGE
+--- smu.source.ilimit.level = 0.1
+--- smu.source.level = 20
+--- smu.source.delay = 0.1
+--- smu.source.highc = smu.OFF
+---  
+--- --turn on output and initiate readings
+--- smu.source.output = smu.ON
+--- trigger.model.load("SimpleLoop", 200)
+--- trigger.model.initiate()
+--- waitcomplete()
+---  
+--- --Parse index and data into three columns
+--- print("Rdg #", "Time (s)", "Current (A)")
+--- for i = 1, defbuffer1.n do
+---       print(i, defbuffer1.relativetimestamps[i], defbuffer1[i])
+--- end
+---  
+--- --Discharge the capacitor to 0 V and turn off the output
+--- smu.source.level = 0
+--- delay(2)
+--- smu.source.output = smu.OFF
+--- 
+--- --This example uses the Simple Loop trigger model template to do a capacitor test. This example produces 200 readings that have output similar to the following example:
+--- --Rdg #	Time (s)	Current (A)
+--- --1	0             8.5718931952528e-11
+--- --2	0.151875      1.6215984111057e-10
+--- --3	0.303727      1.5521139928865e-10
+--- --. . .
+--- --198	29.91579194	1.5521250951167e-10
+--- --199	30.067648716	1.4131290582142e-10
+--- --200	30.219497716	1.5521067764368e-10
+--- ```
+---**trigger.model.load() - SimpleLoop**
+----
+--- **This function loads a trigger-model template configuration that makes a specific number of measurements.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- This command sets up a loop that sets a delay, makes a measurement, and then repeats the loop the number of times you define in the Count parameter.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger-model blocks in a list format.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/46034.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- reset()
+---  
+--- -- Set up measure function
+--- smu.measure.func = smu.FUNC_DC_CURRENT
+--- smu.terminals = smu.TERMINALS_REAR
+--- smu.measure.autorange = smu.ON
+--- smu.measure.nplc = 1
+---  
+--- -- Set up source function
+--- smu.source.func = smu.FUNC_DC_VOLTAGE
+--- smu.source.ilimit.level = 0.1
+--- smu.source.level = 20
+--- smu.source.delay = 0.1
+--- smu.source.highc = smu.OFF
+---  
+--- -- Turn on output and initiate readings
+--- smu.source.output = smu.ON
+--- trigger.model.load("SimpleLoop", 200)
+--- trigger.model.initiate()
+--- waitcomplete()
+---  
+--- -- Parse index and data into three columns
+--- print("Rdg #", "Time (s)", "Current (A)")
+--- for i = 1, defbuffer1.n do
+---       print(i, defbuffer1.relativetimestamps[i], defbuffer1[i])
+--- end
+---  
+--- -- Discharge the capacitor to 0 V and turn off the output
+--- smu.source.level = 0
+--- delay(2)
+--- smu.source.output = smu.OFF
+--- 
+--- --This example uses the SimpleLoop trigger-model template to do a capacitor test. This example produces 200 readings that have output similar to the following example:
+--- --Rdg #   Time (s)   Current (A)
+--- --1   0             8.5718931952528e-11
+--- --2   0.151875      1.6215984111057e-10
+--- --3   0.303727      1.5521139928865e-10
+--- --. . .
+--- --198   29.91579194   1.5521250951167e-10
+--- --199   30.067648716   1.4131290582142e-10
+--- --200   30.219497716   1.5521067764368e-10
+--- ```
+---**trigger.model.load() - LoopUntilEvent**
+----
+--- **This function loads a trigger-model template configuration that makes continuous measurements until the specified event occurs.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- The event constant is the event that ends infinite triggering or ends readings set to occur before the trigger and start post-trigger readings. The trigger model makes readings until it detects the event constant. After the event, it makes a finite number of readings, based on the setting of the trigger position.The position marks the location in the reading buffer where the trigger will occur. The position is set as a percentage of the buffer capacity. The buffer captures measurements until a trigger occurs. When the trigger occurs, the buffer retains the percentage of readings specified by the position, then captures remaining readings until 100 percent of the buffer is filled. For example, if this is set to 75 for a reading buffer that holds 10,000 readings, the trigger model makes 2500 readings after it detects the source event. There are 7500 pre-trigger readings and 2500 post-trigger readings.The instrument makes two sets of readings. The first set is made until the trigger event occurs. The second set is made after the trigger event occurs, up to the number of readings calculated by the position parameter.You cannot have the event constant set at none when you run this trigger-model template.The following table lists the options that are available for triggerEvent.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/46040.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- reset()
+---  
+--- -- Set up measure function
+--- smu.measure.func = smu.FUNC_DC_CURRENT
+---  
+--- -- Initiate readings
+--- trigger.model.load("LoopUntilEvent", trigger.EVENT_DISPLAY, 50)
+--- trigger.model.initiate()
+--- 
+--- --Reset the instrument.
+--- --Set the instrument to measure current.
+--- --Load the LoopUntilEvent trigger model to make measurements until the front panel trigger key is pressed, then continue to make measurements equal to 50% of the reading buffer size.
+--- --Start the trigger model.
+--- ```
+---**trigger.model.load() - GradeBinning**
+----
+--- **This function loads a trigger-model template configuration that sets up a grading operation.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- This trigger-model template allows you to grade components and place them into up to four bins, based on the comparison to limits.To set a limit as unused, set the high value for the limit to be less than the low limit.All limit patterns and the pass pattern are sent on digital I/O lines 1 to 4, where 1 is the least significant bit.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/46058.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- ```
+---**trigger.model.load() - SortBinning**
+----
+--- **This function loads a trigger-model template configuration that sets up a sorting operation.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- This trigger-model template allows you to sort components and place them into up to four bins, based on the comparison to limits.To set a limit as unused, set the high value for the limit to be less than the low limit.All limit patterns and the all fail pattern are sent on digital I/O lines 1 to 4, where 1 is the least significant bit.After selecting a trigger-model template, you can view the trigger-model blocks in a graphical format by pressing the front-panel MENU key and under Trigger, selecting Configure. You can also add or delete blocks and change trigger-model settings from this screen. You can use the trigger.model.getblocklist() command to view the trigger model blocks in a list format.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/46066.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- ```
+---@param loadFunConst loadFunConstParam
+function trigger.model.load(loadFunConst,...) end
+buffer.UNIT_SECOND = nil
+buffer.UNIT_CUSTOM3 = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_AMP_AC = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_CELSIUS = nil
+buffer.UNIT_AMP = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_HERTZ = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_RATIO = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_X = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_FAHRENHEIT = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_DAC = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_DECIBEL = nil
+buffer.UNIT_FARAD = nil
+buffer.UNIT_WATT = nil
 
+---@alias buffermathunit
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_CUSTOM3`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_CELSIUS`
+---|`buffer.UNIT_AMP`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_RATIO`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_X`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_FAHRENHEIT`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_WATT`
+
+
+---**buffer.math()**
+----
+--- **This function allows you to run a mathematical expression on a measurement. The expression is applied when the measurement is placed in the reading buffer.**
+---
+--- *Type:*  Function
+---
+--- *Details:*<br>
+--- 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_2450/73595.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- reset()
+--- mathExp = buffer.make(200, buffer.STYLE_FULL)
+--- smu.measure.func = smu.FUNC_DC_VOLTAGE
+---  
+--- buffer.math(mathExp, buffer.UNIT_NONE, buffer.EXPR_MULTIPLY)
+--- for x = 1, 3 do 
+---      print("Reading: ", smu.measure.read(mathExp))
+--- end
+---  
+--- display.changescreen(display.SCREEN_READING_TABLE)
+---  
+--- print("Extra value reading 1: ", mathExp.extravalues[1])
+--- print("Extra value reading 2: ", mathExp.extravalues[2])
+--- print("Extra value reading 3: ", mathExp.extravalues[3])
+--- 
+--- --Reset the instrument.
+--- --Make a buffer named mathExp set to hold 200 readings with a buffer style of FULL.
+--- --Set the measure function to DC voltage.
+--- --Set the buffer math expression to multiply readings against the previous readings.
+--- --Make three readings.
+--- --Display the reading table on the front panel of the instrument, where you can view the extra readings.
+--- --Print the extra values (the calculated values).
+--- --Example output:
+--- --Reading: 6.3863430578e-05
+--- --Reading: 6.7818055872e-05
+--- --Reading: 1.9871571784e-05
+--- --Extra value reading 1: 6.3863430578e-05
+--- --Extra value reading 2: 4.3310937031e-09
+--- --Extra value reading 3: 1.3476513655e-09
+--- ```
+---@param readingBuffer bufferMethods The name of the reading buffer; the reading buffer selected must be set to the style FULL
+---@param unit buffermathunit The units to be applied to the value generated by the expression
+---@param mathExpression mathExpression
+function buffer.math(readingBuffer, unit, mathExpression, ...) end
 ---@type bufferMethods
 defbuffer1 = {}
 
 ---@type bufferMethods
 defbuffer2 = {}
+
+---This is generic function to define trigger model setblock.<br>
+---Signature of this function depends on the BlockType.<br>
+---For more details, please look at the manual by viewing hower help of blockType or opening command help
+---@param blockNumber number
+---@param blockType triggerBlockBranch
+function trigger.model.setblock(blockNumber, blockType,...) end

@@ -118,7 +118,7 @@ namespace jsonToLuaParser
             }
             return false;
         }
-        public static void PrintFields(int depth, string help_file_path, ref Dictionary<string, Dictionary<string, CommandInfo>>[] instrTable, ref string outStr, ref string tsplinkStr, ref string[] arrList, string item)
+        public static void PrintFields(int depth, string file_name, ref Dictionary<string, Dictionary<string, CommandInfo>>[] instrTable, ref string outStr, ref string tsplinkStr, ref string[] arrList, string item)
         {
             string table_name = "";
             string type_name = "";
@@ -217,14 +217,14 @@ namespace jsonToLuaParser
                     bool class_data_populated = false;
                     foreach (var keyvalue in keyValuePair.Value)
                     {
-                        HelpContent(keyvalue.Value, help_file_path, ref outStr, ref tsplinkStr, class_data, class_data_populated, keyValuePair.Key, keyvalue.Key, false);
+                        HelpContent(keyvalue.Value, file_name, ref outStr, ref tsplinkStr, class_data, class_data_populated, keyValuePair.Key, keyvalue.Key, false);
                         class_data_populated = true;
                     }
                 }
             }
         }
 
-        public static void HelpContent(CommandInfo cmd, string help_file_path, ref string outStr, ref string tsplinkStr, string class_data, bool class_data_populated, string table, string attr, bool directCall)
+        public static void HelpContent(CommandInfo cmd, string file_name, ref string outStr, ref string tsplinkStr, string class_data, bool class_data_populated, string table, string attr, bool directCall)
         {
             string command_help = "";
             if (cmd.name.Contains("node[N].execute()"))
@@ -266,7 +266,7 @@ namespace jsonToLuaParser
             command_help += "\n";
             #endregion            
 
-            var helpFilePath = $@"{(help_file_path.Contains("26") ? "Commands_26XX":"Commands_"+help_file_path)}/{cmd.webhelpfile}";
+            var helpFilePath = $@"{(file_name.Contains("26") ? "Commands_26XX":"Commands_"+file_name)}/{cmd.webhelpfile}";
             command_help += "\n--- **" + cmd.description + "**\n---\n"
             + "--- *Type:*  " + cmd.command_type + "\n---\n"
             + "--- *Details:*<br>\n--- " + cmd.details + "\n---\n"
@@ -379,7 +379,7 @@ namespace jsonToLuaParser
                 cmd.signature = cmd.signature.Replace("\"", "");
             }
 
-            if (cmd.command_type != CommandType.Function && !cmd.name.Contains(" trigger.BLOCK_"))
+            if (cmd.command_type != CommandType.Function && !cmd.name.Contains("trigger.BLOCK_"))
             {
                 foreach (var parm in cmd.param_info)
                 {
@@ -475,11 +475,11 @@ namespace jsonToLuaParser
                     attr = attr.Remove(attr.Length - 3, 3);
                     command_help += table + "." + attr + "= 0\n\n";
                 }
-                else if (attr.Contains("level") && table.Contains("smu.source.protect")) //2461
-                {
-                    command_help += "---@type smuSourceProtectionLevel\n";
-                    command_help += table + "." + attr + " = 0\n\n";
-                }
+                //else if (attr.Contains("level") && table.Contains("smu.source.protect")) //2461
+                //{
+                //    command_help += "---@type smuSourceProtectionLevel\n";
+                //    command_help += table + "." + attr + " = 0\n\n";
+                //}
                 else if (attr.Contains("EVENT_ID"))
                 {
                     command_help += "---@type eventID\n";
@@ -637,6 +637,92 @@ defbuffer1 = {}
 
 ---@type bufferMethods
 defbuffer2 = {}";
+        }
+
+        public static void append_setblock_signature(ref string outStr)
+        {
+            outStr += "\n" + @"
+---This is generic function to define trigger model setblock.<br>
+---Signature of this function depends on the BlockType.<br>
+---For more details, please look at the manual by viewing hower help of blockType or opening command help
+---@param blockNumber number
+---@param blockType triggerBlockBranch
+function trigger.model.setblock(blockNumber, blockType,...) end";
+
+        }
+
+        public static string get_command_header(CommandInfo cmd, string file_name)
+        {
+            var command_header = "\n---**" + cmd.name + "**\n"
+                + "----";
+
+            var helpFilePath = $@"{(file_name.Contains("26") ? "Commands_26XX" : "Commands_" + file_name)}/{cmd.webhelpfile}";
+            command_header += "\n--- **" + cmd.description + "**\n---\n"
+            + "--- *Type:*  " + cmd.command_type + "\n---\n"
+            + "--- *Details:*<br>\n--- " + cmd.details + "\n---\n"
+            + "---[command help](command:kic.viewHelpDocument?[\"" + helpFilePath + "\"])" + "\n---\n"
+            + "---<br>*Examples:*<br>\n"
+            + "--- ```lua\n";
+
+            foreach (var x in cmd.example_info)
+            {
+                var exmp = x.example.Split(';');
+                foreach (var item in exmp)
+                {
+                    command_header += "--- " + item + "\n";
+                }
+                //outStr += "--- " + x.example + "\n"
+                command_header += "--- --" + x.description;
+            }
+            command_header += "--- ```";
+
+            return command_header;
+
+        }
+
+        public static void append_buffermath_signature(ref string outStr)
+        {
+            outStr +=
+            @"
+---@param readingBuffer bufferMethods The name of the reading buffer; the reading buffer selected must be set to the style FULL
+---@param unit buffermathunit The units to be applied to the value generated by the expression
+---@param mathExpression mathExpression
+function buffer.math(readingBuffer, unit, mathExpression, ...) end";
+        }
+
+        public static string create_string_constant_alias_type(string alias_name, IList<string> alias_string_list)
+        {
+            var alias_string = $"\n---@alias {alias_name}\n";
+
+            foreach(var typ in alias_string_list)
+            {
+                alias_string+= string.Format("---| `\"{0}\"` \n", typ);
+
+            }
+
+            return alias_string;
+
+        }
+
+        public static string create_enum_alias_type(ParamInfo param)
+        {
+            var command_help = "";
+
+            string[] enum_data = param.enums.Split('|');
+            command_help += "\n";
+            foreach (var data in enum_data)
+            {
+                command_help += data.Split(' ')[0] + " = " + data.Split(' ')[1] + "\n";
+            }
+            command_help += "\n---@alias " + param.Type + "\n";
+            foreach (var data in enum_data)
+            {
+                command_help += "---|`" + data.Split(' ')[0] + "`\n";
+            }
+            command_help += "\n";
+
+            return command_help;
+
         }
     }
 }

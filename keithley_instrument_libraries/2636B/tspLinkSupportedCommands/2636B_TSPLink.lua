@@ -481,12 +481,12 @@ function display.gettext(embellished, row, columnStart, columnEnd) end
 ---@overload fun(format:string,default:number,minimum:number)
 function display.inputvalue(format, default, minimum, maximum) end
 
-display.LOCK = nil
 display.UNLOCK = nil
+display.LOCK = nil
 
 ---@alias displaylocallockoutlockout
----|`display.LOCK`
 ---|`display.UNLOCK`
+---|`display.LOCK`
 
 
 
@@ -533,12 +533,12 @@ display.locallockout = 0
 ---@param items string Menu items to display on the bottom line
 function display.menu(name, items) end
 
-display.ENABLE = nil
 display.DISABLE = nil
+display.ENABLE = nil
 
 ---@alias displaynumpadnumericKeypad
----|`display.ENABLE`
 ---|`display.DISABLE`
+---|`display.ENABLE`
 
 
 
@@ -681,16 +681,16 @@ function display.getannunciators() end
 ---@overload fun(format:string,units:string,help:string,default:number,minimum:number)
 function display.prompt(format, units, help, default, minimum, maximum) end
 
-display.SMUA = nil
-display.SMUB = nil
 display.SMUA_SMUB = nil
 display.USER = nil
+display.SMUA = nil
+display.SMUB = nil
 
 ---@alias displayscreendisplayID
----|`display.SMUA`
----|`display.SMUB`
 ---|`display.SMUA_SMUB`
 ---|`display.USER`
+---|`display.SMUA`
+---|`display.SMUB`
 
 
 
@@ -987,18 +987,18 @@ eventlog.enable = 0
 ---@return string|nil logString The next log entry
 function eventlog.next() end
 
+format.NORMAL = nil
 format.LITTLEENDIAN = nil
 format.BIGENDIANL = nil
-format.NORMAL = nil
-format.SWAPPED = nil
 format.NETWORK = nil
+format.SWAPPED = nil
 
 ---@alias formatbyteorderorder
+---|`format.NORMAL`
 ---|`format.LITTLEENDIAN`
 ---|`format.BIGENDIANL`
----|`format.NORMAL`
----|`format.SWAPPED`
 ---|`format.NETWORK`
+---|`format.SWAPPED`
 
 
 
@@ -1441,12 +1441,12 @@ lan = {}
 --- ```
 function lan.applysettings() end
 
-lan.DISABLE = nil
 lan.ENABLE = nil
+lan.DISABLE = nil
 
 ---@alias lanautoconnectstate
----|`lan.DISABLE`
 ---|`lan.ENABLE`
+---|`lan.DISABLE`
 
 
 
@@ -1507,12 +1507,12 @@ lan.linktimeout = 0
 lan.lxidomain = 0
 
 
-lan.DISABLE = nil
 lan.ENABLE = nil
+lan.DISABLE = nil
 
 ---@alias lannaglestate
----|`lan.DISABLE`
 ---|`lan.ENABLE`
+---|`lan.DISABLE`
 
 
 
@@ -1684,15 +1684,15 @@ localnode.password = 0
 
 
 localnode.PASSWORD_LAN = nil
-localnode.PASSWORD_WEB = nil
-localnode.PASSWORD_NONE = nil
 localnode.PASSWORD_ALL = nil
+localnode.PASSWORD_NONE = nil
+localnode.PASSWORD_WEB = nil
 
 ---@alias localnodepasswordmodemode
 ---|`localnode.PASSWORD_LAN`
----|`localnode.PASSWORD_WEB`
----|`localnode.PASSWORD_NONE`
 ---|`localnode.PASSWORD_ALL`
+---|`localnode.PASSWORD_NONE`
+---|`localnode.PASSWORD_WEB`
 
 
 
@@ -1970,12 +1970,12 @@ serial.baud = 0
 serial.databits = 0
 
 
-serial.FLOW_NONE = nil
 serial.FLOW_HARDWARE = nil
+serial.FLOW_NONE = nil
 
 ---@alias serialflowcontrolflow
----|`serial.FLOW_NONE`
 ---|`serial.FLOW_HARDWARE`
+---|`serial.FLOW_NONE`
 
 
 
@@ -2402,13 +2402,13 @@ function smua.reset() end
 function smua.savebuffer(buffer) end
 
 smua.SENSE_REMOTE = nil
-smua.SENSE_LOCAL = nil
 smua.SENSE_CALA = nil
+smua.SENSE_LOCAL = nil
 
 ---@alias smuasensesenseMode
 ---|`smua.SENSE_REMOTE`
----|`smua.SENSE_LOCAL`
 ---|`smua.SENSE_CALA`
+---|`smua.SENSE_LOCAL`
 
 
 
@@ -2699,13 +2699,13 @@ function smub.reset() end
 function smub.savebuffer(buffer) end
 
 smub.SENSE_REMOTE = nil
-smub.SENSE_LOCAL = nil
 smub.SENSE_CALA = nil
+smub.SENSE_LOCAL = nil
 
 ---@alias smubsensesenseMode
 ---|`smub.SENSE_REMOTE`
----|`smub.SENSE_LOCAL`
 ---|`smub.SENSE_CALA`
+---|`smub.SENSE_LOCAL`
 
 
 
@@ -2988,7 +2988,8 @@ bufferMethods.fillmode = 0
 --- --Example output:
 --- --Current, Current, Current, Current, Current
 --- ```
-bufferMethods.measurefunctions = 0
+---@type integer[]
+bufferMethods.measurefunctions= {}
 
 
 --- **This attribute contains the measurement range values that were used for readings stored in a specified buffer.**
@@ -3011,7 +3012,8 @@ bufferMethods.measurefunctions = 0
 --- --Example output:
 --- --1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07
 --- ```
-bufferMethods.measureranges = 0
+---@type integer[]
+bufferMethods.measureranges= {}
 
 
 --- **This attribute contains the source function that was being used when the readings were stored in a specified reading buffer.**
@@ -3035,7 +3037,8 @@ bufferMethods.measureranges = 0
 --- --Example output:
 --- --Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage
 --- ```
-bufferMethods.sourcefunctions = 0
+---@type integer[]
+bufferMethods.sourcefunctions= {}
 
 
 --- **This attribute indicates the state of the source output for readings that are stored in a specified buffer.**
@@ -3055,7 +3058,8 @@ bufferMethods.sourcefunctions = 0
 --- --Example output:
 --- --On
 --- ```
-bufferMethods.sourceoutputstates = 0
+---@type integer[]
+bufferMethods.sourceoutputstates= {}
 
 
 --- **This attribute contains the source range that was used for readings stored in a specified reading buffer.**
@@ -3078,7 +3082,8 @@ bufferMethods.sourceoutputstates = 0
 --- --Example output:
 --- --1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04
 --- ```
-bufferMethods.sourceranges = 0
+---@type integer[]
+bufferMethods.sourceranges= {}
 
 
 --- **When enabled by the bufferVar.collectsourcevalues attribute, this attribute contains the source levels being output when readings in the reading buffer were acquired.**
@@ -3104,7 +3109,8 @@ bufferMethods.sourceranges = 0
 --- --1.00000e-04, 1.00000e-04,
 --- --1.00000e-04, 1.00000e-04
 --- ```
-bufferMethods.sourcevalues = 0
+---@type integer[]
+bufferMethods.sourcevalues= {}
 
 
 --- **This attribute contains the readings stored in a specified reading buffer.**
@@ -3124,7 +3130,8 @@ bufferMethods.sourcevalues = 0
 --- --Output:
 --- --8.81658e-08
 --- ```
-bufferMethods.readings = 0
+---@type integer[]
+bufferMethods.readings= {}
 
 
 --- **This attribute contains the status values of readings in the reading buffer.**
@@ -3163,7 +3170,8 @@ bufferMethods.readings = 0
 --- --3.99470e-06
 --- --4.00000e+00
 --- ```
-bufferMethods.statuses = 0
+---@type integer[]
+bufferMethods.statuses= {}
 
 
 --- **When enabled by the bufferVar.collecttimestamps attribute, this attribute contains the timestamp when each reading saved in the specified reading buffer occurred.**
@@ -3182,7 +3190,8 @@ bufferMethods.statuses = 0
 --- 
 --- --Get the timestamp of the first reading stored in source‑measure unit (SMU) A, buffer 1.
 --- ```
-bufferMethods.timestamps = 0
+---@type integer[]
+bufferMethods.timestamps= {}
 ---@class timer
 timer = {}
 
@@ -4139,12 +4148,12 @@ lan.config.gateway = 0
 lan.config.ipaddress = 0
 
 
-lan.MANUAL = nil
 lan.AUTO = nil
+lan.MANUAL = nil
 
 ---@alias lanconfigmethodmethod
----|`lan.MANUAL`
 ---|`lan.AUTO`
+---|`lan.MANUAL`
 
 
 
@@ -4522,14 +4531,14 @@ lantriggerArr.mode= 0
 lantriggerArr.overrun= 0
 
 
+lan.UDP2 = nil
 lan.TCP1 = nil
 lan.MULTICAST = nil
-lan.UDP2 = nil
 
 ---@alias lantriggerprotocolprotocol
+---|`lan.UDP2`
 ---|`lan.TCP1`
 ---|`lan.MULTICAST`
----|`lan.UDP2`
 
 
 
@@ -4632,16 +4641,16 @@ smua.cal = {}
 --- ```
 function smua.cal.lock() end
 
-smua.CALSET_FACTORY = nil
-smua.CALSET_DEFAULT = nil
-smua.CALSET_PREVIOUS = nil
 smua.CALSET_NOMINAL = nil
+smua.CALSET_FACTORY = nil
+smua.CALSET_PREVIOUS = nil
+smua.CALSET_DEFAULT = nil
 
 ---@alias smuacalrestorecalset
----|`smua.CALSET_FACTORY`
----|`smua.CALSET_DEFAULT`
----|`smua.CALSET_PREVIOUS`
 ---|`smua.CALSET_NOMINAL`
+---|`smua.CALSET_FACTORY`
+---|`smua.CALSET_PREVIOUS`
+---|`smua.CALSET_DEFAULT`
 
 
 
@@ -4778,13 +4787,13 @@ smua.cal.password = 0
 
 
 smua.CAL_NEGATIVE = nil
-smua.CAL_POSITIVE = nil
 smua.CAL_AUTO = nil
+smua.CAL_POSITIVE = nil
 
 ---@alias smuacalpolaritycalPolarity
 ---|`smua.CAL_NEGATIVE`
----|`smua.CAL_POSITIVE`
 ---|`smua.CAL_AUTO`
+---|`smua.CAL_POSITIVE`
 
 
 
@@ -4807,14 +4816,14 @@ smua.CAL_AUTO = nil
 smua.cal.polarity = 0
 
 
+smua.CALSTATE_CALIBRATING = nil
 smua.CALSTATE_LOCKED = nil
 smua.CALSTATE_UNLOCKED = nil
-smua.CALSTATE_CALIBRATING = nil
 
 ---@alias smuacalstatecalState
+---|`smua.CALSTATE_CALIBRATING`
 ---|`smua.CALSTATE_LOCKED`
 ---|`smua.CALSTATE_UNLOCKED`
----|`smua.CALSTATE_CALIBRATING`
 
 
 
@@ -4861,16 +4870,16 @@ smub.cal = {}
 --- ```
 function smub.cal.lock() end
 
-smub.CALSET_FACTORY = nil
-smub.CALSET_DEFAULT = nil
-smub.CALSET_PREVIOUS = nil
 smub.CALSET_NOMINAL = nil
+smub.CALSET_FACTORY = nil
+smub.CALSET_PREVIOUS = nil
+smub.CALSET_DEFAULT = nil
 
 ---@alias smubcalrestorecalset
----|`smub.CALSET_FACTORY`
----|`smub.CALSET_DEFAULT`
----|`smub.CALSET_PREVIOUS`
 ---|`smub.CALSET_NOMINAL`
+---|`smub.CALSET_FACTORY`
+---|`smub.CALSET_PREVIOUS`
+---|`smub.CALSET_DEFAULT`
 
 
 
@@ -5007,13 +5016,13 @@ smub.cal.password = 0
 
 
 smub.CAL_NEGATIVE = nil
-smub.CAL_POSITIVE = nil
 smub.CAL_AUTO = nil
+smub.CAL_POSITIVE = nil
 
 ---@alias smubcalpolaritycalPolarity
 ---|`smub.CAL_NEGATIVE`
----|`smub.CAL_POSITIVE`
 ---|`smub.CAL_AUTO`
+---|`smub.CAL_POSITIVE`
 
 
 
@@ -5036,14 +5045,14 @@ smub.CAL_AUTO = nil
 smub.cal.polarity = 0
 
 
+smub.CALSTATE_CALIBRATING = nil
 smub.CALSTATE_LOCKED = nil
 smub.CALSTATE_UNLOCKED = nil
-smub.CALSTATE_CALIBRATING = nil
 
 ---@alias smubcalstatecalState
+---|`smub.CALSTATE_CALIBRATING`
 ---|`smub.CALSTATE_LOCKED`
 ---|`smub.CALSTATE_UNLOCKED`
----|`smub.CALSTATE_CALIBRATING`
 
 
 
@@ -5432,13 +5441,13 @@ smua.measure.analogfilter = 0
 
 
 smua.AUTORANGE_ON = nil
-smua.AUTORANGE_FOLLOW_LIMIT = nil
 smua.AUTORANGE_OFF = nil
+smua.AUTORANGE_FOLLOW_LIMIT = nil
 
 ---@alias smuameasureautorangevautoRange
 ---|`smua.AUTORANGE_ON`
----|`smua.AUTORANGE_FOLLOW_LIMIT`
 ---|`smua.AUTORANGE_OFF`
+---|`smua.AUTORANGE_FOLLOW_LIMIT`
 
 
 
@@ -5462,13 +5471,13 @@ smua.measure.autorangev = 0
 
 
 smua.AUTORANGE_ON = nil
-smua.AUTORANGE_FOLLOW_LIMIT = nil
 smua.AUTORANGE_OFF = nil
+smua.AUTORANGE_FOLLOW_LIMIT = nil
 
 ---@alias smuameasureautorangeiautoRange
 ---|`smua.AUTORANGE_ON`
----|`smua.AUTORANGE_FOLLOW_LIMIT`
 ---|`smua.AUTORANGE_OFF`
+---|`smua.AUTORANGE_FOLLOW_LIMIT`
 
 
 
@@ -5491,14 +5500,14 @@ smua.AUTORANGE_OFF = nil
 smua.measure.autorangei = 0
 
 
-smua.AUTOZERO_AUTO = nil
 smua.AUTOZERO_OFF = nil
 smua.AUTOZERO_ONCE = nil
+smua.AUTOZERO_AUTO = nil
 
 ---@alias smuameasureautozeroazMode
----|`smua.AUTOZERO_AUTO`
 ---|`smua.AUTOZERO_OFF`
 ---|`smua.AUTOZERO_ONCE`
+---|`smua.AUTOZERO_AUTO`
 
 
 
@@ -5903,13 +5912,13 @@ smub.measure.analogfilter = 0
 
 
 smub.AUTORANGE_ON = nil
-smub.AUTORANGE_FOLLOW_LIMIT = nil
 smub.AUTORANGE_OFF = nil
+smub.AUTORANGE_FOLLOW_LIMIT = nil
 
 ---@alias smubmeasureautorangevautoRange
 ---|`smub.AUTORANGE_ON`
----|`smub.AUTORANGE_FOLLOW_LIMIT`
 ---|`smub.AUTORANGE_OFF`
+---|`smub.AUTORANGE_FOLLOW_LIMIT`
 
 
 
@@ -5933,13 +5942,13 @@ smub.measure.autorangev = 0
 
 
 smub.AUTORANGE_ON = nil
-smub.AUTORANGE_FOLLOW_LIMIT = nil
 smub.AUTORANGE_OFF = nil
+smub.AUTORANGE_FOLLOW_LIMIT = nil
 
 ---@alias smubmeasureautorangeiautoRange
 ---|`smub.AUTORANGE_ON`
----|`smub.AUTORANGE_FOLLOW_LIMIT`
 ---|`smub.AUTORANGE_OFF`
+---|`smub.AUTORANGE_FOLLOW_LIMIT`
 
 
 
@@ -5962,14 +5971,14 @@ smub.AUTORANGE_OFF = nil
 smub.measure.autorangei = 0
 
 
-smub.AUTOZERO_AUTO = nil
 smub.AUTOZERO_OFF = nil
 smub.AUTOZERO_ONCE = nil
+smub.AUTOZERO_AUTO = nil
 
 ---@alias smubmeasureautozeroazMode
----|`smub.AUTOZERO_AUTO`
 ---|`smub.AUTOZERO_OFF`
 ---|`smub.AUTOZERO_ONCE`
+---|`smub.AUTOZERO_AUTO`
 
 
 
@@ -6678,14 +6687,14 @@ smua.source.offlimitv = 0
 smua.source.offlimiti = 0
 
 
+smua.OUTPUT_NORMAL = nil
 smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_ZERO = nil
-smua.OUTPUT_NORMAL = nil
 
 ---@alias smuasourceoffmodesourceOffMode
+---|`smua.OUTPUT_NORMAL`
 ---|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_ZERO`
----|`smua.OUTPUT_NORMAL`
 
 
 
@@ -6708,14 +6717,14 @@ smua.OUTPUT_NORMAL = nil
 smua.source.offmode = 0
 
 
+smua.OUTPUT_OFF = nil
 smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_ON = nil
-smua.OUTPUT_OFF = nil
 
 ---@alias smuasourceoutputsourceOutput
+---|`smua.OUTPUT_OFF`
 ---|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_ON`
----|`smua.OUTPUT_OFF`
 
 
 
@@ -6738,12 +6747,12 @@ smua.OUTPUT_OFF = nil
 smua.source.output = 0
 
 
-smua.OE_OUTPUT_OFF = nil
 smua.OE_NONE = nil
+smua.OE_OUTPUT_OFF = nil
 
 ---@alias smuasourceoutputenableactionoutputAction
----|`smua.OE_OUTPUT_OFF`
 ---|`smua.OE_NONE`
+---|`smua.OE_OUTPUT_OFF`
 
 
 
@@ -6804,22 +6813,22 @@ smua.source.rangev = 0
 smua.source.rangei = 0
 
 
+smua.SETTLE_SMOOTH_100NA = nil
 smua.SETTLE_FAST_ = nil
 smua.SETTLE_FAST_ALL = nil
 smua.SETTLE_FAST_POLARITY = nil
-smua.SETTLE_SMOOTH_100NA = nil
 smua.SETTLE_DIRECT_IRANGE = nil
-smua.SETTLE_FAST_RANGE = nil
 smua.SETTLE_SMOOTH = nil
+smua.SETTLE_FAST_RANGE = nil
 
 ---@alias smuasourcesettlingsettleOption
+---|`smua.SETTLE_SMOOTH_100NA`
 ---|`smua.SETTLE_FAST_`
 ---|`smua.SETTLE_FAST_ALL`
 ---|`smua.SETTLE_FAST_POLARITY`
----|`smua.SETTLE_SMOOTH_100NA`
 ---|`smua.SETTLE_DIRECT_IRANGE`
----|`smua.SETTLE_FAST_RANGE`
 ---|`smua.SETTLE_SMOOTH`
+---|`smua.SETTLE_FAST_RANGE`
 
 
 
@@ -7282,14 +7291,14 @@ smub.source.offlimitv = 0
 smub.source.offlimiti = 0
 
 
+smub.OUTPUT_NORMAL = nil
 smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_ZERO = nil
-smub.OUTPUT_NORMAL = nil
 
 ---@alias smubsourceoffmodesourceOffMode
+---|`smub.OUTPUT_NORMAL`
 ---|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_ZERO`
----|`smub.OUTPUT_NORMAL`
 
 
 
@@ -7312,14 +7321,14 @@ smub.OUTPUT_NORMAL = nil
 smub.source.offmode = 0
 
 
+smub.OUTPUT_OFF = nil
 smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_ON = nil
-smub.OUTPUT_OFF = nil
 
 ---@alias smubsourceoutputsourceOutput
+---|`smub.OUTPUT_OFF`
 ---|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_ON`
----|`smub.OUTPUT_OFF`
 
 
 
@@ -7342,12 +7351,12 @@ smub.OUTPUT_OFF = nil
 smub.source.output = 0
 
 
-smub.OE_OUTPUT_OFF = nil
 smub.OE_NONE = nil
+smub.OE_OUTPUT_OFF = nil
 
 ---@alias smubsourceoutputenableactionoutputAction
----|`smub.OE_OUTPUT_OFF`
 ---|`smub.OE_NONE`
+---|`smub.OE_OUTPUT_OFF`
 
 
 
@@ -7408,22 +7417,22 @@ smub.source.rangev = 0
 smub.source.rangei = 0
 
 
+smub.SETTLE_SMOOTH_100NA = nil
 smub.SETTLE_FAST_ = nil
 smub.SETTLE_FAST_ALL = nil
 smub.SETTLE_FAST_POLARITY = nil
-smub.SETTLE_SMOOTH_100NA = nil
 smub.SETTLE_DIRECT_IRANGE = nil
-smub.SETTLE_FAST_RANGE = nil
 smub.SETTLE_SMOOTH = nil
+smub.SETTLE_FAST_RANGE = nil
 
 ---@alias smubsourcesettlingsettleOption
+---|`smub.SETTLE_SMOOTH_100NA`
 ---|`smub.SETTLE_FAST_`
 ---|`smub.SETTLE_FAST_ALL`
 ---|`smub.SETTLE_FAST_POLARITY`
----|`smub.SETTLE_SMOOTH_100NA`
 ---|`smub.SETTLE_DIRECT_IRANGE`
----|`smub.SETTLE_FAST_RANGE`
 ---|`smub.SETTLE_SMOOTH`
+---|`smub.SETTLE_FAST_RANGE`
 
 
 
@@ -10067,16 +10076,16 @@ triggergeneratorArr.EVENT_ID= 0
 ---@class display.smua.measure
 display.smua.measure = {}
 
+display.MEASURE_DCVOLTS = nil
 display.MEASURE_DCAMPS = nil
 display.MEASURE_WATTS = nil
 display.MEASURE_OHMS = nil
-display.MEASURE_DCVOLTS = nil
 
 ---@alias displaysmuameasurefuncfunc
+---|`display.MEASURE_DCVOLTS`
 ---|`display.MEASURE_DCAMPS`
 ---|`display.MEASURE_WATTS`
 ---|`display.MEASURE_OHMS`
----|`display.MEASURE_DCVOLTS`
 
 
 
@@ -10101,16 +10110,16 @@ display.smua.measure.func = 0
 ---@class display.smub.measure
 display.smub.measure = {}
 
+display.MEASURE_DCVOLTS = nil
 display.MEASURE_DCAMPS = nil
 display.MEASURE_WATTS = nil
 display.MEASURE_OHMS = nil
-display.MEASURE_DCVOLTS = nil
 
 ---@alias displaysmubmeasurefuncfunc
+---|`display.MEASURE_DCVOLTS`
 ---|`display.MEASURE_DCAMPS`
 ---|`display.MEASURE_WATTS`
 ---|`display.MEASURE_OHMS`
----|`display.MEASURE_DCVOLTS`
 
 
 
@@ -10176,12 +10185,12 @@ lan.config.dns.address = 0
 lan.config.dns.domain = 0
 
 
-lan.DISABLE = nil
 lan.ENABLE = nil
+lan.DISABLE = nil
 
 ---@alias lanconfigdnsdynamicstate
----|`lan.DISABLE`
 ---|`lan.ENABLE`
+---|`lan.DISABLE`
 
 
 
@@ -10206,12 +10215,12 @@ lan.ENABLE = nil
 lan.config.dns.dynamic = 0
 
 
-lan.DISABLE = nil
 lan.ENABLE = nil
+lan.DISABLE = nil
 
 ---@alias lanconfigdnsverifystate
----|`lan.DISABLE`
 ---|`lan.ENABLE`
+---|`lan.DISABLE`
 
 
 
@@ -10437,14 +10446,14 @@ smua.FILTER_OFF = nil
 smua.measure.filter.enable = 0
 
 
-smua.FILTER_REPEAT_AVG = nil
 smua.FILTER_MEDIAN = nil
 smua.FILTER_MOVING_AVG = nil
+smua.FILTER_REPEAT_AVG = nil
 
 ---@alias smuameasurefiltertypefilterType
----|`smua.FILTER_REPEAT_AVG`
 ---|`smua.FILTER_MEDIAN`
 ---|`smua.FILTER_MOVING_AVG`
+---|`smua.FILTER_REPEAT_AVG`
 
 
 
@@ -10528,14 +10537,14 @@ smub.FILTER_OFF = nil
 smub.measure.filter.enable = 0
 
 
-smub.FILTER_REPEAT_AVG = nil
 smub.FILTER_MEDIAN = nil
 smub.FILTER_MOVING_AVG = nil
+smub.FILTER_REPEAT_AVG = nil
 
 ---@alias smubmeasurefiltertypefilterType
----|`smub.FILTER_REPEAT_AVG`
 ---|`smub.FILTER_MEDIAN`
 ---|`smub.FILTER_MOVING_AVG`
+---|`smub.FILTER_REPEAT_AVG`
 
 
 
@@ -10564,12 +10573,12 @@ smub.measure.filter.type = 0
 ---@class smua.measure.rel
 smua.measure.rel = {}
 
-smua.REL_OFF = nil
 smua.REL_ON = nil
+smua.REL_OFF = nil
 
 ---@alias smuameasurerelenablevrelEnable
----|`smua.REL_OFF`
 ---|`smua.REL_ON`
+---|`smua.REL_OFF`
 
 
 
@@ -10592,12 +10601,12 @@ smua.REL_ON = nil
 smua.measure.rel.enablev = 0
 
 
-smua.REL_OFF = nil
 smua.REL_ON = nil
+smua.REL_OFF = nil
 
 ---@alias smuameasurerelenableirelEnable
----|`smua.REL_OFF`
 ---|`smua.REL_ON`
+---|`smua.REL_OFF`
 
 
 
@@ -10620,12 +10629,12 @@ smua.REL_ON = nil
 smua.measure.rel.enablei = 0
 
 
-smua.REL_OFF = nil
 smua.REL_ON = nil
+smua.REL_OFF = nil
 
 ---@alias smuameasurerelenablerrelEnable
----|`smua.REL_OFF`
 ---|`smua.REL_ON`
+---|`smua.REL_OFF`
 
 
 
@@ -10648,12 +10657,12 @@ smua.REL_ON = nil
 smua.measure.rel.enabler = 0
 
 
-smua.REL_OFF = nil
 smua.REL_ON = nil
+smua.REL_OFF = nil
 
 ---@alias smuameasurerelenableprelEnable
----|`smua.REL_OFF`
 ---|`smua.REL_ON`
+---|`smua.REL_OFF`
 
 
 
@@ -10754,12 +10763,12 @@ smua.measure.rel.levelp = 0
 ---@class smub.measure.rel
 smub.measure.rel = {}
 
-smub.REL_OFF = nil
 smub.REL_ON = nil
+smub.REL_OFF = nil
 
 ---@alias smubmeasurerelenablevrelEnable
----|`smub.REL_OFF`
 ---|`smub.REL_ON`
+---|`smub.REL_OFF`
 
 
 
@@ -10782,12 +10791,12 @@ smub.REL_ON = nil
 smub.measure.rel.enablev = 0
 
 
-smub.REL_OFF = nil
 smub.REL_ON = nil
+smub.REL_OFF = nil
 
 ---@alias smubmeasurerelenableirelEnable
----|`smub.REL_OFF`
 ---|`smub.REL_ON`
+---|`smub.REL_OFF`
 
 
 
@@ -10810,12 +10819,12 @@ smub.REL_ON = nil
 smub.measure.rel.enablei = 0
 
 
-smub.REL_OFF = nil
 smub.REL_ON = nil
+smub.REL_OFF = nil
 
 ---@alias smubmeasurerelenablerrelEnable
----|`smub.REL_OFF`
 ---|`smub.REL_ON`
+---|`smub.REL_OFF`
 
 
 
@@ -10838,12 +10847,12 @@ smub.REL_ON = nil
 smub.measure.rel.enabler = 0
 
 
-smub.REL_OFF = nil
 smub.REL_ON = nil
+smub.REL_OFF = nil
 
 ---@alias smubmeasurerelenableprelEnable
----|`smub.REL_OFF`
 ---|`smub.REL_ON`
+---|`smub.REL_OFF`
 
 
 
@@ -12751,12 +12760,12 @@ status.questionable.unstable_output.ptr = 0
 ---@class display.smua.limit
 display.smua.limit = {}
 
-display.LIMIT_IV = nil
 display.LIMIT_P = nil
+display.LIMIT_IV = nil
 
 ---@alias displaysmualimitfuncfunc
----|`display.LIMIT_IV`
 ---|`display.LIMIT_P`
+---|`display.LIMIT_IV`
 
 
 
@@ -12781,12 +12790,12 @@ display.smua.limit.func = 0
 ---@class display.smub.limit
 display.smub.limit = {}
 
-display.LIMIT_IV = nil
 display.LIMIT_P = nil
+display.LIMIT_IV = nil
 
 ---@alias displaysmublimitfuncfunc
----|`display.LIMIT_IV`
 ---|`display.LIMIT_P`
+---|`display.LIMIT_IV`
 
 
 

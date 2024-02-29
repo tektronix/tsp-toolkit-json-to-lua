@@ -86,6 +86,16 @@ namespace jsonToLuaParser
                 instrTable[i] = new Dictionary<string, Dictionary<string, CommandInfo>>();
             }      
             var directFunctioncommands = cmdList.Where(cmd => !cmd.name.Contains('.')).ToList();
+
+            var triggerModelLoadCommands = cmdList.Where(cmd => cmd.name.Contains("trigger.model.load()")).ToList(); // get trigger.model.load() commands
+
+            var bufferMathCommand = cmdList.Where(cmd => cmd.name.Contains("buffer.math()")).ToList();
+
+       
+            cmdList = cmdList.Except(triggerModelLoadCommands).ToList(); // remove all trigger.model.load() commands and handle it speratley
+
+            cmdList = cmdList.Except(bufferMathCommand).ToList(); // remove "buffer.math()" commands and handle it speratley
+
             foreach (var cmd in cmdList)
             {
                 string s = cmd.name;
@@ -136,7 +146,46 @@ namespace jsonToLuaParser
             {
                 Utility.HelpContent(cmd, file_name, ref outStr, ref tsplinkStr, "", true, "", "", true);
             }
-            
+
+            if (triggerModelLoadCommands.Count > 0)
+            {
+                var defStr = "---This is generic function, This function loads a trigger-model template configuration\n---";
+                outStr += defStr;
+                tsplinkStr += defStr;
+
+                // IList<string> aliasTypes = new List<string>();
+
+                foreach (var cmd in triggerModelLoadCommands)
+                {
+                    // aliasTypes.Add(cmd.name.Split('-')[1].Trim());
+                    var header = Utility.get_command_header(cmd, file_name);
+                    outStr += header;
+                    tsplinkStr += header;
+                }
+
+                //outStr+= Utility.create_alias_type("loadFunConstParam", aliasTypes);
+                //tsplinkStr += Utility.create_alias_type("loadFunConstParam", aliasTypes);
+                var sig = "\n"+@"---@param loadFunConst loadFunConstParam
+function trigger.model.load(loadFunConst,...) end";
+                outStr += sig;
+                tsplinkStr += sig;
+
+                
+            }
+
+            if (bufferMathCommand.Count > 0)
+            {
+                var alias = Utility.create_enum_alias_type(bufferMathCommand[0].param_info[1]);
+                var header = Utility.get_command_header(bufferMathCommand[0], file_name);
+
+                outStr += alias + header;
+                tsplinkStr += alias + header;
+
+                Utility.append_buffermath_signature(ref outStr);
+                Utility.append_buffermath_signature(ref tsplinkStr);
+
+            }
+
             nodeTable.Remove("node[N] = node[N]"); // for now removing this command from nodeTable because its creating problem in lua definitions
             nodeTable.Remove("slot[slot] = slot[slot]"); // for now removing this command from nodeTable because its creating problem in lua definition
             var nodeTable_str = @"{" + string.Join(",\n ", nodeTable) + "\n}";
@@ -167,6 +216,9 @@ namespace jsonToLuaParser
             {
                 Utility.append_defbuffer1_defbuffer2_defination(ref outStr);
                 Utility.append_defbuffer1_defbuffer2_defination(ref tsplinkStr);
+
+                Utility.append_setblock_signature(ref outStr);
+                Utility.append_setblock_signature(ref tsplinkStr);
             }
 
             File.WriteAllText($"keithley_instrument_libraries/{model}/tspLinkSupportedCommands/nodeTable.lua", nodeTableDetails);
