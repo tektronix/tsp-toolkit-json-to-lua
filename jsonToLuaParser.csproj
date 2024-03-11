@@ -2,8 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="keithley_instrument_libraries\**" />
+    <EmbeddedResource Remove="keithley_instrument_libraries\**" />
+    <None Remove="keithley_instrument_libraries\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="bin\Debug\net5.0\2450.json" />

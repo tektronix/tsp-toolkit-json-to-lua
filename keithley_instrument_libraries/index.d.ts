@@ -1,1 +1,1 @@
-export const COMMAND_SETS: Map<string, string>
+export const COMMAND_SETS: string
