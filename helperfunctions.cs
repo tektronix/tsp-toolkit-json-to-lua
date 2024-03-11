@@ -942,7 +942,7 @@ namespace jsonToLuaParser
             + "---  smua.measure.overlappedv(smua.nvbuffer1)\n"
             + "--- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.\n"
             + "--- ```\n"
-            + "---@type bufferMethods\n"
+            + "---@type bufferVar\n"
             + "smua.nvbuffer1 = {}\n\n"
 
             + "---**buffer 2 for channel A**\n"
@@ -955,7 +955,7 @@ namespace jsonToLuaParser
             + "---  smua.measure.overlappedv(smua.nvbuffer2)\n"
             + "--- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 2.\n"
             + "--- ```\n"
-            + "---@type bufferMethods\n"
+            + "---@type bufferVar\n"
             + "smua.nvbuffer2 = {}\n\n"
 
 
@@ -969,7 +969,7 @@ namespace jsonToLuaParser
             + "---  smua.measure.overlappedv(smub.nvbuffer1)\n"
             + "--- --Store voltage readings from SMU channel B into SMU channel B dedicated reading buffer 1.\n"
             + "--- ```\n"
-            + "---@type bufferMethods\n"
+            + "---@type bufferVar\n"
             + "smub.nvbuffer1 = {}\n\n"
 
             + "---**buffer 2 for channel B**\n"
@@ -982,7 +982,7 @@ namespace jsonToLuaParser
             + "---  smua.measure.overlappedv(smub.nvbuffer2)\n"
             + "--- --Store voltage readings from SMU channel B into SMU channel B dedicated reading buffer 2.\n"
             + "--- ```\n"
-            + "---@type bufferMethods\n"
+            + "---@type bufferVar\n"
             + "smub.nvbuffer2 = {}\n\n"
 
             + "---**This function creates a reading buffer.**"
@@ -995,7 +995,7 @@ namespace jsonToLuaParser
             + "--- mybuffer2 = smua.makebuffer(200)\n"
             + "--- --Creates a 200 element reading buffer (mybuffer2) for SMU channel A.\n"
             + "--- ```\n"
-            + "---@return bufferMethods\n"
+            + "---@return bufferVar\n"
             + "---@param bufferSize integer any Maximum number of readings that can be stored.\n"
             + "function  smua.makebuffer(bufferSize) end\n\n"
 
@@ -1009,7 +1009,7 @@ namespace jsonToLuaParser
             + "--- mybuffer2 = smub.makebuffer(200)\n"
             + "--- --Creates a 200 element reading buffer (mybuffer2) for SMU channel B.\n"
             + "--- ```\n"
-            + "---@return bufferMethods\n"
+            + "---@return bufferVar\n"
             + "---@param bufferSize integer any Maximum number of readings that can be stored.\n"
             + "function  smub.makebuffer(bufferSize) end\n\n";
         }

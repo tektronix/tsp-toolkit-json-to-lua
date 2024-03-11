@@ -134,9 +134,9 @@ namespace jsonToLuaParser
                 }
             }
 
-            outStr += "---@class io_object\nlocal io_object={}\n---@class script_object\nlocal script_object={}\n---@class eventID\n\n---@class file_object\nlocal file_object ={}\n\n"; //PRIV
-            outStr += "---@class bufferMethods\nlocal bufferMethods={}\n";
-            outStr += "---@class digio\n digio = {}\n\n---@class tsplink\n tsplink = {}\n\n---@class lan\n  lan = {}\n\n---@class tspnetConnectionID\nlocal tspnetConnectionID = {}\n\n";
+            outStr += "---@class io_object\nlocal io_object={}\n---@class scriptVar\nlocal scriptVar={}\n---@class eventID\n\n---@class file_object\nlocal file_object ={}\n\n"; //PRIV
+            outStr += "---@class bufferVar\nlocal bufferVar={}\n";
+            outStr += "---@class digio\n digio = {}\n\n---@class tsplink\n tsplink = {}\n\n---@class lan\n  lan = {}\n\n---@class tspnetConnectionID\nlocal tspnetConnectionID = {}\n\n ---@class promptID\nlocal promptID = {}\n\n";
 
             var tsplinkStr = "";
             string[] arrlist = { };
@@ -221,10 +221,17 @@ function trigger.model.load(loadFunConst,...) end";
                 Utility.append_setblock_signature(ref tsplinkStr);
             }
 
-            File.WriteAllText($"keithley_instrument_libraries/{model}/tspLinkSupportedCommands/nodeTable.lua", nodeTableDetails);
-            File.WriteAllText($"keithley_instrument_libraries/{model}/AllTspCommands/" + file_name + ".lua", outStr);
-            File.WriteAllText($"keithley_instrument_libraries/{model}/tspLinkSupportedCommands/" + file_name + "_TSPLink.lua", tsplinkStr);
+            var nodeTableFile = $"keithley_instrument_libraries/{model}/tspLinkSupportedCommands/nodeTable.lua";
+            var AllTspCommandsFile = $"keithley_instrument_libraries/{model}/AllTspCommands/" + file_name + ".lua";
+            var tspLinkSupportedCommandsFile = $"keithley_instrument_libraries/{model}/tspLinkSupportedCommands/" + file_name + "_TSPLink.lua";
 
+            Utility.write_to_file(nodeTableFile, nodeTableDetails);
+            Utility.write_to_file(AllTspCommandsFile, outStr);
+            Utility.write_to_file(tspLinkSupportedCommandsFile, tsplinkStr);
+
+            Utility.SetFileReadOnly(nodeTableFile);
+            Utility.SetFileReadOnly(AllTspCommandsFile);
+            Utility.SetFileReadOnly(tspLinkSupportedCommandsFile);
             return 0;
         }
     }

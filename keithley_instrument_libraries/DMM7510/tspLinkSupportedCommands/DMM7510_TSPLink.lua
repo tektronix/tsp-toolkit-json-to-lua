@@ -2,15 +2,15 @@
 
 ---@class io_object
 local io_object={}
----@class script_object
-local script_object={}
+---@class scriptVar
+local scriptVar={}
 ---@class eventID
 
 ---@class file_object
 local file_object ={}
 
----@class bufferMethods
-local bufferMethods={}
+---@class bufferVar
+local bufferVar={}
 ---@class digio
  digio = {}
 
@@ -22,6 +22,9 @@ local bufferMethods={}
 
 ---@class tspnetConnectionID
 local tspnetConnectionID = {}
+
+ ---@class promptID
+local promptID = {}
 
 ---@class dataqueue
 dataqueue = {}
@@ -61,7 +64,7 @@ dataqueue = {}
 ---@return boolean result The resulting value of true or false based on the success of the function
 ---@param value any The data item to add; value can be of any type
 ---@param timeout number The maximum number of seconds to wait for space in the data queue
----@overload fun(value:any):boolean
+---@overload fun(value:any):result:boolean
 function dataqueue.add(value, timeout) end
 
 
@@ -95,7 +98,7 @@ function dataqueue.clear() end
 
 dataqueue.CAPACITY = nil
 
----@alias dataqueueCAPACITYcount
+---@alias dataqueue.CAPACITY
 ---|`dataqueue.CAPACITY`
 
 
@@ -122,9 +125,8 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
----@type dataqueueCAPACITYcount
-dataqueue.CAPACITY = 0
-
+---@type dataqueue.CAPACITY | integer
+dataqueue.CAPACITY = dataqueue.CAPACITY
 
 
 --- **This attribute contains the number of items in the data queue.**
@@ -153,8 +155,8 @@ dataqueue.CAPACITY = 0
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
+---@type number
 dataqueue.count = 0
-
 
 
 --- **This function removes the next entry from the data queue.**
@@ -199,7 +201,7 @@ dataqueue.count = 0
 --- ```
 ---@return any value The next entry in the data queue
 ---@param timeout number The number of seconds to wait for data in the queue
----@overload fun():any
+---@overload fun():value:any
 function dataqueue.next(timeout) end
 ---@class fs
 fs = {}
@@ -319,7 +321,8 @@ function fs.is_dir(path) end
 --- --If it does not exist, create a directory named temp.
 --- ```
 ---@return string path The returned path of the new directory
-function fs.mkdir(newPath) end
+---@param newpath string Location (path) of where to create the new directory
+function fs.mkdir(newpath) end
 
 
 --- **This function returns a list of the file system entries in the directory.**
@@ -346,7 +349,7 @@ function fs.mkdir(newPath) end
 --- --Set entries as the variable for the file system entries in rootDirectory.
 --- --Return the number of files and directories in the directory.
 --- ```
----@return any files A table containing the names of all the file system entries in the specified directory
+---@return string[] files A table containing the names of all the file system entries in the specified directory
 ---@param path string The directory path
 function fs.readdir(path) end
 
@@ -420,8 +423,8 @@ lan = {}
 --- 
 --- --Displays the LXI domain.
 --- ```
+---@type number
 lan.lxidomain = 0
-
 ---@class nodeArr
 local nodeArr = {}
 
@@ -516,8 +519,8 @@ localnode = {}
 --- --Outputs the model number of the local node. For example:
 --- --DMM7510 
 --- ```
-localnode.model = 0
-
+---@type string
+localnode.model = ''
 
 
 --- **This function sets the date and time of the instrument.**
@@ -598,8 +601,8 @@ function localnode.gettime() end
 --- --Outputs the present version level. Example output:
 --- --1.0.0a
 --- ```
-localnode.version = 0
-
+---@type string
+localnode.version = ''
 
 
 --- **This attribute stores the instrument's serial number.**
@@ -620,8 +623,8 @@ localnode.version = 0
 --- --Clears the instrument display.
 --- --Places the serial number of this instrument on the bottom line of the USER swipe screen display. Displays the USER swipe screen.
 --- ```
-localnode.serialno = 0
-
+---@type string
+localnode.serialno = ''
 
 
 --- **This attribute contains the power line frequency setting that is used for NPLC calculations.**
@@ -640,19 +643,19 @@ localnode.serialno = 0
 --- 
 --- --Reads the line frequency setting.
 --- ```
+---@type number
 localnode.linefreq = 0
 
-
-localnode.ACCESS_PROTECTED = nil
-localnode.ACCESS_EXCLUSIVE = nil
-localnode.ACCESS_FULL = nil
 localnode.ACCESS_LOCKOUT = nil
+localnode.ACCESS_PROTECTED = nil
+localnode.ACCESS_FULL = nil
+localnode.ACCESS_EXCLUSIVE = nil
 
 ---@alias localnodeaccessaccessType
----|`localnode.ACCESS_PROTECTED`
----|`localnode.ACCESS_EXCLUSIVE`
----|`localnode.ACCESS_FULL`
 ---|`localnode.ACCESS_LOCKOUT`
+---|`localnode.ACCESS_PROTECTED`
+---|`localnode.ACCESS_FULL`
+---|`localnode.ACCESS_EXCLUSIVE`
 
 
 
@@ -676,8 +679,7 @@ localnode.ACCESS_LOCKOUT = nil
 --- --Log out of the interface.
 --- ```
 ---@type localnodeaccessaccessType
-localnode.access = 0
-
+localnode.access = localnode.ACCESS_LOCKOUT
 
 
 --- **This attribute returns the internal temperature of the instrument.**
@@ -697,8 +699,8 @@ localnode.access = 0
 --- --Example output:
 --- --53.732574528
 --- ```
+---@type any
 localnode.internaltemp = 0
-
 ---@class tsplink
 tsplink = {}
 
@@ -718,8 +720,8 @@ tsplink = {}
 --- 
 --- --Assign the instrument to TSP-Link group number 3.
 --- ```
+---@type number
 tsplink.group = 0
-
 
 
 --- **This attribute defines the node number. **
@@ -737,8 +739,8 @@ tsplink.group = 0
 --- 
 --- --Sets the TSP-Link node for this instrument to number 3.
 --- ```
+---@type number
 tsplink.node = 0
-
 
 
 --- **This function reads the TSP-Link trigger lines as a digital I/O port. **
@@ -782,8 +784,8 @@ function tsplink.readport() end
 --- --Read the state of the TSP-Link system. If it is online, the output is:
 --- --online
 --- ```
+---@type "online" | "offline"
 tsplink.state = 0
-
 
 
 --- **This function writes to all TSP-Link synchronization lines as a digital I/O port. **
@@ -820,8 +822,8 @@ function tsplink.writeport(data) end
 --- 
 --- --Write‑protects TSP-Link trigger lines 1 and 3.
 --- ```
+---@type any
 tsplink.writeprotect = 0
-
 
 
 --- **This attribute reads the node number assigned to the master node.**
@@ -839,8 +841,8 @@ tsplink.writeprotect = 0
 --- 
 --- --Store the TSP-Link master node number in a variable called LinkMaster.
 --- ```
+---@type number
 tsplink.master = 0
-
 
 
 --- **This function defines a trigger model block that clears the reading buffer.**
@@ -866,12 +868,12 @@ tsplink.master = 0
 trigger.BLOCK_BUFFER_CLEAR = 0
 
 
-trigger.CLEAR_NEVER = nil
 trigger.CLEAR_ENTER = nil
+trigger.CLEAR_NEVER = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_WAITclear
----|`trigger.CLEAR_NEVER`
 ---|`trigger.CLEAR_ENTER`
+---|`trigger.CLEAR_NEVER`
 
 
 trigger.WAIT_OR = nil
@@ -901,8 +903,8 @@ trigger.WAIT_AND = nil
 --- Additional paramteres are:
 --- - *event*: The event that must occur before the trigger block allows trigger execution to continue (see Details)<br>
 --- - *clear*: To clear previously detected trigger events when entering the wait block<br>
----    ```trigger.CLEAR_NEVER```<br>
 ---    ```trigger.CLEAR_ENTER```<br>
+---    ```trigger.CLEAR_NEVER```<br>
 --- - *logic*: If each event must occur before the trigger model continues<br>
 ---    ```trigger.WAIT_OR```<br>
 ---    ```trigger.WAIT_AND```<br>
@@ -914,14 +916,14 @@ trigger.WAIT_AND = nil
 trigger.BLOCK_WAIT = 0
 
 
-trigger.COUNT_AUTO = nil
 trigger.COUNT_INFINITE = nil
 trigger.COUNT_STOP = nil
+trigger.COUNT_AUTO = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_MEASURE_DIGITIZEcount
----|`trigger.COUNT_AUTO`
 ---|`trigger.COUNT_INFINITE`
 ---|`trigger.COUNT_STOP`
+---|`trigger.COUNT_AUTO`
 
 
 
@@ -994,9 +996,9 @@ trigger.COUNT_STOP = nil
 --- Additional paramteres are:
 --- - *bufferName*: The name of the buffer, which must be an existing buffer; if no buffer is defined, defbuffer1 is used<br>
 --- - *count*: The number of measure or digitize readings to make before moving to the next block in the trigger model; set to<br>
----    ```trigger.COUNT_AUTO```<br>
 ---    ```trigger.COUNT_INFINITE```<br>
 ---    ```trigger.COUNT_STOP```<br>
+---    ```trigger.COUNT_AUTO```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_MEASURE_DIGITIZE)
@@ -1172,39 +1174,39 @@ trigger.BLOCK_BRANCH_ON_EVENT = 0
 
 
 trigger.LIMIT_OUTSIDE = nil
-trigger.LIMIT_ABOVE = nil
-trigger.LIMIT_INSIDE = nil
 trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitType
 ---|`trigger.LIMIT_OUTSIDE`
----|`trigger.LIMIT_ABOVE`
----|`trigger.LIMIT_INSIDE`
 ---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 
 
 trigger.LIMIT_OUTSIDE = nil
-trigger.LIMIT_ABOVE = nil
-trigger.LIMIT_INSIDE = nil
 trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitA
 ---|`trigger.LIMIT_OUTSIDE`
----|`trigger.LIMIT_ABOVE`
----|`trigger.LIMIT_INSIDE`
 ---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 
 
 trigger.LIMIT_OUTSIDE = nil
-trigger.LIMIT_ABOVE = nil
-trigger.LIMIT_INSIDE = nil
 trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitB
 ---|`trigger.LIMIT_OUTSIDE`
----|`trigger.LIMIT_ABOVE`
----|`trigger.LIMIT_INSIDE`
 ---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 
 
 
@@ -1226,19 +1228,19 @@ trigger.LIMIT_BELOW = nil
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
----    ```trigger.LIMIT_INSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 --- - *limitA*: The lower limit that the measurement is tested against; if limitType is set to<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
----    ```trigger.LIMIT_INSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 --- - *limitB*: The upper limit that the measurement is tested against; if limitType is set to<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
----    ```trigger.LIMIT_INSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the defined criteria<br>
 --- - *measureBlock*: The block number of the measure/digitize block that makes the measurements to be compared; if this is 0 or undefined, the trigger model uses the previous measure/digitize block<br>
 --
@@ -1360,15 +1362,15 @@ trigger.BLOCK_BRANCH_ALWAYS = 0
 
 
 trigger.LIMIT_OUTSIDE = nil
-trigger.LIMIT_ABOVE = nil
-trigger.LIMIT_INSIDE = nil
 trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_DYNAMIClimitType
 ---|`trigger.LIMIT_OUTSIDE`
----|`trigger.LIMIT_ABOVE`
----|`trigger.LIMIT_INSIDE`
 ---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 
 
 
@@ -1390,9 +1392,9 @@ trigger.LIMIT_BELOW = nil
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
----    ```trigger.LIMIT_INSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 --- - *limitNumber*: The limit number (1 or 2)<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the criteria set in the configuration list<br>
 --- - *measureBlock*: The block number of the measure/digitize block that makes the measurements to be compared; if this is 0 or undefined, the trigger model uses the previous measure/digitize block<br>
@@ -1423,16 +1425,16 @@ trigger.BLOCK_BRANCH_LIMIT_DYNAMIC = 0
 trigger.BLOCK_DELAY_CONSTANT = 0
 
 
-trigger.LOG_WARN = nil
 trigger.LOG_WARN_ABORT = nil
 trigger.LOG_INFO = nil
 trigger.LOG_ERROR = nil
+trigger.LOG_WARN = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_LOG_EVENTeventNumber
----|`trigger.LOG_WARN`
 ---|`trigger.LOG_WARN_ABORT`
 ---|`trigger.LOG_INFO`
 ---|`trigger.LOG_ERROR`
+---|`trigger.LOG_WARN`
 
 
 
@@ -1454,10 +1456,10 @@ trigger.LOG_ERROR = nil
 --- ```
 --- Additional paramteres are:
 --- - *eventNumber*: The event number<br>
----    ```trigger.LOG_WARN```<br>
 ---    ```trigger.LOG_WARN_ABORT```<br>
 ---    ```trigger.LOG_INFO```<br>
 ---    ```trigger.LOG_ERROR```<br>
+---    ```trigger.LOG_WARN```<br>
 --- - *message*: A string up to 31 characters<br>
 trigger.BLOCK_LOG_EVENT = 0
 
@@ -1521,13 +1523,13 @@ trigger.BLOCK_NOP = 0
 trigger.BLOCK_RESET_BRANCH_COUNT = 0
 
 
-trigger.CONT_OFF = nil
 trigger.CONT_RESTART = nil
+trigger.CONT_OFF = nil
 trigger.CONT_AUTO = nil
 
 ---@alias triggercontinuoussetting
----|`trigger.CONT_OFF`
 ---|`trigger.CONT_RESTART`
+---|`trigger.CONT_OFF`
 ---|`trigger.CONT_AUTO`
 
 
@@ -1548,8 +1550,7 @@ trigger.CONT_AUTO = nil
 --- --When the instrument starts up, the measurement method is set to idle.
 --- ```
 ---@type triggercontinuoussetting
-trigger.continuous = 0
-
+trigger.continuous = trigger.CONT_RESTART
 ---@class dmm
 dmm = {}
 
@@ -1598,8 +1599,7 @@ dmm.TERMINALS_REAR = nil
 --- --dmm.TERMINALS_FRONT
 --- ```
 ---@type dmmterminalsterminals
-dmm.terminals = 0
-
+dmm.terminals = dmm.TERMINALS_FRONT
 
 
 --- **This attribute contains the source code of a script.**
@@ -1621,8 +1621,8 @@ dmm.terminals = 0
 --- --display.settext(display.TEXT1, "Text on line 1")
 --- --display.settext(display.TEXT2, "Text on line 2")
 --- ```
-script_object.source = 0
-
+---@type string
+scriptVar.source = ''
 ---@class channel
 channel = {}
 
@@ -1683,8 +1683,8 @@ function channel.open(channelList) end
 --- 
 --- --Describe
 --- ```
+---@type any
 channel.enable = 0
-
 ---@class buffer
 buffer = {}
 
@@ -1717,26 +1717,26 @@ buffer = {}
 --- --["min"]={["seconds"]=1561123956, ["fractionalseconds"]=0.010184587, ["timestamp"]=1561123956, ["reading"]=8.4974199416e-05}, ["mean"]=0.000132948335, ["stddev"]=4.4270141937e-05, ["max"]={["seconds"]=1561123955, ["fractionalseconds"]=0.833083981, ["timestamp"]=1561123955.8, ["reading"]=0.0002192359033}, ["n"]=12
 --- ```
 ---@return statsVar statsVar A table that contains the entries for buffer statistics; see Details for information on the entries
----@param bufferVar bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@param bufferVar bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
 ---@param absStartTime number An integer that represents the absolute start time in seconds
 ---@param absStartFractional number An integer that represents the portion of the absolute start time that is in fractional seconds
 ---@param absEndTime number An integer that represents the absolute end time in seconds
 ---@param absEndFractional number An integer that represents the portion of the absolute end time that is in fractional seconds
----@overload fun():statsVar
----@overload fun(bufferVar:bufferMethods):statsVar
----@overload fun(bufferVar:bufferMethods,relStartTime:number,relEndTime:number):statsVar
+---@overload fun():statsVar:statsVar
+---@overload fun(bufferVar:bufferVar):statsVar:statsVar
+---@overload fun(bufferVar:bufferVar,relStartTime:number,relEndTime:number):statsVar:statsVar
 function buffer.getstats(bufferVar, absStartTime, absStartFractional, absEndTime, absEndFractional) end
 
+buffer.STYLE_COMPACT = nil
 buffer.STYLE_WRITABLE = nil
 buffer.STYLE_FULL = nil
-buffer.STYLE_COMPACT = nil
 buffer.STYLE_WRITABLE_FULL = nil
 buffer.STYLE_STANDARD = nil
 
 ---@alias buffermakestyle
+---|`buffer.STYLE_COMPACT`
 ---|`buffer.STYLE_WRITABLE`
 ---|`buffer.STYLE_FULL`
----|`buffer.STYLE_COMPACT`
 ---|`buffer.STYLE_WRITABLE_FULL`
 ---|`buffer.STYLE_STANDARD`
 
@@ -1757,22 +1757,22 @@ buffer.STYLE_STANDARD = nil
 --- 
 --- --Creates a 200-element reading buffer that stores readings with full accuracy named capTest2.
 --- ```
----@return bufferMethods bufferVar The name of the buffer
----@param bufferSize number The maximum number of readings that can be stored in bufferVar; minimum is 10; 0 to maximize buffer size (see Details)
+---@return bufferVar bufferVar The name of the buffer
+---@param bufferSize integer The maximum number of readings that can be stored in bufferVar; minimum is 10; 0 to maximize buffer size (see Details)
 ---@param style buffermakestyle The type of reading buffer to create
----@overload fun(bufferSize:number):bufferMethods
+---@overload fun(bufferSize:integer):bufferVar:bufferVar
 function buffer.make(bufferSize, style) end
 
 buffer.SAVE_FORMAT_TIME = nil
-buffer.SAVE_TIMESTAMP_TIME = nil
-buffer.SAVE_RAW_TIME = nil
 buffer.SAVE_RELATIVE_TIME = nil
+buffer.SAVE_RAW_TIME = nil
+buffer.SAVE_TIMESTAMP_TIME = nil
 
 ---@alias buffersaveappendtimeFormat
 ---|`buffer.SAVE_FORMAT_TIME`
----|`buffer.SAVE_TIMESTAMP_TIME`
----|`buffer.SAVE_RAW_TIME`
 ---|`buffer.SAVE_RELATIVE_TIME`
+---|`buffer.SAVE_RAW_TIME`
+---|`buffer.SAVE_TIMESTAMP_TIME`
 
 
 
@@ -1828,13 +1828,14 @@ buffer.SAVE_RELATIVE_TIME = nil
 --- 
 --- --Write string data to a file with information about a test file.
 --- ```
----@param bufferVar bufferMethods Indicates the reading buffer to use; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, defbuffer1 is used
+---@param bufferVar bufferVar Indicates the reading buffer to use; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, defbuffer1 is used
+---@param fileName string A string that indicates the name of the file on the USB flash drive in which to save the reading buffer
 ---@param timeFormat buffersaveappendtimeFormat Indicates how date and time information from the buffer is saved in the file on the USB flash drive; the options are
----@param start number Defines the starting point in the buffer to start saving data
----@param endPoint number Defines the ending point in the buffer to stop saving data
----@overload fun(bufferVar:bufferMethods)
----@overload fun(bufferVar:bufferMethods,timeFormat:buffersaveappendtimeFormat)
-function buffer.saveappend(bufferVar, filename, timeFormat, start, endPoint) end
+---@param start integer Defines the starting point in the buffer to start saving data
+---@param end integer Defines the ending point in the buffer to stop saving data
+---@overload fun(bufferVar:bufferVar)
+---@overload fun(bufferVar:bufferVar,timeFormat:buffersaveappendtimeFormat)
+function buffer.saveappend(bufferVar, filename, timeFormat, start, end) end
 
 
 --- **This function saves data from the specified reading buffer to a USB flash drive.**
@@ -1858,14 +1859,14 @@ function buffer.saveappend(bufferVar, filename, timeFormat, start, endPoint) end
 --- 
 --- --Save readings and raw time stamps from defbuffer1 to a file named defbuf1data on the USB flash drive.
 --- ```
----@param bufferVar bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
+---@param bufferVar bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
 ---@param fileName string A string that indicates the name of the file on the USB flash drive in which to save the reading buffer
 ---@param what bufferFileSaveDetails Defines which information is saved in the file on the USB flash drive
----@param start number Defines the starting point in the buffer to start saving data
----@param endPoint number Defines the ending point in the buffer to stop saving data
----@overload fun(bufferVar:bufferMethods,fileName:string)
----@overload fun(bufferVar:bufferMethods,fileName:string,what:bufferFileSaveDetails)
-function buffer.save(bufferVar, fileName, what, start, endPoint) end
+---@param start integer Defines the starting point in the buffer to start saving data
+---@param end integer Defines the ending point in the buffer to stop saving data
+---@overload fun(bufferVar:bufferVar,fileName:string)
+---@overload fun(bufferVar:bufferVar,fileName:string,what:bufferFileSaveDetails)
+function buffer.save(bufferVar, fileName, what, start, end) end
 
 
 --- **This function deletes a user-defined reading buffer.**
@@ -1893,7 +1894,7 @@ function buffer.save(bufferVar, fileName, what, start, endPoint) end
 --- --Delete buf400.
 --- --Use collectgarbage() to unallocate the buffer.
 --- ```
----@param bufferName bufferMethods The name of a user-defined reading buffer
+---@param bufferName bufferVar The name of a user-defined reading buffer
 function buffer.delete(bufferName) end
 
 
@@ -1912,7 +1913,7 @@ function buffer.delete(bufferName) end
 --- 
 --- --Clears statistics for defbuffer1.
 --- ```
----@param bufferVar bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1 if not specified
+---@param bufferVar bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1 if not specified
 ---@overload fun()
 function buffer.clearstats(bufferVar) end
 
@@ -1996,7 +1997,8 @@ function buffer.unit(UNIT_CUSTOMN, unitOfMeasure) end
 --- --Example output:
 --- --0
 --- ```
-bufferMethods.n = 0
+---@type integer
+bufferVar.n = 0
 
 
 --- **This attribute contains the stored readings shown as numbers with units and prefixes.**
@@ -2026,8 +2028,8 @@ bufferMethods.n = 0
 --- --Example output:
 --- ---0.0001901 V, +000.08537 mV, -000.13050 mV
 --- ```
----@type integer[]
-bufferMethods.formattedreadings= {}
+---@type string[]
+bufferVar.formattedreadings = {}
 
 
 --- **This attribute contains the unit of measure that is stored with readings in the reading buffer.**
@@ -2065,8 +2067,8 @@ bufferMethods.formattedreadings= {}
 --- --Output:
 --- --Volt DC, Volt DC, Volt DC
 --- ```
----@type integer[]
-bufferMethods.units= {}
+---@type string[]
+bufferVar.units = {}
 
 
 --- **This attribute sets the number of readings a buffer can store.**
@@ -2112,7 +2114,8 @@ bufferMethods.units= {}
 --- --Output:
 --- --100000
 --- ```
-bufferMethods.capacity = 0
+---@type integer
+bufferVar.capacity = 0
 
 
 --- **This attribute contains the timestamps, in seconds, when each reading occurred, relative to the timestamp of the first entry in the reading buffer.**
@@ -2143,8 +2146,8 @@ bufferMethods.capacity = 0
 --- --Example output:
 --- --0, 0.383541, 0.772005
 --- ```
----@type integer[]
-bufferMethods.relativetimestamps= {}
+---@type number[]
+bufferVar.relativetimestamps = {}
 
 
 --- **This attribute contains the timestamp of a reading in seconds, in UTC format.**
@@ -2170,8 +2173,8 @@ bufferMethods.relativetimestamps= {}
 --- --Example output:
 --- --1362261492, 1362261492, 1362261493, 1362261493, 1362261493, 1362261494
 --- ```
----@type integer[]
-bufferMethods.seconds= {}
+---@type number[]
+bufferVar.seconds = {}
 
 
 --- **This attribute contains the time when the instrument made the reading.**
@@ -2201,8 +2204,8 @@ bufferMethods.seconds= {}
 --- --Output:
 --- --23:09:43, 23:09:43, 23:09:43
 --- ```
----@type integer[]
-bufferMethods.times= {}
+---@type string[]
+bufferVar.times = {}
 
 
 --- **This attribute contains the timestamp when each reading saved in the specified reading buffer occurred.**
@@ -2233,8 +2236,8 @@ bufferMethods.times= {}
 --- --Output:
 --- --03/01/2018 14:46:07.71461483803/01/2018 14:46:08.10046883803/01/2018 14:46:08.487631838
 --- ```
----@type integer[]
-bufferMethods.timestamps= {}
+---@type string[]
+bufferVar.timestamps = {}
 
 
 --- **This function clears all readings and statistics from the specified buffer.**
@@ -2272,7 +2275,7 @@ bufferMethods.timestamps= {}
 --- --Output:
 --- --4.923509754e-07, 3.332266330e-07, 3.974883867e-07
 --- ```
-function bufferMethods.clear() end
+function bufferVar.clear() end
 
 
 --- **This attribute contains the dates of readings that are stored in the reading buffer.**
@@ -2302,8 +2305,8 @@ function bufferMethods.clear() end
 --- --Example output:
 --- --11/27/2017, 11/27/2017, 11/27/2017
 --- ```
----@type integer[]
-bufferMethods.dates= {}
+---@type string[]
+bufferVar.dates = {}
 
 buffer.FILL_ONCE = nil
 buffer.FILL_CONTINUOUS = nil
@@ -2340,7 +2343,7 @@ buffer.FILL_CONTINUOUS = nil
 --- --1
 --- ```
 ---@type bufferVarfillmodefillMode
-bufferMethods.fillmode = 0
+bufferVar.fillmode = buffer.FILL_ONCE
 
 
 --- **This attribute contains the fractional second portion of the timestamp of each reading in the reading buffer.**
@@ -2370,8 +2373,8 @@ bufferMethods.fillmode = 0
 --- --Example output:
 --- --0.647118937, 0.064543, 0.48196127, 0.89938724, 0.316800064, 0.734218263
 --- ```
----@type integer[]
-bufferMethods.fractionalseconds= {}
+---@type number[]
+bufferVar.fractionalseconds = {}
 
 
 --- **This attribute contains the readings stored in a specified reading buffer.**
@@ -2397,8 +2400,8 @@ bufferMethods.fractionalseconds= {}
 --- --Output:
 --- ---9.6420389034124e-12, -4.5509945811872e-10, -9.1078204006445e-12
 --- ```
----@type integer[]
-bufferMethods.readings= {}
+---@type number[]
+bufferVar.readings = {}
 
 buffer.ON = nil
 buffer.OFF = nil
@@ -2430,7 +2433,7 @@ buffer.OFF = nil
 --- --0
 --- ```
 ---@type bufferVarlogstatelogState
-bufferMethods.logstate = 0
+bufferVar.logstate = buffer.ON
 
 
 --- **This attribute contains the status values of readings in the reading buffer.**
@@ -2457,8 +2460,8 @@ bufferMethods.logstate = 0
 --- --64, 64
 --- --Indicating that the status is buffer.STAT_LIMIT1_LOW.
 --- ```
----@type integer[]
-bufferMethods.statuses= {}
+---@type bufferVarstatuses
+bufferVar.statuses = 0
 
 
 --- **This attribute contains the additional values in a reading buffer.**
@@ -2504,8 +2507,8 @@ bufferMethods.statuses= {}
 --- ---7.4235309424
 --- ---7.4235309424
 --- ```
----@type integer[]
-bufferMethods.extravalues= {}
+---@type number[]
+bufferVar.extravalues = {}
 
 
 --- **This attribute indicates the starting index in a reading buffer.**
@@ -2529,7 +2532,8 @@ bufferMethods.extravalues= {}
 --- --Output:
 --- --1, 6, 100
 --- ```
-bufferMethods.startindex = 0
+---@type integer
+bufferVar.startindex = 0
 
 
 --- **This attribute indicates the last index in a reading buffer.**
@@ -2559,7 +2563,8 @@ bufferMethods.startindex = 0
 --- --Output:
 --- --1, 12
 --- ```
-bufferMethods.endindex = 0
+---@type integer
+bufferVar.endindex = 0
 
 
 --- **This attribute contains the measurement and the unit of measure of the additional values in a reading buffer.**
@@ -2612,8 +2617,8 @@ bufferMethods.endindex = 0
 --- --Example output:
 --- ---5.716896 RA
 --- ```
----@type integer[]
-bufferMethods.extraformattedvalues= {}
+---@type string[]
+bufferVar.extraformattedvalues = {}
 
 
 --- **This attribute contains the units of the additional values in a reading buffer.**
@@ -2657,21 +2662,21 @@ bufferMethods.extraformattedvalues= {}
 --- --Example output:
 --- --Ratio
 --- ```
----@type integer[]
-bufferMethods.extravalueunits= {}
+---@type string[]
+bufferVar.extravalueunits = {}
 ---@class eventlog
 eventlog = {}
 
-eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventlogsaveeventType
----|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -2710,16 +2715,16 @@ function eventlog.save(filename, eventType) end
 --- ```
 function eventlog.clear() end
 
-eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventlognexteventType
----|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -2740,26 +2745,26 @@ eventlog.SEV_ERROR = nil
 --- --Example output:
 --- ---285 TSP Syntax error at line 1: unexpected symbol near `0' 1 0 1367806152 652040060
 --- ```
----@return any eventNumber The event number
----@return any message A description of the event
----@return any severity The severity of the event
----@return any nodeID The TSP-Link node where the event occurred or 0 if the event occurred on the local node
----@return any timeSeconds The seconds portion of the time when the event occurred
----@return any timeNanoSeconds The fractional seconds portion of the time when the event occurred
+---@return integer eventNumber The event number
+---@return string message A description of the event
+---@return integer severity The severity of the event
+---@return integer nodeID The TSP-Link node where the event occurred or 0 if the event occurred on the local node
+---@return integer timeSeconds The seconds portion of the time when the event occurred
+---@return integer timeNanoSeconds The fractional seconds portion of the time when the event occurred
 ---@param eventType eventlognexteventType Limits the return to specific event log types; set a cumulative integer value that represents the event log types to
----@overload fun():any
+---@overload fun():eventNumber:integer, message:string, severity:integer, nodeID:integer, timeSeconds:integer, timeNanoSeconds:integer
 function eventlog.next(eventType) end
 
-eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventloggetcounteventType
----|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -2784,14 +2789,14 @@ eventlog.SEV_ERROR = nil
 ---@overload fun()
 function eventlog.getcount(eventType) end
 
-eventlog.SEV_WARN = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
+eventlog.SEV_WARN = nil
 
 ---@alias eventlogposteventType
----|`eventlog.SEV_WARN`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
+---|`eventlog.SEV_WARN`
 
 
 
@@ -2819,16 +2824,16 @@ eventlog.SEV_ERROR = nil
 ---@overload fun(message:string)
 function eventlog.post(message, eventType) end
 
-eventlog.SEV_WARN = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventlogsuppresseventType
----|`eventlog.SEV_WARN`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -2853,12 +2858,12 @@ function eventlog.suppress(eventNumber) end
 ---@class display
 display = {}
 
-display.FORMAT_EXPONENT = nil
 display.FORMAT_PREFIX = nil
+display.FORMAT_EXPONENT = nil
 
 ---@alias displayreadingformatformat
----|`display.FORMAT_EXPONENT`
 ---|`display.FORMAT_PREFIX`
+---|`display.FORMAT_EXPONENT`
 
 
 
@@ -2878,13 +2883,12 @@ display.FORMAT_PREFIX = nil
 --- --Change front-panel display to show readings in exponential format.
 --- ```
 ---@type displayreadingformatformat
-display.readingformat = 0
-
+display.readingformat = display.FORMAT_PREFIX
 
 display.TEXT2 = nil
 display.TEXT1 = nil
 
----@alias displaysettextDisplayText
+---@alias displaysettextdisplayArea
 ---|`display.TEXT2`
 ---|`display.TEXT1`
 
@@ -2911,9 +2915,9 @@ display.TEXT1 = nil
 --- --Set the first line to read "A122 Δ A123" and the second line to display ""Results in Ω":
 --- --
 --- ```
----@param DisplayText displaysettextDisplayText display.TEXT1 display.TEXT2
----@param Text any String that contains the message for the top line of the USER swipe screen (up to 20 characters)
-function display.settext(DisplayText, Text) end
+---@param displayArea displaysettextdisplayArea display.TEXT1 display.TEXT2
+---@param text string String that contains the message for the top line of the USER swipe screen (up to 20 characters)
+function display.settext(displayArea, text) end
 
 
 --- **This function clears the text from the front-panel USER swipe screen.**
@@ -2937,32 +2941,32 @@ function display.settext(DisplayText, Text) end
 --- ```
 function display.clear() end
 
-display.SCREEN_HISTOGRAM = nil
-display.SCREEN_SETTINGS_SWIPE = nil
-display.SCREEN_HOME_LARGE_READING = nil
-display.SCREEN_GRAPH_SWIPE = nil
+display.SCREEN_PROCESSING = nil
 display.SCREEN_HOME = nil
 display.SCREEN_FUNCTIONS_SWIPE = nil
 display.SCREEN_SECONDARY_SWIPE = nil
+display.SCREEN_STATS_SWIPE = nil
+display.SCREEN_USER_SWIPE = nil
+display.SCREEN_SETTINGS_SWIPE = nil
 display.SCREEN_READING_TABLE = nil
 display.SCREEN_GRAPH = nil
-display.SCREEN_STATS_SWIPE = nil
-display.SCREEN_PROCESSING = nil
-display.SCREEN_USER_SWIPE = nil
+display.SCREEN_HOME_LARGE_READING = nil
+display.SCREEN_GRAPH_SWIPE = nil
+display.SCREEN_HISTOGRAM = nil
 
 ---@alias displaychangescreenscreenName
----|`display.SCREEN_HISTOGRAM`
----|`display.SCREEN_SETTINGS_SWIPE`
----|`display.SCREEN_HOME_LARGE_READING`
----|`display.SCREEN_GRAPH_SWIPE`
+---|`display.SCREEN_PROCESSING`
 ---|`display.SCREEN_HOME`
 ---|`display.SCREEN_FUNCTIONS_SWIPE`
 ---|`display.SCREEN_SECONDARY_SWIPE`
+---|`display.SCREEN_STATS_SWIPE`
+---|`display.SCREEN_USER_SWIPE`
+---|`display.SCREEN_SETTINGS_SWIPE`
 ---|`display.SCREEN_READING_TABLE`
 ---|`display.SCREEN_GRAPH`
----|`display.SCREEN_STATS_SWIPE`
----|`display.SCREEN_PROCESSING`
----|`display.SCREEN_USER_SWIPE`
+---|`display.SCREEN_HOME_LARGE_READING`
+---|`display.SCREEN_GRAPH_SWIPE`
+---|`display.SCREEN_HISTOGRAM`
 
 
 
@@ -2990,19 +2994,19 @@ display.SCREEN_USER_SWIPE = nil
 ---@param screenName displaychangescreenscreenName The screen to display
 function display.changescreen(screenName) end
 
-display.BUTTONS_OK = nil
 display.BUTTONS_CANCEL = nil
-display.BUTTONS_YESNOCANCEL = nil
-display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_YESNO = nil
+display.BUTTONS_YESNOCANCEL = nil
+display.BUTTONS_OK = nil
+display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_NONE = nil
 
 ---@alias displaypromptbuttonID
----|`display.BUTTONS_OK`
 ---|`display.BUTTONS_CANCEL`
----|`display.BUTTONS_YESNOCANCEL`
----|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_YESNOCANCEL`
+---|`display.BUTTONS_OK`
+---|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_NONE`
 
 
@@ -3040,21 +3044,21 @@ display.BUTTONS_NONE = nil
 --- --If the user presses Yes, the Graph screen is displayed.
 --- --If the user presses No, the user remains on the present screen.
 --- ```
----@return any promptID A set of characters that identifies the prompt; up to 63 characters
+---@return promptID promptID A set of characters that identifies the prompt; up to 63 characters
 ---@param buttonID displaypromptbuttonID The type of prompt to display; choose one of the following options
----@param promptText any A string that contains the text that is displayed above the prompts
+---@param promptText string A string that contains the text that is displayed above the prompts
 function display.prompt(buttonID, promptText) end
 
+display.BUTTON_OK = nil
 display.BUTTON_NO = nil
 display.BUTTON_YES = nil
 display.BUTTON_CANCEL = nil
-display.BUTTON_OK = nil
 
 ---@alias displaywaiteventsubID
+---|`display.BUTTON_OK`
 ---|`display.BUTTON_NO`
 ---|`display.BUTTON_YES`
 ---|`display.BUTTON_CANCEL`
----|`display.BUTTON_OK`
 
 
 
@@ -3093,23 +3097,23 @@ display.BUTTON_OK = nil
 ---@return number objectID A number that identifies the object, such as a prompt message, that is displayed on the front panel
 ---@return displaywaiteventsubID subID The returned value after a button is pressed on the front panel
 ---@param timeout number The amount of time to wait before timing out; time is 0 to 300 s, where the default of 0 waits indefinitely
----@overload fun():displaywaiteventsubID
+---@overload fun():objectID:number, subID:displaywaiteventsubID
 function display.waitevent(timeout) end
 
-display.STATE_LCD_OFF = nil
-display.STATE_LCD_75 = nil
-display.STATE_BLACKOUT = nil
-display.STATE_LCD_50 = nil
 display.STATE_LCD_25 = nil
+display.STATE_LCD_50 = nil
+display.STATE_BLACKOUT = nil
+display.STATE_LCD_OFF = nil
 display.STATE_LCD_100 = nil
+display.STATE_LCD_75 = nil
 
 ---@alias displaylightstatebrightness
----|`display.STATE_LCD_OFF`
----|`display.STATE_LCD_75`
----|`display.STATE_BLACKOUT`
----|`display.STATE_LCD_50`
 ---|`display.STATE_LCD_25`
+---|`display.STATE_LCD_50`
+---|`display.STATE_BLACKOUT`
+---|`display.STATE_LCD_OFF`
 ---|`display.STATE_LCD_100`
+---|`display.STATE_LCD_75`
 
 
 
@@ -3129,8 +3133,7 @@ display.STATE_LCD_100 = nil
 --- --Set the display brightness to 50%.
 --- ```
 ---@type displaylightstatebrightness
-display.lightstate = 0
-
+display.lightstate = display.STATE_LCD_25
 
 
 --- **This function allows you to remove a prompt on the front-panel display that was created with display.prompt().**
@@ -3152,7 +3155,7 @@ display.lightstate = 0
 --- --
 --- -- 
 --- ```
----@param promptID any The identifier defined by display.prompt()
+---@param promptID promptID The identifier defined by display.prompt()
 function display.delete(promptID) end
 
 
@@ -3171,8 +3174,8 @@ function display.delete(promptID) end
 --- 
 --- --Set the front panel to use buffer2 as the active reading buffer.
 --- ```
+---@type bufferVar
 display.activebuffer = 0
-
 ---@class beeper
 beeper = {}
 
@@ -3237,8 +3240,8 @@ function status.clear() end
 --- --Converting this output (129) to its binary equivalent yields 1000 0001 
 --- --Therefore, this output indicates that the set bits of the status byte condition register are presently B0 (MSS) and B7 (OSB).
 --- ```
+---@type number
 status.condition = 0
-
 
 
 --- **This attribute stores the settings of the Service Request (SRQ) Enable Register.**
@@ -3265,8 +3268,8 @@ status.condition = 0
 --- 
 --- --Clear the register.
 --- ```
+---@type integer
 status.request_enable = 0
-
 
 
 --- **This function resets all bits in the status model.**
@@ -3330,7 +3333,7 @@ function digio.writeport(data) end
 --- --42
 --- --This is binary 101010
 --- ```
----@return number data The present value of the input lines on the digital I/O port
+---@return integer data The present value of the input lines on the digital I/O port
 function digio.readport() end
 ---@class acal
 acal = {}
@@ -3353,35 +3356,35 @@ acal = {}
 --- --Example output:
 --- --15
 --- ```
+---@type any
 acal.count = 0
 
-
-acal.ACTION_RUN = nil
 acal.ACTION_NONE = nil
+acal.ACTION_RUN = nil
 acal.ACTION_NOTIFY = nil
 
----@alias acalscheduleaction
----|`acal.ACTION_RUN`
+---@alias any
 ---|`acal.ACTION_NONE`
+---|`acal.ACTION_RUN`
 ---|`acal.ACTION_NOTIFY`
 
 
-acal.INTERVAL_7DAY = nil
-acal.INTERVAL_16HR = nil
-acal.INTERVAL_14DAY = nil
 acal.INTERVAL_1DAY = nil
-acal.INTERVAL_30DAY = nil
-acal.INTERVAL_90DAY = nil
+acal.INTERVAL_16HR = nil
+acal.INTERVAL_7DAY = nil
 acal.INTERVAL_8HR = nil
+acal.INTERVAL_30DAY = nil
+acal.INTERVAL_14DAY = nil
+acal.INTERVAL_90DAY = nil
 
----@alias acalscheduleinterval
----|`acal.INTERVAL_7DAY`
----|`acal.INTERVAL_16HR`
----|`acal.INTERVAL_14DAY`
+---@alias any
 ---|`acal.INTERVAL_1DAY`
----|`acal.INTERVAL_30DAY`
----|`acal.INTERVAL_90DAY`
+---|`acal.INTERVAL_16HR`
+---|`acal.INTERVAL_7DAY`
 ---|`acal.INTERVAL_8HR`
+---|`acal.INTERVAL_30DAY`
+---|`acal.INTERVAL_14DAY`
+---|`acal.INTERVAL_90DAY`
 
 
 
@@ -3400,12 +3403,12 @@ acal.INTERVAL_8HR = nil
 --- 
 --- --Sets autocalibration to run every day at 8 am.
 --- ```
----@param action acalscheduleaction Determines when and if the instrument automatically runs autocalibration
----@param interval acalscheduleinterval Determines how often autocalibration should be run or notification should occur
+---@param action any Determines when and if the instrument automatically runs autocalibration
+---@param interval any Determines how often autocalibration should be run or notification should occur
 ---@param hour any Specify when the autocalibration should occur; specify in 24-hour time format (0 to 23; default is 0); not available for the 8-hour or 16-hour interval
 ---@overload fun()
----@overload fun(action:acalscheduleaction)
----@overload fun(action:acalscheduleaction,interval:acalscheduleinterval)
+---@overload fun(action:any)
+---@overload fun(action:any,interval:any)
 function acal.schedule(action, interval, hour) end
 
 
@@ -3449,7 +3452,7 @@ fan = {}
 fan.LEVEL_NORMAL = nil
 fan.LEVEL_QUIET = nil
 
----@alias fanlevelfanLevel
+---@alias any
 ---|`fan.LEVEL_NORMAL`
 ---|`fan.LEVEL_QUIET`
 
@@ -3470,9 +3473,8 @@ fan.LEVEL_QUIET = nil
 --- 
 --- --Set the fan speed to the quiet level. The audible noise of the fan decreases.
 --- ```
----@type fanlevelfanLevel
-fan.level = 0
-
+---@type any
+fan.level = fan.LEVEL_NORMAL
 ---@class triggerblenderArr
 local triggerblenderArr = {}
 
@@ -3516,8 +3518,8 @@ function triggerblenderArr.clear() end
 --- 
 --- --Generate a trigger blender 1 event when a digital I/O trigger happens on line 3 or 5.
 --- ```
-triggerblenderArr.orenable= 0
-
+---@type boolean | true | false
+triggerblenderArr.orenable = 0
 
 
 --- **This attribute indicates whether or not an event was ignored because of the event detector state.**
@@ -3536,8 +3538,8 @@ triggerblenderArr.orenable= 0
 --- --If an event was ignored, the output is true.
 --- --If an event was not ignored, the output is false.
 --- ```
-triggerblenderArr.overrun= 0
-
+---@type boolean
+triggerblenderArr.overrun = true
 
 
 --- **This function resets some of the trigger blender settings to their factory defaults.**
@@ -3580,8 +3582,8 @@ function triggerblenderArr.reset() end
 --- 
 --- --Generate a trigger blender 1 event when a digital I/O trigger happens on line 3 or 5.
 --- ```
----@type eventID[]|0
-triggerblenderArr.stimulus= 0
+---@type triggerEvents[]
+triggerblenderArr.stimulus= trigger.EVENT_NONE
 
 
 
@@ -3653,8 +3655,8 @@ function triggertimerArr.clear() end
 --- 
 --- --Set the trigger timer 1 to delay for 50 µs.
 --- ```
-triggertimerArr.delay= 0
-
+---@type number
+triggertimerArr.delay = 0
 
 
 --- **This attribute sets an array of timer intervals.**
@@ -3684,8 +3686,8 @@ triggertimerArr.delay= 0
 --- --0.0001
 --- --0.00015
 --- ```
-triggertimerArr.delaylist= 0
-
+---@type number[]
+triggertimerArr.delaylist = {}
 
 
 --- **This function waits for a trigger.**
@@ -3765,15 +3767,15 @@ function triggertimerArr.wait(timeout) end
 --- --Output:
 --- --20
 --- ```
-triggertimerArr.count= 0
+---@type number
+triggertimerArr.count = 0
 
-
-trigger.OFF = nil
 trigger.ON = nil
+trigger.OFF = nil
 
 ---@alias triggertimerenablestate
----|`trigger.OFF`
 ---|`trigger.ON`
+---|`trigger.OFF`
 
 
 
@@ -3793,8 +3795,7 @@ trigger.ON = nil
 --- --Enable the trigger timer for timer 3.
 --- ```
 ---@type triggertimerenablestate
-triggertimerArr.enable= 0
-
+triggertimerArr.enable = trigger.ON
 
 
 --- **This function resets trigger timer settings to their default values.**
@@ -3836,8 +3837,8 @@ dmm.measure = {}
 --- 
 --- --Sets 30 degrees Celsius as the simulated reference temperature for thermocouples.
 --- ```
+---@type number
 dmm.measure.simreftemperature = 0
-
 
 
 --- **This attribute sets a user-defined delay that you can use in the trigger model.**
@@ -3864,9 +3865,8 @@ dmm.measure.simreftemperature = 0
 --- --Set trigger block 3 to branch to block 1 ten times.
 --- --Start the trigger model.
 --- ```
----@type integer[]
-dmm.measure.userdelay= 0
-
+---@type number
+dmm.measure.userdelay = 0
 
 
 --- **This function initiates measurements and returns the last actual measurement and time information in UTC format without using the trigger model.**
@@ -3888,7 +3888,7 @@ dmm.measure.userdelay= 0
 ---@return number reading The last reading of the measurement process
 ---@return number seconds Seconds in UTC format
 ---@return number fractional Fractional seconds
----@overload fun(bufferName:bufferMethods):number
+---@overload fun(bufferName:bufferVar):reading:number, seconds:number, fractional:number
 function dmm.measure.readwithtime() end
 
 
@@ -3920,8 +3920,8 @@ function dmm.measure.readwithtime() end
 --- --Change the function to voltage. Print the math format. The output is:
 --- --dmm.MATH_PERCENT
 --- ```
+---@type functions
 dmm.measure.func = 0
-
 
 
 --- **This function makes measurements, places them in a reading buffer, and returns the last reading.**
@@ -3942,23 +3942,23 @@ dmm.measure.func = 0
 --- --Create a buffer named voltMeasBuffer. Set the instrument to measure voltage.
 --- --Make a measurement that is stored in the voltMeasBuffer and is also printed.
 --- ```
----@return any reading The last reading of the measurement process
----@param bufferName any The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is defined, it defaults to defbuffer1
----@overload fun():any
+---@return number reading The last reading of the measurement process
+---@param bufferName bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is defined, it defaults to defbuffer1
+---@overload fun():reading:number
 function dmm.measure.read(bufferName) end
 
+dmm.DIGITS_4_5 = nil
+dmm.DIGITS_6_5 = nil
+dmm.DIGITS_7_5 = nil
 dmm.DIGITS_5_5 = nil
 dmm.DIGITS_3_5 = nil
-dmm.DIGITS_7_5 = nil
-dmm.DIGITS_6_5 = nil
-dmm.DIGITS_4_5 = nil
 
 ---@alias dmmmeasuredisplaydigitsvalue
+---|`dmm.DIGITS_4_5`
+---|`dmm.DIGITS_6_5`
+---|`dmm.DIGITS_7_5`
 ---|`dmm.DIGITS_5_5`
 ---|`dmm.DIGITS_3_5`
----|`dmm.DIGITS_7_5`
----|`dmm.DIGITS_6_5`
----|`dmm.DIGITS_4_5`
 
 
 
@@ -3979,8 +3979,7 @@ dmm.DIGITS_4_5 = nil
 --- --Set the measurement function to voltage with a front-panel display resolution of 5½.
 --- ```
 ---@type dmmmeasuredisplaydigitsvalue
-dmm.measure.displaydigits = 0
-
+dmm.measure.displaydigits = dmm.DIGITS_4_5
 
 dmm.ON = nil
 dmm.OFF = nil
@@ -4008,8 +4007,7 @@ dmm.OFF = nil
 --- --Select the measurement function to be DC voltage. Set autorange on.
 --- ```
 ---@type dmmmeasureautorangestate
-dmm.measure.autorange = 0
-
+dmm.measure.autorange = dmm.ON
 
 
 --- **This function determines the aperture setting for the selected function.**
@@ -4027,8 +4025,8 @@ dmm.measure.autorange = 0
 --- 
 --- --Set the aperture to 3.5 ms.
 --- ```
+---@type number
 dmm.measure.aperture = 0
-
 
 
 --- **This attribute defines the decibel (dB) reference setting for the DMM in volts.**
@@ -4048,8 +4046,8 @@ dmm.measure.aperture = 0
 --- 
 --- --Sets the units to decibel and sets the dB reference to 5 for DC volts.
 --- ```
+---@type number
 dmm.measure.dbreference = 0
-
 
 dmm.DETECTBW_30HZ = nil
 dmm.DETECTBW_300HZ = nil
@@ -4080,13 +4078,12 @@ dmm.DETECTBW_3HZ = nil
 --- --Set the bandwidth to 3 Hz.
 --- ```
 ---@type dmmmeasuredetectorbandwidthvalue
-dmm.measure.detectorbandwidth = 0
-
+dmm.measure.detectorbandwidth = dmm.DETECTBW_30HZ
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasuredrycircuitstate
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -4108,22 +4105,21 @@ dmm.OFF = nil
 --- 
 --- --Set the measure function to 4-wire resistance and enable dry circuit.
 --- ```
----@type dmmmeasuredrycircuitstate
-dmm.measure.drycircuit = 0
+---@type any
+dmm.measure.drycircuit = dmm.ON
 
-
-dmm.RTD_F100 = nil
+dmm.RTD_PT3916 = nil
 dmm.RTD_D100 = nil
 dmm.RTD_PT100 = nil
-dmm.RTD_PT3916 = nil
+dmm.RTD_F100 = nil
 dmm.RTD_PT385 = nil
 dmm.RTD_USER = nil
 
 ---@alias dmmmeasurefourrtdRTDType
----|`dmm.RTD_F100`
+---|`dmm.RTD_PT3916`
 ---|`dmm.RTD_D100`
 ---|`dmm.RTD_PT100`
----|`dmm.RTD_PT3916`
+---|`dmm.RTD_F100`
 ---|`dmm.RTD_PT385`
 ---|`dmm.RTD_USER`
 
@@ -4149,21 +4145,20 @@ dmm.RTD_USER = nil
 --- --Set the RTD type to PT3916.
 --- ```
 ---@type dmmmeasurefourrtdRTDType
-dmm.measure.fourrtd = 0
+dmm.measure.fourrtd = dmm.RTD_PT3916
 
-
-dmm.RTD_F100 = 3
+dmm.RTD_PT3916 = 3
 dmm.RTD_D100 = nil
 dmm.RTD_PT100 = nil
-dmm.RTD_PT3916 = nil
+dmm.RTD_F100 = nil
 dmm.RTD_PT385 = nil
 dmm.RTD_USER = nil
 
 ---@alias dmmmeasurethreertdvalue
----|`dmm.RTD_F100`
+---|`dmm.RTD_PT3916`
 ---|`dmm.RTD_D100`
 ---|`dmm.RTD_PT100`
----|`dmm.RTD_PT3916`
+---|`dmm.RTD_F100`
 ---|`dmm.RTD_PT385`
 ---|`dmm.RTD_USER`
 
@@ -4189,19 +4184,18 @@ dmm.RTD_USER = nil
 --- --Set the RTD type to D100.
 --- ```
 ---@type dmmmeasurethreertdvalue
-dmm.measure.threertd = 0
-
+dmm.measure.threertd = dmm.RTD_PT3916
 
 dmm.TRANS_THREERTD = nil
-dmm.TRANS_FOURRTD = nil
-dmm.TRANS_THERMISTOR = nil
 dmm.TRANS_THERMOCOUPLE = nil
+dmm.TRANS_THERMISTOR = nil
+dmm.TRANS_FOURRTD = nil
 
 ---@alias dmmmeasuretransducertype
 ---|`dmm.TRANS_THREERTD`
----|`dmm.TRANS_FOURRTD`
----|`dmm.TRANS_THERMISTOR`
 ---|`dmm.TRANS_THERMOCOUPLE`
+---|`dmm.TRANS_THERMISTOR`
+---|`dmm.TRANS_FOURRTD`
 
 
 
@@ -4225,8 +4219,7 @@ dmm.TRANS_THERMOCOUPLE = nil
 --- --Set the RTD type to D100.
 --- ```
 ---@type dmmmeasuretransducertype
-dmm.measure.transducer = 0
-
+dmm.measure.transducer = dmm.TRANS_THREERTD
 
 
 --- **This attribute contains the alpha value of a user-defined RTD.**
@@ -4250,8 +4243,8 @@ dmm.measure.transducer = 0
 --- --Set the RTD type to User.
 --- --Set the alpha RTD value to 0.00385.
 --- ```
+---@type number
 dmm.measure.rtdalpha = 0
-
 
 
 --- **This attribute contains the beta value of a user-defined RTD.**
@@ -4277,8 +4270,8 @@ dmm.measure.rtdalpha = 0
 --- --Set the alpha RTD value to 0.00385.
 --- --Set the beta RTD value to 0.10863.
 --- ```
+---@type number
 dmm.measure.rtdbeta = 0
-
 
 
 --- **This attribute contains the delta value of a user-defined RTD.**
@@ -4302,8 +4295,8 @@ dmm.measure.rtdbeta = 0
 --- --Set the RTD type to User.
 --- --Set the delta RTD value to 1.49990.
 --- ```
+---@type number
 dmm.measure.rtddelta = 0
-
 
 
 --- **This attribute contains the zero value of a user-defined RTD.**
@@ -4329,8 +4322,8 @@ dmm.measure.rtddelta = 0
 --- --Set the alpha RTD value to 0.00385.
 --- --Set the zero RTD value to 120.
 --- ```
+---@type number
 dmm.measure.rtdzero = 0
-
 
 dmm.THERM_5000 = nil
 dmm.THERM_10000 = nil
@@ -4363,26 +4356,25 @@ dmm.THERM_2252 = nil
 --- --Set the thermistor type to 2252.
 --- ```
 ---@type dmmmeasurethermistorvalue
-dmm.measure.thermistor = 0
+dmm.measure.thermistor = dmm.THERM_5000
 
-
-dmm.THERMOCOUPLE_R = nil
-dmm.THERMOCOUPLE_S = nil
 dmm.THERMOCOUPLE_J = nil
-dmm.THERMOCOUPLE_K = nil
-dmm.THERMOCOUPLE_N = nil
+dmm.THERMOCOUPLE_R = nil
 dmm.THERMOCOUPLE_E = nil
+dmm.THERMOCOUPLE_S = nil
 dmm.THERMOCOUPLE_B = nil
+dmm.THERMOCOUPLE_N = nil
+dmm.THERMOCOUPLE_K = nil
 dmm.THERMOCOUPLE_T = nil
 
 ---@alias dmmmeasurethermocouplevalue
----|`dmm.THERMOCOUPLE_R`
----|`dmm.THERMOCOUPLE_S`
 ---|`dmm.THERMOCOUPLE_J`
----|`dmm.THERMOCOUPLE_K`
----|`dmm.THERMOCOUPLE_N`
+---|`dmm.THERMOCOUPLE_R`
 ---|`dmm.THERMOCOUPLE_E`
+---|`dmm.THERMOCOUPLE_S`
 ---|`dmm.THERMOCOUPLE_B`
+---|`dmm.THERMOCOUPLE_N`
+---|`dmm.THERMOCOUPLE_K`
 ---|`dmm.THERMOCOUPLE_T`
 
 
@@ -4407,14 +4399,13 @@ dmm.THERMOCOUPLE_T = nil
 --- --Set the thermocouple type to J.
 --- ```
 ---@type dmmmeasurethermocouplevalue
-dmm.measure.thermocouple = 0
-
+dmm.measure.thermocouple = dmm.THERMOCOUPLE_J
 
 dmm.REFJUNCTION_SIMULATED = nil
 dmm.REFJUNCTION_EXTERNAL = nil
 dmm.REFJUNCTION_INTERNAL = nil
 
----@alias dmmmeasurerefjunctionstate
+---@alias any
 ---|`dmm.REFJUNCTION_SIMULATED`
 ---|`dmm.REFJUNCTION_EXTERNAL`
 ---|`dmm.REFJUNCTION_INTERNAL`
@@ -4438,14 +4429,13 @@ dmm.REFJUNCTION_INTERNAL = nil
 --- 
 --- --Describe
 --- ```
----@type dmmmeasurerefjunctionstate
-dmm.measure.refjunction = 0
-
+---@type any
+dmm.measure.refjunction = dmm.REFJUNCTION_SIMULATED
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasureinputdividerstate
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -4466,9 +4456,8 @@ dmm.OFF = nil
 --- 
 --- --Describe
 --- ```
----@type dmmmeasureinputdividerstate
-dmm.measure.inputdivider = 0
-
+---@type any
+dmm.measure.inputdivider = dmm.ON
 
 dmm.ON = nil
 dmm.OFF = nil
@@ -4496,8 +4485,7 @@ dmm.OFF = nil
 --- --Set line synchronization on for DC current measurements.
 --- ```
 ---@type dmmmeasurelinesyncstate
-dmm.measure.linesync = 0
-
+dmm.measure.linesync = dmm.ON
 
 
 --- **This attribute sets the number of measurements to make when a measurement is requested.**
@@ -4517,8 +4505,8 @@ dmm.measure.linesync = 0
 --- --Set the instrument to make 10 measurements.
 --- --Request 10 measurements.
 --- ```
+---@type number
 dmm.measure.count = 0
-
 
 
 --- **This command sets the time that the input signal is measured for the selected function.**
@@ -4537,13 +4525,13 @@ dmm.measure.count = 0
 --- 
 --- --Sets the measurement function to DC voltage. Set the NPLC value to 0.5.
 --- ```
+---@type number
 dmm.measure.nplc = 0
-
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasureopendetectorstate
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -4568,9 +4556,8 @@ dmm.OFF = nil
 --- --Set the transducer type to thermocouple.
 --- --Set open lead detection off.
 --- ```
----@type dmmmeasureopendetectorstate
-dmm.measure.opendetector = 0
-
+---@type any
+dmm.measure.opendetector = dmm.ON
 
 
 --- **This attribute determines the positive full-scale measure range.**
@@ -4592,23 +4579,23 @@ dmm.measure.opendetector = 0
 --- --Output:
 --- --100
 --- ```
+---@type number
 dmm.measure.range = 0
 
-
-dmm.UNIT_KELVIN = nil
 dmm.UNIT_CELSIUS = nil
-dmm.UNIT_DB = nil
-dmm.UNIT_VOLT = nil
 dmm.UNIT_DBM = nil
 dmm.UNIT_FAHRENHEIT = nil
+dmm.UNIT_DB = nil
+dmm.UNIT_KELVIN = nil
+dmm.UNIT_VOLT = nil
 
 ---@alias dmmmeasureunitvalue
----|`dmm.UNIT_KELVIN`
 ---|`dmm.UNIT_CELSIUS`
----|`dmm.UNIT_DB`
----|`dmm.UNIT_VOLT`
 ---|`dmm.UNIT_DBM`
 ---|`dmm.UNIT_FAHRENHEIT`
+---|`dmm.UNIT_DB`
+---|`dmm.UNIT_KELVIN`
+---|`dmm.UNIT_VOLT`
 
 
 
@@ -4629,8 +4616,7 @@ dmm.UNIT_FAHRENHEIT = nil
 --- --Changes the front-panel display and buffer readings for voltage measurements to be displayed as decibel readings.
 --- ```
 ---@type dmmmeasureunitvalue
-dmm.measure.unit = 0
-
+dmm.measure.unit = dmm.UNIT_CELSIUS
 
 dmm.DELAY_ON = nil
 dmm.DELAY_OFF = nil
@@ -4665,8 +4651,7 @@ dmm.DELAY_OFF = nil
 --- --Make 10 measurements and store them in the reading buffer.
 --- ```
 ---@type dmmmeasureautodelayvalue
-dmm.measure.autodelay = 0
-
+dmm.measure.autodelay = dmm.DELAY_ON
 
 dmm.IMPEDANCE_10M = nil
 dmm.IMPEDANCE_AUTO = nil
@@ -4694,8 +4679,7 @@ dmm.IMPEDANCE_AUTO = nil
 --- --Set input impedance to be set automatically when the DC voltage function is selected.
 --- ```
 ---@type dmmmeasureinputimpedancesetting
-dmm.measure.inputimpedance = 0
-
+dmm.measure.inputimpedance = dmm.IMPEDANCE_10M
 
 
 --- **This attribute defines the decibel-milliwatts (dBm) reference.**
@@ -4715,8 +4699,8 @@ dmm.measure.inputimpedance = 0
 --- 
 --- --Sets the units to dBm and sets the dBm reference to 85 Ω.
 --- ```
+---@type number
 dmm.measure.dbmreference = 0
-
 
 
 --- **This function returns the setting for a function attribute.**
@@ -4741,9 +4725,9 @@ dmm.measure.dbmreference = 0
 --- --dmm.DIGITS_4_5
 --- ```
 ---@return any value The attribute value
----@param measFunction functions The measurement function; see Details
+---@param function functions The measurement function; see Details
 ---@param setting functionAttributes The attribute for the function; refer to dmm.measure.setattribute() for available settings
-function dmm.measure.getattribute(measFunction, setting) end
+function dmm.measure.getattribute(function, setting) end
 
 
 --- **This function allows you to set up a measure function whether or not the function is active.**
@@ -4767,10 +4751,10 @@ function dmm.measure.getattribute(measFunction, setting) end
 --- --Create a configuration list named measlist.
 --- --Save the settings into measlist.
 --- ```
----@param measFunction functions The function for which you are setting parameters; see Functions
+---@param function functions The function for which you are setting parameters; see Functions
 ---@param setting functionAttributes The parameter for the function; refer to Details and the tables following the examples
 ---@param value any The parameter value
-function dmm.measure.setattribute(measFunction, setting, value) end
+function dmm.measure.setattribute(function, setting, value) end
 ---@class trigger.model
 trigger.model = {}
 
@@ -4792,26 +4776,26 @@ trigger.model = {}
 --- ```
 function trigger.model.abort() end
 
-trigger.STATE_IDLE = nil
-trigger.STATE_BUILDING = nil
-trigger.STATE_FAILED = nil
 trigger.STATE_PAUSED = nil
-trigger.STATE_WAITING = nil
 trigger.STATE_RUNNING = nil
 trigger.STATE_ABORTED = nil
 trigger.STATE_ABORTING = nil
+trigger.STATE_WAITING = nil
+trigger.STATE_IDLE = nil
 trigger.STATE_EMPTY = nil
+trigger.STATE_FAILED = nil
+trigger.STATE_BUILDING = nil
 
 ---@alias triggermodelstatestatus
----|`trigger.STATE_IDLE`
----|`trigger.STATE_BUILDING`
----|`trigger.STATE_FAILED`
 ---|`trigger.STATE_PAUSED`
----|`trigger.STATE_WAITING`
 ---|`trigger.STATE_RUNNING`
 ---|`trigger.STATE_ABORTED`
 ---|`trigger.STATE_ABORTING`
+---|`trigger.STATE_WAITING`
+---|`trigger.STATE_IDLE`
 ---|`trigger.STATE_EMPTY`
+---|`trigger.STATE_FAILED`
+---|`trigger.STATE_BUILDING`
 
 
 
@@ -4832,7 +4816,8 @@ trigger.STATE_EMPTY = nil
 --- --trigger.STATE_WAITING trigger.STATE_EMPTY 9
 --- ```
 ---@return triggermodelstatestatus status The status of the trigger model
----@return any n The last trigger model block that was executed
+---@return triggermodelstatestatus status The status of the parallel/dual trigger model
+---@return integer n The last trigger model block that was executed
 function trigger.model.state() end
 
 
@@ -4856,6 +4841,7 @@ function trigger.model.state() end
 --- -- 4) DELAY_CONSTANT        DELAY: 1.000000000
 --- -- 5) BRANCH_COUNTER        VALUE: 3  BRANCH_BLOCK: 2
 --- ```
+---@return string output Returns the settings for the trigger model
 function trigger.model.getblocklist() end
 
 
@@ -4889,6 +4875,7 @@ function trigger.model.getblocklist() end
 --- --At end of execution, 10 readings are stored in defbuffer1.
 --- ```
 ---@param blockNumber number The sequence of the block in the trigger model
+---@return any output Returns the count value of the trigger model counter block.
 function trigger.model.getbranchcount(blockNumber) end
 
 
@@ -4989,8 +4976,8 @@ trigger.lanin = {}
 --- 
 --- --Set the edge state of LAN event 1 to falling.
 --- ```
-triggerlaninArr.edge= 0
-
+---@type triggerMode
+triggerlaninArr.edge = 0
 
 
 --- **This function waits for an input trigger.**
@@ -5050,8 +5037,8 @@ function triggerlaninArr.clear() end
 --- --Checks the overrun status of a trigger on LAN5 and outputs the value, such as:
 --- --false
 --- ```
-triggerlaninArr.overrun= 0
-
+---@type boolean
+triggerlaninArr.overrun = true
 ---@class triggerdigoutArr
 local triggerdigoutArr = {}
 
@@ -5075,8 +5062,8 @@ trigger.digout = {}
 --- 
 --- --Set the stimulus for output digital trigger line 2 to be the expiration of trigger timer 3.
 --- ```
----@type eventID|0
-triggerdigoutArr.stimulus= 0
+---@type triggerEvents
+triggerdigoutArr.stimulus= trigger.EVENT_NONE
 
 
 
@@ -5096,8 +5083,8 @@ triggerdigoutArr.stimulus= 0
 --- 
 --- --Sets the pulse width for trigger line 4 to 20 µs.
 --- ```
-triggerdigoutArr.pulsewidth= 0
-
+---@type number
+triggerdigoutArr.pulsewidth = 0
 
 
 --- **This function asserts a trigger pulse on one of the digital I/O lines.**
@@ -5140,12 +5127,12 @@ function triggerdigoutArr.assert() end
 function triggerdigoutArr.release() end
 
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
 ---@alias triggerdigoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -5166,8 +5153,7 @@ trigger.LOGIC_POSITIVE = nil
 --- --Sets line 4 mode to be a trigger output and sets the output logic of the trigger event generator to negative (asserts a low pulse).
 --- ```
 ---@type triggerdigoutlogiclogicType
-triggerdigoutArr.logic= 0
-
+triggerdigoutArr.logic = trigger.LOGIC_POSITIVE
 ---@class status.operation
 status.operation = {}
 
@@ -5189,9 +5175,9 @@ status.operation = {}
 --- --Example output:
 --- --4918    4917
 --- ```
----@return number setEvent The event mapped to set this bit; 0 if no mapping
----@return number clearEvent The event mapped to clear this bit; 0 if no mapping
----@param bitNumber number The bit number to check
+---@return integer setEvent The event mapped to set this bit; 0 if no mapping
+---@return integer clearEvent The event mapped to clear this bit; 0 if no mapping
+---@param bitNumber integer The bit number to check
 function status.operation.getmap(bitNumber) end
 
 
@@ -5212,8 +5198,8 @@ function status.operation.getmap(bitNumber) end
 --- 
 --- --Sets the 12 and 14 bits of the operation status enable register using a decimal value.
 --- ```
+---@type number
 status.operation.enable = 0
-
 
 
 --- **This attribute reads the Operation Event Register of the status model.**
@@ -5247,8 +5233,8 @@ status.operation.enable = 0
 --- --Output:
 --- --1
 --- ```
+---@type number
 status.operation.event = 0
-
 
 
 --- **This attribute reads the Operation Event Register of the status model.**
@@ -5266,8 +5252,8 @@ status.operation.event = 0
 --- 
 --- --Returns the contents of the register.
 --- ```
+---@type number
 status.operation.condition = 0
-
 
 
 --- **This function allows you to map events to bits in the Operation Event Register.**
@@ -5285,10 +5271,10 @@ status.operation.condition = 0
 --- 
 --- --When event 2731 (trigger model initiated) occurs, bit 0 in the condition and event registers of the Operation Event Register are set. When event 2732 (trigger model idled) occurs, bit 0 in the condition register is cleared.
 --- ```
----@param bitNumber number The bit number that is mapped to an event (0 to 14)
----@param setEvent number The number of the event that sets the bits in the condition and event registers; 0 if no mapping
----@param clearEvent number The number of the event that clears the bit in the condition register; 0 if no mapping
----@overload fun(bitNumber:number,setEvent:number)
+---@param bitNumber integer The bit number that is mapped to an event (0 to 14)
+---@param setEvent integer The number of the event that sets the bits in the condition and event registers; 0 if no mapping
+---@param clearEvent integer The number of the event that clears the bit in the condition register; 0 if no mapping
+---@overload fun(bitNumber:integer,setEvent:integer)
 function status.operation.setmap(bitNumber, setEvent, clearEvent) end
 ---@class status.questionable
 status.questionable = {}
@@ -5316,8 +5302,8 @@ status.questionable = {}
 --- 
 --- --Uses a decimal value to set bits B9 and B11 of the status questionable enable register.
 --- ```
+---@type number
 status.questionable.event = 0
-
 
 
 --- **This function maps events to bits in the questionable event registers.**
@@ -5335,10 +5321,10 @@ status.questionable.event = 0
 --- 
 --- --When event 4917 (a default buffer is 0% filled) occurs, bit 0 is set in the condition register and the event register of the Questionable Event Register. When event 4918 (a default buffer is 100% filled) occurs, bit 0 in the condition register is cleared.
 --- ```
----@param bitNumber number The bit number that is mapped to an event (0 to 14)
----@param setEvent number The number of the event that sets the bits in the condition and event registers; 0 if no mapping
----@param clearEvent number The number of the event that clears the bit in the condition register; 0 if no mapping
----@overload fun(bitNumber:number,setEvent:number)
+---@param bitNumber integer The bit number that is mapped to an event (0 to 14)
+---@param setEvent integer The number of the event that sets the bits in the condition and event registers; 0 if no mapping
+---@param clearEvent integer The number of the event that clears the bit in the condition register; 0 if no mapping
+---@overload fun(bitNumber:integer,setEvent:integer)
 function status.questionable.setmap(bitNumber, setEvent, clearEvent) end
 
 
@@ -5357,9 +5343,9 @@ function status.questionable.setmap(bitNumber, setEvent, clearEvent) end
 --- 
 --- --Returns the events that were mapped to set and clear bit 9.
 --- ```
----@return number setEvent The event mapped to set this bit; 0 if no mapping
----@return number clearEvent The event mapped to clear this bit; 0 if no mapping
----@param bitNumber number The bit number to check (0 to 14)
+---@return integer setEvent The event mapped to set this bit; 0 if no mapping
+---@return integer clearEvent The event mapped to clear this bit; 0 if no mapping
+---@param bitNumber integer The bit number to check (0 to 14)
 function status.questionable.getmap(bitNumber) end
 
 
@@ -5378,8 +5364,8 @@ function status.questionable.getmap(bitNumber) end
 --- 
 --- --Reads the Questionable Condition Register.
 --- ```
+---@type number
 status.questionable.condition = 0
-
 
 
 --- **This attribute sets or reads the contents of the questionable event enable register of the status model.**
@@ -5399,8 +5385,8 @@ status.questionable.condition = 0
 --- --Set bits 0 and 4 of the Questionable Event Enable Register.
 --- --Returns 17, which indicates the register was set correctly.
 --- ```
+---@type number
 status.questionable.enable = 0
-
 ---@class status.standard
 status.standard = {}
 
@@ -5426,8 +5412,8 @@ status.standard = {}
 --- 
 --- --Uses a decimal value to set the OPC and QYE bits of the standard event status enable register.
 --- ```
+---@type number
 status.standard.enable = 0
-
 
 
 --- **This attribute returns the contents of the Standard Event Status Register set of the status model.**
@@ -5445,20 +5431,20 @@ status.standard.enable = 0
 --- 
 --- --May return the value 129, showing that the Standard Event Status Register contains binary 10000001
 --- ```
+---@type number
 status.standard.event = 0
-
 ---@class digiolineArr
 local digiolineArr = {}
 
 ---@type digiolineArr[]
 digio.line = {}
 
-digio.STATE_LOW = nil
 digio.STATE_HIGH = nil
+digio.STATE_LOW = nil
 
 ---@alias digiolinestatestate
----|`digio.STATE_LOW`
 ---|`digio.STATE_HIGH`
+---|`digio.STATE_LOW`
 
 
 
@@ -5479,27 +5465,26 @@ digio.STATE_HIGH = nil
 --- --Sets line 1 (bit B1) of the digital I/O port high.
 --- ```
 ---@type digiolinestatestate
-digiolineArr.state= 0
+digiolineArr.state = digio.STATE_HIGH
 
-
-digio.MODE_TRIGGER_OPEN_DRAIN = nil
 digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
-digio.MODE_DIGITAL_OUT = nil
+digio.MODE_DIGITAL_IN = nil
 digio.MODE_SYNCHRONOUS_MASTER = nil
+digio.MODE_DIGITAL_OUT = nil
+digio.MODE_DIGITAL_OPEN_DRAIN = nil
+digio.MODE_TRIGGER_OPEN_DRAIN = nil
 digio.MODE_TRIGGER_IN = nil
 digio.MODE_TRIGGER_OUT = nil
-digio.MODE_DIGITAL_OPEN_DRAIN = nil
-digio.MODE_DIGITAL_IN = nil
 
 ---@alias digiolinemodelineMode
----|`digio.MODE_TRIGGER_OPEN_DRAIN`
 ---|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
----|`digio.MODE_DIGITAL_OUT`
+---|`digio.MODE_DIGITAL_IN`
 ---|`digio.MODE_SYNCHRONOUS_MASTER`
+---|`digio.MODE_DIGITAL_OUT`
+---|`digio.MODE_DIGITAL_OPEN_DRAIN`
+---|`digio.MODE_TRIGGER_OPEN_DRAIN`
 ---|`digio.MODE_TRIGGER_IN`
 ---|`digio.MODE_TRIGGER_OUT`
----|`digio.MODE_DIGITAL_OPEN_DRAIN`
----|`digio.MODE_DIGITAL_IN`
 
 
 
@@ -5519,8 +5504,7 @@ digio.MODE_DIGITAL_IN = nil
 --- --Set digital I/O line 1 to be an output trigger line.
 --- ```
 ---@type digiolinemodelineMode
-digiolineArr.mode= 0
-
+digiolineArr.mode = digio.MODE_SYNCHRONOUS_ACCEPTOR
 
 
 --- **This function resets digital I/O line values to their factory defaults.**
@@ -5562,13 +5546,13 @@ local triggerdiginArr = {}
 ---@type triggerdiginArr[]
 trigger.digin = {}
 
-trigger.EDGE_FALLING = nil
 trigger.EDGE_EITHER = nil
+trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
 
 ---@alias triggerdiginedgedetectedEdge
----|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_EITHER`
+---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
 
 
@@ -5590,8 +5574,7 @@ trigger.EDGE_RISING = nil
 --- --Sets the trigger mode for digital I/O line 4 to detect a rising-edge trigger as an input.
 --- ```
 ---@type triggerdiginedgedetectedEdge
-triggerdiginArr.edge= 0
-
+triggerdiginArr.edge = trigger.EDGE_EITHER
 
 
 --- **This function clears the trigger event on a digital input line.**
@@ -5630,8 +5613,8 @@ function triggerdiginArr.clear() end
 --- --If there is no trigger overrun on digital input 1, the output is:
 --- --false
 --- ```
-triggerdiginArr.overrun= 0
-
+---@type boolean
+triggerdiginArr.overrun = true
 
 
 --- **This function waits for a trigger.**
@@ -5740,8 +5723,8 @@ function triggerlanoutArr.disconnect() end
 --- --Example output:
 --- --false
 --- ```
-triggerlanoutArr.connected= 0
-
+---@type boolean
+triggerlanoutArr.connected = true
 
 
 --- **This attribute specifies the address (in dotted-decimal format) of UDP or TCP listeners.**
@@ -5762,8 +5745,8 @@ triggerlanoutArr.connected= 0
 --- --Set the protocol for LAN trigger 3 to be TCP when sending LAN triggers.
 --- --Use IP address "192.0.32.10" to connect the LAN trigger.
 --- ```
-triggerlanoutArr.ipaddress= 0
-
+---@type string
+triggerlanoutArr.ipaddress = ''
 
 lan.PROTOCOL_UDP = nil
 lan.PROTOCOL_TCP = nil
@@ -5792,8 +5775,7 @@ lan.PROTOCOL_MULTICAST = nil
 --- --Get LAN protocol that is being used for sending trigger messages for LAN event 1.
 --- ```
 ---@type triggerlanoutprotocolprotocol
-triggerlanoutArr.protocol= 0
-
+triggerlanoutArr.protocol = lan.PROTOCOL_UDP
 
 
 --- **This attribute specifies events that cause this trigger to assert.**
@@ -5811,16 +5793,16 @@ triggerlanoutArr.protocol= 0
 --- 
 --- --Use the timer 1 trigger event as the source for LAN trigger 5 stimulus.
 --- ```
----@type eventID|0
-triggerlanoutArr.stimulus= 0
+---@type triggerEvents
+triggerlanoutArr.stimulus= trigger.EVENT_NONE
 
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
 ---@alias triggerlanoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -5840,8 +5822,7 @@ trigger.LOGIC_POSITIVE = nil
 --- --Set the logic for LAN trigger line 2 to positive.
 --- ```
 ---@type triggerlanoutlogiclogicType
-triggerlanoutArr.logic= 0
-
+triggerlanoutArr.logic = trigger.LOGIC_POSITIVE
 ---@class tsplinklineArr
 local tsplinklineArr = {}
 
@@ -5864,8 +5845,8 @@ tsplink.line = {}
 --- 
 --- --Sets the trigger mode for synchronization line 3 as a trigger open drain line.
 --- ```
-tsplinklineArr.mode= 0
-
+---@type tsplinkLineMode
+tsplinklineArr.mode = 0
 
 
 --- **This function resets some of the TSP-Link trigger attributes to their factory defaults.**
@@ -5914,21 +5895,20 @@ tsplink.STATE_HIGH = nil
 --- --tsplink.STATE_HIGH
 --- ```
 ---@type tsplinklinestatelineState
-tsplinklineArr.state= 0
-
+tsplinklineArr.state = tsplink.STATE_LOW
 ---@class triggertsplinkinArr
 local triggertsplinkinArr = {}
 
 ---@type triggertsplinkinArr[]
 trigger.tsplinkin = {}
 
-trigger.EDGE_FALLING = nil
 trigger.EDGE_EITHER = nil
+trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
 
 ---@alias triggertsplinkinedgedetectedEdge
----|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_EITHER`
+---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
 
 
@@ -5950,8 +5930,7 @@ trigger.EDGE_RISING = nil
 --- --Sets synchronization line 3 to detect rising edge triggers as input.
 --- ```
 ---@type triggertsplinkinedgedetectedEdge
-triggertsplinkinArr.edge= 0
-
+triggertsplinkinArr.edge = trigger.EDGE_EITHER
 
 
 --- **This function clears the event detector for a LAN trigger.**
@@ -5989,8 +5968,8 @@ function triggertsplinkinArr.clear() end
 --- 
 --- --If an event on line 1 was ignored, displays true; if no additional event occurred, displays false.
 --- ```
-triggertsplinkinArr.overrun= 0
-
+---@type boolean
+triggertsplinkinArr.overrun = true
 
 
 --- **This function waits for a trigger.**
@@ -6022,12 +6001,12 @@ local triggertsplinkoutArr = {}
 ---@type triggertsplinkoutArr[]
 trigger.tsplinkout = {}
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
 ---@alias triggertsplinkoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -6048,8 +6027,7 @@ trigger.LOGIC_POSITIVE = nil
 --- --Sets the trigger logic for synchronization line 3 to output a positive pulse.
 --- ```
 ---@type triggertsplinkoutlogiclogicType
-triggertsplinkoutArr.logic= 0
-
+triggertsplinkoutArr.logic = trigger.LOGIC_POSITIVE
 
 
 --- **This function simulates the occurrence of the trigger and generates the corresponding trigger event.**
@@ -6088,8 +6066,8 @@ function triggertsplinkoutArr.assert() end
 --- 
 --- --Sets pulse width for trigger line 3 to 20 μs.
 --- ```
-triggertsplinkoutArr.pulsewidth= 0
-
+---@type number
+triggertsplinkoutArr.pulsewidth = 0
 
 
 --- **This function releases a latched trigger on the given TSP-Link trigger line.**
@@ -6127,22 +6105,22 @@ function triggertsplinkoutArr.release() end
 --- 
 --- --Outputs the event that will start action on TSP-Link trigger line 3.
 --- ```
----@type eventID|0
-triggertsplinkoutArr.stimulus= 0
+---@type triggerEvents
+triggertsplinkoutArr.stimulus= trigger.EVENT_NONE
 
 ---@class display.input
 display.input = {}
 
+display.NFORMAT_PREFIX = nil
 display.NFORMAT_INTEGER = nil
 display.NFORMAT_DECIMAL = nil
 display.NFORMAT_EXPONENT = nil
-display.NFORMAT_PREFIX = nil
 
 ---@alias displayinputnumbernumberFormat
+---|`display.NFORMAT_PREFIX`
 ---|`display.NFORMAT_INTEGER`
 ---|`display.NFORMAT_DECIMAL`
 ---|`display.NFORMAT_EXPONENT`
----|`display.NFORMAT_PREFIX`
 
 
 
@@ -6171,10 +6149,10 @@ display.NFORMAT_PREFIX = nil
 ---@param defaultValue number The value that is initially displayed in the displayed keypad
 ---@param minimumValue number The lowest value that can be entered
 ---@param maximumValue number The highest value that can be entered
----@overload fun(dialogTitle:string):number
----@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat):number
----@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number):number
----@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number,minimumValue:number):number
+---@overload fun(dialogTitle:string):numberEntered:number
+---@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat):numberEntered:number
+---@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number):numberEntered:number
+---@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number,minimumValue:number):numberEntered:number
 function display.input.number(dialogTitle, numberFormat, defaultValue, minimumValue, maximumValue) end
 
 
@@ -6196,38 +6174,35 @@ function display.input.number(dialogTitle, numberFormat, defaultValue, minimumVa
 --- --
 --- --If the user selects Peach, the return is display.BUTTON_OPTION8.
 --- ```
----@return displayInputOption n The number of the button that is selected from the front-panel display; nil if Cancel is pressed on the keypad; buttons are numbered top to bottom, left to right
+---@return display_BUTTON_OPTIONs | nil n The number of the button that is selected from the front-panel display; nil if Cancel is pressed on the keypad; buttons are numbered top to bottom, left to right
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
 ---@param buttonTitle1 string A string that contains the name of the first button; up to 15 characters
----@param buttonTitle2 string A string that contains the name of the second button; up to 15 characters
----@param buttonTitleN string A string that contains the names of subsequent buttons, where N is a number from 3 to 10; you can define up to 10 buttons; each button can be up to 15 characters
----@overload fun(dialogTitle:string,buttonTitle1:string,buttonTitle2:string):displayInputOption
-function display.input.option(dialogTitle, buttonTitle1, buttonTitle2, buttonTitleN, ...) end
+---@return displayInputOption displayOption---@return displayInputOption displayOptionfunction display.input.option(dialogTitle, buttonTitle1, ...) end
 
-display.BUTTON_NO = nil
-display.BUTTON_YES = nil
-display.BUTTON_CANCEL = nil
 display.BUTTON_OK = nil
+display.BUTTON_NO = nil
+display.BUTTON_CANCEL = nil
+display.BUTTON_YES = nil
 
 ---@alias displayinputpromptbuttonReturn
----|`display.BUTTON_NO`
----|`display.BUTTON_YES`
----|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_OK`
+---|`display.BUTTON_NO`
+---|`display.BUTTON_CANCEL`
+---|`display.BUTTON_YES`
 
 
-display.BUTTONS_OK = nil
 display.BUTTONS_CANCEL = nil
 display.BUTTONS_YESNOCANCEL = nil
-display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_YESNO = nil
+display.BUTTONS_OK = nil
+display.BUTTONS_OKCANCEL = nil
 
 ---@alias displayinputpromptbuttonSet
----|`display.BUTTONS_OK`
 ---|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_YESNOCANCEL`
----|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_OK`
+---|`display.BUTTONS_OKCANCEL`
 
 
 
@@ -6256,16 +6231,16 @@ display.BUTTONS_YESNO = nil
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 63 characters
 function display.input.prompt(buttonSet, dialogTitle) end
 
-display.SFORMAT_UPPER = nil
-display.SFORMAT_UPPER_LOWER = nil
 display.SFORMAT_ANY = nil
+display.SFORMAT_UPPER_LOWER = nil
 display.SFORMAT_BUFFER_NAME = nil
+display.SFORMAT_UPPER = nil
 
 ---@alias displayinputstringtextFormat
----|`display.SFORMAT_UPPER`
----|`display.SFORMAT_UPPER_LOWER`
 ---|`display.SFORMAT_ANY`
+---|`display.SFORMAT_UPPER_LOWER`
 ---|`display.SFORMAT_BUFFER_NAME`
+---|`display.SFORMAT_UPPER`
 
 
 
@@ -6290,7 +6265,7 @@ display.SFORMAT_BUFFER_NAME = nil
 ---@return string|nil textEntered The text that is entered from the front-panel display; nil if Cancel is pressed on the keypad
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
 ---@param textFormat displayinputstringtextFormat The format of the entered text
----@overload fun(dialogTitle:string):string|nil
+---@overload fun(dialogTitle:string):textEntered:string|nil
 function display.input.string(dialogTitle, textFormat) end
 ---@class dmm.digitize
 dmm.digitize = {}
@@ -6315,20 +6290,20 @@ dmm.digitize = {}
 --- --Make a measurement that is stored in the voltMeasBuffer and is also printed.
 --- ```
 ---@return number reading The last reading of the measurement process
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if nothing is specified, the reading is stored in defbuffer1
----@overload fun():number
+---@param bufferName bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if nothing is specified, the reading is stored in defbuffer1
+---@overload fun():reading:number
 function dmm.digitize.read(bufferName) end
 
-dmm.DIGITS_6_5 = nil
-dmm.DIGITS_5_5 = nil
-dmm.DIGITS_3_5 = nil
 dmm.DIGITS_4_5 = nil
+dmm.DIGITS_6_5 = nil
+dmm.DIGITS_3_5 = nil
+dmm.DIGITS_5_5 = nil
 
 ---@alias dmmdigitizedisplaydigitsvalue
----|`dmm.DIGITS_6_5`
----|`dmm.DIGITS_5_5`
----|`dmm.DIGITS_3_5`
 ---|`dmm.DIGITS_4_5`
+---|`dmm.DIGITS_6_5`
+---|`dmm.DIGITS_3_5`
+---|`dmm.DIGITS_5_5`
 
 
 
@@ -6350,13 +6325,12 @@ dmm.DIGITS_4_5 = nil
 --- --Set the front panel to display 3½ digits.
 --- ```
 ---@type dmmdigitizedisplaydigitsvalue
-dmm.digitize.displaydigits = 0
-
+dmm.digitize.displaydigits = dmm.DIGITS_4_5
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmdigitizeinputdividervalue
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -6378,9 +6352,8 @@ dmm.OFF = nil
 --- 
 --- --Describe
 --- ```
----@type dmmdigitizeinputdividervalue
-dmm.digitize.inputdivider = 0
-
+---@type any
+dmm.digitize.inputdivider = dmm.ON
 
 
 --- **This attribute sets a user-defined delay that you can use in the trigger model.**
@@ -6400,9 +6373,8 @@ dmm.digitize.inputdivider = 0
 --- 
 --- --Set user delay 2 to be 0.5 s. Sets trigger-model block 6 to use the delay.
 --- ```
----@type integer[]
-dmm.digitize.userdelay= 0
-
+---@type number
+dmm.digitize.userdelay = 0
 
 
 --- **This attribute sets the number of measurements to digitize when a measurement is requested.**
@@ -6427,8 +6399,8 @@ dmm.digitize.userdelay= 0
 --- --Example output:
 --- ---0.0039799990218
 --- ```
+---@type any
 dmm.digitize.count = 0
-
 
 
 --- **This attribute determines the positive full-scale measure range for the selected digitize function.**
@@ -6447,16 +6419,16 @@ dmm.digitize.count = 0
 --- 
 --- --Set the function to digitize voltage. Set the range to 90 V, which selects the 100 V range.
 --- ```
+---@type number
 dmm.digitize.range = 0
 
-
-dmm.FUNC_NONE = nil
 dmm.FUNC_DIGITIZE_CURRENT = nil
+dmm.FUNC_NONE = nil
 dmm.FUNC_DIGITIZE_VOLTAGE = nil
 
----@alias dmmdigitizefuncvalue
----|`dmm.FUNC_NONE`
+---@alias dmmdigitizefunc
 ---|`dmm.FUNC_DIGITIZE_CURRENT`
+---|`dmm.FUNC_NONE`
 ---|`dmm.FUNC_DIGITIZE_VOLTAGE`
 
 
@@ -6476,13 +6448,12 @@ dmm.FUNC_DIGITIZE_VOLTAGE = nil
 --- 
 --- --Set the measurement function to digitize current.
 --- ```
----@type dmmdigitizefuncvalue
-dmm.digitize.func = 0
-
+---@type dmmdigitizefunc
+dmm.digitize.func = dmm.FUNC_DIGITIZE_CURRENT
 
 dmm.APERTURE_AUTO = nil
 
----@alias dmmdigitizeaperturetime
+---@alias any
 ---|`dmm.APERTURE_AUTO`
 
 
@@ -6507,9 +6478,8 @@ dmm.APERTURE_AUTO = nil
 --- --Set the digitize function to measure current. Set the sample rate to 200,000, with a count of 1, and automatic aperture.
 --- --Make a digitize measurement.
 --- ```
----@type dmmdigitizeaperturetime
-dmm.digitize.aperture = 0
-
+---@type any
+dmm.digitize.aperture = dmm.APERTURE_AUTO
 
 
 --- **This attribute defines the precise acquisition rate at which the digitizing measurements are made.**
@@ -6532,8 +6502,8 @@ dmm.digitize.aperture = 0
 --- --Set the digitize function to digitize current. Set the sample rate to 200,000, with a count of 1, and automatic aperture.
 --- --Make a digitize measurement.
 --- ```
+---@type number
 dmm.digitize.samplerate = 0
-
 
 
 --- **This function initiates digitize measurements and returns the last actual measurement and time information in UTC format without using the trigger mode.**
@@ -6555,20 +6525,20 @@ dmm.digitize.samplerate = 0
 ---@return number reading The last reading of the measurement process
 ---@return number seconds Seconds in UTC format
 ---@return number fractional Fractional seconds
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
----@overload fun():number
+---@param bufferName bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@overload fun():reading:number, seconds:number, fractional:number
 function dmm.digitize.readwithtime(bufferName) end
 
+dmm.UNIT_DBM = nil
 dmm.UNIT_DB = nil
 dmm.UNIT_VOLT = nil
 dmm.UNIT_AMP = nil
-dmm.UNIT_DBM = nil
 
 ---@alias dmmdigitizeunitvalue
+---|`dmm.UNIT_DBM`
 ---|`dmm.UNIT_DB`
 ---|`dmm.UNIT_VOLT`
 ---|`dmm.UNIT_AMP`
----|`dmm.UNIT_DBM`
 
 
 
@@ -6590,8 +6560,7 @@ dmm.UNIT_DBM = nil
 --- --Set the units to display in decibels.
 --- ```
 ---@type dmmdigitizeunitvalue
-dmm.digitize.unit = 0
-
+dmm.digitize.unit = dmm.UNIT_DBM
 
 dmm.IMPEDANCE_10M = nil
 dmm.IMPEDANCE_AUTO = nil
@@ -6619,8 +6588,7 @@ dmm.IMPEDANCE_AUTO = nil
 --- --Set input impedance to be set automatically when the digitize voltage function is selected.
 --- ```
 ---@type dmmdigitizeinputimpedancesetting
-dmm.digitize.inputimpedance = 0
-
+dmm.digitize.inputimpedance = dmm.IMPEDANCE_10M
 
 
 --- **This attribute defines the decibel (dB) reference setting for the DMM in volts.**
@@ -6640,8 +6608,8 @@ dmm.digitize.inputimpedance = 0
 --- 
 --- --Sets the units to decibel and sets the dB reference to 5 for DC volts.
 --- ```
+---@type number
 dmm.digitize.dbreference = 0
-
 
 
 --- **This attribute defines the decibel-milliwatts (dBm) reference.**
@@ -6661,8 +6629,8 @@ dmm.digitize.dbreference = 0
 --- 
 --- --Sets the units to dBm and sets the dBm resistance to 85 Ω.
 --- ```
+---@type number
 dmm.digitize.dbmreference = 0
-
 ---@class trigger.extin
 trigger.extin = {}
 
@@ -6684,13 +6652,13 @@ trigger.extin = {}
 --- ```
 function trigger.extin.clear() end
 
-trigger.EDGE_FALLING = nil
 trigger.EDGE_EITHER = nil
+trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
 
----@alias triggerextinedgedetectedEdge
----|`trigger.EDGE_FALLING`
+---@alias any
 ---|`trigger.EDGE_EITHER`
+---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
 
 
@@ -6710,9 +6678,8 @@ trigger.EDGE_RISING = nil
 --- 
 --- --Sets the external I/O input line to detect rising-edge triggers as inputs.
 --- ```
----@type triggerextinedgedetectedEdge
-trigger.extin.edge = 0
-
+---@type any
+trigger.extin.edge = trigger.EDGE_EITHER
 
 
 --- **This attribute returns the event detector overrun status.**
@@ -6732,8 +6699,8 @@ trigger.extin.edge = 0
 --- --If there is no trigger overrun on the external input, the output is:
 --- --false
 --- ```
-trigger.extin.overrun = 0
-
+---@type boolean
+trigger.extin.overrun = true
 
 
 --- **This function waits for a trigger.**
@@ -6780,12 +6747,12 @@ trigger.extout = {}
 --- ```
 function trigger.extout.assert() end
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
----@alias triggerextoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
+---@alias any
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -6812,9 +6779,8 @@ trigger.LOGIC_POSITIVE = nil
 --- --Set the stimulus to the external I/O input.
 --- --Set the external input to detect a falling edge.
 --- ```
----@type triggerextoutlogiclogicType
-trigger.extout.logic = 0
-
+---@type any
+trigger.extout.logic = trigger.LOGIC_POSITIVE
 
 
 --- **This function releases an indefinite length or latched trigger.**
@@ -6911,8 +6877,8 @@ trigger.limit = {}
 --- 
 --- --Describe
 --- ```
+---@type any
 trigger.limit.direction = 0
-
 
 
 --- **This attribute describes something.**
@@ -6949,8 +6915,8 @@ trigger.limit.EVENT_ID= nil
 --- 
 --- --Describe
 --- ```
+---@type any
 trigger.limit.value = 0
-
 ---@class acal.lastrun
 acal.lastrun = {}
 
@@ -6972,8 +6938,8 @@ acal.lastrun = {}
 --- --Example output:
 --- --63.167084
 --- ```
+---@type any
 acal.lastrun.internaltemp = 0
-
 
 
 --- **This attribute returns the date and time when autocalibration was last run.**
@@ -6993,8 +6959,8 @@ acal.lastrun.internaltemp = 0
 --- --Example output:
 --- --08/11/2014 16:30:26.745369595
 --- ```
+---@type any
 acal.lastrun.time = 0
-
 
 
 --- **This attribute returns the difference between the internal temperature and the temperature when autocalibration was last run.**
@@ -7014,8 +6980,8 @@ acal.lastrun.time = 0
 --- --Example output:
 --- --4.5678
 --- ```
+---@type any
 acal.lastrun.tempdiff = 0
-
 ---@class acal.nextrun
 acal.nextrun = {}
 
@@ -7037,53 +7003,79 @@ acal.nextrun = {}
 --- --Example output:
 --- --05/29/2014 17:11:17.000000000
 --- ```
+---@type any
 acal.nextrun.time = 0
-
 ---@class buffer.write
 buffer.write = {}
 
-buffer.UNIT_DBM = nil
-buffer.UNIT_AMP = nil
-buffer.UNIT_FARAD = nil
-buffer.UNIT_CELSIUS = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_DECIBEL = nil
-buffer.UNIT_CUSTOM1 = nil
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_DAC = nil
 buffer.UNIT_CUSTOM3 = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_FAHRENHEIT = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_RATIO = nil
 buffer.UNIT_DIO = nil
+buffer.UNIT_AMP_AC = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_AMP = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CELSIUS = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_DAC = nil
+buffer.UNIT_DECIBEL = nil
+buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_FARAD = nil
+buffer.UNIT_HERTZ = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_WATT = nil
+buffer.UNIT_X = nil
 
 ---@alias bufferwriteformatunits
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_AMP`
----|`buffer.UNIT_FARAD`
----|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_CUSTOM1`
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_DAC`
 ---|`buffer.UNIT_CUSTOM3`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_FAHRENHEIT`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_RATIO`
 ---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_AMP`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CELSIUS`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_WATT`
+---|`buffer.UNIT_X`
 
 
-buffer.DIGITS_5_5 = nil
 buffer.DIGITS_3_5 = nil
-buffer.DIGITS_8_5 = nil
-buffer.DIGITS_7_5 = nil
-buffer.DIGITS_6_5 = nil
+buffer.DIGITS_5_5 = nil
 buffer.DIGITS_4_5 = nil
+buffer.DIGITS_8_5 = nil
+buffer.DIGITS_6_5 = nil
+buffer.DIGITS_7_5 = nil
 
 ---@alias bufferwriteformatdisplayDigits
----|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_3_5`
----|`buffer.DIGITS_8_5`
----|`buffer.DIGITS_7_5`
----|`buffer.DIGITS_6_5`
+---|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_4_5`
+---|`buffer.DIGITS_8_5`
+---|`buffer.DIGITS_6_5`
+---|`buffer.DIGITS_7_5`
 
 
 
@@ -7133,13 +7125,13 @@ buffer.DIGITS_4_5 = nil
 --- --Output:
 --- --1, Watt DC, 7, Watt DC, 2, Watt DC, 8, Watt DC, 3, Watt DC, 9, Watt DC, 4, Watt DC, 10, Watt DC, 5, Watt DC, 11, Watt DC, 6, Watt DC, 12, Watt DC
 --- ```
----@param bufferVar bufferMethods The name of the buffer
+---@param bufferVar bufferVar The name of the buffer
 ---@param units bufferwriteformatunits The units for the first measurement in the buffer index
 ---@param displayDigits bufferwriteformatdisplayDigits The number of digits to use for the first measurement
 ---@param extraUnits bufferwriteformatunits The units for the second measurement in the buffer index; the selections are the same as units (only valid for buffer style WRITABLE_FULL); if not specified, uses the value for units
 ---@param extraDigits bufferwriteformatdisplayDigits The number of digits to use for the second measurement; the selections are the same as displayDigits (only valid for buffer style WRITABLE_FULL); if not specified, uses the value for displayDigits
----@overload fun(bufferVar:bufferMethods,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits)
----@overload fun(bufferVar:bufferMethods,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits,extraUnits:bufferwriteformatunits)
+---@overload fun(bufferVar:bufferVar,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits)
+---@overload fun(bufferVar:bufferVar,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits,extraUnits:bufferwriteformatunits)
 function buffer.write.format(bufferVar, units, displayDigits, extraUnits, extraDigits) end
 
 
@@ -7189,19 +7181,19 @@ function buffer.write.format(bufferVar, units, displayDigits, extraUnits, extraD
 --- --Output:
 --- --1, Watt DC, 7, Watt DC, 2, Watt DC, 8, Watt DC, 3, Watt DC, 9, Watt DC, 4, Watt DC, 10, Watt DC, 5, Watt DC, 11, Watt DC, 6, Watt DC, 12, Watt DC
 --- ```
----@param bufferVar bufferMethods The name of the buffer
----@param readingValue number The first value that is recorded in the buffer index
----@param extraValue number A second value that is recorded in the buffer index (only valid for buffer style WRITABLE_FULL)
+---@param bufferVar bufferVar The name of the buffer
+---@param readingValue integer The first value that is recorded in the buffer index
+---@param extraValue integer A second value that is recorded in the buffer index (only valid for buffer style WRITABLE_FULL)
 ---@param seconds number An integer that represents the seconds
 ---@param fractionalSeconds number The portion of the time that represents the fractional seconds
 ---@param status readingStatus Additional information about the reading; see Details
----@overload fun(bufferVar:bufferMethods,readingValue:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,seconds:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,extraValue:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,extraValue:number,seconds:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,seconds:number,fractionalSeconds:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,seconds:number,fractionalSeconds:number,status:readingStatus)
----@overload fun(bufferVar:bufferMethods,readingValue:number,extraValue:number,seconds:number,fractionalSeconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,seconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,extraValue:integer)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,extraValue:integer,seconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,seconds:number,fractionalSeconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,seconds:number,fractionalSeconds:number,status:readingStatus)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,extraValue:integer,seconds:number,fractionalSeconds:number)
 function buffer.write.reading(bufferVar, readingValue, extraValue, seconds, fractionalSeconds, status) end
 ---@class dmm.measure.configlist
 dmm.measure.configlist = {}
@@ -7241,6 +7233,7 @@ function dmm.measure.configlist.create(listName) end
 --- 
 --- --Request the name of one measure configuration list that is stored in the instrument. Send the command again until it returns nil to get all stored lists.
 --- ```
+---@return any output Returns the name of one measure configuration list that is stored on the instrument
 function dmm.measure.configlist.catalog() end
 
 
@@ -7275,9 +7268,10 @@ function dmm.measure.configlist.catalog() end
 --- --dmm.measure.filter.window = 0
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@param fieldSeparator string String that represents the separator for the data; use one of the following
----@overload fun(listName:string,index:number)
+---@return any output Returns a list of TSP commands and parameter settings that are stored in the specified configuration index
+---@overload fun(listName:string,index:integer):output:any
 function dmm.measure.configlist.query(listName, index, fieldSeparator) end
 
 
@@ -7297,7 +7291,7 @@ function dmm.measure.configlist.query(listName, index, fieldSeparator) end
 --- --Because an index was not specified, this command recalls configuration index 1 from a configuration list named MyMeasList.
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the measure configuration list
+---@param index integer A number that defines a specific configuration index in the measure configuration list
 ---@overload fun(listName:string)
 function dmm.measure.configlist.recall(listName, index) end
 
@@ -7318,7 +7312,7 @@ function dmm.measure.configlist.recall(listName, index) end
 --- --Delete a measure configuration list named myMeasList.
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@overload fun(listName:string)
 function dmm.measure.configlist.delete(listName, index) end
 
@@ -7339,7 +7333,7 @@ function dmm.measure.configlist.delete(listName, index) end
 --- --Stores the active settings of the instrument to the end of the configuration list MyConfigList.
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@overload fun(listName:string)
 function dmm.measure.configlist.store(listName, index) end
 
@@ -7386,10 +7380,10 @@ function dmm.measure.configlist.size(listName) end
 --- --Stores attributes for the Temperature function in index 2.
 --- ```
 ---@param listName string Name of the configuration list in which to store the function settings
----@param measFunction functions The measure function settings to save into the configuration list; see Details
----@param index number The number of the configuration list index in which to store the settings
----@overload fun(listName:string)
-function dmm.measure.configlist.storefunc(listName, measFunction, index) end
+---@param function functions The measure function settings to save into the configuration list; see Details
+---@param index integer The number of the configuration list index in which to store the settings
+---@overload fun(listName:string,function:functions)
+function dmm.measure.configlist.storefunc(listName, function, index) end
 ---@class dmm.measure.autozero
 dmm.measure.autozero = {}
 
@@ -7438,17 +7432,16 @@ dmm.OFF = nil
 --- --Set autozero off for voltage measurements.
 --- ```
 ---@type dmmmeasureautozeroenablestate
-dmm.measure.autozero.enable = 0
-
+dmm.measure.autozero.enable = dmm.ON
 ---@type triggertimerArr[]
 triggertimerArr.start = {}
 
-trigger.OFF = nil
 trigger.ON = nil
+trigger.OFF = nil
 
 ---@alias triggertimerstartgeneratestate
----|`trigger.OFF`
 ---|`trigger.ON`
+---|`trigger.OFF`
 
 
 
@@ -7498,6 +7491,7 @@ triggertimerArr.start.generate= 0
 --- --If an event was ignored, the output is true.
 --- --If the event was not ignored, the output is false.
 --- ```
+---@type boolean
 triggertimerArr.start.overrun= 0
 
 
@@ -7521,8 +7515,8 @@ triggertimerArr.start.overrun= 0
 --- --Set timer 1 to delay for 3 ms.
 --- --Set timer 1 to start the timer when an event is detected on digital I/O line 3.
 --- ```
----@type eventID|0
-triggertimerArr.start.stimulus= 0
+---@type triggerEvents
+triggertimerArr.start.stimulus= trigger.EVENT_NONE
 
 
 
@@ -7542,6 +7536,7 @@ triggertimerArr.start.stimulus= 0
 --- 
 --- --Set the trigger timer to start 30 s from the time when the timer is enabled.
 --- ```
+---@type number
 triggertimerArr.start.seconds= 0
 
 
@@ -7561,6 +7556,7 @@ triggertimerArr.start.seconds= 0
 --- 
 --- --Set the trigger timer to start in 0.4 s.
 --- ```
+---@type number
 triggertimerArr.start.fractionalseconds= 0
 
 ---@class dmm.measure.filter
@@ -7587,8 +7583,8 @@ dmm.measure.filter = {}
 --- --Set the averaging filter type to moving average, with a filter count of 10.
 --- --Enable the averaging filter.
 --- ```
+---@type number
 dmm.measure.filter.count = 0
-
 
 dmm.ON = nil
 dmm.OFF = nil
@@ -7620,8 +7616,7 @@ dmm.OFF = nil
 --- --Enable the averaging filter.
 --- ```
 ---@type dmmmeasurefilterenablefilterState
-dmm.measure.filter.enable = 0
-
+dmm.measure.filter.enable = dmm.ON
 
 dmm.FILTER_REPEAT_AVG = nil
 dmm.FILTER_MOVING_AVG = nil
@@ -7650,8 +7645,7 @@ dmm.FILTER_MOVING_AVG = nil
 --- --Set the measurement function to DC current. Set the filter type to moving average and enable filtered measurements.
 --- ```
 ---@type dmmmeasurefiltertypetype
-dmm.measure.filter.type = 0
-
+dmm.measure.filter.type = dmm.FILTER_REPEAT_AVG
 
 
 --- **This attribute sets the window for the averaging filter that is used for measurements for the selected function.**
@@ -7674,8 +7668,8 @@ dmm.measure.filter.type = 0
 --- --Set the filter type to moving average.
 --- --Set the filter window to 0.25 and enable filtered measurements.
 --- ```
+---@type number
 dmm.measure.filter.window = 0
-
 ---@class dmm.digitize.filter
 dmm.digitize.filter = {}
 
@@ -7695,13 +7689,13 @@ dmm.digitize.filter = {}
 --- 
 --- --Describe
 --- ```
+---@type integer
 dmm.digitize.filter.count = 0
-
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmdigitizefilterenablevalue
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -7722,14 +7716,13 @@ dmm.OFF = nil
 --- 
 --- --Describe
 --- ```
----@type dmmdigitizefilterenablevalue
-dmm.digitize.filter.enable = 0
-
+---@type any
+dmm.digitize.filter.enable = dmm.ON
 
 dmm.FILTER_REPEAT_AVG = nil
 dmm.FILTER_MOVING_AVG = nil
 
----@alias dmmdigitizefiltertypevalue
+---@alias any
 ---|`dmm.FILTER_REPEAT_AVG`
 ---|`dmm.FILTER_MOVING_AVG`
 
@@ -7752,9 +7745,8 @@ dmm.FILTER_MOVING_AVG = nil
 --- 
 --- --Set the filter type for 2-wire ohms to moving average and enable filtered measurements.
 --- ```
----@type dmmdigitizefiltertypevalue
-dmm.digitize.filter.type = 0
-
+---@type any
+dmm.digitize.filter.type = dmm.FILTER_REPEAT_AVG
 
 
 --- **This attribute sets the window for the averaging filter that is used for measurements for the selected function when the measurement filter is enabled.**
@@ -7773,8 +7765,8 @@ dmm.digitize.filter.type = 0
 --- 
 --- -- 
 --- ```
+---@type any
 dmm.digitize.filter.window = 0
-
 ---@class dmmmeasurelimitArr
 local dmmmeasurelimitArr = {}
 
@@ -7784,7 +7776,7 @@ dmm.measure.limit = {}
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasurelimitautoclearvalue
+---@alias dmmmeasurelimitArrautoclearvalue
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -7805,9 +7797,8 @@ dmm.OFF = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitautoclearvalue
-dmmmeasurelimitArr.autoclear= 0
-
+---@type dmmmeasurelimitArrautoclearvalue
+dmmmeasurelimitArr.autoclear = dmm.ON
 
 
 --- **This function clears the results of the limit test defined by Y.**
@@ -7828,16 +7819,16 @@ dmmmeasurelimitArr.autoclear= 0
 function dmmmeasurelimitArr.clear() end
 
 
-dmm.FAIL_BOTH = nil
+dmm.FAIL_HIGH = nil
 dmm.FAIL_LOW = nil
 dmm.FAIL_NONE = nil
-dmm.FAIL_HIGH = nil
+dmm.FAIL_BOTH = nil
 
----@alias dmmmeasurelimitfailvalue
----|`dmm.FAIL_BOTH`
+---@alias dmmmeasurelimitArrfailvalue
+---|`dmm.FAIL_HIGH`
 ---|`dmm.FAIL_LOW`
 ---|`dmm.FAIL_NONE`
----|`dmm.FAIL_HIGH`
+---|`dmm.FAIL_BOTH`
 
 
 
@@ -7856,14 +7847,13 @@ dmm.FAIL_HIGH = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitfailvalue
-dmmmeasurelimitArr.fail= 0
-
+---@type dmmmeasurelimitArrfailvalue
+dmmmeasurelimitArr.fail = dmm.FAIL_HIGH
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasurelimitenablestate
+---@alias dmmmeasurelimitArrenablestate
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -7884,18 +7874,17 @@ dmm.OFF = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitenablestate
-dmmmeasurelimitArr.enable= 0
-
+---@type dmmmeasurelimitArrenablestate
+dmmmeasurelimitArr.enable = dmm.ON
 
 dmm.AUDIBLE_PASS = nil
-dmm.AUDIBLE_NONE = nil
 dmm.AUDIBLE_FAIL = nil
+dmm.AUDIBLE_NONE = nil
 
----@alias dmmmeasurelimitaudiblestate
+---@alias dmmmeasurelimitArraudiblestate
 ---|`dmm.AUDIBLE_PASS`
----|`dmm.AUDIBLE_NONE`
 ---|`dmm.AUDIBLE_FAIL`
+---|`dmm.AUDIBLE_NONE`
 
 
 
@@ -7914,9 +7903,8 @@ dmm.AUDIBLE_FAIL = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitaudiblestate
-dmmmeasurelimitArr.audible= 0
-
+---@type dmmmeasurelimitArraudiblestate
+dmmmeasurelimitArr.audible = dmm.AUDIBLE_PASS
 ---@class dmmdigitizelimitArr
 local dmmdigitizelimitArr = {}
 
@@ -7926,7 +7914,7 @@ dmm.digitize.limit = {}
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmdigitizelimitautoclearstate
+---@alias dmmdigitizelimitArrautoclearstate
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -7948,9 +7936,8 @@ dmm.OFF = nil
 --- 
 --- --Turns off autoclear for limit 1 when measuring digitize voltage.
 --- ```
----@type dmmdigitizelimitautoclearstate
-dmmdigitizelimitArr.autoclear= 0
-
+---@type dmmdigitizelimitArrautoclearstate
+dmmdigitizelimitArr.autoclear = dmm.ON
 
 
 --- **This attribute clears the results of the limit test defined by Y.**
@@ -7973,16 +7960,16 @@ dmmdigitizelimitArr.autoclear= 0
 function dmmdigitizelimitArr.clear() end
 
 
-dmm.FAIL_BOTH = nil
+dmm.FAIL_HIGH = nil
 dmm.FAIL_LOW = nil
 dmm.FAIL_NONE = nil
-dmm.FAIL_HIGH = nil
+dmm.FAIL_BOTH = nil
 
----@alias dmmdigitizelimitfailvalue
----|`dmm.FAIL_BOTH`
+---@alias dmmdigitizelimitArrfailvalue
+---|`dmm.FAIL_HIGH`
 ---|`dmm.FAIL_LOW`
 ---|`dmm.FAIL_NONE`
----|`dmm.FAIL_HIGH`
+---|`dmm.FAIL_BOTH`
 
 
 
@@ -8001,14 +7988,13 @@ dmm.FAIL_HIGH = nil
 --- 
 --- --The results of the limit test for limit Y:
 --- --dmm.FAIL_NONE: Test passed; measurement under or equal to the high limitdmm.FAIL_HIGH: Test failed; measurement exceeded high limitdmm.FAIL_LOW: Test failed; measurement exceeded low limitdmm.FAIL_BOTH: Test failed; measurement exceeded both --- ```
----@type dmmdigitizelimitfailvalue
-dmmdigitizelimitArr.fail= 0
-
+---@type dmmdigitizelimitArrfailvalue
+dmmdigitizelimitArr.fail = dmm.FAIL_HIGH
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmdigitizelimitenablestate
+---@alias dmmdigitizelimitArrenablestate
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -8029,18 +8015,17 @@ dmm.OFF = nil
 --- 
 --- --Limit Y testing:
 --- --Disable: dmm.OFFEnable: --- ```
----@type dmmdigitizelimitenablestate
-dmmdigitizelimitArr.enable= 0
-
+---@type dmmdigitizelimitArrenablestate
+dmmdigitizelimitArr.enable = dmm.ON
 
 dmm.AUDIBLE_PASS = nil
-dmm.AUDIBLE_NONE = nil
 dmm.AUDIBLE_FAIL = nil
+dmm.AUDIBLE_NONE = nil
 
----@alias dmmdigitizelimitaudiblevalue
+---@alias dmmdigitizelimitArraudiblevalue
 ---|`dmm.AUDIBLE_PASS`
----|`dmm.AUDIBLE_NONE`
 ---|`dmm.AUDIBLE_FAIL`
+---|`dmm.AUDIBLE_NONE`
 
 
 
@@ -8059,9 +8044,8 @@ dmm.AUDIBLE_FAIL = nil
 --- 
 --- --When the beeper sounds:
 --- --Never: dmm.AUDIBLE_NONEOn test failure: dmm.AUDIBLE_FAILOn test pass: dmm.AUDIBL--- ```
----@type dmmdigitizelimitaudiblevalue
-dmmdigitizelimitArr.audible= 0
-
+---@type dmmdigitizelimitArraudiblevalue
+dmmdigitizelimitArr.audible = dmm.AUDIBLE_PASS
 ---@class dmm.measure.math
 dmm.measure.math = {}
 
@@ -8113,17 +8097,16 @@ dmm.OFF = nil
 --- ---100.00210915
 --- ```
 ---@type dmmmeasuremathenablevalue
-dmm.measure.math.enable = 0
+dmm.measure.math.enable = dmm.ON
 
-
-dmm.MATH_PERCENT = nil
 dmm.MATH_MXB = nil
 dmm.MATH_RECIPROCAL = nil
+dmm.MATH_PERCENT = nil
 
 ---@alias dmmmeasuremathformatoperation
----|`dmm.MATH_PERCENT`
 ---|`dmm.MATH_MXB`
 ---|`dmm.MATH_RECIPROCAL`
+---|`dmm.MATH_PERCENT`
 
 
 
@@ -8145,8 +8128,7 @@ dmm.MATH_RECIPROCAL = nil
 --- --Enables the reciprocal math operation on voltage measurements.
 --- ```
 ---@type dmmmeasuremathformatoperation
-dmm.measure.math.format = 0
-
+dmm.measure.math.format = dmm.MATH_MXB
 
 
 --- **This attribute specifies the reference constant that is used when math operations are set to percent.**
@@ -8170,8 +8152,8 @@ dmm.measure.math.format = 0
 --- --Set the reference constant to 50 for voltage measurements.
 --- --Enable math operations.
 --- ```
+---@type number
 dmm.measure.math.percent = 0
-
 ---@class dmm.digitize.rel
 dmm.digitize.rel = {}
 
@@ -8217,8 +8199,8 @@ function dmm.digitize.rel.acquire() end
 --- --Set the relative offset level to be the reading with any calculations included.
 --- --Enable the relative offset.
 --- ```
+---@type number
 dmm.digitize.rel.level = 0
-
 
 dmm.ON = nil
 dmm.OFF = nil
@@ -8247,8 +8229,7 @@ dmm.OFF = nil
 --- --Enables the relative measurements for digitize current after using the acquire command to set the relative level.
 --- ```
 ---@type dmmdigitizerelenablestate
-dmm.digitize.rel.enable = 0
-
+dmm.digitize.rel.enable = dmm.ON
 ---@class dmm.digitize.math
 dmm.digitize.math = {}
 
@@ -8300,17 +8281,16 @@ dmm.OFF = nil
 --- ---99.998932056
 --- ```
 ---@type dmmdigitizemathenablevalue
-dmm.digitize.math.enable = 0
+dmm.digitize.math.enable = dmm.ON
 
-
-dmm.MATH_PERCENT = nil
 dmm.MATH_MXB = nil
 dmm.MATH_RECIPROCAL = nil
+dmm.MATH_PERCENT = nil
 
 ---@alias dmmdigitizemathformatoperation
----|`dmm.MATH_PERCENT`
 ---|`dmm.MATH_MXB`
 ---|`dmm.MATH_RECIPROCAL`
+---|`dmm.MATH_PERCENT`
 
 
 
@@ -8332,8 +8312,7 @@ dmm.MATH_RECIPROCAL = nil
 --- --Enables the reciprocal math operation on digitize voltage measurements.
 --- ```
 ---@type dmmdigitizemathformatoperation
-dmm.digitize.math.format = 0
-
+dmm.digitize.math.format = dmm.MATH_MXB
 
 
 --- **This attribute specifies the reference constant that is used when math operations are set to percent.**
@@ -8357,8 +8336,8 @@ dmm.digitize.math.format = 0
 --- --Set the percentage value to 42.
 --- --Enable math operations.
 --- ```
+---@type number
 dmm.digitize.math.percent = 0
-
 ---@class dmm.measure.offsetcompensation
 dmm.measure.offsetcompensation = {}
 
@@ -8366,7 +8345,7 @@ dmm.ON = 4
 dmm.OCOMP_AUTO = nil
 dmm.OFF = nil
 
----@alias dmmmeasureoffsetcompensationenablestate
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OCOMP_AUTO`
 ---|`dmm.OFF`
@@ -8392,9 +8371,8 @@ dmm.OFF = nil
 --- --Sets the measurement function to resistance. Set the instrument for 4-wire RTD and turn offset compensation on.
 --- --Make a measurement.
 --- ```
----@type dmmmeasureoffsetcompensationenablestate
-dmm.measure.offsetcompensation.enable = 0
-
+---@type any
+dmm.measure.offsetcompensation.enable = dmm.ON
 ---@class dmm.measure.rel
 dmm.measure.rel = {}
 
@@ -8425,8 +8403,7 @@ dmm.OFF = nil
 --- --Enables the relative measurements for AC current and uses the acquire command to set the relative level attribute.
 --- ```
 ---@type dmmmeasurerelenablestate
-dmm.measure.rel.enable = 0
-
+dmm.measure.rel.enable = dmm.ON
 
 
 --- **This function acquires a measurement and stores it as the relative offset value.**
@@ -8469,8 +8446,8 @@ function dmm.measure.rel.acquire() end
 --- --Set the relative offset level to be the reading with any calculations included.
 --- --Enable the relative offset.
 --- ```
+---@type number
 dmm.measure.rel.level = 0
-
 
 dmm.METHOD_RESULT = nil
 dmm.METHOD_PARTS = nil
@@ -8499,8 +8476,7 @@ dmm.METHOD_PARTS = nil
 --- --Set the method to apply relative offset before generating the ratio.
 --- ```
 ---@type dmmmeasurerelmethodvalue
-dmm.measure.rel.method = 0
-
+dmm.measure.rel.method = dmm.METHOD_RESULT
 ---@class dmm.measure.threshold
 dmm.measure.threshold = {}
 
@@ -8521,8 +8497,8 @@ dmm.measure.threshold = {}
 --- 
 --- --Set the threshold range for the selected function to the nearest range of 100 V.
 --- ```
+---@type number
 dmm.measure.threshold.range = 0
-
 
 
 --- **This attribute determines the signal level where the instrument makes frequency or period measurements.**
@@ -8544,8 +8520,8 @@ dmm.measure.threshold.range = 0
 --- --Set the threshold range to 10 V.
 --- --Set the threshold level to 5 V.
 --- ```
+---@type any
 dmm.measure.threshold.level = 0
-
 
 dmm.ON = nil
 dmm.OFF = nil
@@ -8574,15 +8550,14 @@ dmm.OFF = nil
 --- --Set the threshold autorange on.
 --- ```
 ---@type dmmmeasurethresholdautorangestate
-dmm.measure.threshold.autorange = 0
-
+dmm.measure.threshold.autorange = dmm.ON
 ---@class dmm.digitize.coupling
 dmm.digitize.coupling = {}
 
 dmm.COUPLING_AC = nil
 dmm.COUPLING_DC = nil
 
----@alias dmmdigitizecouplingtypecouplingType
+---@alias any
 ---|`dmm.COUPLING_AC`
 ---|`dmm.COUPLING_DC`
 
@@ -8604,14 +8579,13 @@ dmm.COUPLING_DC = nil
 --- 
 --- --Set the digitize voltage coupling to AC.
 --- ```
----@type dmmdigitizecouplingtypecouplingType
-dmm.digitize.coupling.type = 0
-
+---@type any
+dmm.digitize.coupling.type = dmm.COUPLING_AC
 
 dmm.AC_FILTER_FAST = nil
 dmm.AC_FILTER_SLOW = nil
 
----@alias dmmdigitizecouplingacfiltertype
+---@alias any
 ---|`dmm.AC_FILTER_FAST`
 ---|`dmm.AC_FILTER_SLOW`
 
@@ -8636,9 +8610,8 @@ dmm.AC_FILTER_SLOW = nil
 --- --Set the coupling type to AC.
 --- --Set the filter to fast.
 --- ```
----@type dmmdigitizecouplingacfiltertype
-dmm.digitize.coupling.acfilter = 0
-
+---@type any
+dmm.digitize.coupling.acfilter = dmm.AC_FILTER_FAST
 
 
 --- **This attribute allows you to optimize the amplitude to compensate for signal loss across the coupling capacitor when AC coupling is selected.**
@@ -8660,21 +8633,21 @@ dmm.digitize.coupling.acfilter = 0
 --- --Set the coupling type to AC.
 --- --Set the frequency to 500 Hz.
 --- ```
+---@type any
 dmm.digitize.coupling.acfrequency = 0
-
 ---@class dmm.digitize.analogtrigger
 dmm.digitize.analogtrigger = {}
 
+dmm.MODE_OFF = nil
 dmm.MODE_EDGE = nil
 dmm.MODE_WINDOW = nil
 dmm.MODE_PULSE = nil
-dmm.MODE_OFF = nil
 
 ---@alias dmmdigitizeanalogtriggermodesetting
+---|`dmm.MODE_OFF`
 ---|`dmm.MODE_EDGE`
 ---|`dmm.MODE_WINDOW`
 ---|`dmm.MODE_PULSE`
----|`dmm.MODE_OFF`
 
 
 
@@ -8702,13 +8675,12 @@ dmm.MODE_OFF = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmdigitizeanalogtriggermodesetting
-dmm.digitize.analogtrigger.mode = 0
-
+dmm.digitize.analogtrigger.mode = dmm.MODE_OFF
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmdigitizeanalogtriggerhighfreqrejectsetting
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -8730,22 +8702,21 @@ dmm.OFF = nil
 --- 
 --- --Set the measure function to DC voltage and turn high frequency rejection for the analog trigger to on.
 --- ```
----@type dmmdigitizeanalogtriggerhighfreqrejectsetting
-dmm.digitize.analogtrigger.highfreqreject = 0
-
+---@type any
+dmm.digitize.analogtrigger.highfreqreject = dmm.ON
 ---@class dmm.measure.analogtrigger
 dmm.measure.analogtrigger = {}
 
+dmm.MODE_OFF = nil
 dmm.MODE_EDGE = nil
 dmm.MODE_WINDOW = nil
 dmm.MODE_PULSE = nil
-dmm.MODE_OFF = nil
 
 ---@alias dmmmeasureanalogtriggermodesetting
+---|`dmm.MODE_OFF`
 ---|`dmm.MODE_EDGE`
 ---|`dmm.MODE_WINDOW`
 ---|`dmm.MODE_PULSE`
----|`dmm.MODE_OFF`
 
 
 
@@ -8775,13 +8746,12 @@ dmm.MODE_OFF = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmmeasureanalogtriggermodesetting
-dmm.measure.analogtrigger.mode = 0
-
+dmm.measure.analogtrigger.mode = dmm.MODE_OFF
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasureanalogtriggerhighfreqrejectsetting
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -8803,18 +8773,17 @@ dmm.OFF = nil
 --- 
 --- --Set the measure function to DC voltage and turn high frequency rejection for the analog trigger to on.
 --- ```
----@type dmmmeasureanalogtriggerhighfreqrejectsetting
-dmm.measure.analogtrigger.highfreqreject = 0
-
+---@type any
+dmm.measure.analogtrigger.highfreqreject = dmm.ON
 ---@class dmm.digitize.comparator
 dmm.digitize.comparator = {}
 
-dmm.EDGE_FALLING = nil
 dmm.EDGE_RISING = nil
+dmm.EDGE_FALLING = nil
 
----@alias dmmdigitizecomparatoredgevalue
----|`dmm.EDGE_FALLING`
+---@alias any
 ---|`dmm.EDGE_RISING`
+---|`dmm.EDGE_FALLING`
 
 
 
@@ -8835,16 +8804,15 @@ dmm.EDGE_RISING = nil
 --- 
 --- -- 
 --- ```
----@type dmmdigitizecomparatoredgevalue
-dmm.digitize.comparator.edge = 0
-
+---@type any
+dmm.digitize.comparator.edge = dmm.EDGE_RISING
 ---@class dmm.measure.sense
 dmm.measure.sense = {}
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasuresenseautorangevalue
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -8867,9 +8835,8 @@ dmm.OFF = nil
 --- --Select the DC voltage ratio function.
 --- --Set the sense range to be set manually.
 --- ```
----@type dmmmeasuresenseautorangevalue
-dmm.measure.sense.autorange = 0
-
+---@type any
+dmm.measure.sense.autorange = dmm.ON
 
 
 --- **This attribute determines the positive full-scale range for the sense measurement.**
@@ -8889,8 +8856,8 @@ dmm.measure.sense.autorange = 0
 --- --Select the DC voltage ratio function.
 --- --Set the sense range to 1 V.
 --- ```
+---@type number
 dmm.measure.sense.range = 0
-
 ---@class dmm.measure.bias
 dmm.measure.bias = {}
 
@@ -8910,8 +8877,8 @@ dmm.measure.bias = {}
 --- 
 --- --Set a bias level of 100 µA.
 --- ```
+---@type number
 dmm.measure.bias.level = 0
-
 
 
 --- **This attribute returns the amount of current the instrument is sourcing when it makes measurements.**
@@ -8929,8 +8896,8 @@ dmm.measure.bias.level = 0
 --- 
 --- --Read the actual bias level.
 --- ```
+---@type any
 dmm.measure.bias.actual = 0
-
 ---@class dmm.trigger.measure
 dmm.trigger.measure = {}
 
@@ -9056,6 +9023,7 @@ dmmdigitizelimitArr.low = {}
 --- --limit 1 results = dmm.FAIL_LOW
 --- --limit 2 results = dmm.FAIL_LOW
 --- ```
+---@type number
 dmmdigitizelimitArr.low.value= 0
 
 ---@type dmmdigitizelimitArr[]
@@ -9077,6 +9045,7 @@ dmmdigitizelimitArr.high = {}
 --- 
 --- --The value of the upper limit (-1e+12 to 1e+12)
 --- ```
+---@type number
 dmmdigitizelimitArr.high.value= 0
 
 ---@type dmmmeasurelimitArr[]
@@ -9145,6 +9114,7 @@ dmmmeasurelimitArr.low = {}
 --- --limit 1 results = dmm.FAIL_LOW
 --- --limit 2 results = dmm.FAIL_LOW
 --- ```
+---@type number
 dmmmeasurelimitArr.low.value= 0
 
 ---@type dmmmeasurelimitArr[]
@@ -9166,6 +9136,7 @@ dmmmeasurelimitArr.high = {}
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
+---@type number
 dmmmeasurelimitArr.high.value= 0
 
 ---@class dmm.measure.math.mxb
@@ -9194,8 +9165,8 @@ dmm.measure.math.mxb = {}
 --- --Set the offset factor to 50.
 --- --Enable the math function.
 --- ```
+---@type number
 dmm.measure.math.mxb.bfactor = 0
-
 
 
 --- **This attribute specifies the scale factor, m, for the y = mx + b math operation.**
@@ -9220,8 +9191,8 @@ dmm.measure.math.mxb.bfactor = 0
 --- --Set the offset factor to 50.
 --- --Enable the math function.
 --- ```
+---@type number
 dmm.measure.math.mxb.mfactor = 0
-
 ---@class dmm.digitize.math.mxb
 dmm.digitize.math.mxb = {}
 
@@ -9248,8 +9219,8 @@ dmm.digitize.math.mxb = {}
 --- --Set the offset factor to 42.
 --- --Enable the math function.
 --- ```
+---@type number
 dmm.digitize.math.mxb.bfactor = 0
-
 
 
 --- **This attribute specifies the scale factor, m, for the y = mx + b math operation.**
@@ -9274,15 +9245,15 @@ dmm.digitize.math.mxb.bfactor = 0
 --- --Set the offset factor to 42.
 --- --Enable the math function.
 --- ```
+---@type number
 dmm.digitize.math.mxb.mfactor = 0
-
 ---@class dmm.measure.offsetcompensation.delay
 dmm.measure.offsetcompensation.delay = {}
 
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias dmmmeasureoffsetcompensationdelayautostate
+---@alias any
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -9305,9 +9276,8 @@ dmm.OFF = nil
 --- 
 --- --Describe
 --- ```
----@type dmmmeasureoffsetcompensationdelayautostate
-dmm.measure.offsetcompensation.delay.auto = 0
-
+---@type any
+dmm.measure.offsetcompensation.delay.auto = dmm.ON
 
 
 --- **This attribute describes something.**
@@ -9327,8 +9297,8 @@ dmm.measure.offsetcompensation.delay.auto = 0
 --- 
 --- --Describe
 --- ```
+---@type any
 dmm.measure.offsetcompensation.delay.currenton = 0
-
 
 
 --- **This attribute describes something.**
@@ -9346,17 +9316,17 @@ dmm.measure.offsetcompensation.delay.currenton = 0
 --- 
 --- --Describe
 --- ```
+---@type any
 dmm.measure.offsetcompensation.delay.currentoff = 0
-
 ---@class dmm.digitize.analogtrigger.pulse
 dmm.digitize.analogtrigger.pulse = {}
 
-dmm.CONDITION_GREATER = nil
 dmm.CONDITION_LESS = nil
+dmm.CONDITION_GREATER = nil
 
----@alias dmmdigitizeanalogtriggerpulseconditionvalue
----|`dmm.CONDITION_GREATER`
+---@alias any
 ---|`dmm.CONDITION_LESS`
+---|`dmm.CONDITION_GREATER`
 
 
 
@@ -9385,9 +9355,8 @@ dmm.CONDITION_LESS = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type dmmdigitizeanalogtriggerpulseconditionvalue
-dmm.digitize.analogtrigger.pulse.condition = 0
-
+---@type any
+dmm.digitize.analogtrigger.pulse.condition = dmm.CONDITION_LESS
 
 
 --- **This attribute defines the threshold value for the pulse width.**
@@ -9415,15 +9384,15 @@ dmm.digitize.analogtrigger.pulse.condition = 0
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
+---@type any
 dmm.digitize.analogtrigger.pulse.width = 0
 
-
-dmm.POLARITY_ABOVE = nil
 dmm.POLARITY_BELOW = nil
+dmm.POLARITY_ABOVE = nil
 
----@alias dmmdigitizeanalogtriggerpulsepolarityvalue
----|`dmm.POLARITY_ABOVE`
+---@alias any
 ---|`dmm.POLARITY_BELOW`
+---|`dmm.POLARITY_ABOVE`
 
 
 
@@ -9452,9 +9421,8 @@ dmm.POLARITY_BELOW = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type dmmdigitizeanalogtriggerpulsepolarityvalue
-dmm.digitize.analogtrigger.pulse.polarity = 0
-
+---@type any
+dmm.digitize.analogtrigger.pulse.polarity = dmm.POLARITY_BELOW
 
 
 --- **This attribute defines the pulse level that generates an analog trigger event.**
@@ -9482,17 +9450,17 @@ dmm.digitize.analogtrigger.pulse.polarity = 0
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
+---@type any
 dmm.digitize.analogtrigger.pulse.level = 0
-
 ---@class dmm.measure.analogtrigger.pulse
 dmm.measure.analogtrigger.pulse = {}
 
-dmm.CONDITION_GREATER = nil
 dmm.CONDITION_LESS = nil
+dmm.CONDITION_GREATER = nil
 
----@alias dmmmeasureanalogtriggerpulseconditionvalue
----|`dmm.CONDITION_GREATER`
+---@alias any
 ---|`dmm.CONDITION_LESS`
+---|`dmm.CONDITION_GREATER`
 
 
 
@@ -9525,9 +9493,8 @@ dmm.CONDITION_LESS = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type dmmmeasureanalogtriggerpulseconditionvalue
-dmm.measure.analogtrigger.pulse.condition = 0
-
+---@type any
+dmm.measure.analogtrigger.pulse.condition = dmm.CONDITION_LESS
 
 
 --- **This attribute defines the pulse level that generates an analog trigger event.**
@@ -9559,8 +9526,8 @@ dmm.measure.analogtrigger.pulse.condition = 0
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
+---@type any
 dmm.measure.analogtrigger.pulse.level = 0
-
 
 
 --- **This attribute defines the threshold value for the pulse width.**
@@ -9592,15 +9559,15 @@ dmm.measure.analogtrigger.pulse.level = 0
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
+---@type any
 dmm.measure.analogtrigger.pulse.width = 0
 
-
-dmm.POLARITY_ABOVE = nil
 dmm.POLARITY_BELOW = nil
+dmm.POLARITY_ABOVE = nil
 
----@alias dmmmeasureanalogtriggerpulsepolarityvalue
----|`dmm.POLARITY_ABOVE`
+---@alias any
 ---|`dmm.POLARITY_BELOW`
+---|`dmm.POLARITY_ABOVE`
 
 
 
@@ -9633,9 +9600,8 @@ dmm.POLARITY_BELOW = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type dmmmeasureanalogtriggerpulsepolarityvalue
-dmm.measure.analogtrigger.pulse.polarity = 0
-
+---@type any
+dmm.measure.analogtrigger.pulse.polarity = dmm.POLARITY_BELOW
 ---@class dmm.digitize.analogtrigger.edge
 dmm.digitize.analogtrigger.edge = {}
 
@@ -9661,15 +9627,15 @@ dmm.digitize.analogtrigger.edge = {}
 --- --Set the level to sense 5 V.
 --- --Set the level to be detected on a falling edge.
 --- ```
+---@type number
 dmm.digitize.analogtrigger.edge.level = 0
 
-
-dmm.SLOPE_RISING = nil
 dmm.SLOPE_FALLING = nil
+dmm.SLOPE_RISING = nil
 
 ---@alias dmmdigitizeanalogtriggeredgeslopevalue
----|`dmm.SLOPE_RISING`
 ---|`dmm.SLOPE_FALLING`
+---|`dmm.SLOPE_RISING`
 
 
 
@@ -9695,17 +9661,16 @@ dmm.SLOPE_FALLING = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmdigitizeanalogtriggeredgeslopevalue
-dmm.digitize.analogtrigger.edge.slope = 0
-
+dmm.digitize.analogtrigger.edge.slope = dmm.SLOPE_FALLING
 ---@class dmm.digitize.analogtrigger.window
 dmm.digitize.analogtrigger.window = {}
 
-dmm.DIRECTION_LEAVE = nil
 dmm.DIRECTION_ENTER = nil
+dmm.DIRECTION_LEAVE = nil
 
 ---@alias dmmdigitizeanalogtriggerwindowdirectionvalue
----|`dmm.DIRECTION_LEAVE`
 ---|`dmm.DIRECTION_ENTER`
+---|`dmm.DIRECTION_LEAVE`
 
 
 
@@ -9733,8 +9698,7 @@ dmm.DIRECTION_ENTER = nil
 --- --Set the trigger to occur when the signal leaves the window.
 --- ```
 ---@type dmmdigitizeanalogtriggerwindowdirectionvalue
-dmm.digitize.analogtrigger.window.direction = 0
-
+dmm.digitize.analogtrigger.window.direction = dmm.DIRECTION_ENTER
 
 
 --- **This attribute defines the upper boundary of the analog trigger window.**
@@ -9760,8 +9724,8 @@ dmm.digitize.analogtrigger.window.direction = 0
 --- --Set the analog trigger low level to 1 V.
 --- --Set the trigger to occur when the signal leaves the window.
 --- ```
+---@type number
 dmm.digitize.analogtrigger.window.levelhigh = 0
-
 
 
 --- **This attribute defines the lower boundary of the analog trigger window.**
@@ -9787,8 +9751,8 @@ dmm.digitize.analogtrigger.window.levelhigh = 0
 --- --Set the analog trigger low level to 1 V.
 --- --Set the trigger to occur when the signal leaves the window.
 --- ```
+---@type number
 dmm.digitize.analogtrigger.window.levellow = 0
-
 ---@class dmm.measure.analogtrigger.edge
 dmm.measure.analogtrigger.edge = {}
 
@@ -9818,15 +9782,15 @@ dmm.measure.analogtrigger.edge = {}
 --- --Set the analog trigger level to 2.5 A.
 --- --Set the level to be detected on a falling edge.
 --- ```
+---@type number
 dmm.measure.analogtrigger.edge.level = 0
 
-
-dmm.SLOPE_RISING = nil
 dmm.SLOPE_FALLING = nil
+dmm.SLOPE_RISING = nil
 
 ---@alias dmmmeasureanalogtriggeredgeslopevalue
----|`dmm.SLOPE_RISING`
 ---|`dmm.SLOPE_FALLING`
+---|`dmm.SLOPE_RISING`
 
 
 
@@ -9856,17 +9820,16 @@ dmm.SLOPE_FALLING = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmmeasureanalogtriggeredgeslopevalue
-dmm.measure.analogtrigger.edge.slope = 0
-
+dmm.measure.analogtrigger.edge.slope = dmm.SLOPE_FALLING
 ---@class dmm.measure.analogtrigger.window
 dmm.measure.analogtrigger.window = {}
 
-dmm.DIRECTION_LEAVE = nil
 dmm.DIRECTION_ENTER = nil
+dmm.DIRECTION_LEAVE = nil
 
 ---@alias dmmmeasureanalogtriggerwindowdirectionvalue
----|`dmm.DIRECTION_LEAVE`
 ---|`dmm.DIRECTION_ENTER`
+---|`dmm.DIRECTION_LEAVE`
 
 
 
@@ -9898,8 +9861,7 @@ dmm.DIRECTION_ENTER = nil
 --- --Set the trigger to occur when the signal leaves the window.
 --- ```
 ---@type dmmmeasureanalogtriggerwindowdirectionvalue
-dmm.measure.analogtrigger.window.direction = 0
-
+dmm.measure.analogtrigger.window.direction = dmm.DIRECTION_ENTER
 
 
 --- **This attribute defines the upper boundary of the analog trigger window.**
@@ -9929,8 +9891,8 @@ dmm.measure.analogtrigger.window.direction = 0
 --- --Set the analog trigger low level to 1 V.
 --- --Set the trigger to occur when the signal leaves the window.
 --- ```
+---@type number
 dmm.measure.analogtrigger.window.levelhigh = 0
-
 
 
 --- **This attribute defines the lower boundary of the analog trigger window.**
@@ -9960,8 +9922,8 @@ dmm.measure.analogtrigger.window.levelhigh = 0
 --- --Set the analog trigger low level to 1 V.
 --- --Set the trigger to occur when the signal leaves the window.
 --- ```
+---@type number
 dmm.measure.analogtrigger.window.levellow = 0
-
 ---This is generic function, This function loads a trigger-model template configuration
 ---
 ---**trigger.model.load() - DurationLoop**
@@ -10186,58 +10148,58 @@ dmm.measure.analogtrigger.window.levellow = 0
 --- ```
 ---@param loadFunConst loadFunConstParam
 function trigger.model.load(loadFunConst,...) end
-buffer.UNIT_RATIO = nil
-buffer.UNIT_SECOND = nil
-buffer.UNIT_FARAD = nil
-buffer.UNIT_DECIBEL = nil
-buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_X = nil
-buffer.UNIT_AMP = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_TOT = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_RECIPROCAL = nil
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_HERTZ = nil
-buffer.UNIT_DAC = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_WATT = nil
-buffer.UNIT_CELSIUS = nil
-buffer.UNIT_NONE = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_PERCENT = nil
-buffer.UNIT_OHM = nil
-buffer.UNIT_VOLT_AC = nil
-buffer.UNIT_CUSTOM1 = nil
 buffer.UNIT_CUSTOM3 = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_FAHRENHEIT = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_RATIO = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_AMP_AC = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_AMP = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CELSIUS = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_DAC = nil
+buffer.UNIT_DECIBEL = nil
+buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_FARAD = nil
+buffer.UNIT_HERTZ = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_WATT = nil
+buffer.UNIT_X = nil
 
 ---@alias buffermathunit
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_SECOND`
----|`buffer.UNIT_FARAD`
----|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_X`
----|`buffer.UNIT_AMP`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_TOT`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_RECIPROCAL`
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_HERTZ`
----|`buffer.UNIT_DAC`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_WATT`
----|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_NONE`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_PERCENT`
----|`buffer.UNIT_OHM`
----|`buffer.UNIT_VOLT_AC`
----|`buffer.UNIT_CUSTOM1`
 ---|`buffer.UNIT_CUSTOM3`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_FAHRENHEIT`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_RATIO`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_AMP`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CELSIUS`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_WATT`
+---|`buffer.UNIT_X`
 
 
 ---**buffer.math()**
@@ -10283,19 +10245,19 @@ buffer.UNIT_CUSTOM3 = nil
 --- --Extra value reading 2: 4.3310937031e-09
 --- --Extra value reading 3: 1.3476513655e-09
 --- ```
----@param readingBuffer bufferMethods The name of the reading buffer; the reading buffer selected must be set to the style FULL
+---@param readingBuffer bufferVar The name of the reading buffer; the reading buffer selected must be set to the style FULL
 ---@param unit buffermathunit The units to be applied to the value generated by the expression
 ---@param mathExpression mathExpression
 function buffer.math(readingBuffer, unit, mathExpression, ...) end
----@type bufferMethods
+---@type bufferVar
 defbuffer1 = {}
 
----@type bufferMethods
+---@type bufferVar
 defbuffer2 = {}
 
 ---This is generic function to define trigger model setblock.<br>
 ---Signature of this function depends on the BlockType.<br>
----For more details, please look at the manual by viewing hower help of blockType or opening command help
+---For more details, please look at the manual by viewing hover help of blockType or opening command help
 ---@param blockNumber number
 ---@param blockType triggerBlockBranch
 function trigger.model.setblock(blockNumber, blockType,...) end

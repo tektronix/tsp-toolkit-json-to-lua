@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -67,6 +68,33 @@ namespace jsonToLuaParser
             return cmds;
         }
 
+
+        public static IList<string> get_return_type_and_default_value(CommandInfo cmd)
+        {
+            var lst = new List<string>();
+
+            var prm = cmd.param_info.Where(param => param.Name.ToUpper() == cmd.command_return.ToUpper()).ToList();
+            if (prm.Count > 0)
+            {
+                var type = prm[0].Type;
+                lst.Add(type);
+
+                var defaultValue = type.Contains("[]") ? "{}" : type == "table" ? "{}" : type == "string" ? "''" : type == "integer" ? "0" : type == "boolean" ? "true" : "0";
+
+                if (prm[0].enums != "")
+                {
+                    defaultValue = prm[0].enums.Split('|')[0].Split(' ')[0];
+
+                }
+                lst.Add(defaultValue);
+            }
+            else
+                System.Console.WriteLine(cmd.name);
+
+
+            return lst;
+
+        }
         public static IList<CommandInfo> PopulateCommands(ref JObject obj, string feild)
         {
             IList<CommandInfo> cmdList = obj[feild].ToArray().Select(p => new CommandInfo
@@ -76,7 +104,7 @@ namespace jsonToLuaParser
                 signature = (string)p["signature"],
                 tsplink_supported = (string)p["tsp_link"],
                 description = (string)p["description"],
-                command_type = ((string)p["type"] == "Function" ? CommandType.Function : ((string)p["type"] == "Attribute (RW)" ? CommandType.Attribute_RW : ((string)p["type"] == "Attribute (R)") ? CommandType.Attribute_RO : ((string)p["type"] == "Attribute (Ro)") ? CommandType.Attribute_RO :(string)p["type"]== "Constant" ? CommandType.Constant: CommandType.Attribute_WO)),
+                command_type = ((string)p["type"] == "Function" ? CommandType.Function : ((string)p["type"] == "Attribute (RW)" ? CommandType.Attribute_RW : ((string)p["type"] == "Attribute (R)") ? CommandType.Attribute_RO : ((string)p["type"] == "Attribute (Ro)") ? CommandType.Attribute_RO : (string)p["type"] == "Constant" ? CommandType.Constant : CommandType.Attribute_WO)),
                 default_value = (string)p["default_value"],
                 usage = p["usage"].ToObject<string[]>(),
                 overloads = p["overloads"].ToObject<string[]>(),
@@ -175,7 +203,7 @@ namespace jsonToLuaParser
                         {
                             arrList = arrList.Append(type_name).ToArray();
                             class_data += "---@class " + type_name + "\n";
-                            class_data += "local "+type_name + " = {}\n\n";
+                            class_data += "local " + type_name + " = {}\n\n";
 
                             class_data += "---@type " + type_name + "[]\n";
                             class_data += table_name + " = {}\n";
@@ -202,7 +230,7 @@ namespace jsonToLuaParser
                     {
                         //table_name = keyValuePair.Key.Replace("[1]",""); //DMM6500 slot[1]
                         table_name = keyValuePair.Key;
-                        if (!table_name.Contains("bufferVar") && !table_name.Contains(".setblock()"))
+                        if (!table_name.Contains("bufferVar") && !table_name.Contains("scriptVar") && !table_name.Contains(".setblock()"))
                         {
                             class_data += "---@class " + table_name + "\n";
                             if (i == 0)
@@ -248,13 +276,15 @@ namespace jsonToLuaParser
                     continue;
                 else if (param.enums != "")
                 {
+                    var aliasName = param.Type.Contains('|') ? param.Type.Split('|')[0].Trim() : param.Type;
+
                     string[] enum_data = param.enums.Split('|');
                     command_help += "\n";
                     foreach (var data in enum_data)
                     {
                         command_help += data.Split(' ')[0] + " = " + data.Split(' ')[1] + "\n";
                     }
-                    command_help += "\n---@alias " + param.Type + "\n";
+                    command_help += "\n---@alias " + aliasName + "\n";
                     foreach (var data in enum_data)
                     {
                         command_help += "---|`" + data.Split(' ')[0] + "`\n";
@@ -266,7 +296,7 @@ namespace jsonToLuaParser
             command_help += "\n";
             #endregion            
 
-            var helpFilePath = $@"{(file_name.Contains("26") ? "Commands_26XX":"Commands_"+file_name)}/{cmd.webhelpfile}";
+            var helpFilePath = $@"{(file_name.Contains("26") ? "Commands_26XX" : "Commands_" + file_name)}/{cmd.webhelpfile}";
             command_help += "\n--- **" + cmd.description + "**\n---\n"
             + "--- *Type:*  " + cmd.command_type + "\n---\n"
             + "--- *Details:*<br>\n--- " + cmd.details + "\n---\n"
@@ -290,10 +320,10 @@ namespace jsonToLuaParser
             {
                 command_help += "--- Additional paramteres are:\n";
                 foreach (var param in cmd.param_info)
-                {                    
+                {
                     if (param.Name != "blockNumber" && param.Name != cmd.name)
                     {
-                        command_help +="--- - *"+ param.Name +"*: " + param.Description +"<br>\n";
+                        command_help += "--- - *" + param.Name + "*: " + param.Description + "<br>\n";
                         if (param.enums != "")
                         {
                             string[] enum_data = param.enums.Split('|');
@@ -312,14 +342,14 @@ namespace jsonToLuaParser
                 if (cmd.signature.Contains("[N]"))
                 {
                     outStr += "---@type integer[]\n";
-                    outStr += "bufferMethods." + attr + "= {}\n";
+                    outStr += "bufferVar." + attr + "= {}\n";
                 }
                 else
                 {
                     if (cmd.command_type == CommandType.Function)
-                        outStr += "function bufferMethods." + attr + "end \n";
+                        outStr += "function bufferVar." + attr + "end \n";
                     else
-                        outStr += "bufferMethods." + attr + "= 0\n";
+                        outStr += "bufferVar." + attr + "= 0\n";
                 }
                 return;
             } */
@@ -333,13 +363,13 @@ namespace jsonToLuaParser
                     string[] s;
                     try
                     {
-                        s = cmd.signature.Substring(start, end - start).Replace(" ", "").Split(',');
+                        s = cmd.signature.ToUpper().Substring(start, end - start).Replace(" ", "").Split(',');
                     }
                     catch (System.Exception)
                     {
                         s = new string[] { };
                     }
-                    if (s.Contains(param.Name))
+                    if (s.Contains(param.Name.ToUpper()))
                     {
                         string temp = "\"" + param.Name + "\"";
                         command_help += "---@param " + param.Name;
@@ -350,18 +380,18 @@ namespace jsonToLuaParser
                         command_help += " " + param.Type + " ";
                         command_help += param.Description + "\n";
                     }
-                    else if (cmd.command_return.Contains(param.Name))
+                    else if (cmd.command_return.ToUpper().Contains(param.Name.ToUpper()))
                     {
                         command_help += "---@return ";
 
                         if (param.Name.Contains("fileNumber"))
                             command_help += "file_object ";
                         else if (param.Name.Contains("scriptVar"))
-                            command_help += "script_object ";
+                            command_help += "scriptVar ";
                         else if (param.Name.Contains("bufferName") || param.Name.Contains("bufferVar"))
-                            command_help += "bufferMethods ";
+                            command_help += "bufferVar ";
                         else if (param.Name.Contains("connectionID"))
-                            command_help += "tsplinkConnectionID ";
+                            command_help += "tspnetConnectionID ";
                         else
                             command_help += param.Type + " ";
 
@@ -379,16 +409,18 @@ namespace jsonToLuaParser
                 cmd.signature = cmd.signature.Replace("\"", "");
             }
 
-            if (cmd.command_type != CommandType.Function && !cmd.name.Contains("trigger.BLOCK_"))
+            if (cmd.command_type != CommandType.Function && !cmd.name.Contains("trigger.BLOCK_")) // for attributes
             {
-                foreach (var parm in cmd.param_info)
-                {
-                    if (parm.enums != "")
-                    {
-                        if (cmd.usage[0].Contains(parm.Name))// || cmd.usage[1].Contains(parm.Name))
-                            command_help += "---@type " + parm.Type + "\n";
-                    }
-                }
+                //foreach (var parm in cmd.param_info)
+                //{
+                //    if (parm.enums != "" && !table.Contains("bufferVar"))
+                //    {
+                //        if (cmd.usage[0].Contains(parm.Name))// || cmd.usage[1].Contains(parm.Name))
+                //            command_help += "---@type " + parm.Type + "\n";
+                //    }
+                //}
+
+                var lst = get_return_type_and_default_value(cmd);
 
                 if (table.Contains("[N]") || table.Contains("[Y]") || table.Contains("[slot]") || table.Contains("[1]") || table.Contains("[X]"))
                 {
@@ -419,44 +451,50 @@ namespace jsonToLuaParser
                     {
                         if (attr.Contains("stimulus") && !attr.Contains("["))
                         {
-                            command_help += "---@type eventID|0\n";
+                            command_help += $"---@type {lst[0]}\n";
+                            command_help += type_name + a[1] + "." + attr + "= trigger.EVENT_NONE\n\n";
                         }
-                        command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+                        else
+                        {
+                            command_help += $"---@type {lst[0]}\n";
+                            command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+
+                        }
+
                     }
                     else
                     {
                         if (attr.Contains("stimulus["))
                         {
-                            command_help += "---@type eventID[]|0\n";
+                            command_help += $"---@type {lst[0]}\n";
                             attr = attr.Remove(attr.Length - 3, 3);
-                            command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+                            command_help += type_name + a[1] + "." + attr + "= trigger.EVENT_NONE\n\n";
                         }
                         else if (attr.Contains("stimulus") && !attr.Contains("["))
                         {
-                            command_help += "---@type eventID|0\n";
-                            command_help += type_name + a[1] + "." + attr + "= 0\n\n";
+                            command_help += $"---@type {lst[0]}\n";
+                            command_help += type_name + a[1] + "." + attr + "= trigger.EVENT_NONE\n\n";
                         }
                         else
-                            command_help += type_name + "." + attr + "= 0\n\n";
+                        {
+                            command_help += $"---@type {lst[0]}\n";
+                            command_help += $"{type_name}.{attr} = {lst[1]}\n";
+
+                        }
+
                     }
 
                 }
                 else if (table.Contains("bufferVar") || table.Contains("bufferName"))
                 {
-                    if (cmd.signature.Contains("[N]"))
-                    {
-                        command_help += "---@type integer[]\n";
-                        command_help += "bufferMethods." + attr + "= {}\n";
-                    }
-                    else
-                    {
-                        command_help += "bufferMethods." + attr + " = 0\n";
-                    }
-                    //outStr += "bufferMethods" + "." + attr + " = 0\n\n";
+                    command_help += $"---@type {lst[0]}\n";
+                    command_help += $"bufferVar.{attr} = {lst[1]}\n";
+
                 }
                 else if (table.Contains("scriptVar"))
                 {
-                    command_help += "script_object" + "." + attr + " = 0\n\n";
+                    command_help += $"---@type {lst[0]}\n";
+                    command_help += $"scriptVar.{attr} = {lst[1]}\n";
                 }
                 else if (attr.Contains("address[N]"))
                 {
@@ -469,17 +507,14 @@ namespace jsonToLuaParser
                     command_help += "---@type triggerEvents|0\n";
                     command_help += table + "." + attr + "= 0\n\n";
                 }
-                else if (attr.Contains("[N]"))
+                else if (attr.Contains("[N]"))//TODOD need to check this can be removed
                 {
-                    command_help += "---@type integer[]\n";
                     attr = attr.Remove(attr.Length - 3, 3);
-                    command_help += table + "." + attr + "= 0\n\n";
+                    command_help += $"---@type {lst[0]}\n";
+                    command_help += $"{table}.{attr} = {lst[1]}\n";
+
                 }
-                //else if (attr.Contains("level") && table.Contains("smu.source.protect")) //2461
-                //{
-                //    command_help += "---@type smuSourceProtectionLevel\n";
-                //    command_help += table + "." + attr + " = 0\n\n";
-                //}
+
                 else if (attr.Contains("EVENT_ID"))
                 {
                     command_help += "---@type eventID\n";
@@ -493,7 +528,11 @@ namespace jsonToLuaParser
                         command_help += cmd.name + "= 0\n\n";
                     }
                     else
-                        command_help += table + "." + attr + " = 0\n\n";
+                    {
+                        command_help += $"---@type {lst[0]}\n";
+                        command_help += $"{table}.{attr} = {lst[1]}\n";
+
+                    }
                 }
             }
             else if (cmd.command_type == CommandType.Function || (cmd.command_type == CommandType.Attribute_WO && cmd.name.Contains(" trigger.BLOCK_")))
@@ -508,19 +547,18 @@ namespace jsonToLuaParser
                         int endIndex = sig.IndexOf(")", startIndex);
                         var overlad_params = sig.Substring(startIndex, endIndex - startIndex).Split(',').Select(str => str.Trim()).ToList();
                         IList<string> overload_sig_and_type = new List<string>();
-                        var returnType = "";
+                        IList<string> overload_return_type = new List<string>();
                         foreach (var param in cmd.param_info)
                         {
                             if (cmd.command_return.Contains(param.Name))
-                                returnType = $":{param.Type}";
+                                overload_return_type.Add($"{param.Name}:{param.Type}");
                             if (overlad_params.Contains(param.Name))
                             {
                                 overload_sig_and_type.Add($"{param.Name}:{param.Type}");
                             }
                         }
 
-                        System.Console.WriteLine(overload_sig_and_type);
-                        command_help += getOverloadDoc($"({string.Join(",", overload_sig_and_type)}){returnType}") + "\n";
+                        command_help += getOverloadDoc($"({string.Join(",", overload_sig_and_type)}){(overload_return_type.Count > 0 ? ":" : "")}{string.Join(", ", overload_return_type)}") + "\n";
                     }
                 }
                 else
@@ -559,7 +597,7 @@ namespace jsonToLuaParser
                 }
                 else if (cmd.signature.Contains("scriptVar"))
                 {
-                    string sig = cmd.signature.Replace("scriptVar", "script_object");
+                    string sig = cmd.signature.Replace("scriptVar", "scriptVar");
                     command_help += "function " + sig + " end\n";
                 }
                 else if (cmd.signature.Contains("fileVar"))
@@ -584,12 +622,12 @@ namespace jsonToLuaParser
                 }
                 else if (cmd.signature.Contains("bufferName."))
                 {
-                    string sig = cmd.signature.Replace("bufferName.", "bufferMethods.");
+                    string sig = cmd.signature.Replace("bufferName.", "bufferVar.");
                     command_help += "function " + sig + " end\n";
                 }
                 else if (cmd.signature.Contains("bufferVar."))
                 {
-                    string sig = cmd.signature.Replace("bufferVar.", "bufferMethods.");
+                    string sig = cmd.signature.Replace("bufferVar.", "bufferVar.");
                     command_help += "function " + sig + " end\n";
                 }
                 else
@@ -625,17 +663,17 @@ namespace jsonToLuaParser
             int index = outStr.IndexOf(subString);
             if (index != -1)
             {
-                string modifiedString = outStr.Insert(index, "\n---@type bufferMethods\n");
+                string modifiedString = outStr.Insert(index, "\n---@type bufferVar\n");
                 outStr = modifiedString;
             }
         }
 
         public static void append_defbuffer1_defbuffer2_defination(ref string outStr)
         {
-            outStr += "\n"+@"---@type bufferMethods
+            outStr += "\n" + @"---@type bufferVar
 defbuffer1 = {}
 
----@type bufferMethods
+---@type bufferVar
 defbuffer2 = {}";
         }
 
@@ -644,7 +682,7 @@ defbuffer2 = {}";
             outStr += "\n" + @"
 ---This is generic function to define trigger model setblock.<br>
 ---Signature of this function depends on the BlockType.<br>
----For more details, please look at the manual by viewing hower help of blockType or opening command help
+---For more details, please look at the manual by viewing hover help of blockType or opening command help
 ---@param blockNumber number
 ---@param blockType triggerBlockBranch
 function trigger.model.setblock(blockNumber, blockType,...) end";
@@ -684,7 +722,7 @@ function trigger.model.setblock(blockNumber, blockType,...) end";
         {
             outStr +=
             @"
----@param readingBuffer bufferMethods The name of the reading buffer; the reading buffer selected must be set to the style FULL
+---@param readingBuffer bufferVar The name of the reading buffer; the reading buffer selected must be set to the style FULL
 ---@param unit buffermathunit The units to be applied to the value generated by the expression
 ---@param mathExpression mathExpression
 function buffer.math(readingBuffer, unit, mathExpression, ...) end";
@@ -694,9 +732,9 @@ function buffer.math(readingBuffer, unit, mathExpression, ...) end";
         {
             var alias_string = $"\n---@alias {alias_name}\n";
 
-            foreach(var typ in alias_string_list)
+            foreach (var typ in alias_string_list)
             {
-                alias_string+= string.Format("---| `\"{0}\"` \n", typ);
+                alias_string += string.Format("---| `\"{0}\"` \n", typ);
 
             }
 
@@ -708,13 +746,15 @@ function buffer.math(readingBuffer, unit, mathExpression, ...) end";
         {
             var command_help = "";
 
+            var aliasName = param.Type.Contains('|') ? param.Type.Split('|')[0].Trim() : param.Type;
+
             string[] enum_data = param.enums.Split('|');
             command_help += "\n";
             foreach (var data in enum_data)
             {
                 command_help += data.Split(' ')[0] + " = " + data.Split(' ')[1] + "\n";
             }
-            command_help += "\n---@alias " + param.Type + "\n";
+            command_help += "\n---@alias " + aliasName + "\n";
             foreach (var data in enum_data)
             {
                 command_help += "---|`" + data.Split(' ')[0] + "`\n";
@@ -723,6 +763,24 @@ function buffer.math(readingBuffer, unit, mathExpression, ...) end";
 
             return command_help;
 
+        }
+
+        public static void write_to_file(string file_path, string content)
+        {
+            File.WriteAllText(file_path, content);
+        }
+
+        public static void SetFileReadOnly(string file_path)
+        {
+            try
+            {
+                // Set the file as read-only
+                File.SetAttributes(file_path, File.GetAttributes(file_path) | FileAttributes.ReadOnly);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while setting the file as read-only: {ex.Message}");
+            }
         }
     }
 }

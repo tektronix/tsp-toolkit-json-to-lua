@@ -2,15 +2,15 @@
 
 ---@class io_object
 local io_object={}
----@class script_object
-local script_object={}
+---@class scriptVar
+local scriptVar={}
 ---@class eventID
 
 ---@class file_object
 local file_object ={}
 
----@class bufferMethods
-local bufferMethods={}
+---@class bufferVar
+local bufferVar={}
 ---@class digio
  digio = {}
 
@@ -51,9 +51,6 @@ beeper.OFF = 1
 --- 
 --- --Enables the beeper and generates a two‑second, 2400 Hz tone.
 --- ```
----@type beeperenablestate
-beeper.enable = 0
-
 
 
 --- **This function generates an audible tone.**
@@ -113,7 +110,7 @@ dataqueue = {}
 ---@return boolean result The resulting value of true or false based on the success of the function
 ---@param value any The data item to add; value can be of any type
 ---@param timeout number The maximum number of seconds to wait for space in the data queue
----@overload fun(value:any):boolean
+---@overload fun(value:any):result:boolean
 function dataqueue.add(value, timeout) end
 
 
@@ -173,9 +170,6 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
----@type dataqueueCAPACITYcount
-dataqueue.CAPACITY = 0
-
 
 
 --- **This attribute contains the number of items in the data queue.**
@@ -204,8 +198,6 @@ dataqueue.CAPACITY = 0
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
-dataqueue.count = 0
-
 
 
 --- **This function removes the next entry from the data queue.**
@@ -248,7 +240,7 @@ dataqueue.count = 0
 --- ```
 ---@return any value The next entry in the data queue
 ---@param timeout number The number of seconds to wait for data in the queue
----@overload fun():any
+---@overload fun():value:any
 function dataqueue.next(timeout) end
 ---@class digio
 digio = {}
@@ -353,8 +345,6 @@ function digio.writeport(data) end
 --- 
 --- --Write‑protects lines 1, 2, 3, and 4.
 --- ```
-digio.writeprotect = 0
-
 ---@class display
 display = {}
 
@@ -445,10 +435,10 @@ function display.getcursor() end
 ---@param row number Selects the row from which to read the text
 ---@param columnStart number Selects the first column from which to read text; for row 1, the valid column numbers are 1 to 20; for row 2, the valid column numbers are 1 to 32; if nothing is selected, 1 is used
 ---@param columnEnd number Selects the last column from which to read text; for row 1, the valid column numbers are 1 to 20; for row 2, the valid column numbers are 1 to 32; the default is 20 for row 1, and 32 for row 2
----@overload fun():string
----@overload fun(embellished:boolean):string
----@overload fun(embellished:boolean,row:number):string
----@overload fun(embellished:boolean,row:number,columnStart:number):string
+---@overload fun():text:string
+---@overload fun(embellished:boolean):text:string
+---@overload fun(embellished:boolean,row:number):text:string
+---@overload fun(embellished:boolean,row:number,columnStart:number):text:string
 function display.gettext(embellished, row, columnStart, columnEnd) end
 
 
@@ -481,12 +471,12 @@ function display.gettext(embellished, row, columnStart, columnEnd) end
 ---@overload fun(format:string,default:number,minimum:number)
 function display.inputvalue(format, default, minimum, maximum) end
 
-display.UNLOCK = nil
 display.LOCK = nil
+display.UNLOCK = nil
 
 ---@alias displaylocallockoutlockout
----|`display.UNLOCK`
 ---|`display.LOCK`
+---|`display.UNLOCK`
 
 
 
@@ -505,9 +495,6 @@ display.LOCK = nil
 --- 
 --- --Disables the front‑panel EXIT (LOCAL) key.
 --- ```
----@type displaylocallockoutlockout
-display.locallockout = 0
-
 
 
 --- **This function presents a menu on the front‑panel display.**
@@ -557,9 +544,6 @@ display.ENABLE = nil
 --- 
 --- --Turn on the numeric keypad feature.
 --- ```
----@type displaynumpadnumericKeypad
-display.numpad = 0
-
 
 
 --- **This function sets the position of the cursor.**
@@ -681,16 +665,16 @@ function display.getannunciators() end
 ---@overload fun(format:string,units:string,help:string,default:number,minimum:number)
 function display.prompt(format, units, help, default, minimum, maximum) end
 
-display.SMUA_SMUB = nil
-display.USER = nil
-display.SMUA = nil
 display.SMUB = nil
+display.SMUA_SMUB = nil
+display.SMUA = nil
+display.USER = nil
 
 ---@alias displayscreendisplayID
----|`display.SMUA_SMUB`
----|`display.USER`
----|`display.SMUA`
 ---|`display.SMUB`
+---|`display.SMUA_SMUB`
+---|`display.SMUA`
+---|`display.USER`
 
 
 
@@ -709,9 +693,6 @@ display.SMUB = nil
 --- 
 --- --Selects the source-measure and compliance limit display for SMU A.
 --- ```
----@type displayscreendisplayID
-display.screen = 0
-
 
 
 --- **This function retrieves the key code for the last pressed key.**
@@ -813,8 +794,6 @@ function errorqueue.clear() end
 --- --The output below indicates that there are four entries in the error queue:
 --- --4.00000e+00
 --- ```
-errorqueue.count = 0
-
 
 
 --- **This function reads the oldest entry from the error queue and removes it from the queue.**
@@ -883,8 +862,6 @@ function eventlog.all() end
 --- --Output looks similar to:
 --- --3.00000e+00
 --- ```
-eventlog.count = 0
-
 
 
 --- **This function clears the event log.**
@@ -925,9 +902,6 @@ eventlog.DISCARD_NEWEST = nil
 --- 
 --- --When the log is full, the event log ignores new entries.
 --- ```
----@type eventlogoverwritemethodmethod
-eventlog.overwritemethod = 0
-
 
 eventlog.ENABLE = nil
 eventlog.DISABLE = nil
@@ -958,9 +932,6 @@ eventlog.DISABLE = nil
 --- --1.00000e+00
 --- --0.00000e+00
 --- ```
----@type eventlogenablestatus
-eventlog.enable = 0
-
 
 
 --- **This function returns the oldest unread event message from the event log and removes it from the event log.**
@@ -984,21 +955,21 @@ eventlog.enable = 0
 --- --If you send this command when there is nothing in the event log, you get the following output:
 --- --nil
 --- ```
----@return string|nil logString The next log entry
+---@return string logString The next log entry
 function eventlog.next() end
 
-format.NORMAL = nil
 format.LITTLEENDIAN = nil
-format.BIGENDIANL = nil
 format.NETWORK = nil
+format.NORMAL = nil
 format.SWAPPED = nil
+format.BIGENDIANL = nil
 
 ---@alias formatbyteorderorder
----|`format.NORMAL`
 ---|`format.LITTLEENDIAN`
----|`format.BIGENDIANL`
 ---|`format.NETWORK`
+---|`format.NORMAL`
 ---|`format.SWAPPED`
+---|`format.BIGENDIANL`
 
 
 
@@ -1024,9 +995,6 @@ format.SWAPPED = nil
 --- --#0¤p??
 --- --#0??p¤
 --- ```
----@type formatbyteorderorder
-format.byteorder = 0
-
 ---@class fs
 fs = {}
 
@@ -1308,7 +1276,7 @@ function io.flush() end
 --- ```
 ---@return io_object fileVar The descriptor of the output file or an error message (if the function fails)
 ---@param newfile string A file descriptor to assign (or the path of a file to open) as the default output file
----@overload fun():io_object
+---@overload fun():fileVar:io_object
 function io.output(newfile) end
 
 
@@ -1355,9 +1323,9 @@ function io.output(newfile) end
 ---@return any data2 The data read from the file
 ---@param format1 string A string or number indicating the type of data to be read
 ---@param format2 string A string or number indicating the type of data to be read
----@overload fun():any
----@overload fun(format1:string):any
----@overload fun(format1:string,...:any):any
+---@overload fun():data1:any, data2:any
+---@overload fun(format1:string):data1:any, data2:any
+---@overload fun(format1:string,...:any):data1:any, data2:any
 function io.read(format1, format2) end
 
 
@@ -1418,7 +1386,7 @@ function io.write(data1, data2) end
 --- ```
 ---@return io_object fileVar The descriptor of the input file or an error message (if the function fails)
 ---@param newfile string A string representing the path of a file to open as the default input file, or the file descriptor of an open file to use as the default input file
----@overload fun():io_object
+---@overload fun():fileVar:io_object
 function io.input(newfile) end
 ---@class lan
 lan = {}
@@ -1465,9 +1433,6 @@ lan.DISABLE = nil
 --- 
 --- --Enable LAN link monitoring.
 --- ```
----@type lanautoconnectstate
-lan.autoconnect = 0
-
 
 
 --- **This attribute contains the LAN link timeout period.**
@@ -1485,8 +1450,6 @@ lan.autoconnect = 0
 --- 
 --- --Outputs the present LAN link timeout setting.
 --- ```
-lan.linktimeout = 0
-
 
 
 --- **This attribute contains the LXI domain.**
@@ -1504,8 +1467,6 @@ lan.linktimeout = 0
 --- 
 --- --Displays the LXI domain.
 --- ```
-lan.lxidomain = 0
-
 
 lan.ENABLE = nil
 lan.DISABLE = nil
@@ -1528,9 +1489,6 @@ lan.DISABLE = nil
 ---<br>*Examples:*<br>
 --- ```lua
 --- ```
----@type lannaglestate
-lan.nagle = 0
-
 
 
 --- **This function resets the LAN interface.**
@@ -1581,8 +1539,6 @@ function lan.restoredefaults() end
 --- 
 --- --Set the amount of time resources are allocated to TCP connection to 30 s.
 --- ```
-lan.timedwait = 0
-
 ---@class localnode
 localnode = {}
 
@@ -1599,8 +1555,6 @@ localnode = {}
 ---<br>*Examples:*<br>
 --- ```lua
 --- ```
-localnode.autolinefreq = 0
-
 
 
 --- **This attribute stores a user-defined description and mDNS service name of the instrument.**
@@ -1619,8 +1573,6 @@ localnode.autolinefreq = 0
 --- 
 --- --Set description to System in Lab 05.
 --- ```
-localnode.description = 0
-
 
 
 --- **This attribute contains the power line frequency setting that is used for NPLC calculations.**
@@ -1641,8 +1593,6 @@ localnode.description = 0
 --- 
 --- --Sets the line frequency to 60 Hz.
 --- ```
-localnode.linefreq = 0
-
 
 
 --- **This attribute stores the model number.**
@@ -1661,8 +1611,6 @@ localnode.linefreq = 0
 --- --Outputs the model number of the local node. For example:
 --- --2602B
 --- ```
-localnode.model = 0
-
 
 
 --- **This attribute stores the remote access password.**
@@ -1680,18 +1628,16 @@ localnode.model = 0
 --- 
 --- --Changes the remote interface password to N3wpa55w0rd.
 --- ```
-localnode.password = 0
 
-
-localnode.PASSWORD_LAN = nil
-localnode.PASSWORD_ALL = nil
 localnode.PASSWORD_NONE = nil
+localnode.PASSWORD_ALL = nil
+localnode.PASSWORD_LAN = nil
 localnode.PASSWORD_WEB = nil
 
 ---@alias localnodepasswordmodemode
----|`localnode.PASSWORD_LAN`
----|`localnode.PASSWORD_ALL`
 ---|`localnode.PASSWORD_NONE`
+---|`localnode.PASSWORD_ALL`
+---|`localnode.PASSWORD_LAN`
 ---|`localnode.PASSWORD_WEB`
 
 
@@ -1715,9 +1661,6 @@ localnode.PASSWORD_WEB = nil
 --- --Allows use of passwords on the web interface only.
 --- --Set the password to SMU1234.
 --- ```
----@type localnodepasswordmodemode
-localnode.passwordmode = 0
-
 
 
 --- **This attribute determines if the instrument generates prompts in response to command messages.**
@@ -1735,8 +1678,6 @@ localnode.passwordmode = 0
 --- 
 --- --Enable prompting.
 --- ```
-localnode.prompts = 0
-
 
 
 --- **This attribute enables and disables the generation of prompts for IEEE Std 488.2 common commands.**
@@ -1754,8 +1695,6 @@ localnode.prompts = 0
 --- 
 --- --Disables IEEE Std 488.2 common command prompting.
 --- ```
-localnode.prompts4882 = 0
-
 
 
 --- **This attribute stores the firmware revision level.**
@@ -1775,8 +1714,6 @@ localnode.prompts4882 = 0
 --- --Sample output:
 --- --1.0.0
 --- ```
-localnode.revision = 0
-
 
 
 --- **This attribute stores the serial number of the instrument.**
@@ -1796,8 +1733,6 @@ localnode.revision = 0
 --- --Clears the instrument display.
 --- --Places the serial number of the instrument on the top line of its display.
 --- ```
-localnode.serialno = 0
-
 
 
 --- **This attribute sets whether or not the instrument automatically sends generated errors.**
@@ -1815,8 +1750,6 @@ localnode.serialno = 0
 --- 
 --- --Enables sending of generated errors.
 --- ```
-localnode.showerrors = 0
-
 
 
 --- **This function resets the local node instrument.**
@@ -1852,8 +1785,6 @@ function localnode.reset() end
 --- 
 --- --Returns the license agreements for the 2600B.
 --- ```
-localnode.license = 0
-
 ---@class nodeArr
 local nodeArr = {}
 
@@ -1948,8 +1879,6 @@ serial = {}
 --- 
 --- --Sets the baud rate to 1200.
 --- ```
-serial.baud = 0
-
 
 
 --- **This attribute configures character width (data bits) for the RS-232 port.**
@@ -1967,8 +1896,6 @@ serial.baud = 0
 --- 
 --- --Sets data width to 8.
 --- ```
-serial.databits = 0
-
 
 serial.FLOW_HARDWARE = nil
 serial.FLOW_NONE = nil
@@ -1994,18 +1921,15 @@ serial.FLOW_NONE = nil
 --- 
 --- --Sets flow control to none.
 --- ```
----@type serialflowcontrolflow
-serial.flowcontrol = 0
 
-
+serial.PARITY_EVEN = nil
 serial.PARITY_ODD = nil
 serial.PARITY_NONE = nil
-serial.PARITY_EVEN = nil
 
 ---@alias serialparityparity
+---|`serial.PARITY_EVEN`
 ---|`serial.PARITY_ODD`
 ---|`serial.PARITY_NONE`
----|`serial.PARITY_EVEN`
 
 
 
@@ -2024,9 +1948,6 @@ serial.PARITY_EVEN = nil
 --- 
 --- --Sets parity to none.
 --- ```
----@type serialparityparity
-serial.parity = 0
-
 
 
 --- **This function reads available characters (data) from the serial port.**
@@ -2090,8 +2011,6 @@ setup = {}
 --- 
 --- --Set the instrument to use the factory default setup when power is turned on.
 --- ```
-setup.poweron = 0
-
 
 
 --- **This function saves the present setup as a user-saved setup.**
@@ -2170,7 +2089,7 @@ function smua.abort() end
 --- 
 --- --Creates a 200 element reading buffer (mybuffer2) for SMU channel A.
 --- ```
----@return bufferMethods bufferVar The created reading buffer
+---@return bufferVar bufferVar The created reading buffer
 ---@param bufferSize number Maximum number of readings that can be stored
 function smua.makebuffer(bufferSize) end
 
@@ -2318,7 +2237,7 @@ function smua.measurepandstep(sourceValue) end
 ---@param sourceValue number Source value to be set after the measurement is made
 ---@return number iReading The current reading before stepping the source
 ---@return number vReading The voltage reading before stepping the source
----@overload fun(sourceValue:number):number
+---@overload fun(sourceValue:number):iReading:number, vReading:number
 function smua.measureivandstep(sourceValue) end
 
 
@@ -2338,10 +2257,6 @@ function smua.measureivandstep(sourceValue) end
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
 
----@type bufferMethods
-smua.nvbuffer1 = 0
-
-
 
 --- **This attribute contains a dedicated reading buffer.**
 ---
@@ -2358,10 +2273,6 @@ smua.nvbuffer1 = 0
 --- 
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
-
----@type bufferMethods
-smua.nvbuffer2 = 0
-
 
 
 --- **This function turns off the output and resets the commands that begin with smuX. to their default settings.**
@@ -2398,17 +2309,17 @@ function smua.reset() end
 --- 
 --- --Saves buffer 1 (SMU channel A) to internal memory.
 --- ```
----@param buffer bufferMethods Buffer variable
+---@param buffer bufferVar Buffer variable
 function smua.savebuffer(buffer) end
 
+smua.SENSE_LOCAL = nil
 smua.SENSE_REMOTE = nil
 smua.SENSE_CALA = nil
-smua.SENSE_LOCAL = nil
 
 ---@alias smuasensesenseMode
+---|`smua.SENSE_LOCAL`
 ---|`smua.SENSE_REMOTE`
 ---|`smua.SENSE_CALA`
----|`smua.SENSE_LOCAL`
 
 
 
@@ -2427,9 +2338,6 @@ smua.SENSE_LOCAL = nil
 --- 
 --- --Selects remote sensing for SMU channel A.
 --- ```
----@type smuasensesenseMode
-smua.sense = 0
-
 ---@class smub
 smub = {}
 
@@ -2467,7 +2375,7 @@ function smub.abort() end
 --- 
 --- --Creates a 200 element reading buffer (mybuffer2) for SMU channel A.
 --- ```
----@return bufferMethods bufferVar The created reading buffer
+---@return bufferVar bufferVar The created reading buffer
 ---@param bufferSize number Maximum number of readings that can be stored
 function smub.makebuffer(bufferSize) end
 
@@ -2615,7 +2523,7 @@ function smub.measurepandstep(sourceValue) end
 ---@param sourceValue number Source value to be set after the measurement is made
 ---@return number iReading The current reading before stepping the source
 ---@return number vReading The voltage reading before stepping the source
----@overload fun(sourceValue:number):number
+---@overload fun(sourceValue:number):iReading:number, vReading:number
 function smub.measureivandstep(sourceValue) end
 
 
@@ -2635,10 +2543,6 @@ function smub.measureivandstep(sourceValue) end
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
 
----@type bufferMethods
-smub.nvbuffer1 = 0
-
-
 
 --- **This attribute contains a dedicated reading buffer.**
 ---
@@ -2655,10 +2559,6 @@ smub.nvbuffer1 = 0
 --- 
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
-
----@type bufferMethods
-smub.nvbuffer2 = 0
-
 
 
 --- **This function turns off the output and resets the commands that begin with smuX. to their default settings.**
@@ -2695,17 +2595,17 @@ function smub.reset() end
 --- 
 --- --Saves buffer 1 (SMU channel A) to internal memory.
 --- ```
----@param buffer bufferMethods Buffer variable
+---@param buffer bufferVar Buffer variable
 function smub.savebuffer(buffer) end
 
+smub.SENSE_LOCAL = nil
 smub.SENSE_REMOTE = nil
 smub.SENSE_CALA = nil
-smub.SENSE_LOCAL = nil
 
 ---@alias smubsensesenseMode
+---|`smub.SENSE_LOCAL`
 ---|`smub.SENSE_REMOTE`
 ---|`smub.SENSE_CALA`
----|`smub.SENSE_LOCAL`
 
 
 
@@ -2724,9 +2624,6 @@ smub.SENSE_LOCAL = nil
 --- 
 --- --Selects remote sensing for SMU channel A.
 --- ```
----@type smubsensesenseMode
-smub.sense = 0
-
 
 
 --- **This attribute sets the state of the append mode of the reading buffer.**
@@ -2744,7 +2641,8 @@ smub.sense = 0
 --- 
 --- --Append new readings to contents of the reading buffer named buffer1.
 --- ```
-bufferMethods.appendmode = 0
+---@type any
+bufferVar.appendmode = 0
 
 
 --- **This attribute contains the timestamp that indicates when the first reading was stored in the buffer.**
@@ -2766,7 +2664,8 @@ bufferMethods.appendmode = 0
 --- --1.57020e+09
 --- --This output indicates that the timestamp is 1,570,200,000 seconds (which is Friday, October 4, 2019 at 14:40:00 pm).
 --- ```
-bufferMethods.basetimestamp = 0
+---@type any
+bufferVar.basetimestamp = 0
 
 
 --- **This attribute sets the number of readings a buffer can store.**
@@ -2789,7 +2688,8 @@ bufferMethods.basetimestamp = 0
 --- --1.49789e+05
 --- --The above output indicates that the buffer can hold 149789 readings.
 --- ```
-bufferMethods.capacity = 0
+---@type number
+bufferVar.capacity = 0
 
 
 --- **This function empties the buffer.**
@@ -2807,7 +2707,7 @@ bufferMethods.capacity = 0
 --- 
 --- --Clears dedicated reading buffer 1 (source‑measure unit (SMU) channel A).
 --- ```
-function bufferMethods.clear() end
+function bufferVar.clear() end
 
 
 --- **This function clears the cache.**
@@ -2825,7 +2725,7 @@ function bufferMethods.clear() end
 --- 
 --- --Clears the reading buffer cache for dedicated reading buffer 1.
 --- ```
-function bufferMethods.clearcache() end
+function bufferVar.clearcache() end
 
 
 --- **This attribute sets whether or not source values are stored with the readings in the buffer.**
@@ -2843,7 +2743,8 @@ function bufferMethods.clearcache() end
 --- 
 --- --Include source values with readings for dedicated reading buffer 1.
 --- ```
-bufferMethods.collectsourcevalues = 0
+---@type any
+bufferVar.collectsourcevalues = 0
 
 
 --- **This attribute sets whether or not timestamp values are stored with the readings in the buffer.**
@@ -2861,7 +2762,8 @@ bufferMethods.collectsourcevalues = 0
 --- 
 --- --Include timestamps with readings for dedicated reading buffer 1.
 --- ```
-bufferMethods.collecttimestamps = 0
+---@type any
+bufferVar.collecttimestamps = 0
 
 
 --- **This attribute contains the number of readings in the buffer.**
@@ -2883,7 +2785,8 @@ bufferMethods.collecttimestamps = 0
 --- --1.25000+02
 --- --The above output indicates that there are 125 readings stored in the buffer.
 --- ```
-bufferMethods.n = 0
+---@type number
+bufferVar.n = 0
 
 
 --- **This attribute contains the resolution of the timestamp.**
@@ -2902,7 +2805,8 @@ bufferMethods.n = 0
 --- 
 --- --Sets the timestamp resolution of dedicated reading buffer 1 to 8 μs.
 --- ```
-bufferMethods.timestampresolution = 0
+---@type any
+bufferVar.timestampresolution = 0
 
 
 --- **This attribute enables or disables the reading buffer cache (on or off).**
@@ -2920,7 +2824,8 @@ bufferMethods.timestampresolution = 0
 --- 
 --- --Enables reading buffer cache of dedicated reading buffer 1 (source‑measure unit (SMU) channel A).
 --- ```
-bufferMethods.cachemode = 0
+---@type any
+bufferVar.cachemode = 0
 
 
 --- **This attribute sets the reading buffer fill count.**
@@ -2938,14 +2843,15 @@ bufferMethods.cachemode = 0
 --- 
 --- --Sets fill count of dedicated reading buffer 1 to 50.
 --- ```
-bufferMethods.fillcount = 0
+---@type any
+bufferVar.fillcount = 0
 
-smua.FILL_ONCE = nil
 smua.FILL_WINDOW = nil
+smua.FILL_ONCE = nil
 
 ---@alias bufferVarfillmodefillMode
----|`smua.FILL_ONCE`
 ---|`smua.FILL_WINDOW`
+---|`smua.FILL_ONCE`
 
 
 
@@ -2965,7 +2871,7 @@ smua.FILL_WINDOW = nil
 --- --Sets fill mode of dedicated reading buffer 1 to fill once (do not overwrite old data).
 --- ```
 ---@type bufferVarfillmodefillMode
-bufferMethods.fillmode = 0
+bufferVar.fillmode = smua.FILL_WINDOW
 
 
 --- **This attribute contains the measurement function that was used to acquire a reading stored in a specified reading buffer.**
@@ -2988,8 +2894,8 @@ bufferMethods.fillmode = 0
 --- --Example output:
 --- --Current, Current, Current, Current, Current
 --- ```
----@type integer[]
-bufferMethods.measurefunctions= {}
+---@type any
+bufferVar.measurefunctions = 0
 
 
 --- **This attribute contains the measurement range values that were used for readings stored in a specified buffer.**
@@ -3012,8 +2918,8 @@ bufferMethods.measurefunctions= {}
 --- --Example output:
 --- --1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07
 --- ```
----@type integer[]
-bufferMethods.measureranges= {}
+---@type any
+bufferVar.measureranges = 0
 
 
 --- **This attribute contains the source function that was being used when the readings were stored in a specified reading buffer.**
@@ -3037,8 +2943,8 @@ bufferMethods.measureranges= {}
 --- --Example output:
 --- --Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage
 --- ```
----@type integer[]
-bufferMethods.sourcefunctions= {}
+---@type any
+bufferVar.sourcefunctions = 0
 
 
 --- **This attribute indicates the state of the source output for readings that are stored in a specified buffer.**
@@ -3058,8 +2964,8 @@ bufferMethods.sourcefunctions= {}
 --- --Example output:
 --- --On
 --- ```
----@type integer[]
-bufferMethods.sourceoutputstates= {}
+---@type any
+bufferVar.sourceoutputstates = 0
 
 
 --- **This attribute contains the source range that was used for readings stored in a specified reading buffer.**
@@ -3082,8 +2988,8 @@ bufferMethods.sourceoutputstates= {}
 --- --Example output:
 --- --1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04
 --- ```
----@type integer[]
-bufferMethods.sourceranges= {}
+---@type any
+bufferVar.sourceranges = 0
 
 
 --- **When enabled by the bufferVar.collectsourcevalues attribute, this attribute contains the source levels being output when readings in the reading buffer were acquired.**
@@ -3109,8 +3015,8 @@ bufferMethods.sourceranges= {}
 --- --1.00000e-04, 1.00000e-04,
 --- --1.00000e-04, 1.00000e-04
 --- ```
----@type integer[]
-bufferMethods.sourcevalues= {}
+---@type any
+bufferVar.sourcevalues = 0
 
 
 --- **This attribute contains the readings stored in a specified reading buffer.**
@@ -3130,8 +3036,8 @@ bufferMethods.sourcevalues= {}
 --- --Output:
 --- --8.81658e-08
 --- ```
----@type integer[]
-bufferMethods.readings= {}
+---@type number
+bufferVar.readings = 0
 
 
 --- **This attribute contains the status values of readings in the reading buffer.**
@@ -3170,8 +3076,8 @@ bufferMethods.readings= {}
 --- --3.99470e-06
 --- --4.00000e+00
 --- ```
----@type integer[]
-bufferMethods.statuses= {}
+---@type bufferVarstatuses
+bufferVar.statuses = 0
 
 
 --- **When enabled by the bufferVar.collecttimestamps attribute, this attribute contains the timestamp when each reading saved in the specified reading buffer occurred.**
@@ -3190,8 +3096,8 @@ bufferMethods.statuses= {}
 --- 
 --- --Get the timestamp of the first reading stored in source‑measure unit (SMU) A, buffer 1.
 --- ```
----@type integer[]
-bufferMethods.timestamps= {}
+---@type any
+bufferVar.timestamps = 0
 ---@class timer
 timer = {}
 
@@ -3237,8 +3143,6 @@ tsplink = {}
 --- 
 --- --Assign the instrument to TSP-Link group number 3.
 --- ```
-tsplink.group = 0
-
 
 
 --- **This attribute reads the node number assigned to the master node. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -3256,8 +3160,6 @@ tsplink.group = 0
 --- 
 --- --Store the TSP-Link master node number in a variable called LinkMaster.
 --- ```
-tsplink.master = 0
-
 
 
 --- **This attribute defines the node number. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -3275,8 +3177,6 @@ tsplink.master = 0
 --- 
 --- --Sets the TSP‑Link node for this instrument to number 3.
 --- ```
-tsplink.node = 0
-
 
 
 --- **This function reads the state of a TSP-Link synchronization line. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -3343,8 +3243,6 @@ function tsplink.readport() end
 --- --Read the state of the TSP‑Link system. If it is online, the output is:
 --- --online
 --- ```
-tsplink.state = 0
-
 
 
 --- **This function sets a TSP-Link trigger line high or low. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -3401,8 +3299,6 @@ function tsplink.writeport(data) end
 --- 
 --- --Write‑protects TSP-Link trigger lines 1 and 3.
 --- ```
-tsplink.writeprotect = 0
-
 
 
 --- **This constant contains the command interface trigger event number.**
@@ -3447,8 +3343,6 @@ status = {}
 --- 
 --- --Sets the MSB and OSB bits of the system node enable register using a decimal value.
 --- ```
-status.node_enable = 0
-
 
 
 --- **This attribute stores the status node event register.**
@@ -3470,8 +3364,6 @@ status.node_enable = 0
 --- --1.29000e+02
 --- --Converting this output (129) to its binary equivalent yields 1000 0001. Therefore, this output indicates that the set bits of the status byte condition register are presently B0 (MSB) and B7 (OSB).
 --- ```
-status.node_event = 0
-
 
 
 --- **This function resets all bits in the status model.**
@@ -3513,8 +3405,6 @@ function status.reset() end
 --- 
 --- --Uses a decimal value to set the MSB and OSB bits of the service request (SRQ) enable register.
 --- ```
-status.request_enable = 0
-
 
 
 --- **This attribute stores the service request (SRQ) event register.**
@@ -3537,8 +3427,6 @@ status.request_enable = 0
 --- --Converting this output (129) to its binary equivalent yields 1000 0001.
 --- --Therefore, this output indicates that the set bits of the status request event register are presently B0 (MSB) and B7 (OSB).
 --- ```
-status.request_event = 0
-
 
 
 --- **This attribute stores the status byte condition register.**
@@ -3561,8 +3449,6 @@ status.request_event = 0
 --- --Converting this output (129) to its binary equivalent yields 1000 0001 
 --- --Therefore, this output indicates that the set bits of the status byte condition register are presently B0 (MSS) and B7 (OSB).
 --- ```
-status.condition = 0
-
 ---@class os
 os = {}
 
@@ -3633,7 +3519,7 @@ function os.rename(oldname, newname) end
 --- ```
 ---@return any utcTime Time value in UTC time
 ---@param timespec any The date and time (year, month, day, hour, and minute)
----@overload fun():any
+---@overload fun():utcTime:any
 function os.time(timespec) end
 
 
@@ -3970,9 +3856,6 @@ display.DIGITS_4_5 = nil
 --- 
 --- --Select 5½ digit resolution for SMU A.
 --- ```
----@type displaysmuadigitsdigits
-display.smua.digits = 0
-
 ---@class display.smub
 display.smub = {}
 
@@ -4002,9 +3885,6 @@ display.DIGITS_4_5 = nil
 --- 
 --- --Select 5½ digit resolution for SMU A.
 --- ```
----@type displaysmubdigitsdigits
-display.smub.digits = 0
-
 ---@class display.trigger
 display.trigger = {}
 
@@ -4076,17 +3956,15 @@ function display.trigger.wait(timeout) end
 --- 
 --- --Sets the variable overrun equal to the present state of the event detector built into the display. 
 --- ```
-display.trigger.overrun = 0
-
 ---@class lan.config
 lan.config = {}
 
-lan.HALF = nil
 lan.FULL = nil
+lan.HALF = nil
 
 ---@alias lanconfigduplexduplex
----|`lan.HALF`
 ---|`lan.FULL`
+---|`lan.HALF`
 
 
 
@@ -4105,9 +3983,6 @@ lan.FULL = nil
 --- 
 --- --Set the LAN duplex mode to full.
 --- ```
----@type lanconfigduplexduplex
-lan.config.duplex = 0
-
 
 
 --- **This attribute contains the LAN default gateway address.**
@@ -4126,8 +4001,6 @@ lan.config.duplex = 0
 --- --Outputs the default gateway address. For example, you might see the output:
 --- --192.168.0.1
 --- ```
-lan.config.gateway = 0
-
 
 
 --- **This command specifies the LAN IP address.**
@@ -4145,8 +4018,6 @@ lan.config.gateway = 0
 --- 
 --- --Retrieves the presently set LAN IP address.
 --- ```
-lan.config.ipaddress = 0
-
 
 lan.AUTO = nil
 lan.MANUAL = nil
@@ -4174,9 +4045,6 @@ lan.MANUAL = nil
 --- --For example:
 --- --1.00000e+00
 --- ```
----@type lanconfigmethodmethod
-lan.config.method = 0
-
 
 
 --- **This attribute contains the LAN speed used when restarting in manual configuration mode.**
@@ -4194,8 +4062,6 @@ lan.config.method = 0
 --- 
 --- --Configure LAN speed for 100.
 --- ```
-lan.config.speed = 0
-
 
 
 --- **This attribute contains the LAN subnet mask.**
@@ -4214,17 +4080,15 @@ lan.config.speed = 0
 --- --Outputs the LAN subnet mask, such as:
 --- --255.255.255.0
 --- ```
-lan.config.subnetmask = 0
-
 ---@class lan.status
 lan.status = {}
 
-lan.HALF = nil
 lan.FULL = nil
+lan.HALF = nil
 
 ---@alias lanstatusduplexduplex
----|`lan.HALF`
 ---|`lan.FULL`
+---|`lan.HALF`
 
 
 
@@ -4244,9 +4108,6 @@ lan.FULL = nil
 --- --Outputs the present LAN duplex mode, such as:
 --- --1.00000e+00
 --- ```
----@type lanstatusduplexduplex
-lan.status.duplex = 0
-
 
 
 --- **This attribute contains the gateway address presently in use by the LAN interface.**
@@ -4265,8 +4126,6 @@ lan.status.duplex = 0
 --- --Outputs the gateway address, such as:
 --- --192.168.0.1
 --- ```
-lan.status.gateway = 0
-
 
 
 --- **This attribute contains the LAN IP address presently in use by the LAN interface.**
@@ -4285,8 +4144,6 @@ lan.status.gateway = 0
 --- --Outputs the LAN IP address currently in use, such as:
 --- --192.168.0.2
 --- ```
-lan.status.ipaddress = 0
-
 
 
 --- **This attribute contains the LAN MAC address.**
@@ -4305,8 +4162,6 @@ lan.status.ipaddress = 0
 --- --Outputs the MAC address of the instrument, for example:
 --- --08:00:11:00:00:57
 --- ```
-lan.status.macaddress = 0
-
 
 
 --- **This attribute contains the LAN speed.**
@@ -4325,8 +4180,6 @@ lan.status.macaddress = 0
 --- --Outputs the transmission speed of the instrument presently in use, such as:
 --- --1.00000e+02
 --- ```
-lan.status.speed = 0
-
 
 
 --- **This attribute contains the LAN subnet mask that is presently in use by the LAN interface.**
@@ -4345,8 +4198,6 @@ lan.status.speed = 0
 --- --Outputs the subnet mask of the instrument that is presently in use, such as:
 --- --255.255.255.0
 --- ```
-lan.status.subnetmask = 0
-
 ---@class lantriggerArr
 local lantriggerArr = {}
 
@@ -4531,14 +4382,14 @@ lantriggerArr.mode= 0
 lantriggerArr.overrun= 0
 
 
+lan.MULTICAST = nil
 lan.UDP2 = nil
 lan.TCP1 = nil
-lan.MULTICAST = nil
 
 ---@alias lantriggerprotocolprotocol
+---|`lan.MULTICAST`
 ---|`lan.UDP2`
 ---|`lan.TCP1`
----|`lan.MULTICAST`
 
 
 
@@ -4557,7 +4408,6 @@ lan.MULTICAST = nil
 --- 
 --- --Get LAN protocol to use for sending trigger messages for LAN event 1.
 --- ```
----@type lantriggerprotocolprotocol
 lantriggerArr.protocol= 0
 
 
@@ -4641,16 +4491,16 @@ smua.cal = {}
 --- ```
 function smua.cal.lock() end
 
-smua.CALSET_NOMINAL = nil
 smua.CALSET_FACTORY = nil
-smua.CALSET_PREVIOUS = nil
+smua.CALSET_NOMINAL = nil
 smua.CALSET_DEFAULT = nil
+smua.CALSET_PREVIOUS = nil
 
 ---@alias smuacalrestorecalset
----|`smua.CALSET_NOMINAL`
 ---|`smua.CALSET_FACTORY`
----|`smua.CALSET_PREVIOUS`
+---|`smua.CALSET_NOMINAL`
 ---|`smua.CALSET_DEFAULT`
+---|`smua.CALSET_PREVIOUS`
 
 
 
@@ -4726,8 +4576,6 @@ function smua.cal.unlock(password) end
 --- 
 --- --Sets the adjustment date for SMU channel A to the current time set on the instrument.
 --- ```
-smua.cal.adjustdate = 0
-
 
 
 --- **This attribute stores the calibration date of the active calibration set.**
@@ -4745,8 +4593,6 @@ smua.cal.adjustdate = 0
 --- 
 --- --Sets calibration date for SMU channel A to the present time set on the instrument.
 --- ```
-smua.cal.date = 0
-
 
 
 --- **This attribute stores the calibration due date for the next calibration.**
@@ -4764,8 +4610,6 @@ smua.cal.date = 0
 --- 
 --- --Sets the SMU channel A calibration due date equal to one year from the present time set on the instrument.
 --- ```
-smua.cal.due = 0
-
 
 
 --- **This attribute stores the password required to enable calibration.**
@@ -4783,16 +4627,14 @@ smua.cal.due = 0
 --- 
 --- --Assigns a new calibration password for SMU channel A.
 --- ```
-smua.cal.password = 0
 
-
-smua.CAL_NEGATIVE = nil
 smua.CAL_AUTO = nil
+smua.CAL_NEGATIVE = nil
 smua.CAL_POSITIVE = nil
 
 ---@alias smuacalpolaritycalPolarity
----|`smua.CAL_NEGATIVE`
 ---|`smua.CAL_AUTO`
+---|`smua.CAL_NEGATIVE`
 ---|`smua.CAL_POSITIVE`
 
 
@@ -4812,18 +4654,15 @@ smua.CAL_POSITIVE = nil
 --- 
 --- --Selects positive calibration constants for all subsequent measurements on SMU channel A.
 --- ```
----@type smuacalpolaritycalPolarity
-smua.cal.polarity = 0
 
-
-smua.CALSTATE_CALIBRATING = nil
-smua.CALSTATE_LOCKED = nil
 smua.CALSTATE_UNLOCKED = nil
+smua.CALSTATE_LOCKED = nil
+smua.CALSTATE_CALIBRATING = nil
 
 ---@alias smuacalstatecalState
----|`smua.CALSTATE_CALIBRATING`
----|`smua.CALSTATE_LOCKED`
 ---|`smua.CALSTATE_UNLOCKED`
+---|`smua.CALSTATE_LOCKED`
+---|`smua.CALSTATE_CALIBRATING`
 
 
 
@@ -4846,9 +4685,6 @@ smua.CALSTATE_UNLOCKED = nil
 --- --0.000000e+00
 --- --The above output indicates that calibration is locked.
 --- ```
----@type smuacalstatecalState
-smua.cal.state = 0
-
 ---@class smub.cal
 smub.cal = {}
 
@@ -4870,16 +4706,16 @@ smub.cal = {}
 --- ```
 function smub.cal.lock() end
 
-smub.CALSET_NOMINAL = nil
 smub.CALSET_FACTORY = nil
-smub.CALSET_PREVIOUS = nil
+smub.CALSET_NOMINAL = nil
 smub.CALSET_DEFAULT = nil
+smub.CALSET_PREVIOUS = nil
 
 ---@alias smubcalrestorecalset
----|`smub.CALSET_NOMINAL`
 ---|`smub.CALSET_FACTORY`
----|`smub.CALSET_PREVIOUS`
+---|`smub.CALSET_NOMINAL`
 ---|`smub.CALSET_DEFAULT`
+---|`smub.CALSET_PREVIOUS`
 
 
 
@@ -4955,8 +4791,6 @@ function smub.cal.unlock(password) end
 --- 
 --- --Sets the adjustment date for SMU channel A to the current time set on the instrument.
 --- ```
-smub.cal.adjustdate = 0
-
 
 
 --- **This attribute stores the calibration date of the active calibration set.**
@@ -4974,8 +4808,6 @@ smub.cal.adjustdate = 0
 --- 
 --- --Sets calibration date for SMU channel A to the present time set on the instrument.
 --- ```
-smub.cal.date = 0
-
 
 
 --- **This attribute stores the calibration due date for the next calibration.**
@@ -4993,8 +4825,6 @@ smub.cal.date = 0
 --- 
 --- --Sets the SMU channel A calibration due date equal to one year from the present time set on the instrument.
 --- ```
-smub.cal.due = 0
-
 
 
 --- **This attribute stores the password required to enable calibration.**
@@ -5012,16 +4842,14 @@ smub.cal.due = 0
 --- 
 --- --Assigns a new calibration password for SMU channel A.
 --- ```
-smub.cal.password = 0
 
-
-smub.CAL_NEGATIVE = nil
 smub.CAL_AUTO = nil
+smub.CAL_NEGATIVE = nil
 smub.CAL_POSITIVE = nil
 
 ---@alias smubcalpolaritycalPolarity
----|`smub.CAL_NEGATIVE`
 ---|`smub.CAL_AUTO`
+---|`smub.CAL_NEGATIVE`
 ---|`smub.CAL_POSITIVE`
 
 
@@ -5041,18 +4869,15 @@ smub.CAL_POSITIVE = nil
 --- 
 --- --Selects positive calibration constants for all subsequent measurements on SMU channel A.
 --- ```
----@type smubcalpolaritycalPolarity
-smub.cal.polarity = 0
 
-
-smub.CALSTATE_CALIBRATING = nil
-smub.CALSTATE_LOCKED = nil
 smub.CALSTATE_UNLOCKED = nil
+smub.CALSTATE_LOCKED = nil
+smub.CALSTATE_CALIBRATING = nil
 
 ---@alias smubcalstatecalState
----|`smub.CALSTATE_CALIBRATING`
----|`smub.CALSTATE_LOCKED`
 ---|`smub.CALSTATE_UNLOCKED`
+---|`smub.CALSTATE_LOCKED`
+---|`smub.CALSTATE_CALIBRATING`
 
 
 
@@ -5075,9 +4900,6 @@ smub.CALSTATE_UNLOCKED = nil
 --- --0.000000e+00
 --- --The above output indicates that calibration is locked.
 --- ```
----@type smubcalstatecalState
-smub.cal.state = 0
-
 ---@class smua.contact
 smua.contact = {}
 
@@ -5226,9 +5048,6 @@ smua.CONTACT_MEDIUM2 = nil
 --- 
 --- --Configure contact check for higher accuracy on SMU channel A.
 --- ```
----@type smuacontactspeedspeedSetting
-smua.contact.speed = 0
-
 
 
 --- **This attribute stores the resistance threshold for the smuX.contact.check() function. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -5246,8 +5065,6 @@ smua.contact.speed = 0
 --- 
 --- --Set the contact check threshold for SMU channel A to 5 Ω.
 --- ```
-smua.contact.threshold = 0
-
 ---@class smub.contact
 smub.contact = {}
 
@@ -5396,9 +5213,6 @@ smub.CONTACT_MEDIUM2 = nil
 --- 
 --- --Configure contact check for higher accuracy on SMU channel A.
 --- ```
----@type smubcontactspeedspeedSetting
-smub.contact.speed = 0
-
 
 
 --- **This attribute stores the resistance threshold for the smuX.contact.check() function. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -5416,8 +5230,6 @@ smub.contact.speed = 0
 --- 
 --- --Set the contact check threshold for SMU channel A to 5 Ω.
 --- ```
-smub.contact.threshold = 0
-
 ---@class smua.measure
 smua.measure = {}
 
@@ -5437,17 +5249,15 @@ smua.measure = {}
 --- 
 --- --Turns off the SMU channel A analog filter.
 --- ```
-smua.measure.analogfilter = 0
 
-
-smua.AUTORANGE_ON = nil
-smua.AUTORANGE_OFF = nil
 smua.AUTORANGE_FOLLOW_LIMIT = nil
+smua.AUTORANGE_OFF = nil
+smua.AUTORANGE_ON = nil
 
 ---@alias smuameasureautorangevautoRange
----|`smua.AUTORANGE_ON`
----|`smua.AUTORANGE_OFF`
 ---|`smua.AUTORANGE_FOLLOW_LIMIT`
+---|`smua.AUTORANGE_OFF`
+---|`smua.AUTORANGE_ON`
 
 
 
@@ -5466,18 +5276,15 @@ smua.AUTORANGE_FOLLOW_LIMIT = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
----@type smuameasureautorangevautoRange
-smua.measure.autorangev = 0
 
-
-smua.AUTORANGE_ON = nil
-smua.AUTORANGE_OFF = nil
 smua.AUTORANGE_FOLLOW_LIMIT = nil
+smua.AUTORANGE_OFF = nil
+smua.AUTORANGE_ON = nil
 
 ---@alias smuameasureautorangeiautoRange
----|`smua.AUTORANGE_ON`
----|`smua.AUTORANGE_OFF`
 ---|`smua.AUTORANGE_FOLLOW_LIMIT`
+---|`smua.AUTORANGE_OFF`
+---|`smua.AUTORANGE_ON`
 
 
 
@@ -5496,18 +5303,15 @@ smua.AUTORANGE_FOLLOW_LIMIT = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
----@type smuameasureautorangeiautoRange
-smua.measure.autorangei = 0
-
 
 smua.AUTOZERO_OFF = nil
-smua.AUTOZERO_ONCE = nil
 smua.AUTOZERO_AUTO = nil
+smua.AUTOZERO_ONCE = nil
 
 ---@alias smuameasureautozeroazMode
 ---|`smua.AUTOZERO_OFF`
----|`smua.AUTOZERO_ONCE`
 ---|`smua.AUTOZERO_AUTO`
+---|`smua.AUTOZERO_ONCE`
 
 
 
@@ -5526,9 +5330,6 @@ smua.AUTOZERO_AUTO = nil
 --- 
 --- --Performs autozero once for SMU channel A.
 --- ```
----@type smuameasureautozeroazMode
-smua.measure.autozero = 0
-
 
 
 --- **This function generates and activates new measurement calibration constants.**
@@ -5600,9 +5401,6 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets a 10 ms measurement delay for SMU channel A.
 --- ```
----@type smuameasuredelaymDelay
-smua.measure.delay = 0
-
 
 
 --- **This attribute stores a multiplier to the delays that are used when smuX.measure.delay is set to smuX.DELAY_AUTO.**
@@ -5620,8 +5418,6 @@ smua.measure.delay = 0
 --- 
 --- --Doubles the measure delay for SMU channel A.
 --- ```
-smua.measure.delayfactor = 0
-
 
 
 --- **This attribute contains a delay multiplier that is only used during range changes when the high-capacitance mode is active.**
@@ -5639,8 +5435,6 @@ smua.measure.delayfactor = 0
 --- 
 --- --Increases the delay used during range changes for SMU channel A by a factor of 5.
 --- ```
-smua.measure.highcrangedelayfactor = 0
-
 
 
 --- **This attribute sets the interval between multiple measurements.**
@@ -5658,27 +5452,6 @@ smua.measure.highcrangedelayfactor = 0
 --- 
 --- --Sets the measure interval for SMU channel A to 0.5 s.
 --- ```
-smua.measure.interval = 0
-
-
-
---- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- This attribute is used with autoranging to put a lower bound on the range used. Since lower ranges generally require greater settling times, setting a lowest range limit might make measurements require less settling time.If the instrument is set to autorange and it is on a range lower than the one specified, the range is changed to the lowRange range value.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15118.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.lowrangev = 1
---- 
---- --Sets voltage low range for SMU channel A to 1 V.
---- ```
-smua.measure.lowrangev = 0
-
 
 
 --- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
@@ -5696,8 +5469,23 @@ smua.measure.lowrangev = 0
 --- 
 --- --Sets voltage low range for SMU channel A to 1 V.
 --- ```
-smua.measure.lowrangei = 0
 
+
+--- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This attribute is used with autoranging to put a lower bound on the range used. Since lower ranges generally require greater settling times, setting a lowest range limit might make measurements require less settling time.If the instrument is set to autorange and it is on a range lower than the one specified, the range is changed to the lowRange range value.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15118.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.measure.lowrangev = 1
+--- 
+--- --Sets voltage low range for SMU channel A to 1 V.
+--- ```
 
 
 --- **This command sets the integration aperture for measurements.**
@@ -5715,27 +5503,6 @@ smua.measure.lowrangei = 0
 --- 
 --- --Sets the integration time for SMU channel A to 0.5.
 --- ```
-smua.measure.nplc = 0
-
-
-
---- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- Reading this attribute returns the positive full-scale value of the measurement range that the SMU is currently using. Assigning a value to this attribute sets the SMU on a fixed range large enough to measure the assigned value. The instrument selects the best range for measuring a value of rangeValue.This attribute is primarily intended to eliminate the time that is required by the automatic range selection performed by a measuring instrument. Because selecting a fixed range prevents autoranging, an overrange condition can occur. For example, measuring 10.0 V on the 2601B, 2602B, or 2604B 6 V range or measuring 5.0 V on the 2611B, 2612B, or 2614B 2 V range causes an overrange. The value 9.91000E+37 is returned when this occurs. If the source function is the same as the measurement function (for example, sourcing voltage and measuring voltage), the measurement range is locked to be the same as the source range. However, the setting for the measure range is retained. If the source function is changed (for example, from sourcing voltage to sourcing current), the retained measurement range is used.2601B, 2602B, or 2604B example: Assume the source function is voltage. The source range is 1 V and you set the measure range for 6 V. Since the source range is 1 V, the SMU performs voltage measurements on the 1 V range. If you now change the source function to current, voltage measurements are made on the 6 V range.Explicitly setting a measure range disables measure autoranging for that function. Autoranging is controlled separately for each source and measurement function: source voltage, source current, measure voltage and measure current. Autoranging is enabled for all four by default.Changing the range while the output is off does not update the hardware settings, but querying returns the range setting that is used when the output is turned on. Setting a range while the output is on takes effect immediately.With measure autoranging enabled, the range is changed only when a measurement is made. Querying the range after a measurement returns the range selected for that measurement.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15121.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.rangev = 0.5 
---- 
---- --Selects the 1 V measurement range for SMU channel A.
---- ```
-smua.measure.rangev = 0
-
 
 
 --- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
@@ -5753,8 +5520,23 @@ smua.measure.rangev = 0
 --- 
 --- --Selects the 1 V measurement range for SMU channel A.
 --- ```
-smua.measure.rangei = 0
 
+
+--- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- Reading this attribute returns the positive full-scale value of the measurement range that the SMU is currently using. Assigning a value to this attribute sets the SMU on a fixed range large enough to measure the assigned value. The instrument selects the best range for measuring a value of rangeValue.This attribute is primarily intended to eliminate the time that is required by the automatic range selection performed by a measuring instrument. Because selecting a fixed range prevents autoranging, an overrange condition can occur. For example, measuring 10.0 V on the 2601B, 2602B, or 2604B 6 V range or measuring 5.0 V on the 2611B, 2612B, or 2614B 2 V range causes an overrange. The value 9.91000E+37 is returned when this occurs. If the source function is the same as the measurement function (for example, sourcing voltage and measuring voltage), the measurement range is locked to be the same as the source range. However, the setting for the measure range is retained. If the source function is changed (for example, from sourcing voltage to sourcing current), the retained measurement range is used.2601B, 2602B, or 2604B example: Assume the source function is voltage. The source range is 1 V and you set the measure range for 6 V. Since the source range is 1 V, the SMU performs voltage measurements on the 1 V range. If you now change the source function to current, voltage measurements are made on the 6 V range.Explicitly setting a measure range disables measure autoranging for that function. Autoranging is controlled separately for each source and measurement function: source voltage, source current, measure voltage and measure current. Autoranging is enabled for all four by default.Changing the range while the output is off does not update the hardware settings, but querying returns the range setting that is used when the output is turned on. Setting a range while the output is on takes effect immediately.With measure autoranging enabled, the range is changed only when a measurement is made. Querying the range after a measurement returns the range selected for that measurement.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15121.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.measure.rangev = 0.5 
+--- 
+--- --Selects the 1 V measurement range for SMU channel A.
+--- ```
 
 
 --- **This function makes one or more measurements.**
@@ -5774,8 +5556,8 @@ smua.measure.rangei = 0
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smua.measure.v(readingBuffer) end
 
 
@@ -5796,8 +5578,8 @@ function smua.measure.v(readingBuffer) end
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smua.measure.i(readingBuffer) end
 
 
@@ -5818,8 +5600,8 @@ function smua.measure.i(readingBuffer) end
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smua.measure.r(readingBuffer) end
 
 
@@ -5840,8 +5622,8 @@ function smua.measure.r(readingBuffer) end
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smua.measure.p(readingBuffer) end
 
 
@@ -5863,12 +5645,12 @@ function smua.measure.p(readingBuffer) end
 --- ```
 ---@return number iReading The last reading of the current measurement process
 ---@return number vReading The last reading of the voltage measurement process
----@param iReadingBuffer bufferMethods A reading buffer object where current readings are stored
----@param vReadingBuffer bufferMethods A reading buffer object where voltage readings are stored
----@overload fun():number
----@overload fun():number
----@overload fun(readingBuffer:bufferMethods):number
----@overload fun(iReadingBuffer:bufferMethods):number
+---@param iReadingBuffer bufferVar A reading buffer object where current readings are stored
+---@param vReadingBuffer bufferVar A reading buffer object where voltage readings are stored
+---@overload fun():iReading:number, vReading:number
+---@overload fun():iReading:number, vReading:number
+---@overload fun(readingBuffer:bufferVar):iReading:number, vReading:number
+---@overload fun(iReadingBuffer:bufferVar):iReading:number, vReading:number
 function smua.measure.iv(iReadingBuffer, vReadingBuffer) end
 
 
@@ -5887,8 +5669,6 @@ function smua.measure.iv(iReadingBuffer, vReadingBuffer) end
 --- 
 --- --Sets the SMU channel A measure count to 10.
 --- ```
-smua.measure.count = 0
-
 ---@class smub.measure
 smub.measure = {}
 
@@ -5908,17 +5688,15 @@ smub.measure = {}
 --- 
 --- --Turns off the SMU channel A analog filter.
 --- ```
-smub.measure.analogfilter = 0
 
-
-smub.AUTORANGE_ON = nil
-smub.AUTORANGE_OFF = nil
 smub.AUTORANGE_FOLLOW_LIMIT = nil
+smub.AUTORANGE_OFF = nil
+smub.AUTORANGE_ON = nil
 
 ---@alias smubmeasureautorangevautoRange
----|`smub.AUTORANGE_ON`
----|`smub.AUTORANGE_OFF`
 ---|`smub.AUTORANGE_FOLLOW_LIMIT`
+---|`smub.AUTORANGE_OFF`
+---|`smub.AUTORANGE_ON`
 
 
 
@@ -5937,18 +5715,15 @@ smub.AUTORANGE_FOLLOW_LIMIT = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
----@type smubmeasureautorangevautoRange
-smub.measure.autorangev = 0
 
-
-smub.AUTORANGE_ON = nil
-smub.AUTORANGE_OFF = nil
 smub.AUTORANGE_FOLLOW_LIMIT = nil
+smub.AUTORANGE_OFF = nil
+smub.AUTORANGE_ON = nil
 
 ---@alias smubmeasureautorangeiautoRange
----|`smub.AUTORANGE_ON`
----|`smub.AUTORANGE_OFF`
 ---|`smub.AUTORANGE_FOLLOW_LIMIT`
+---|`smub.AUTORANGE_OFF`
+---|`smub.AUTORANGE_ON`
 
 
 
@@ -5967,18 +5742,15 @@ smub.AUTORANGE_FOLLOW_LIMIT = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
----@type smubmeasureautorangeiautoRange
-smub.measure.autorangei = 0
-
 
 smub.AUTOZERO_OFF = nil
-smub.AUTOZERO_ONCE = nil
 smub.AUTOZERO_AUTO = nil
+smub.AUTOZERO_ONCE = nil
 
 ---@alias smubmeasureautozeroazMode
 ---|`smub.AUTOZERO_OFF`
----|`smub.AUTOZERO_ONCE`
 ---|`smub.AUTOZERO_AUTO`
+---|`smub.AUTOZERO_ONCE`
 
 
 
@@ -5997,9 +5769,6 @@ smub.AUTOZERO_AUTO = nil
 --- 
 --- --Performs autozero once for SMU channel A.
 --- ```
----@type smubmeasureautozeroazMode
-smub.measure.autozero = 0
-
 
 
 --- **This function generates and activates new measurement calibration constants.**
@@ -6071,9 +5840,6 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets a 10 ms measurement delay for SMU channel A.
 --- ```
----@type smubmeasuredelaymDelay
-smub.measure.delay = 0
-
 
 
 --- **This attribute stores a multiplier to the delays that are used when smuX.measure.delay is set to smuX.DELAY_AUTO.**
@@ -6091,8 +5857,6 @@ smub.measure.delay = 0
 --- 
 --- --Doubles the measure delay for SMU channel A.
 --- ```
-smub.measure.delayfactor = 0
-
 
 
 --- **This attribute contains a delay multiplier that is only used during range changes when the high-capacitance mode is active.**
@@ -6110,8 +5874,6 @@ smub.measure.delayfactor = 0
 --- 
 --- --Increases the delay used during range changes for SMU channel A by a factor of 5.
 --- ```
-smub.measure.highcrangedelayfactor = 0
-
 
 
 --- **This attribute sets the interval between multiple measurements.**
@@ -6129,27 +5891,6 @@ smub.measure.highcrangedelayfactor = 0
 --- 
 --- --Sets the measure interval for SMU channel A to 0.5 s.
 --- ```
-smub.measure.interval = 0
-
-
-
---- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- This attribute is used with autoranging to put a lower bound on the range used. Since lower ranges generally require greater settling times, setting a lowest range limit might make measurements require less settling time.If the instrument is set to autorange and it is on a range lower than the one specified, the range is changed to the lowRange range value.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15118.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.lowrangev = 1
---- 
---- --Sets voltage low range for SMU channel A to 1 V.
---- ```
-smub.measure.lowrangev = 0
-
 
 
 --- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
@@ -6167,8 +5908,23 @@ smub.measure.lowrangev = 0
 --- 
 --- --Sets voltage low range for SMU channel A to 1 V.
 --- ```
-smub.measure.lowrangei = 0
 
+
+--- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This attribute is used with autoranging to put a lower bound on the range used. Since lower ranges generally require greater settling times, setting a lowest range limit might make measurements require less settling time.If the instrument is set to autorange and it is on a range lower than the one specified, the range is changed to the lowRange range value.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15118.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.measure.lowrangev = 1
+--- 
+--- --Sets voltage low range for SMU channel A to 1 V.
+--- ```
 
 
 --- **This command sets the integration aperture for measurements.**
@@ -6186,27 +5942,6 @@ smub.measure.lowrangei = 0
 --- 
 --- --Sets the integration time for SMU channel A to 0.5.
 --- ```
-smub.measure.nplc = 0
-
-
-
---- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- Reading this attribute returns the positive full-scale value of the measurement range that the SMU is currently using. Assigning a value to this attribute sets the SMU on a fixed range large enough to measure the assigned value. The instrument selects the best range for measuring a value of rangeValue.This attribute is primarily intended to eliminate the time that is required by the automatic range selection performed by a measuring instrument. Because selecting a fixed range prevents autoranging, an overrange condition can occur. For example, measuring 10.0 V on the 2601B, 2602B, or 2604B 6 V range or measuring 5.0 V on the 2611B, 2612B, or 2614B 2 V range causes an overrange. The value 9.91000E+37 is returned when this occurs. If the source function is the same as the measurement function (for example, sourcing voltage and measuring voltage), the measurement range is locked to be the same as the source range. However, the setting for the measure range is retained. If the source function is changed (for example, from sourcing voltage to sourcing current), the retained measurement range is used.2601B, 2602B, or 2604B example: Assume the source function is voltage. The source range is 1 V and you set the measure range for 6 V. Since the source range is 1 V, the SMU performs voltage measurements on the 1 V range. If you now change the source function to current, voltage measurements are made on the 6 V range.Explicitly setting a measure range disables measure autoranging for that function. Autoranging is controlled separately for each source and measurement function: source voltage, source current, measure voltage and measure current. Autoranging is enabled for all four by default.Changing the range while the output is off does not update the hardware settings, but querying returns the range setting that is used when the output is turned on. Setting a range while the output is on takes effect immediately.With measure autoranging enabled, the range is changed only when a measurement is made. Querying the range after a measurement returns the range selected for that measurement.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15121.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.rangev = 0.5 
---- 
---- --Selects the 1 V measurement range for SMU channel A.
---- ```
-smub.measure.rangev = 0
-
 
 
 --- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
@@ -6224,8 +5959,23 @@ smub.measure.rangev = 0
 --- 
 --- --Selects the 1 V measurement range for SMU channel A.
 --- ```
-smub.measure.rangei = 0
 
+
+--- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- Reading this attribute returns the positive full-scale value of the measurement range that the SMU is currently using. Assigning a value to this attribute sets the SMU on a fixed range large enough to measure the assigned value. The instrument selects the best range for measuring a value of rangeValue.This attribute is primarily intended to eliminate the time that is required by the automatic range selection performed by a measuring instrument. Because selecting a fixed range prevents autoranging, an overrange condition can occur. For example, measuring 10.0 V on the 2601B, 2602B, or 2604B 6 V range or measuring 5.0 V on the 2611B, 2612B, or 2614B 2 V range causes an overrange. The value 9.91000E+37 is returned when this occurs. If the source function is the same as the measurement function (for example, sourcing voltage and measuring voltage), the measurement range is locked to be the same as the source range. However, the setting for the measure range is retained. If the source function is changed (for example, from sourcing voltage to sourcing current), the retained measurement range is used.2601B, 2602B, or 2604B example: Assume the source function is voltage. The source range is 1 V and you set the measure range for 6 V. Since the source range is 1 V, the SMU performs voltage measurements on the 1 V range. If you now change the source function to current, voltage measurements are made on the 6 V range.Explicitly setting a measure range disables measure autoranging for that function. Autoranging is controlled separately for each source and measurement function: source voltage, source current, measure voltage and measure current. Autoranging is enabled for all four by default.Changing the range while the output is off does not update the hardware settings, but querying returns the range setting that is used when the output is turned on. Setting a range while the output is on takes effect immediately.With measure autoranging enabled, the range is changed only when a measurement is made. Querying the range after a measurement returns the range selected for that measurement.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15121.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.measure.rangev = 0.5 
+--- 
+--- --Selects the 1 V measurement range for SMU channel A.
+--- ```
 
 
 --- **This function makes one or more measurements.**
@@ -6245,8 +5995,8 @@ smub.measure.rangei = 0
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smub.measure.v(readingBuffer) end
 
 
@@ -6267,8 +6017,8 @@ function smub.measure.v(readingBuffer) end
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smub.measure.i(readingBuffer) end
 
 
@@ -6289,8 +6039,8 @@ function smub.measure.i(readingBuffer) end
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smub.measure.r(readingBuffer) end
 
 
@@ -6311,8 +6061,8 @@ function smub.measure.r(readingBuffer) end
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
 ---@return any reading Returned value of the last (or only) reading of the measurement process
----@param readingBuffer bufferMethods A reading buffer object where all readings are stored
----@overload fun():any
+---@param readingBuffer bufferVar A reading buffer object where all readings are stored
+---@overload fun():reading:any
 function smub.measure.p(readingBuffer) end
 
 
@@ -6334,12 +6084,12 @@ function smub.measure.p(readingBuffer) end
 --- ```
 ---@return number iReading The last reading of the current measurement process
 ---@return number vReading The last reading of the voltage measurement process
----@param iReadingBuffer bufferMethods A reading buffer object where current readings are stored
----@param vReadingBuffer bufferMethods A reading buffer object where voltage readings are stored
----@overload fun():number
----@overload fun():number
----@overload fun(readingBuffer:bufferMethods):number
----@overload fun(iReadingBuffer:bufferMethods):number
+---@param iReadingBuffer bufferVar A reading buffer object where current readings are stored
+---@param vReadingBuffer bufferVar A reading buffer object where voltage readings are stored
+---@overload fun():iReading:number, vReading:number
+---@overload fun():iReading:number, vReading:number
+---@overload fun(readingBuffer:bufferVar):iReading:number, vReading:number
+---@overload fun(iReadingBuffer:bufferVar):iReading:number, vReading:number
 function smub.measure.iv(iReadingBuffer, vReadingBuffer) end
 
 
@@ -6358,17 +6108,15 @@ function smub.measure.iv(iReadingBuffer, vReadingBuffer) end
 --- 
 --- --Sets the SMU channel A measure count to 10.
 --- ```
-smub.measure.count = 0
-
 ---@class smua.source
 smua.source = {}
 
-smua.AUTORANGE_ON = nil
 smua.AUTORANGE_OFF = nil
+smua.AUTORANGE_ON = nil
 
 ---@alias smuasourceautorangevsourceAutorange
----|`smua.AUTORANGE_ON`
 ---|`smua.AUTORANGE_OFF`
+---|`smua.AUTORANGE_ON`
 
 
 
@@ -6387,16 +6135,13 @@ smua.AUTORANGE_OFF = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
----@type smuasourceautorangevsourceAutorange
-smua.source.autorangev = 0
 
-
-smua.AUTORANGE_ON = nil
 smua.AUTORANGE_OFF = nil
+smua.AUTORANGE_ON = nil
 
 ---@alias smuasourceautorangeisourceAutorange
----|`smua.AUTORANGE_ON`
 ---|`smua.AUTORANGE_OFF`
+---|`smua.AUTORANGE_ON`
 
 
 
@@ -6415,9 +6160,6 @@ smua.AUTORANGE_OFF = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
----@type smuasourceautorangeisourceAutorange
-smua.source.autorangei = 0
-
 
 
 --- **This attribute contains the state of source compliance. **
@@ -6440,8 +6182,6 @@ smua.source.autorangei = 0
 --- --true
 --- --This output indicates that a configured limit has been reached (voltage, current, or power limit).
 --- ```
-smua.source.compliance = 0
-
 
 smua.DELAY_OFF = nil
 smua.DELAY_AUTO = nil
@@ -6467,9 +6207,6 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets the delay for SMU channel A to automatic (a range-dependent delay is inserted whenever the source is changed).
 --- ```
----@type smuasourcedelaysDelay
-smua.source.delay = 0
-
 
 
 --- **This function generates and activates new source calibration constants.**
@@ -6517,12 +6254,12 @@ function smua.source.calibratev(range, cp1Expected, cp1Reference, cp2Expected, c
 ---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smua.source.calibratei(range, cp1Expected, cp1Reference, cp2Expected, cp2Reference) end
 
-smua.OUTPUT_DCVOLTS = nil
 smua.OUTPUT_DCAMPS = nil
+smua.OUTPUT_DCVOLTS = nil
 
 ---@alias smuasourcefuncsFunction
----|`smua.OUTPUT_DCVOLTS`
 ---|`smua.OUTPUT_DCAMPS`
+---|`smua.OUTPUT_DCVOLTS`
 
 
 
@@ -6541,16 +6278,13 @@ smua.OUTPUT_DCAMPS = nil
 --- 
 --- --Sets the source function of SMU channel A to be a current source.
 --- ```
----@type smuasourcefuncsFunction
-smua.source.func = 0
 
-
-smua.DISABLE = nil
 smua.ENABLE = nil
+smua.DISABLE = nil
 
 ---@alias smuasourcehighchighC
----|`smua.DISABLE`
 ---|`smua.ENABLE`
+---|`smua.DISABLE`
 
 
 
@@ -6569,9 +6303,6 @@ smua.ENABLE = nil
 --- 
 --- --Activates high-capacitance mode for SMU channel A.
 --- ```
----@type smuasourcehighchighC
-smua.source.highc = 0
-
 
 
 --- **This attribute sets the source level.**
@@ -6589,8 +6320,6 @@ smua.source.highc = 0
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
-smua.source.levelv = 0
-
 
 
 --- **This attribute sets the source level.**
@@ -6608,27 +6337,6 @@ smua.source.levelv = 0
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
-smua.source.leveli = 0
-
-
-
---- **This attribute sets the lowest source range that is used during autoranging.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- This attribute is used with source autoranging to put a lower bound on the range that is used. Lower ranges generally require greater settling times. If you set a low range value, you might be able to source small values with less settling time.If the instrument is set to autorange and it is on a range lower than the one specified by sourceRangeLow, the source range is changed to the range specified by sourceRangeLow.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15148.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.source.lowrangev = 1
---- 
---- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
---- ```
-smua.source.lowrangev = 0
-
 
 
 --- **This attribute sets the lowest source range that is used during autoranging.**
@@ -6646,8 +6354,23 @@ smua.source.lowrangev = 0
 --- 
 --- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
 --- ```
-smua.source.lowrangei = 0
 
+
+--- **This attribute sets the lowest source range that is used during autoranging.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This attribute is used with source autoranging to put a lower bound on the range that is used. Lower ranges generally require greater settling times. If you set a low range value, you might be able to source small values with less settling time.If the instrument is set to autorange and it is on a range lower than the one specified by sourceRangeLow, the source range is changed to the range specified by sourceRangeLow.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15148.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.source.lowrangev = 1
+--- 
+--- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
+--- ```
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -6665,8 +6388,6 @@ smua.source.lowrangei = 0
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
-smua.source.offlimitv = 0
-
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -6684,17 +6405,15 @@ smua.source.offlimitv = 0
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
-smua.source.offlimiti = 0
-
 
 smua.OUTPUT_NORMAL = nil
-smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_ZERO = nil
+smua.OUTPUT_HIGH_Z = nil
 
 ---@alias smuasourceoffmodesourceOffMode
 ---|`smua.OUTPUT_NORMAL`
----|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_ZERO`
+---|`smua.OUTPUT_HIGH_Z`
 
 
 
@@ -6713,18 +6432,15 @@ smua.OUTPUT_ZERO = nil
 --- 
 --- --Sets the output‑off mode for SMU channel A to open the output relay when the output is turned off.
 --- ```
----@type smuasourceoffmodesourceOffMode
-smua.source.offmode = 0
 
-
-smua.OUTPUT_OFF = nil
 smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_ON = nil
+smua.OUTPUT_OFF = nil
 
 ---@alias smuasourceoutputsourceOutput
----|`smua.OUTPUT_OFF`
 ---|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_ON`
+---|`smua.OUTPUT_OFF`
 
 
 
@@ -6743,9 +6459,6 @@ smua.OUTPUT_ON = nil
 --- 
 --- --Turns on the SMU channel A source output.
 --- ```
----@type smuasourceoutputsourceOutput
-smua.source.output = 0
-
 
 smua.OE_NONE = nil
 smua.OE_OUTPUT_OFF = nil
@@ -6771,9 +6484,6 @@ smua.OE_OUTPUT_OFF = nil
 --- 
 --- --Sets SMU channel A to turn off the output if the output enable line goes low (deasserted).
 --- ```
----@type smuasourceoutputenableactionoutputAction
-smua.source.outputenableaction = 0
-
 
 
 --- **This attribute contains the source range.**
@@ -6791,8 +6501,6 @@ smua.source.outputenableaction = 0
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
-smua.source.rangev = 0
-
 
 
 --- **This attribute contains the source range.**
@@ -6810,22 +6518,20 @@ smua.source.rangev = 0
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
-smua.source.rangei = 0
 
-
-smua.SETTLE_SMOOTH_100NA = nil
+smua.SETTLE_FAST_POLARITY = nil
 smua.SETTLE_FAST_ = nil
 smua.SETTLE_FAST_ALL = nil
-smua.SETTLE_FAST_POLARITY = nil
+smua.SETTLE_SMOOTH_100NA = nil
 smua.SETTLE_DIRECT_IRANGE = nil
 smua.SETTLE_SMOOTH = nil
 smua.SETTLE_FAST_RANGE = nil
 
 ---@alias smuasourcesettlingsettleOption
----|`smua.SETTLE_SMOOTH_100NA`
+---|`smua.SETTLE_FAST_POLARITY`
 ---|`smua.SETTLE_FAST_`
 ---|`smua.SETTLE_FAST_ALL`
----|`smua.SETTLE_FAST_POLARITY`
+---|`smua.SETTLE_SMOOTH_100NA`
 ---|`smua.SETTLE_DIRECT_IRANGE`
 ---|`smua.SETTLE_SMOOTH`
 ---|`smua.SETTLE_FAST_RANGE`
@@ -6847,16 +6553,13 @@ smua.SETTLE_FAST_RANGE = nil
 --- 
 --- --Selects fast polarity changing for SMU channel A.
 --- ```
----@type smuasourcesettlingsettleOption
-smua.source.settling = 0
 
-
-smua.DISABLE = nil
 smua.ENABLE = nil
+smua.DISABLE = nil
 
 ---@alias smuasourcesinksinkMode
----|`smua.DISABLE`
 ---|`smua.ENABLE`
+---|`smua.DISABLE`
 
 
 
@@ -6875,9 +6578,6 @@ smua.ENABLE = nil
 --- 
 --- --Enables sink mode for SMU channel A.
 --- ```
----@type smuasourcesinksinkMode
-smua.source.sink = 0
-
 
 
 --- **This attribute sets compliance limits.**
@@ -6895,27 +6595,6 @@ smua.source.sink = 0
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
-smua.source.limitv = 0
-
-
-
---- **This attribute sets compliance limits.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- Use the smuX.source.limiti attribute to limit the current output of the voltage source. Use smuX.source.limitv to limit the voltage output of the current source. The SMU always uses autoranging for the limit setting. Use the smuX.source.limitp attribute to limit the output power of the source.Set this attribute in the test sequence before the turning the source on.Using a limit value of 0 results in error code 1102, "Parameter too small," for v and i. Setting this attribute to zero disables power compliance for p. When setting the power compliance limit to a nonzero value, the SMU adjusts the source limit where appropriate to limit the output to the specified power. The SMU uses the lower of the programmed compliance value (the compliance level that is if power compliance is disabled) or the limit calculated from the power compliance setting.Reading this attribute indicates the presently set compliance value. Use smuX.source.compliance to read the state of source compliance.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/17115.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.source.limitv = 15
---- 
---- --Sets the voltage limit of SMU channel A to 15 V.
---- ```
-smua.source.limiti = 0
-
 
 
 --- **This attribute sets compliance limits.**
@@ -6933,15 +6612,30 @@ smua.source.limiti = 0
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
-smua.source.limitp = 0
 
 
-smua.OUTPUT_DCVOLTS = nil
+--- **This attribute sets compliance limits.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- Use the smuX.source.limiti attribute to limit the current output of the voltage source. Use smuX.source.limitv to limit the voltage output of the current source. The SMU always uses autoranging for the limit setting. Use the smuX.source.limitp attribute to limit the output power of the source.Set this attribute in the test sequence before the turning the source on.Using a limit value of 0 results in error code 1102, "Parameter too small," for v and i. Setting this attribute to zero disables power compliance for p. When setting the power compliance limit to a nonzero value, the SMU adjusts the source limit where appropriate to limit the output to the specified power. The SMU uses the lower of the programmed compliance value (the compliance level that is if power compliance is disabled) or the limit calculated from the power compliance setting.Reading this attribute indicates the presently set compliance value. Use smuX.source.compliance to read the state of source compliance.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/17115.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.source.limitv = 15
+--- 
+--- --Sets the voltage limit of SMU channel A to 15 V.
+--- ```
+
 smua.OUTPUT_DCAMPS = nil
+smua.OUTPUT_DCVOLTS = nil
 
 ---@alias smuasourceofffuncofffunc
----|`smua.OUTPUT_DCVOLTS`
 ---|`smua.OUTPUT_DCAMPS`
+---|`smua.OUTPUT_DCVOLTS`
 
 
 
@@ -6961,18 +6655,15 @@ smua.OUTPUT_DCAMPS = nil
 --- 
 --- --Sets the normal output-off mode to source 0 V when the output is turned off for SMU channel A.
 --- ```
----@type smuasourceofffuncofffunc
-smua.source.offfunc = 0
-
 ---@class smub.source
 smub.source = {}
 
-smub.AUTORANGE_ON = nil
 smub.AUTORANGE_OFF = nil
+smub.AUTORANGE_ON = nil
 
 ---@alias smubsourceautorangevsourceAutorange
----|`smub.AUTORANGE_ON`
 ---|`smub.AUTORANGE_OFF`
+---|`smub.AUTORANGE_ON`
 
 
 
@@ -6991,16 +6682,13 @@ smub.AUTORANGE_OFF = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
----@type smubsourceautorangevsourceAutorange
-smub.source.autorangev = 0
 
-
-smub.AUTORANGE_ON = nil
 smub.AUTORANGE_OFF = nil
+smub.AUTORANGE_ON = nil
 
 ---@alias smubsourceautorangeisourceAutorange
----|`smub.AUTORANGE_ON`
 ---|`smub.AUTORANGE_OFF`
+---|`smub.AUTORANGE_ON`
 
 
 
@@ -7019,9 +6707,6 @@ smub.AUTORANGE_OFF = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
----@type smubsourceautorangeisourceAutorange
-smub.source.autorangei = 0
-
 
 
 --- **This attribute contains the state of source compliance. **
@@ -7044,8 +6729,6 @@ smub.source.autorangei = 0
 --- --true
 --- --This output indicates that a configured limit has been reached (voltage, current, or power limit).
 --- ```
-smub.source.compliance = 0
-
 
 smub.DELAY_OFF = nil
 smub.DELAY_AUTO = nil
@@ -7071,9 +6754,6 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets the delay for SMU channel A to automatic (a range-dependent delay is inserted whenever the source is changed).
 --- ```
----@type smubsourcedelaysDelay
-smub.source.delay = 0
-
 
 
 --- **This function generates and activates new source calibration constants.**
@@ -7121,12 +6801,12 @@ function smub.source.calibratev(range, cp1Expected, cp1Reference, cp2Expected, c
 ---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smub.source.calibratei(range, cp1Expected, cp1Reference, cp2Expected, cp2Reference) end
 
-smub.OUTPUT_DCVOLTS = nil
 smub.OUTPUT_DCAMPS = nil
+smub.OUTPUT_DCVOLTS = nil
 
 ---@alias smubsourcefuncsFunction
----|`smub.OUTPUT_DCVOLTS`
 ---|`smub.OUTPUT_DCAMPS`
+---|`smub.OUTPUT_DCVOLTS`
 
 
 
@@ -7145,16 +6825,13 @@ smub.OUTPUT_DCAMPS = nil
 --- 
 --- --Sets the source function of SMU channel A to be a current source.
 --- ```
----@type smubsourcefuncsFunction
-smub.source.func = 0
 
-
-smub.DISABLE = nil
 smub.ENABLE = nil
+smub.DISABLE = nil
 
 ---@alias smubsourcehighchighC
----|`smub.DISABLE`
 ---|`smub.ENABLE`
+---|`smub.DISABLE`
 
 
 
@@ -7173,9 +6850,6 @@ smub.ENABLE = nil
 --- 
 --- --Activates high-capacitance mode for SMU channel A.
 --- ```
----@type smubsourcehighchighC
-smub.source.highc = 0
-
 
 
 --- **This attribute sets the source level.**
@@ -7193,8 +6867,6 @@ smub.source.highc = 0
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
-smub.source.levelv = 0
-
 
 
 --- **This attribute sets the source level.**
@@ -7212,27 +6884,6 @@ smub.source.levelv = 0
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
-smub.source.leveli = 0
-
-
-
---- **This attribute sets the lowest source range that is used during autoranging.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- This attribute is used with source autoranging to put a lower bound on the range that is used. Lower ranges generally require greater settling times. If you set a low range value, you might be able to source small values with less settling time.If the instrument is set to autorange and it is on a range lower than the one specified by sourceRangeLow, the source range is changed to the range specified by sourceRangeLow.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15148.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.source.lowrangev = 1
---- 
---- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
---- ```
-smub.source.lowrangev = 0
-
 
 
 --- **This attribute sets the lowest source range that is used during autoranging.**
@@ -7250,8 +6901,23 @@ smub.source.lowrangev = 0
 --- 
 --- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
 --- ```
-smub.source.lowrangei = 0
 
+
+--- **This attribute sets the lowest source range that is used during autoranging.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This attribute is used with source autoranging to put a lower bound on the range that is used. Lower ranges generally require greater settling times. If you set a low range value, you might be able to source small values with less settling time.If the instrument is set to autorange and it is on a range lower than the one specified by sourceRangeLow, the source range is changed to the range specified by sourceRangeLow.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15148.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.source.lowrangev = 1
+--- 
+--- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
+--- ```
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -7269,8 +6935,6 @@ smub.source.lowrangei = 0
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
-smub.source.offlimitv = 0
-
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -7288,17 +6952,15 @@ smub.source.offlimitv = 0
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
-smub.source.offlimiti = 0
-
 
 smub.OUTPUT_NORMAL = nil
-smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_ZERO = nil
+smub.OUTPUT_HIGH_Z = nil
 
 ---@alias smubsourceoffmodesourceOffMode
 ---|`smub.OUTPUT_NORMAL`
----|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_ZERO`
+---|`smub.OUTPUT_HIGH_Z`
 
 
 
@@ -7317,18 +6979,15 @@ smub.OUTPUT_ZERO = nil
 --- 
 --- --Sets the output‑off mode for SMU channel A to open the output relay when the output is turned off.
 --- ```
----@type smubsourceoffmodesourceOffMode
-smub.source.offmode = 0
 
-
-smub.OUTPUT_OFF = nil
 smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_ON = nil
+smub.OUTPUT_OFF = nil
 
 ---@alias smubsourceoutputsourceOutput
----|`smub.OUTPUT_OFF`
 ---|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_ON`
+---|`smub.OUTPUT_OFF`
 
 
 
@@ -7347,9 +7006,6 @@ smub.OUTPUT_ON = nil
 --- 
 --- --Turns on the SMU channel A source output.
 --- ```
----@type smubsourceoutputsourceOutput
-smub.source.output = 0
-
 
 smub.OE_NONE = nil
 smub.OE_OUTPUT_OFF = nil
@@ -7375,9 +7031,6 @@ smub.OE_OUTPUT_OFF = nil
 --- 
 --- --Sets SMU channel A to turn off the output if the output enable line goes low (deasserted).
 --- ```
----@type smubsourceoutputenableactionoutputAction
-smub.source.outputenableaction = 0
-
 
 
 --- **This attribute contains the source range.**
@@ -7395,8 +7048,6 @@ smub.source.outputenableaction = 0
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
-smub.source.rangev = 0
-
 
 
 --- **This attribute contains the source range.**
@@ -7414,22 +7065,20 @@ smub.source.rangev = 0
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
-smub.source.rangei = 0
 
-
-smub.SETTLE_SMOOTH_100NA = nil
+smub.SETTLE_FAST_POLARITY = nil
 smub.SETTLE_FAST_ = nil
 smub.SETTLE_FAST_ALL = nil
-smub.SETTLE_FAST_POLARITY = nil
+smub.SETTLE_SMOOTH_100NA = nil
 smub.SETTLE_DIRECT_IRANGE = nil
 smub.SETTLE_SMOOTH = nil
 smub.SETTLE_FAST_RANGE = nil
 
 ---@alias smubsourcesettlingsettleOption
----|`smub.SETTLE_SMOOTH_100NA`
+---|`smub.SETTLE_FAST_POLARITY`
 ---|`smub.SETTLE_FAST_`
 ---|`smub.SETTLE_FAST_ALL`
----|`smub.SETTLE_FAST_POLARITY`
+---|`smub.SETTLE_SMOOTH_100NA`
 ---|`smub.SETTLE_DIRECT_IRANGE`
 ---|`smub.SETTLE_SMOOTH`
 ---|`smub.SETTLE_FAST_RANGE`
@@ -7451,16 +7100,13 @@ smub.SETTLE_FAST_RANGE = nil
 --- 
 --- --Selects fast polarity changing for SMU channel A.
 --- ```
----@type smubsourcesettlingsettleOption
-smub.source.settling = 0
 
-
-smub.DISABLE = nil
 smub.ENABLE = nil
+smub.DISABLE = nil
 
 ---@alias smubsourcesinksinkMode
----|`smub.DISABLE`
 ---|`smub.ENABLE`
+---|`smub.DISABLE`
 
 
 
@@ -7479,9 +7125,6 @@ smub.ENABLE = nil
 --- 
 --- --Enables sink mode for SMU channel A.
 --- ```
----@type smubsourcesinksinkMode
-smub.source.sink = 0
-
 
 
 --- **This attribute sets compliance limits.**
@@ -7499,27 +7142,6 @@ smub.source.sink = 0
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
-smub.source.limitv = 0
-
-
-
---- **This attribute sets compliance limits.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- Use the smuX.source.limiti attribute to limit the current output of the voltage source. Use smuX.source.limitv to limit the voltage output of the current source. The SMU always uses autoranging for the limit setting. Use the smuX.source.limitp attribute to limit the output power of the source.Set this attribute in the test sequence before the turning the source on.Using a limit value of 0 results in error code 1102, "Parameter too small," for v and i. Setting this attribute to zero disables power compliance for p. When setting the power compliance limit to a nonzero value, the SMU adjusts the source limit where appropriate to limit the output to the specified power. The SMU uses the lower of the programmed compliance value (the compliance level that is if power compliance is disabled) or the limit calculated from the power compliance setting.Reading this attribute indicates the presently set compliance value. Use smuX.source.compliance to read the state of source compliance.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/17115.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.source.limitv = 15
---- 
---- --Sets the voltage limit of SMU channel A to 15 V.
---- ```
-smub.source.limiti = 0
-
 
 
 --- **This attribute sets compliance limits.**
@@ -7537,15 +7159,30 @@ smub.source.limiti = 0
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
-smub.source.limitp = 0
 
 
-smub.OUTPUT_DCVOLTS = nil
+--- **This attribute sets compliance limits.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- Use the smuX.source.limiti attribute to limit the current output of the voltage source. Use smuX.source.limitv to limit the voltage output of the current source. The SMU always uses autoranging for the limit setting. Use the smuX.source.limitp attribute to limit the output power of the source.Set this attribute in the test sequence before the turning the source on.Using a limit value of 0 results in error code 1102, "Parameter too small," for v and i. Setting this attribute to zero disables power compliance for p. When setting the power compliance limit to a nonzero value, the SMU adjusts the source limit where appropriate to limit the output to the specified power. The SMU uses the lower of the programmed compliance value (the compliance level that is if power compliance is disabled) or the limit calculated from the power compliance setting.Reading this attribute indicates the presently set compliance value. Use smuX.source.compliance to read the state of source compliance.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/17115.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.source.limitv = 15
+--- 
+--- --Sets the voltage limit of SMU channel A to 15 V.
+--- ```
+
 smub.OUTPUT_DCAMPS = nil
+smub.OUTPUT_DCVOLTS = nil
 
 ---@alias smubsourceofffuncofffunc
----|`smub.OUTPUT_DCVOLTS`
 ---|`smub.OUTPUT_DCAMPS`
+---|`smub.OUTPUT_DCVOLTS`
 
 
 
@@ -7565,9 +7202,6 @@ smub.OUTPUT_DCAMPS = nil
 --- 
 --- --Sets the normal output-off mode to source 0 V when the output is turned off for SMU channel A.
 --- ```
----@type smubsourceofffuncofffunc
-smub.source.offfunc = 0
-
 ---@class smua.trigger
 smua.trigger = {}
 
@@ -7596,12 +7230,12 @@ trigger.ARMED_EVENT_ID = nil
 ---@type eventID
 smua.trigger.ARMED_EVENT_ID= nil
 
-smua.DISABLE = nil
 smua.ENABLE = nil
+smua.DISABLE = nil
 
 ---@alias smuatriggerautoclearautoClear
----|`smua.DISABLE`
 ---|`smua.ENABLE`
+---|`smua.DISABLE`
 
 
 
@@ -7620,9 +7254,6 @@ smua.ENABLE = nil
 --- 
 --- --Automatically clear the event detectors for the trigger mode state.
 --- ```
----@type smuatriggerautoclearautoClear
-smua.trigger.autoclear = 0
-
 
 
 --- **This attribute sets the trigger count in the trigger model.**
@@ -7674,8 +7305,6 @@ smua.trigger.autoclear = 0
 --- --Start the trigger model.
 --- --Wait for the sweep to complete.
 --- ```
-smua.trigger.count = 0
-
 
 trigger.IDLE_EVENT_ID = nil
 
@@ -7913,12 +7542,12 @@ trigger.ARMED_EVENT_ID = nil
 ---@type eventID
 smub.trigger.ARMED_EVENT_ID= nil
 
-smub.DISABLE = nil
 smub.ENABLE = nil
+smub.DISABLE = nil
 
 ---@alias smubtriggerautoclearautoClear
----|`smub.DISABLE`
 ---|`smub.ENABLE`
+---|`smub.DISABLE`
 
 
 
@@ -7937,9 +7566,6 @@ smub.ENABLE = nil
 --- 
 --- --Automatically clear the event detectors for the trigger mode state.
 --- ```
----@type smubtriggerautoclearautoClear
-smub.trigger.autoclear = 0
-
 
 
 --- **This attribute sets the trigger count in the trigger model.**
@@ -7991,8 +7617,6 @@ smub.trigger.autoclear = 0
 --- --Start the trigger model.
 --- --Wait for the sweep to complete.
 --- ```
-smub.trigger.count = 0
-
 
 trigger.IDLE_EVENT_ID = nil
 
@@ -8838,8 +8462,6 @@ status.operation = {}
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
-status.operation.condition = 0
-
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -8863,8 +8485,6 @@ status.operation.condition = 0
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
-status.operation.enable = 0
-
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -8888,33 +8508,6 @@ status.operation.enable = 0
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
-status.operation.event = 0
-
-
-
---- **These attributes manage the operation status register set of the status model.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes read or write the operation status registers.Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 2.04800e+04 (which is 20,480) is read as the value of the condition register, the binary equivalent is 0101 0000 0000 0000. This value indicates that bit B14 (PROGRAM_RUNNING) and bit B12 (USER) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B12 of the operation status enable register, set status.operation.enable = status.operation.USER.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B12 and B14, set operationRegister to 20,480 (which is the sum of 4,096 + 16,384). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15833.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.USER + status.operation.PROG
---- status.operation.enable = operationRegister
---- 
---- --Uses constants to set the USER and PROG bits of the operation status enable register.
---- -- decimal 20480 = binary 0101 0000 0000 0000
---- operationRegister = 20480
---- status.operation.enable = operationRegister
---- 
---- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
---- ```
-status.operation.ntr = 0
-
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -8938,8 +8531,29 @@ status.operation.ntr = 0
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
-status.operation.ptr = 0
 
+
+--- **These attributes manage the operation status register set of the status model.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes read or write the operation status registers.Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 2.04800e+04 (which is 20,480) is read as the value of the condition register, the binary equivalent is 0101 0000 0000 0000. This value indicates that bit B14 (PROGRAM_RUNNING) and bit B12 (USER) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B12 of the operation status enable register, set status.operation.enable = status.operation.USER.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B12 and B14, set operationRegister to 20,480 (which is the sum of 4,096 + 16,384). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15833.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.USER + status.operation.PROG
+--- status.operation.enable = operationRegister
+--- 
+--- --Uses constants to set the USER and PROG bits of the operation status enable register.
+--- -- decimal 20480 = binary 0101 0000 0000 0000
+--- operationRegister = 20480
+--- status.operation.enable = operationRegister
+--- 
+--- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
+--- ```
 ---@class status.questionable
 status.questionable = {}
 
@@ -8959,8 +8573,6 @@ status.questionable = {}
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
-status.questionable.condition = 0
-
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -8978,8 +8590,6 @@ status.questionable.condition = 0
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
-status.questionable.enable = 0
-
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -8997,27 +8607,6 @@ status.questionable.enable = 0
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
-status.questionable.event = 0
-
-
-
---- **These attributes manage the questionable status register set of the status model.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status registers. Reading a status register returns a value. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.22880e+04 (which is 12,288) is read as the value of the condition register, the binary equivalent is 0011 0000 0000 0000. This value indicates that bits B12 and B13 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B9 of the questionable status enable register, set status.questionable.enable = status.questionable.UO.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B12 and B13, set questionableRegister to 12,288 (which is the sum of 4,096 + 8,192). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15853.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.questionable.enable = status.questionable.OTEMP
---- 
---- --Uses a constant to set the OTEMP bit of the questionable status enable register.
---- ```
-status.questionable.ntr = 0
-
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -9035,8 +8624,23 @@ status.questionable.ntr = 0
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
-status.questionable.ptr = 0
 
+
+--- **These attributes manage the questionable status register set of the status model.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status registers. Reading a status register returns a value. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.22880e+04 (which is 12,288) is read as the value of the condition register, the binary equivalent is 0011 0000 0000 0000. This value indicates that bits B12 and B13 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B9 of the questionable status enable register, set status.questionable.enable = status.questionable.UO.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B12 and B13, set questionableRegister to 12,288 (which is the sum of 4,096 + 8,192). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15853.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.questionable.enable = status.questionable.OTEMP
+--- 
+--- --Uses a constant to set the OTEMP bit of the questionable status enable register.
+--- ```
 ---@class status.standard
 status.standard = {}
 
@@ -9062,8 +8666,6 @@ status.standard = {}
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
-status.standard.condition = 0
-
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -9087,8 +8689,6 @@ status.standard.condition = 0
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
-status.standard.enable = 0
-
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -9112,33 +8712,6 @@ status.standard.enable = 0
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
-status.standard.event = 0
-
-
-
---- **These attributes manage the standard event status register set of the status model.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the standard event status registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the standard event status enable register, set status.standard.enable = status.standard.OPC.In addition to the above constants, standardRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set standardRegister to the sum of their decimal weights. For example, to set bits B0 and B4, set standardRegister to 17 (which is the sum of 1 + 16).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15862.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- standardRegister = status.standard.OPC + status.standard.EXE
---- status.standard.enable = standardRegister
---- 
---- --Uses constants to set the OPC and EXE bits of the standard event status enable register.
---- -- decimal 17 = binary 0001 0001
---- standardRegister = 17
---- status.standard.enable = standardRegister
---- 
---- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
---- ```
-status.standard.ntr = 0
-
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -9162,8 +8735,29 @@ status.standard.ntr = 0
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
-status.standard.ptr = 0
 
+
+--- **These attributes manage the standard event status register set of the status model.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the standard event status registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the standard event status enable register, set status.standard.enable = status.standard.OPC.In addition to the above constants, standardRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set standardRegister to the sum of their decimal weights. For example, to set bits B0 and B4, set standardRegister to 17 (which is the sum of 1 + 16).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15862.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- standardRegister = status.standard.OPC + status.standard.EXE
+--- status.standard.enable = standardRegister
+--- 
+--- --Uses constants to set the OPC and EXE bits of the standard event status enable register.
+--- -- decimal 17 = binary 0001 0001
+--- standardRegister = 17
+--- status.standard.enable = standardRegister
+--- 
+--- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
+--- ```
 ---@class status.system
 status.system = {}
 
@@ -9189,8 +8783,6 @@ status.system = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
-status.system.condition = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9214,8 +8806,6 @@ status.system.condition = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
-status.system.enable = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9239,33 +8829,6 @@ status.system.enable = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
-status.system.event = 0
-
-
-
---- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary status enable register, set status.system.enable = status.system.enable.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15863.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- enableRegister = status.system.NODE11 + status.system.NODE14
---- status.system.enable = enableRegister
---- 
---- --Uses constants to set bits B11 and B14 of the system summary enable register.
---- -- decimal 18432 = binary 0100 1000 0000 0000
---- enableRegister = 18432
---- status.system.enable = enableRegister
---- 
---- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
---- ```
-status.system.ntr = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9289,8 +8852,29 @@ status.system.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
-status.system.ptr = 0
 
+
+--- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary status enable register, set status.system.enable = status.system.enable.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15863.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- enableRegister = status.system.NODE11 + status.system.NODE14
+--- status.system.enable = enableRegister
+--- 
+--- --Uses constants to set bits B11 and B14 of the system summary enable register.
+--- -- decimal 18432 = binary 0100 1000 0000 0000
+--- enableRegister = 18432
+--- status.system.enable = enableRegister
+--- 
+--- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
+--- ```
 ---@class status.system2
 status.system2 = {}
 
@@ -9316,8 +8900,6 @@ status.system2 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
-status.system2.condition = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9341,8 +8923,6 @@ status.system2.condition = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
-status.system2.enable = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9366,33 +8946,6 @@ status.system2.enable = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
-status.system2.event = 0
-
-
-
---- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary 2 enable register, set status.system2.enable = status.system2.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15864.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- enableRegister = status.system2.NODE25 + status.system2.NODE28
---- status.system2.enable = enableRegister 
---- 
---- --Uses constants to set bits B11 and B14 of the system summary 2 enable register.
---- -- decimal 18432 = binary 0100 1000 0000 0000
---- enableRegister = 18432
---- status.system2.enable = enableRegister
---- 
---- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
---- ```
-status.system2.ntr = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9416,8 +8969,29 @@ status.system2.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
-status.system2.ptr = 0
 
+
+--- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary 2 enable register, set status.system2.enable = status.system2.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15864.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- enableRegister = status.system2.NODE25 + status.system2.NODE28
+--- status.system2.enable = enableRegister 
+--- 
+--- --Uses constants to set bits B11 and B14 of the system summary 2 enable register.
+--- -- decimal 18432 = binary 0100 1000 0000 0000
+--- enableRegister = 18432
+--- status.system2.enable = enableRegister
+--- 
+--- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
+--- ```
 ---@class status.system3
 status.system3 = {}
 
@@ -9443,8 +9017,6 @@ status.system3 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
-status.system3.condition = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9468,8 +9040,6 @@ status.system3.condition = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
-status.system3.enable = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9493,33 +9063,6 @@ status.system3.enable = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
-status.system3.event = 0
-
-
-
---- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0 and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary 3 enable register, set status.system3.enable = status.system3.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15865.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- enableRegister = status.system3.NODE39 + status.system3.NODE42
---- status.system3.enable = enableRegister
---- 
---- --Uses constants to set bits B11 and B14 of the system summary 3 enable register.
---- -- decimal 18432 = binary 0100 1000 0000 0000
---- enableRegister = 18432
---- status.system3.enable = enableRegister
---- 
---- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
---- ```
-status.system3.ntr = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9543,8 +9086,29 @@ status.system3.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
-status.system3.ptr = 0
 
+
+--- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0 and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary 3 enable register, set status.system3.enable = status.system3.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15865.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- enableRegister = status.system3.NODE39 + status.system3.NODE42
+--- status.system3.enable = enableRegister
+--- 
+--- --Uses constants to set bits B11 and B14 of the system summary 3 enable register.
+--- -- decimal 18432 = binary 0100 1000 0000 0000
+--- enableRegister = 18432
+--- status.system3.enable = enableRegister
+--- 
+--- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
+--- ```
 ---@class status.system4
 status.system4 = {}
 
@@ -9570,8 +9134,6 @@ status.system4 = {}
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
-status.system4.condition = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9595,8 +9157,6 @@ status.system4.condition = 0
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
-status.system4.enable = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9620,33 +9180,6 @@ status.system4.enable = 0
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
-status.system4.event = 0
-
-
-
---- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary 4 enable register, set status.system4.enable = status.system4.enable.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15866.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- enableRegister = status.system4.NODE53 + status.system4.NODE56
---- status.system2.enable = enableRegister 
---- 
---- --Uses constants to set bit B11 and bit B14 of the system summary 4 enable register.
---- -- decimal 18432 = binary 0100 1000 0000 0000
---- enableRegister = 18432
---- status.system4.enable = enableRegister
---- 
---- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
---- ```
-status.system4.ntr = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9670,8 +9203,29 @@ status.system4.ntr = 0
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
-status.system4.ptr = 0
 
+
+--- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bit B0 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the system summary 4 enable register, set status.system4.enable = status.system4.enable.EXT.In addition to the above constants, enableRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal values. For example, to set bits B11 and B14, set enableRegister to 18,432 (which is the sum of 2,048 + 16,384). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15866.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- enableRegister = status.system4.NODE53 + status.system4.NODE56
+--- status.system2.enable = enableRegister 
+--- 
+--- --Uses constants to set bit B11 and bit B14 of the system summary 4 enable register.
+--- -- decimal 18432 = binary 0100 1000 0000 0000
+--- enableRegister = 18432
+--- status.system4.enable = enableRegister
+--- 
+--- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
+--- ```
 ---@class status.system5
 status.system5 = {}
 
@@ -9697,8 +9251,6 @@ status.system5 = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
-status.system5.condition = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9722,8 +9274,6 @@ status.system5.condition = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
-status.system5.enable = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9747,33 +9297,6 @@ status.system5.enable = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
-status.system5.event = 0
-
-
-
---- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value, but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.30000e+02 (which is 130) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0010. This value indicates that bit B1 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the system summary 5 enable register, set status.system5.enable = status.system5.NODE57.In addition to the above constants, enableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set enableRegister to 18 (which is the sum of 2 + 16).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15867.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- enableRegister = status.system5.NODE57 + status.system5.NODE60
---- status.system2.enable = enableRegister 
---- 
---- --Uses constants to set bits B1 and B4 of the system summary 5 enable register.
---- -- decimal 18 = binary 0000 0000 0001 0010
---- enableRegister = 18
---- status.system5.enable = enableRegister
---- 
---- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
---- ```
-status.system5.ntr = 0
-
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -9797,8 +9320,29 @@ status.system5.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
-status.system5.ptr = 0
 
+
+--- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- In an expanded system (TSP-Link), these attributes are used to read or write to the system summary registers. They are set using a constant or a numeric value, but are returned as a numeric value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.30000e+02 (which is 130) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0010. This value indicates that bit B1 and bit B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the system summary 5 enable register, set status.system5.enable = status.system5.NODE57.In addition to the above constants, enableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set enableRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set enableRegister to 18 (which is the sum of 2 + 16).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15867.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- enableRegister = status.system5.NODE57 + status.system5.NODE60
+--- status.system2.enable = enableRegister 
+--- 
+--- --Uses constants to set bits B1 and B4 of the system summary 5 enable register.
+--- -- decimal 18 = binary 0000 0000 0001 0010
+--- enableRegister = 18
+--- status.system5.enable = enableRegister
+--- 
+--- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
+--- ```
 ---@class smua.buffer
 smua.buffer = {}
 
@@ -9834,7 +9378,7 @@ smua.buffer = {}
 --- --max= -2.322196996829e-05
 --- ```
 ---@return statistics statistics The statistical data about the data in the reading buffer
----@param bufferVar bufferMethods The reading buffer to process
+---@param bufferVar bufferVar The reading buffer to process
 function smua.buffer.getstats(bufferVar) end
 
 
@@ -9853,7 +9397,7 @@ function smua.buffer.getstats(bufferVar) end
 --- 
 --- --Recalculates the statistics of buffer smua.nvbuffer1.
 --- ```
----@param bufferVar bufferMethods The reading buffer to process
+---@param bufferVar bufferVar The reading buffer to process
 function smua.buffer.recalculatestats(bufferVar) end
 ---@class smub.buffer
 smub.buffer = {}
@@ -9890,7 +9434,7 @@ smub.buffer = {}
 --- --max= -2.322196996829e-05
 --- ```
 ---@return statistics statistics The statistical data about the data in the reading buffer
----@param bufferVar bufferMethods The reading buffer to process
+---@param bufferVar bufferVar The reading buffer to process
 function smub.buffer.getstats(bufferVar) end
 
 
@@ -9909,7 +9453,7 @@ function smub.buffer.getstats(bufferVar) end
 --- 
 --- --Recalculates the statistics of buffer smua.nvbuffer1.
 --- ```
----@param bufferVar bufferMethods The reading buffer to process
+---@param bufferVar bufferVar The reading buffer to process
 function smub.buffer.recalculatestats(bufferVar) end
 ---@class script.factory
 script.factory = {}
@@ -9952,8 +9496,6 @@ status.measurement = {}
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
-status.measurement.condition = 0
-
 
 
 --- **This attribute contains the measurement event register set.**
@@ -9971,8 +9513,6 @@ status.measurement.condition = 0
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
-status.measurement.enable = 0
-
 
 
 --- **This attribute contains the measurement event register set.**
@@ -9990,27 +9530,6 @@ status.measurement.enable = 0
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
-status.measurement.event = 0
-
-
-
---- **This attribute contains the measurement event register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes read or write the measurement event registers.Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume value 257 is returned for the enable register. The binary equivalent is 0000 0001 0000 0001. This value indicates that bit B0 (VLMT) and bit B8 (BAV) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B8 of the measurement event enable register, set status.measurement.enable = status.measurement.BAV. In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set measurementRegister to 258 (which is the sum of 2 + 256).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27145.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.enable = status.measurement.BAV
---- 
---- --Sets the BAV bit of the measurement event enable register.
---- ```
-status.measurement.ntr = 0
-
 
 
 --- **This attribute contains the measurement event register set.**
@@ -10028,8 +9547,23 @@ status.measurement.ntr = 0
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
-status.measurement.ptr = 0
 
+
+--- **This attribute contains the measurement event register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes read or write the measurement event registers.Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume value 257 is returned for the enable register. The binary equivalent is 0000 0001 0000 0001. This value indicates that bit B0 (VLMT) and bit B8 (BAV) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B8 of the measurement event enable register, set status.measurement.enable = status.measurement.BAV. In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set measurementRegister to 258 (which is the sum of 2 + 256).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27145.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.enable = status.measurement.BAV
+--- 
+--- --Sets the BAV bit of the measurement event enable register.
+--- ```
 ---@class triggergeneratorArr
 local triggergeneratorArr = {}
 
@@ -10076,16 +9610,16 @@ triggergeneratorArr.EVENT_ID= 0
 ---@class display.smua.measure
 display.smua.measure = {}
 
-display.MEASURE_DCVOLTS = nil
 display.MEASURE_DCAMPS = nil
-display.MEASURE_WATTS = nil
 display.MEASURE_OHMS = nil
+display.MEASURE_WATTS = nil
+display.MEASURE_DCVOLTS = nil
 
 ---@alias displaysmuameasurefuncfunc
----|`display.MEASURE_DCVOLTS`
 ---|`display.MEASURE_DCAMPS`
----|`display.MEASURE_WATTS`
 ---|`display.MEASURE_OHMS`
+---|`display.MEASURE_WATTS`
+---|`display.MEASURE_DCVOLTS`
 
 
 
@@ -10104,22 +9638,19 @@ display.MEASURE_OHMS = nil
 --- 
 --- --Selects the current measure function for SMU A.
 --- ```
----@type displaysmuameasurefuncfunc
-display.smua.measure.func = 0
-
 ---@class display.smub.measure
 display.smub.measure = {}
 
-display.MEASURE_DCVOLTS = nil
 display.MEASURE_DCAMPS = nil
-display.MEASURE_WATTS = nil
 display.MEASURE_OHMS = nil
+display.MEASURE_WATTS = nil
+display.MEASURE_DCVOLTS = nil
 
 ---@alias displaysmubmeasurefuncfunc
----|`display.MEASURE_DCVOLTS`
 ---|`display.MEASURE_DCAMPS`
----|`display.MEASURE_WATTS`
 ---|`display.MEASURE_OHMS`
+---|`display.MEASURE_WATTS`
+---|`display.MEASURE_DCVOLTS`
 
 
 
@@ -10138,9 +9669,6 @@ display.MEASURE_OHMS = nil
 --- 
 --- --Selects the current measure function for SMU A.
 --- ```
----@type displaysmubmeasurefuncfunc
-display.smub.measure.func = 0
-
 ---@class lan.config.dns
 lan.config.dns = {}
 
@@ -10182,8 +9710,6 @@ lan.config.dns.address = 0
 --- --Outputs the present dynamic DNS domain. For example, if the domain is "Matrix", the response is:
 --- --Matrix
 --- ```
-lan.config.dns.domain = 0
-
 
 lan.ENABLE = nil
 lan.DISABLE = nil
@@ -10211,9 +9737,6 @@ lan.DISABLE = nil
 --- --If dynamic DNS registration is enabled, the response is:
 --- --1.00000e+00
 --- ```
----@type lanconfigdnsdynamicstate
-lan.config.dns.dynamic = 0
-
 
 lan.ENABLE = nil
 lan.DISABLE = nil
@@ -10241,9 +9764,6 @@ lan.DISABLE = nil
 --- --If it is enabled, the output is:
 --- --1.00000e+00
 --- ```
----@type lanconfigdnsverifystate
-lan.config.dns.verify = 0
-
 
 
 --- **This attribute defines the dynamic DNS host name.**
@@ -10261,8 +9781,6 @@ lan.config.dns.verify = 0
 --- 
 --- --Outputs the present dynamic DNS host name.
 --- ```
-lan.config.dns.hostname = 0
-
 ---@class lan.status.dns
 lan.status.dns = {}
 
@@ -10303,8 +9821,6 @@ lan.status.dns.address = 0
 --- 
 --- --Outputs the dynamic DNS host name.
 --- ```
-lan.status.dns.name = 0
-
 ---@class lan.status.port
 lan.status.port = {}
 
@@ -10325,8 +9841,6 @@ lan.status.port = {}
 --- --Outputs the LAN dead socket termination port number, such as:
 --- --5.03000e+03
 --- ```
-lan.status.port.dst = 0
-
 
 
 --- **This attribute contains the LAN raw socket connection port number.**
@@ -10345,8 +9859,6 @@ lan.status.port.dst = 0
 --- --Outputs the LAN raw socket port number, such as:
 --- --5.02500e+03
 --- ```
-lan.status.port.rawsocket = 0
-
 
 
 --- **This attribute contains the LAN Telnet connection port number.**
@@ -10366,8 +9878,6 @@ lan.status.port.rawsocket = 0
 --- --Output:
 --- --2.30000e+01
 --- ```
-lan.status.port.telnet = 0
-
 
 
 --- **This attribute contains the LAN VXI-11 connection port number.**
@@ -10386,8 +9896,6 @@ lan.status.port.telnet = 0
 --- --Outputs the VXI-11 number, such as:
 --- --1.02400e+03
 --- ```
-lan.status.port.vxi11 = 0
-
 ---@class smua.measure.filter
 smua.measure.filter = {}
 
@@ -10411,15 +9919,13 @@ smua.measure.filter = {}
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
-smua.measure.filter.count = 0
 
-
-smua.FILTER_ON = nil
 smua.FILTER_OFF = nil
+smua.FILTER_ON = nil
 
 ---@alias smuameasurefilterenablefilterState
----|`smua.FILTER_ON`
 ---|`smua.FILTER_OFF`
+---|`smua.FILTER_ON`
 
 
 
@@ -10442,18 +9948,15 @@ smua.FILTER_OFF = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
----@type smuameasurefilterenablefilterState
-smua.measure.filter.enable = 0
-
 
 smua.FILTER_MEDIAN = nil
-smua.FILTER_MOVING_AVG = nil
 smua.FILTER_REPEAT_AVG = nil
+smua.FILTER_MOVING_AVG = nil
 
 ---@alias smuameasurefiltertypefilterType
 ---|`smua.FILTER_MEDIAN`
----|`smua.FILTER_MOVING_AVG`
 ---|`smua.FILTER_REPEAT_AVG`
+---|`smua.FILTER_MOVING_AVG`
 
 
 
@@ -10476,9 +9979,6 @@ smua.FILTER_REPEAT_AVG = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
----@type smuameasurefiltertypefilterType
-smua.measure.filter.type = 0
-
 ---@class smub.measure.filter
 smub.measure.filter = {}
 
@@ -10502,15 +10002,13 @@ smub.measure.filter = {}
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
-smub.measure.filter.count = 0
 
-
-smub.FILTER_ON = nil
 smub.FILTER_OFF = nil
+smub.FILTER_ON = nil
 
 ---@alias smubmeasurefilterenablefilterState
----|`smub.FILTER_ON`
 ---|`smub.FILTER_OFF`
+---|`smub.FILTER_ON`
 
 
 
@@ -10533,18 +10031,15 @@ smub.FILTER_OFF = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
----@type smubmeasurefilterenablefilterState
-smub.measure.filter.enable = 0
-
 
 smub.FILTER_MEDIAN = nil
-smub.FILTER_MOVING_AVG = nil
 smub.FILTER_REPEAT_AVG = nil
+smub.FILTER_MOVING_AVG = nil
 
 ---@alias smubmeasurefiltertypefilterType
 ---|`smub.FILTER_MEDIAN`
----|`smub.FILTER_MOVING_AVG`
 ---|`smub.FILTER_REPEAT_AVG`
+---|`smub.FILTER_MOVING_AVG`
 
 
 
@@ -10567,9 +10062,6 @@ smub.FILTER_REPEAT_AVG = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
----@type smubmeasurefiltertypefilterType
-smub.measure.filter.type = 0
-
 ---@class smua.measure.rel
 smua.measure.rel = {}
 
@@ -10597,9 +10089,6 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smuameasurerelenablevrelEnable
-smua.measure.rel.enablev = 0
-
 
 smua.REL_ON = nil
 smua.REL_OFF = nil
@@ -10625,9 +10114,6 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smuameasurerelenableirelEnable
-smua.measure.rel.enablei = 0
-
 
 smua.REL_ON = nil
 smua.REL_OFF = nil
@@ -10653,9 +10139,6 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smuameasurerelenablerrelEnable
-smua.measure.rel.enabler = 0
-
 
 smua.REL_ON = nil
 smua.REL_OFF = nil
@@ -10681,9 +10164,6 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smuameasurerelenableprelEnable
-smua.measure.rel.enablep = 0
-
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -10701,27 +10181,6 @@ smua.measure.rel.enablep = 0
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
-smua.measure.rel.levelv = 0
-
-
-
---- **This attribute sets the offset value for relative measurements.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- This attribute specifies the offset value used for relative measurements. When relative measurements are enabled (see smuX.measure.rel.enableY), all subsequent measured readings are offset by the value of this attribute. Each returned measured relative reading is the result of the following calculation: Relative reading = Actual measured reading - Relative offset value
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15124.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.rel.levelv = smua.measure.v()
---- 
---- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
---- ```
-smua.measure.rel.leveli = 0
-
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -10739,8 +10198,6 @@ smua.measure.rel.leveli = 0
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
-smua.measure.rel.levelr = 0
-
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -10758,8 +10215,23 @@ smua.measure.rel.levelr = 0
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
-smua.measure.rel.levelp = 0
 
+
+--- **This attribute sets the offset value for relative measurements.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This attribute specifies the offset value used for relative measurements. When relative measurements are enabled (see smuX.measure.rel.enableY), all subsequent measured readings are offset by the value of this attribute. Each returned measured relative reading is the result of the following calculation: Relative reading = Actual measured reading - Relative offset value
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15124.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.measure.rel.levelv = smua.measure.v()
+--- 
+--- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
+--- ```
 ---@class smub.measure.rel
 smub.measure.rel = {}
 
@@ -10787,9 +10259,6 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smubmeasurerelenablevrelEnable
-smub.measure.rel.enablev = 0
-
 
 smub.REL_ON = nil
 smub.REL_OFF = nil
@@ -10815,9 +10284,6 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smubmeasurerelenableirelEnable
-smub.measure.rel.enablei = 0
-
 
 smub.REL_ON = nil
 smub.REL_OFF = nil
@@ -10843,9 +10309,6 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smubmeasurerelenablerrelEnable
-smub.measure.rel.enabler = 0
-
 
 smub.REL_ON = nil
 smub.REL_OFF = nil
@@ -10871,9 +10334,6 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
----@type smubmeasurerelenableprelEnable
-smub.measure.rel.enablep = 0
-
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -10891,27 +10351,6 @@ smub.measure.rel.enablep = 0
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
-smub.measure.rel.levelv = 0
-
-
-
---- **This attribute sets the offset value for relative measurements.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- This attribute specifies the offset value used for relative measurements. When relative measurements are enabled (see smuX.measure.rel.enableY), all subsequent measured readings are offset by the value of this attribute. Each returned measured relative reading is the result of the following calculation: Relative reading = Actual measured reading - Relative offset value
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15124.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.rel.levelv = smua.measure.v()
---- 
---- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
---- ```
-smub.measure.rel.leveli = 0
-
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -10929,8 +10368,6 @@ smub.measure.rel.leveli = 0
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
-smub.measure.rel.levelr = 0
-
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -10948,8 +10385,23 @@ smub.measure.rel.levelr = 0
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
-smub.measure.rel.levelp = 0
 
+
+--- **This attribute sets the offset value for relative measurements.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- This attribute specifies the offset value used for relative measurements. When relative measurements are enabled (see smuX.measure.rel.enableY), all subsequent measured readings are offset by the value of this attribute. Each returned measured relative reading is the result of the following calculation: Relative reading = Actual measured reading - Relative offset value
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15124.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- smua.measure.rel.levelv = smua.measure.v()
+--- 
+--- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
+--- ```
 ---@class smua.trigger.arm
 smua.trigger.arm = {}
 
@@ -10969,8 +10421,6 @@ smua.trigger.arm = {}
 --- 
 --- --Sets the SMU channel A to iterate through the arm layer of the trigger model five times and then return to the idle state.
 --- ```
-smua.trigger.arm.count = 0
-
 
 
 --- **This function sets the arm event detector to the detected state.**
@@ -11028,8 +10478,6 @@ smub.trigger.arm = {}
 --- 
 --- --Sets the SMU channel A to iterate through the arm layer of the trigger model five times and then return to the idle state.
 --- ```
-smub.trigger.arm.count = 0
-
 
 
 --- **This function sets the arm event detector to the detected state.**
@@ -11096,9 +10544,6 @@ smua.SOURCE_HOLD = nil
 --- 
 --- --Configure the end pulse action to achieve a pulse and configure trigger timer 1 to control the end of pulse.
 --- ```
----@type smuatriggerendpulseactionpulseAction
-smua.trigger.endpulse.action = 0
-
 
 
 --- **This function sets the end pulse event detector to the detected state.**
@@ -11200,9 +10645,6 @@ smub.SOURCE_HOLD = nil
 --- 
 --- --Configure the end pulse action to achieve a pulse and configure trigger timer 1 to control the end of pulse.
 --- ```
----@type smubtriggerendpulseactionpulseAction
-smub.trigger.endpulse.action = 0
-
 
 
 --- **This function sets the end pulse event detector to the detected state.**
@@ -11303,9 +10745,6 @@ smua.SOURCE_HOLD = nil
 --- 
 --- --Sets SMU channel A to return the source back to the idle source level at the end of a sweep.
 --- ```
----@type smuatriggerendsweepactionaction
-smua.trigger.endsweep.action = 0
-
 ---@class smub.trigger.endsweep
 smub.trigger.endsweep = {}
 
@@ -11333,20 +10772,17 @@ smub.SOURCE_HOLD = nil
 --- 
 --- --Sets SMU channel A to return the source back to the idle source level at the end of a sweep.
 --- ```
----@type smubtriggerendsweepactionaction
-smub.trigger.endsweep.action = 0
-
 ---@class smua.trigger.measure
 smua.trigger.measure = {}
 
+smua.ENABLE = nil
 smua.DISABLE = nil
 smua.ASYNC = nil
-smua.ENABLE = nil
 
 ---@alias smuatriggermeasureactionaction
+---|`smua.ENABLE`
 ---|`smua.DISABLE`
 ---|`smua.ASYNC`
----|`smua.ENABLE`
 
 
 
@@ -11367,9 +10803,6 @@ smua.ENABLE = nil
 --- --Configure sweep voltage measurements.
 --- --Enable voltage measurements during the sweep.
 --- ```
----@type smuatriggermeasureactionaction
-smua.trigger.measure.action = 0
-
 
 
 --- **This function sets the measurement event detector to the detected state.**
@@ -11426,7 +10859,7 @@ smua.trigger.measure.stimulus= 0
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smua.trigger.measure.v(rbuffer) end
 
 
@@ -11446,7 +10879,7 @@ function smua.trigger.measure.v(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smua.trigger.measure.i(rbuffer) end
 
 
@@ -11466,7 +10899,7 @@ function smua.trigger.measure.i(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smua.trigger.measure.r(rbuffer) end
 
 
@@ -11486,7 +10919,7 @@ function smua.trigger.measure.r(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smua.trigger.measure.p(rbuffer) end
 
 
@@ -11506,21 +10939,21 @@ function smua.trigger.measure.p(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param ibuffer bufferMethods A reading buffer object where current readings are stored
----@param vbuffer bufferMethods A reading buffer object where voltage readings are stored
----@overload fun(rbuffer:bufferMethods)
+---@param ibuffer bufferVar A reading buffer object where current readings are stored
+---@param vbuffer bufferVar A reading buffer object where voltage readings are stored
+---@overload fun(rbuffer:bufferVar)
 function smua.trigger.measure.iv(ibuffer, vbuffer) end
 ---@class smub.trigger.measure
 smub.trigger.measure = {}
 
+smub.ENABLE = nil
 smub.DISABLE = nil
 smub.ASYNC = nil
-smub.ENABLE = nil
 
 ---@alias smubtriggermeasureactionaction
+---|`smub.ENABLE`
 ---|`smub.DISABLE`
 ---|`smub.ASYNC`
----|`smub.ENABLE`
 
 
 
@@ -11541,9 +10974,6 @@ smub.ENABLE = nil
 --- --Configure sweep voltage measurements.
 --- --Enable voltage measurements during the sweep.
 --- ```
----@type smubtriggermeasureactionaction
-smub.trigger.measure.action = 0
-
 
 
 --- **This function sets the measurement event detector to the detected state.**
@@ -11600,7 +11030,7 @@ smub.trigger.measure.stimulus= 0
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smub.trigger.measure.v(rbuffer) end
 
 
@@ -11620,7 +11050,7 @@ function smub.trigger.measure.v(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smub.trigger.measure.i(rbuffer) end
 
 
@@ -11640,7 +11070,7 @@ function smub.trigger.measure.i(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smub.trigger.measure.r(rbuffer) end
 
 
@@ -11660,7 +11090,7 @@ function smub.trigger.measure.r(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param rbuffer bufferMethods A reading buffer object where the readings are stored
+---@param rbuffer bufferVar A reading buffer object where the readings are stored
 function smub.trigger.measure.p(rbuffer) end
 
 
@@ -11680,19 +11110,19 @@ function smub.trigger.measure.p(rbuffer) end
 --- 
 --- --Stores voltage readings during the sweep for SMU channel A in buffer vbuffername.
 --- ```
----@param ibuffer bufferMethods A reading buffer object where current readings are stored
----@param vbuffer bufferMethods A reading buffer object where voltage readings are stored
----@overload fun(rbuffer:bufferMethods)
+---@param ibuffer bufferVar A reading buffer object where current readings are stored
+---@param vbuffer bufferVar A reading buffer object where voltage readings are stored
+---@overload fun(rbuffer:bufferVar)
 function smub.trigger.measure.iv(ibuffer, vbuffer) end
 ---@class smua.trigger.source
 smua.trigger.source = {}
 
-smua.DISABLE = nil
 smua.ENABLE = nil
+smua.DISABLE = nil
 
 ---@alias smuatriggersourceactionaction
----|`smua.DISABLE`
 ---|`smua.ENABLE`
+---|`smua.DISABLE`
 
 
 
@@ -11713,9 +11143,6 @@ smua.ENABLE = nil
 --- --Configure list sweep for SMU channel A (sweep through 3 V, 1 V, 4 V, 5 V, and 2 V).
 --- --Enable the source action.
 --- ```
----@type smuatriggersourceactionaction
-smua.trigger.source.action = 0
-
 
 smua.LIMIT_AUTO = nil
 
@@ -11739,9 +11166,6 @@ smua.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
----@type smuatriggersourcelimitvsweepSourceLimit
-smua.trigger.source.limitv = 0
-
 
 smua.LIMIT_AUTO = nil
 
@@ -11765,9 +11189,6 @@ smua.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
----@type smuatriggersourcelimitisweepSourceLimit
-smua.trigger.source.limiti = 0
-
 
 
 --- **This function configures a linear source sweep.**
@@ -11786,9 +11207,9 @@ smua.trigger.source.limiti = 0
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
-function smua.trigger.source.linearv(startValue, endPointValue, points) end
+function smua.trigger.source.linearv(startValue, endValue, points) end
 
 
 --- **This function configures a linear source sweep.**
@@ -11807,9 +11228,9 @@ function smua.trigger.source.linearv(startValue, endPointValue, points) end
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
-function smua.trigger.source.lineari(startValue, endPointValue, points) end
+function smua.trigger.source.lineari(startValue, endValue, points) end
 
 
 --- **This function configures an array-based source sweep.**
@@ -11866,10 +11287,10 @@ function smua.trigger.source.listi(sweepList) end
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
-function smua.trigger.source.logv(startValue, endPointValue, points, asymptote) end
+function smua.trigger.source.logv(startValue, endValue, points, asymptote) end
 
 
 --- **This function configures an exponential (geometric) source sweep.**
@@ -11888,10 +11309,10 @@ function smua.trigger.source.logv(startValue, endPointValue, points, asymptote) 
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
-function smua.trigger.source.logi(startValue, endPointValue, points, asymptote) end
+function smua.trigger.source.logi(startValue, endValue, points, asymptote) end
 
 
 --- **This function sets the source event detector to the detected state.**
@@ -11941,12 +11362,12 @@ smua.trigger.source.stimulus= 0
 ---@class smub.trigger.source
 smub.trigger.source = {}
 
-smub.DISABLE = nil
 smub.ENABLE = nil
+smub.DISABLE = nil
 
 ---@alias smubtriggersourceactionaction
----|`smub.DISABLE`
 ---|`smub.ENABLE`
+---|`smub.DISABLE`
 
 
 
@@ -11967,9 +11388,6 @@ smub.ENABLE = nil
 --- --Configure list sweep for SMU channel A (sweep through 3 V, 1 V, 4 V, 5 V, and 2 V).
 --- --Enable the source action.
 --- ```
----@type smubtriggersourceactionaction
-smub.trigger.source.action = 0
-
 
 smub.LIMIT_AUTO = nil
 
@@ -11993,9 +11411,6 @@ smub.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
----@type smubtriggersourcelimitvsweepSourceLimit
-smub.trigger.source.limitv = 0
-
 
 smub.LIMIT_AUTO = nil
 
@@ -12019,9 +11434,6 @@ smub.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
----@type smubtriggersourcelimitisweepSourceLimit
-smub.trigger.source.limiti = 0
-
 
 
 --- **This function configures a linear source sweep.**
@@ -12040,9 +11452,9 @@ smub.trigger.source.limiti = 0
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
-function smub.trigger.source.linearv(startValue, endPointValue, points) end
+function smub.trigger.source.linearv(startValue, endValue, points) end
 
 
 --- **This function configures a linear source sweep.**
@@ -12061,9 +11473,9 @@ function smub.trigger.source.linearv(startValue, endPointValue, points) end
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
-function smub.trigger.source.lineari(startValue, endPointValue, points) end
+function smub.trigger.source.lineari(startValue, endValue, points) end
 
 
 --- **This function configures an array-based source sweep.**
@@ -12120,10 +11532,10 @@ function smub.trigger.source.listi(sweepList) end
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
-function smub.trigger.source.logv(startValue, endPointValue, points, asymptote) end
+function smub.trigger.source.logv(startValue, endValue, points, asymptote) end
 
 
 --- **This function configures an exponential (geometric) source sweep.**
@@ -12142,10 +11554,10 @@ function smub.trigger.source.logv(startValue, endPointValue, points, asymptote) 
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endPointValue number Source value of the last point
+---@param endValue any Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
-function smub.trigger.source.logi(startValue, endPointValue, points, asymptote) end
+function smub.trigger.source.logi(startValue, endValue, points, asymptote) end
 
 
 --- **This function sets the source event detector to the detected state.**
@@ -12218,8 +11630,6 @@ status.operation.instrument = {}
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
-status.operation.instrument.condition = 0
-
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -12244,8 +11654,6 @@ status.operation.instrument.condition = 0
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
-status.operation.instrument.enable = 0
-
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -12270,34 +11678,6 @@ status.operation.instrument.enable = 0
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
-status.operation.instrument.event = 0
-
-
-
---- **This attribute contains the operation status instrument summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status instrument summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1,026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status instrument summary enable register, set status.operation.instrument.enable = status.operation.instrument.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1,024). Condition register sets of:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27207.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.instrument.SMUA +
----    status.operation.instrument.TRGBLND
---- status.operation.instrument.enable = operationRegister
---- 
---- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using constants.
---- -- 1026 = binary 0000 0100 0000 0010
---- operationRegister = 1026
---- status.operation.instrument.enable = operationRegister
---- 
---- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
---- ```
-status.operation.instrument.ntr = 0
-
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -12322,8 +11702,30 @@ status.operation.instrument.ntr = 0
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
-status.operation.instrument.ptr = 0
 
+
+--- **This attribute contains the operation status instrument summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status instrument summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1,026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status instrument summary enable register, set status.operation.instrument.enable = status.operation.instrument.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1,024). Condition register sets of:
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27207.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.instrument.SMUA +
+---    status.operation.instrument.TRGBLND
+--- status.operation.instrument.enable = operationRegister
+--- 
+--- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using constants.
+--- -- 1026 = binary 0000 0100 0000 0010
+--- operationRegister = 1026
+--- status.operation.instrument.enable = operationRegister
+--- 
+--- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
+--- ```
 ---@class status.operation.remote
 status.operation.remote = {}
 
@@ -12346,8 +11748,6 @@ status.operation.remote = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
-status.operation.remote.condition = 0
-
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -12368,8 +11768,6 @@ status.operation.remote.condition = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
-status.operation.remote.enable = 0
-
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -12390,30 +11788,6 @@ status.operation.remote.enable = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
-status.operation.remote.event = 0
-
-
-
---- **This attribute contains the operation status remote summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status remote summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status remote summary enable register, set status.operation.remote.enable = status.operation.remote.CAV.In addition to the above constants, operationRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal values. For example, to set bits B1 and B11, set operationRegister to 2,050 (which is the sum of 2 + 2,048). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15849.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.remote.enable = status.operation.remote.CAV
---- 
---- --Uses a constant to set the CAV bit, B1, of the operation status remote summary enable register.
---- status.operation.remote.enable = 2050
---- 
---- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
---- ```
-status.operation.remote.ntr = 0
-
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -12434,8 +11808,26 @@ status.operation.remote.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
-status.operation.remote.ptr = 0
 
+
+--- **This attribute contains the operation status remote summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status remote summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status remote summary enable register, set status.operation.remote.enable = status.operation.remote.CAV.In addition to the above constants, operationRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal values. For example, to set bits B1 and B11, set operationRegister to 2,050 (which is the sum of 2 + 2,048). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15849.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.remote.enable = status.operation.remote.CAV
+--- 
+--- --Uses a constant to set the CAV bit, B1, of the operation status remote summary enable register.
+--- status.operation.remote.enable = 2050
+--- 
+--- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
+--- ```
 ---@class status.operation.user
 status.operation.user = {}
 
@@ -12461,8 +11853,6 @@ status.operation.user = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
-status.operation.user.condition = 0
-
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -12486,8 +11876,6 @@ status.operation.user.condition = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
-status.operation.user.enable = 0
-
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -12511,33 +11899,6 @@ status.operation.user.enable = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
-status.operation.user.event = 0
-
-
-
---- **These attributes manage the operation status user register set of the status model.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status user registers. Reading a status register returns a value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bits B0 and B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status user enable register, set status.operation.user.enable = status.operation.user.BIT0.In addition to the above constants, operationRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal values. For example, to set bits B11 and B14, set operationRegister to 18,432 (which is the sum of 2,048 + 16,384). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15852.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.user.BIT11 + status.operation.user.BIT14
---- status.operation.user.enable = operationRegister
---- 
---- --Uses constants to set bits B11 and B14 of the operation status user enable register.
---- -- 18432 = binary 0100 1000 0000 0000
---- operationRegister = 18432
---- status.operation.enable = operationRegister
---- 
---- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
---- ```
-status.operation.user.ntr = 0
-
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -12561,8 +11922,29 @@ status.operation.user.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
-status.operation.user.ptr = 0
 
+
+--- **These attributes manage the operation status user register set of the status model.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status user registers. Reading a status register returns a value. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.29000e+02 (which is 129) is read as the value of the condition register, the binary equivalent is 0000 0000 1000 0001. This value indicates that bits B0 and B7 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status user enable register, set status.operation.user.enable = status.operation.user.BIT0.In addition to the above constants, operationRegister can be set to the decimal value of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal values. For example, to set bits B11 and B14, set operationRegister to 18,432 (which is the sum of 2,048 + 16,384). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15852.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.user.BIT11 + status.operation.user.BIT14
+--- status.operation.user.enable = operationRegister
+--- 
+--- --Uses constants to set bits B11 and B14 of the operation status user enable register.
+--- -- 18432 = binary 0100 1000 0000 0000
+--- operationRegister = 18432
+--- status.operation.enable = operationRegister
+--- 
+--- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
+--- ```
 ---@class status.questionable.instrument
 status.questionable.instrument = {}
 
@@ -12582,8 +11964,6 @@ status.questionable.instrument = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
-status.questionable.instrument.condition = 0
-
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -12601,8 +11981,6 @@ status.questionable.instrument.condition = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
-status.questionable.instrument.enable = 0
-
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -12620,27 +11998,6 @@ status.questionable.instrument.enable = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
-status.questionable.instrument.event = 0
-
-
-
---- **This attribute contains the questionable status instrument summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status instrument summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the questionable status instrument summary enable register, set status.questionable.instrument.enable = status.questionable.instrument.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27212.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.questionable.instrument.enable = status.questionable.instrument.SMUA
---- 
---- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
---- ```
-status.questionable.instrument.ntr = 0
-
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -12658,8 +12015,23 @@ status.questionable.instrument.ntr = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
-status.questionable.instrument.ptr = 0
 
+
+--- **This attribute contains the questionable status instrument summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status instrument summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the questionable status instrument summary enable register, set status.questionable.instrument.enable = status.questionable.instrument.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27212.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.questionable.instrument.enable = status.questionable.instrument.SMUA
+--- 
+--- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
+--- ```
 ---@class status.questionable.unstable_output
 status.questionable.unstable_output = {}
 
@@ -12679,8 +12051,6 @@ status.questionable.unstable_output = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
-status.questionable.unstable_output.condition = 0
-
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -12698,8 +12068,6 @@ status.questionable.unstable_output.condition = 0
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
-status.questionable.unstable_output.enable = 0
-
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -12717,27 +12085,6 @@ status.questionable.unstable_output.enable = 0
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
-status.questionable.unstable_output.event = 0
-
-
-
---- **This attribute contains the questionable status unstable output summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status unstable output summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the questionable status unstable output summary enable register, set status.questionable.instrument.enable = status.questionable.instrument.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15858.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.questionable.unstable_output.enable = status.questionable.unstable_output.SMUA
---- 
---- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
---- ```
-status.questionable.unstable_output.ntr = 0
-
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -12755,17 +12102,32 @@ status.questionable.unstable_output.ntr = 0
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
-status.questionable.unstable_output.ptr = 0
 
+
+--- **This attribute contains the questionable status unstable output summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status unstable output summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the questionable status unstable output summary enable register, set status.questionable.instrument.enable = status.questionable.instrument.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15858.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.questionable.unstable_output.enable = status.questionable.unstable_output.SMUA
+--- 
+--- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
+--- ```
 ---@class display.smua.limit
 display.smua.limit = {}
 
-display.LIMIT_P = nil
 display.LIMIT_IV = nil
+display.LIMIT_P = nil
 
 ---@alias displaysmualimitfuncfunc
----|`display.LIMIT_P`
 ---|`display.LIMIT_IV`
+---|`display.LIMIT_P`
 
 
 
@@ -12784,18 +12146,15 @@ display.LIMIT_IV = nil
 --- 
 --- --Specifies the power limit value is displayed for SMU Channel A.
 --- ```
----@type displaysmualimitfuncfunc
-display.smua.limit.func = 0
-
 ---@class display.smub.limit
 display.smub.limit = {}
 
-display.LIMIT_P = nil
 display.LIMIT_IV = nil
+display.LIMIT_P = nil
 
 ---@alias displaysmublimitfuncfunc
----|`display.LIMIT_P`
 ---|`display.LIMIT_IV`
+---|`display.LIMIT_P`
 
 
 
@@ -12814,9 +12173,6 @@ display.LIMIT_IV = nil
 --- 
 --- --Specifies the power limit value is displayed for SMU Channel A.
 --- ```
----@type displaysmublimitfuncfunc
-display.smub.limit.func = 0
-
 ---@class status.measurement.buffer_available
 status.measurement.buffer_available = {}
 
@@ -12836,8 +12192,6 @@ status.measurement.buffer_available = {}
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
-status.measurement.buffer_available.condition = 0
-
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -12855,8 +12209,6 @@ status.measurement.buffer_available.condition = 0
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
-status.measurement.buffer_available.enable = 0
-
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -12874,27 +12226,6 @@ status.measurement.buffer_available.enable = 0
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
-status.measurement.buffer_available.event = 0
-
-
-
---- **This attribute contains the measurement event buffer available summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the measurement event buffer available summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume value 6 is returned for the enable register. The binary equivalent is 0000 0000 0000 0110. This value indicates that bit B1 (SMUA) and bit B2 (SMUB) are set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event buffer available summary enable register, set status.measurement.buffer_available.enable = status.measurement.buffer_available.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27146.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.buffer_available.enable = status.measurement.buffer_available.SMUA
---- 
---- --Sets the SMUA bit of the measurement event buffer available summary enable register.
---- ```
-status.measurement.buffer_available.ntr = 0
-
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -12912,8 +12243,23 @@ status.measurement.buffer_available.ntr = 0
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
-status.measurement.buffer_available.ptr = 0
 
+
+--- **This attribute contains the measurement event buffer available summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the measurement event buffer available summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume value 6 is returned for the enable register. The binary equivalent is 0000 0000 0000 0110. This value indicates that bit B1 (SMUA) and bit B2 (SMUB) are set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event buffer available summary enable register, set status.measurement.buffer_available.enable = status.measurement.buffer_available.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27146.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.buffer_available.enable = status.measurement.buffer_available.SMUA
+--- 
+--- --Sets the SMUA bit of the measurement event buffer available summary enable register.
+--- ```
 ---@class status.measurement.current_limit
 status.measurement.current_limit = {}
 
@@ -12933,8 +12279,6 @@ status.measurement.current_limit = {}
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
-status.measurement.current_limit.condition = 0
-
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -12952,8 +12296,6 @@ status.measurement.current_limit.condition = 0
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
-status.measurement.current_limit.enable = 0
-
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -12971,27 +12313,6 @@ status.measurement.current_limit.enable = 0
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
-status.measurement.current_limit.event = 0
-
-
-
---- **This attribute contains the measurement event current limit summary registers.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the measurement event current limit summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For example, assume value 6 is returned for the enable register. The binary equivalent is 0000 0000 0000 0110. This value indicates that bit B1 (SMUA) and bit B2 (SMUB) are set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event current limit summary enable register, set status.measurement.current_limit.enable = status.measurement.current_limit.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27165.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.current_limit.enable = status.measurement.current_limit.SMUA
---- 
---- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
---- ```
-status.measurement.current_limit.ntr = 0
-
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -13009,8 +12330,23 @@ status.measurement.current_limit.ntr = 0
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
-status.measurement.current_limit.ptr = 0
 
+
+--- **This attribute contains the measurement event current limit summary registers.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the measurement event current limit summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For example, assume value 6 is returned for the enable register. The binary equivalent is 0000 0000 0000 0110. This value indicates that bit B1 (SMUA) and bit B2 (SMUB) are set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event current limit summary enable register, set status.measurement.current_limit.enable = status.measurement.current_limit.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27165.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.current_limit.enable = status.measurement.current_limit.SMUA
+--- 
+--- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
+--- ```
 ---@class status.measurement.instrument
 status.measurement.instrument = {}
 
@@ -13030,8 +12366,6 @@ status.measurement.instrument = {}
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
-status.measurement.instrument.condition = 0
-
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -13049,8 +12383,6 @@ status.measurement.instrument.condition = 0
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
-status.measurement.instrument.enable = 0
-
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -13068,27 +12400,6 @@ status.measurement.instrument.enable = 0
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
-status.measurement.instrument.event = 0
-
-
-
---- **This attribute contains the registers of the measurement event instrument summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the measurement event instrument summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 6 is returned for the enable register. The binary equivalent is 0000 0000 0000 0110. This value indicates that bit B1 (SMUA) and bit B2 (SMUB) are set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. As an example, to set bit B1 of the measurement event instrument summary enable register, set status.measurement.instrument.enable = status.measurement.instrument.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27167.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.instrument.enable = status.measurement.instrument.SMUA
---- 
---- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
---- ```
-status.measurement.instrument.ntr = 0
-
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -13106,8 +12417,23 @@ status.measurement.instrument.ntr = 0
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
-status.measurement.instrument.ptr = 0
 
+
+--- **This attribute contains the registers of the measurement event instrument summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the measurement event instrument summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 6 is returned for the enable register. The binary equivalent is 0000 0000 0000 0110. This value indicates that bit B1 (SMUA) and bit B2 (SMUB) are set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. As an example, to set bit B1 of the measurement event instrument summary enable register, set status.measurement.instrument.enable = status.measurement.instrument.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27167.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.instrument.enable = status.measurement.instrument.SMUA
+--- 
+--- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
+--- ```
 ---@class status.measurement.reading_overflow
 status.measurement.reading_overflow = {}
 
@@ -13127,8 +12453,6 @@ status.measurement.reading_overflow = {}
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
-status.measurement.reading_overflow.condition = 0
-
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -13146,8 +12470,6 @@ status.measurement.reading_overflow.condition = 0
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
-status.measurement.reading_overflow.enable = 0
-
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -13165,27 +12487,6 @@ status.measurement.reading_overflow.enable = 0
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
-status.measurement.reading_overflow.event = 0
-
-
-
---- **This attribute contains the measurement event reading overflow summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the measurement event reading overflow summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 2 is returned for the enable register. The binary equivalent is 0000 0000 0000 0010. This value indicates that bit B1 (SMUA) is set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event reading overflow summary enable register, set status.measurement.reading_overflow.enable = status.measurement.reading_overflow.SMUA.In addition to the above constants, measurementRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27169.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.reading_overflow.enable = status.measurement.reading_overflow.SMUA
---- 
---- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
---- ```
-status.measurement.reading_overflow.ntr = 0
-
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -13203,8 +12504,23 @@ status.measurement.reading_overflow.ntr = 0
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
-status.measurement.reading_overflow.ptr = 0
 
+
+--- **This attribute contains the measurement event reading overflow summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the measurement event reading overflow summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 2 is returned for the enable register. The binary equivalent is 0000 0000 0000 0010. This value indicates that bit B1 (SMUA) is set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event reading overflow summary enable register, set status.measurement.reading_overflow.enable = status.measurement.reading_overflow.SMUA.In addition to the above constants, measurementRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27169.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.reading_overflow.enable = status.measurement.reading_overflow.SMUA
+--- 
+--- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
+--- ```
 ---@class status.operation.calibrating
 status.operation.calibrating = {}
 
@@ -13224,8 +12540,6 @@ status.operation.calibrating = {}
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
-status.operation.calibrating.condition = 0
-
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -13243,8 +12557,6 @@ status.operation.calibrating.condition = 0
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
-status.operation.calibrating.enable = 0
-
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -13262,27 +12574,6 @@ status.operation.calibrating.enable = 0
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
-status.operation.calibrating.event = 0
-
-
-
---- **This attribute contains the operation status calibration summary register set.  **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status calibration summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27170.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.calibrating.enable = status.operation.calibrating.SMUA
---- 
---- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
---- ```
-status.operation.calibrating.ntr = 0
-
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -13300,8 +12591,23 @@ status.operation.calibrating.ntr = 0
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
-status.operation.calibrating.ptr = 0
 
+
+--- **This attribute contains the operation status calibration summary register set.  **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status calibration summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27170.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.calibrating.enable = status.operation.calibrating.SMUA
+--- 
+--- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
+--- ```
 ---@class status.operation.measuring
 status.operation.measuring = {}
 
@@ -13321,8 +12627,6 @@ status.operation.measuring = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
-status.operation.measuring.condition = 0
-
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -13340,8 +12644,6 @@ status.operation.measuring.condition = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
-status.operation.measuring.enable = 0
-
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -13359,27 +12661,6 @@ status.operation.measuring.enable = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
-status.operation.measuring.event = 0
-
-
-
---- **This attribute contains the operation status measuring summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status measuring summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. As an example, to set bit B1 of the operation status measuring summary enable register, set status.operation.measuring.enable = status.operation.measuring.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set operationRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27208.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.measuring.enable = status.operation.measuring.SMUA
---- 
---- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
---- ```
-status.operation.measuring.ntr = 0
-
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -13397,8 +12678,23 @@ status.operation.measuring.ntr = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
-status.operation.measuring.ptr = 0
 
+
+--- **This attribute contains the operation status measuring summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status measuring summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. As an example, to set bit B1 of the operation status measuring summary enable register, set status.operation.measuring.enable = status.operation.measuring.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set operationRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27208.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.measuring.enable = status.operation.measuring.SMUA
+--- 
+--- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
+--- ```
 ---@class status.operation.sweeping
 status.operation.sweeping = {}
 
@@ -13418,8 +12714,6 @@ status.operation.sweeping = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
-status.operation.sweeping.condition = 0
-
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -13437,8 +12731,6 @@ status.operation.sweeping.condition = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
-status.operation.sweeping.enable = 0
-
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -13456,27 +12748,6 @@ status.operation.sweeping.enable = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
-status.operation.sweeping.event = 0
-
-
-
---- **This attribute contains the operation status sweeping summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status sweeping summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status sweeping summary enable register, set status.operation.sweeping.enable = status.operation.sweeping.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set operationRegister to 6 (the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27209.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.sweeping.enable = status.operation.sweeping.SMUA
---- 
---- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
---- ```
-status.operation.sweeping.ntr = 0
-
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -13494,8 +12765,23 @@ status.operation.sweeping.ntr = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
-status.operation.sweeping.ptr = 0
 
+
+--- **This attribute contains the operation status sweeping summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status sweeping summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status sweeping summary enable register, set status.operation.sweeping.enable = status.operation.sweeping.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set operationRegister to 6 (the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27209.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.sweeping.enable = status.operation.sweeping.SMUA
+--- 
+--- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
+--- ```
 ---@class status.operation.trigger_overrun
 status.operation.trigger_overrun = {}
 
@@ -13516,8 +12802,6 @@ status.operation.trigger_overrun = {}
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
-status.operation.trigger_overrun.condition = 0
-
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -13536,8 +12820,6 @@ status.operation.trigger_overrun.condition = 0
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
-status.operation.trigger_overrun.enable = 0
-
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -13556,28 +12838,6 @@ status.operation.trigger_overrun.enable = 0
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
-status.operation.trigger_overrun.event = 0
-
-
-
---- **This attribute contains the operation status trigger overrun summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status trigger overrun summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1,026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitThe bits in this register summarize events in other registers. A set bit in this summary register indicates that an enabled event in one of the summarized registers is set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status trigger overrun summary enable register, set status.operation.trigger_overrun.enable = status.operation.trigger_overrun.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1,024).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27210.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.trigger_overrun.SMUA + status.operation.trigger_overrun.TRGBLND
---- status.operation.trigger_overrun.enable = operationRegister
---- 
---- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
---- ```
-status.operation.trigger_overrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -13596,8 +12856,24 @@ status.operation.trigger_overrun.ntr = 0
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
-status.operation.trigger_overrun.ptr = 0
 
+
+--- **This attribute contains the operation status trigger overrun summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status trigger overrun summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1,026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitThe bits in this register summarize events in other registers. A set bit in this summary register indicates that an enabled event in one of the summarized registers is set.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status trigger overrun summary enable register, set status.operation.trigger_overrun.enable = status.operation.trigger_overrun.SMUA.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1,024).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27210.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.trigger_overrun.SMUA + status.operation.trigger_overrun.TRGBLND
+--- status.operation.trigger_overrun.enable = operationRegister
+--- 
+--- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
+--- ```
 ---@class status.questionable.calibration
 status.questionable.calibration = {}
 
@@ -13617,8 +12893,6 @@ status.questionable.calibration = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
-status.questionable.calibration.condition = 0
-
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -13636,8 +12910,6 @@ status.questionable.calibration.condition = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
-status.questionable.calibration.enable = 0
-
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -13655,27 +12927,6 @@ status.questionable.calibration.enable = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
-status.questionable.calibration.event = 0
-
-
-
---- **This attribute contains the questionable status calibration summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status calibration summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. As an example, to set bit B1 of the questionable status calibration summary enable register, set status.questionable.calibration.enable = status.questionable.calibration.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27211.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.questionable.calibration.enable = status.questionable.calibration.SMUA
---- 
---- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
---- ```
-status.questionable.calibration.ntr = 0
-
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -13693,8 +12944,23 @@ status.questionable.calibration.ntr = 0
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
-status.questionable.calibration.ptr = 0
 
+
+--- **This attribute contains the questionable status calibration summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status calibration summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table. As an example, to set bit B1 of the questionable status calibration summary enable register, set status.questionable.calibration.enable = status.questionable.calibration.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27211.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.questionable.calibration.enable = status.questionable.calibration.SMUA
+--- 
+--- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
+--- ```
 ---@class status.questionable.over_temperature
 status.questionable.over_temperature = {}
 
@@ -13714,8 +12980,6 @@ status.questionable.over_temperature = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
-status.questionable.over_temperature.condition = 0
-
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -13733,8 +12997,6 @@ status.questionable.over_temperature.condition = 0
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
-status.questionable.over_temperature.enable = 0
-
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -13752,27 +13014,6 @@ status.questionable.over_temperature.enable = 0
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
-status.questionable.over_temperature.event = 0
-
-
-
---- **This attribute contains the questionable status over temperature summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status over temperature summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the questionable status over temperature summary enable register, set status.questionable.instrument.enable = status.questionable.instrument.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27213.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.questionable.over_temperature.enable = status.questionable.over_temperature.SMUA
---- 
---- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
---- ```
-status.questionable.over_temperature.ntr = 0
-
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -13790,8 +13031,23 @@ status.questionable.over_temperature.ntr = 0
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
-status.questionable.over_temperature.ptr = 0
 
+
+--- **This attribute contains the questionable status over temperature summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status over temperature summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the questionable status over temperature summary enable register, set status.questionable.instrument.enable = status.questionable.instrument.SMUA.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set questionableRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27213.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.questionable.over_temperature.enable = status.questionable.over_temperature.SMUA
+--- 
+--- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
+--- ```
 ---@class status.measurement.voltage_limit
 status.measurement.voltage_limit = {}
 
@@ -13811,8 +13067,6 @@ status.measurement.voltage_limit = {}
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
-status.measurement.voltage_limit.condition = 0
-
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -13830,8 +13084,6 @@ status.measurement.voltage_limit.condition = 0
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
-status.measurement.voltage_limit.enable = 0
-
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -13849,27 +13101,6 @@ status.measurement.voltage_limit.enable = 0
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
-status.measurement.voltage_limit.event = 0
-
-
-
---- **This attribute contains the measurement event voltage limit summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes read or write to the measurement event voltage limit summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event voltage limit summary enable register, set status.measurement.voltage_limit.enable = status.measurement.voltage_limit.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/27887.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.voltage_limit.enable = status.measurement.voltage_limit.SMUA
---- 
---- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
---- ```
-status.measurement.voltage_limit.ntr = 0
-
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -13887,8 +13118,23 @@ status.measurement.voltage_limit.ntr = 0
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
-status.measurement.voltage_limit.ptr = 0
 
+
+--- **This attribute contains the measurement event voltage limit summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes read or write to the measurement event voltage limit summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the measurement event voltage limit summary enable register, set status.measurement.voltage_limit.enable = status.measurement.voltage_limit.SMUA.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B2, set measurementRegister to 6 (which is the sum of 2 + 4).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/27887.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.voltage_limit.enable = status.measurement.voltage_limit.SMUA
+--- 
+--- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
+--- ```
 ---@class status.operation.instrument.digio
 status.operation.instrument.digio = {}
 
@@ -13911,8 +13157,6 @@ status.operation.instrument.digio = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
-status.operation.instrument.digio.condition = 0
-
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -13933,8 +13177,6 @@ status.operation.instrument.digio.condition = 0
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
-status.operation.instrument.digio.enable = 0
-
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -13955,30 +13197,6 @@ status.operation.instrument.digio.enable = 0
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
-status.operation.instrument.digio.event = 0
-
-
-
---- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status digital I/O summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constant, operationRegister can be set to the decimal value of the bit to set.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15836.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.digio.enable = status.operation.instrument.digio.TRGOVR
---- 
---- --Uses a constant to set the TRGOVR bit of the operation status digital I/O summary enable register.
---- status.operation.instrument.digio.enable = 1024
---- 
---- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
---- ```
-status.operation.instrument.digio.ntr = 0
-
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -13999,8 +13217,26 @@ status.operation.instrument.digio.ntr = 0
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
-status.operation.instrument.digio.ptr = 0
 
+
+--- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status digital I/O summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constant, operationRegister can be set to the decimal value of the bit to set.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15836.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.digio.enable = status.operation.instrument.digio.TRGOVR
+--- 
+--- --Uses a constant to set the TRGOVR bit of the operation status digital I/O summary enable register.
+--- status.operation.instrument.digio.enable = 1024
+--- 
+--- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
+--- ```
 ---@class status.operation.instrument.lan
 status.operation.instrument.lan = {}
 
@@ -14026,8 +13262,6 @@ status.operation.instrument.lan = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
-status.operation.instrument.lan.condition = 0
-
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -14051,8 +13285,6 @@ status.operation.instrument.lan.condition = 0
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
-status.operation.instrument.lan.enable = 0
-
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -14076,33 +13308,6 @@ status.operation.instrument.lan.enable = 0
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
-status.operation.instrument.lan.event = 0
-
-
-
---- **This attribute contains the operation status LAN summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status LAN summary registers. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status LAN summary enable register, set status.operation.instrument.lan.enable = status.operation.instrument.lan.CON.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1024). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15838.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.instrument.lan.CONF +
----    status.operation.instrument.lan.TRGOVR
---- status.operation.instrument.lan.enable = operationRegister
---- 
---- --Use constants to set bit B1 and bit B10 of the operation status LAN summary enable register.
---- operationRegister = 1026
---- status.operation.instrument.lan.enable = operationRegister
---- 
---- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
---- ```
-status.operation.instrument.lan.ntr = 0
-
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -14126,8 +13331,29 @@ status.operation.instrument.lan.ntr = 0
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
-status.operation.instrument.lan.ptr = 0
 
+
+--- **This attribute contains the operation status LAN summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status LAN summary registers. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status LAN summary enable register, set status.operation.instrument.lan.enable = status.operation.instrument.lan.CON.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1024). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15838.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.instrument.lan.CONF +
+---    status.operation.instrument.lan.TRGOVR
+--- status.operation.instrument.lan.enable = operationRegister
+--- 
+--- --Use constants to set bit B1 and bit B10 of the operation status LAN summary enable register.
+--- operationRegister = 1026
+--- status.operation.instrument.lan.enable = operationRegister
+--- 
+--- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
+--- ```
 ---@class status.operation.instrument.smua
 status.operation.instrument.smua = {}
 
@@ -14150,8 +13376,6 @@ status.operation.instrument.smua = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smua.condition = 0
-
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -14172,8 +13396,6 @@ status.operation.instrument.smua.condition = 0
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smua.enable = 0
-
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -14194,30 +13416,6 @@ status.operation.instrument.smua.enable = 0
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smua.event = 0
-
-
-
---- **This attribute contains the operation status SMU X summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02500e+02 (which is 1,025) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B0 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status SMU A summary enable register, set status.operation.instrument.smua.enable = status.operation.instrument.smua.CAL.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B0 and B10, set operationRegister to 1,025 (which is the sum of 1 + 1,024). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15840.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.smua.enable = status.operation.instrument.smua.MEAS
---- 
---- --Use a constant to set bit B4 of the operation status SMU A summary enable register.
---- status.operation.instrument.smua.enable = 1025
---- 
---- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
---- ```
-status.operation.instrument.smua.ntr = 0
-
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -14238,8 +13436,26 @@ status.operation.instrument.smua.ntr = 0
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smua.ptr = 0
 
+
+--- **This attribute contains the operation status SMU X summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02500e+02 (which is 1,025) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B0 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status SMU A summary enable register, set status.operation.instrument.smua.enable = status.operation.instrument.smua.CAL.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B0 and B10, set operationRegister to 1,025 (which is the sum of 1 + 1,024). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15840.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.smua.enable = status.operation.instrument.smua.MEAS
+--- 
+--- --Use a constant to set bit B4 of the operation status SMU A summary enable register.
+--- status.operation.instrument.smua.enable = 1025
+--- 
+--- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
+--- ```
 ---@class status.operation.instrument.smub
 status.operation.instrument.smub = {}
 
@@ -14262,8 +13478,6 @@ status.operation.instrument.smub = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smub.condition = 0
-
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -14284,8 +13498,6 @@ status.operation.instrument.smub.condition = 0
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smub.enable = 0
-
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -14306,30 +13518,6 @@ status.operation.instrument.smub.enable = 0
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smub.event = 0
-
-
-
---- **This attribute contains the operation status SMU X summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02500e+02 (which is 1,025) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B0 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status SMU A summary enable register, set status.operation.instrument.smua.enable = status.operation.instrument.smua.CAL.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B0 and B10, set operationRegister to 1,025 (which is the sum of 1 + 1,024). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15840.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.smua.enable = status.operation.instrument.smua.MEAS
---- 
---- --Use a constant to set bit B4 of the operation status SMU A summary enable register.
---- status.operation.instrument.smua.enable = 1025
---- 
---- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
---- ```
-status.operation.instrument.smub.ntr = 0
-
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -14350,8 +13538,26 @@ status.operation.instrument.smub.ntr = 0
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
-status.operation.instrument.smub.ptr = 0
 
+
+--- **This attribute contains the operation status SMU X summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. The binary equivalent of the value indicates which register bits are set. In the binary equivalent, the least significant bit is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02500e+02 (which is 1,025) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B0 and bit B10 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the operation status SMU A summary enable register, set status.operation.instrument.smua.enable = status.operation.instrument.smua.CAL.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B0 and B10, set operationRegister to 1,025 (which is the sum of 1 + 1,024). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15840.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.smua.enable = status.operation.instrument.smua.MEAS
+--- 
+--- --Use a constant to set bit B4 of the operation status SMU A summary enable register.
+--- status.operation.instrument.smua.enable = 1025
+--- 
+--- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
+--- ```
 ---@class status.operation.instrument.trigger_blender
 status.operation.instrument.trigger_blender = {}
 
@@ -14371,8 +13577,6 @@ status.operation.instrument.trigger_blender = {}
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
-status.operation.instrument.trigger_blender.condition = 0
-
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -14390,8 +13594,6 @@ status.operation.instrument.trigger_blender.condition = 0
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
-status.operation.instrument.trigger_blender.enable = 0
-
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -14409,27 +13611,6 @@ status.operation.instrument.trigger_blender.enable = 0
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
-status.operation.instrument.trigger_blender.event = 0
-
-
-
---- **This attribute contains the operation status trigger blender summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status trigger blender summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. For example, to set bit B10, set operationRegister to 1024.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15842.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.trigger_blender.enable = 1024
---- 
---- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
---- ```
-status.operation.instrument.trigger_blender.ntr = 0
-
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -14447,8 +13628,23 @@ status.operation.instrument.trigger_blender.ntr = 0
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
-status.operation.instrument.trigger_blender.ptr = 0
 
+
+--- **This attribute contains the operation status trigger blender summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status trigger blender summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. For example, to set bit B10, set operationRegister to 1024.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15842.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.trigger_blender.enable = 1024
+--- 
+--- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
+--- ```
 ---@class status.operation.instrument.trigger_timer
 status.operation.instrument.trigger_timer = {}
 
@@ -14468,8 +13664,6 @@ status.operation.instrument.trigger_timer = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
-status.operation.instrument.trigger_timer.condition = 0
-
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -14487,8 +13681,6 @@ status.operation.instrument.trigger_timer.condition = 0
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
-status.operation.instrument.trigger_timer.enable = 0
-
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -14506,27 +13698,6 @@ status.operation.instrument.trigger_timer.enable = 0
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
-status.operation.instrument.trigger_timer.event = 0
-
-
-
---- **This attribute contains the operation status trigger timer summary register set. **
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status trigger timer summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. For example, to set bit B10, set operationRegister to 1024.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15844.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.trigger_timer.enable = 1024
---- 
---- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
---- ```
-status.operation.instrument.trigger_timer.ntr = 0
-
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -14544,8 +13715,23 @@ status.operation.instrument.trigger_timer.ntr = 0
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
-status.operation.instrument.trigger_timer.ptr = 0
 
+
+--- **This attribute contains the operation status trigger timer summary register set. **
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status trigger timer summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. For example, to set bit B10, set operationRegister to 1024.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15844.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.trigger_timer.enable = 1024
+--- 
+--- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
+--- ```
 ---@class status.operation.instrument.tsplink
 status.operation.instrument.tsplink = {}
 
@@ -14565,8 +13751,6 @@ status.operation.instrument.tsplink = {}
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
-status.operation.instrument.tsplink.condition = 0
-
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -14584,8 +13768,6 @@ status.operation.instrument.tsplink.condition = 0
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
-status.operation.instrument.tsplink.enable = 0
-
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -14603,27 +13785,6 @@ status.operation.instrument.tsplink.enable = 0
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
-status.operation.instrument.tsplink.event = 0
-
-
-
---- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status TSP-Link summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. For example, to set bit B10, set operationRegister to 1024.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15846.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.tsplink.enable = 1024
---- 
---- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
---- ```
-status.operation.instrument.tsplink.ntr = 0
-
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -14641,8 +13802,23 @@ status.operation.instrument.tsplink.ntr = 0
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
-status.operation.instrument.tsplink.ptr = 0
 
+
+--- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status TSP-Link summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. For example, to set bit B10, set operationRegister to 1024.
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15846.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.tsplink.enable = 1024
+--- 
+--- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
+--- ```
 ---@class status.questionable.instrument.smua
 status.questionable.instrument.smua = {}
 
@@ -14664,8 +13840,6 @@ status.questionable.instrument.smua = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smua.condition = 0
-
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -14685,8 +13859,6 @@ status.questionable.instrument.smua.condition = 0
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smua.enable = 0
-
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -14706,29 +13878,6 @@ status.questionable.instrument.smua.enable = 0
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smua.event = 0
-
-
-
---- **This attribute contains the questionable status SMU X summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status instrument SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 7.68000e+02 (which is 768) is read as the value of the condition register, the binary equivalent is 0000 0011 0000 0000. This value indicates that bit B8 and bit B9 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B8 of the questionable status SMU A summary enable register, set status.questionable.instrument.smua.enable = status.questionable.instrument.smua.CAL.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B8 and B9, set questionableRegister to 768 (which is the sum of 256 + 512).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15856.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- questionableRegister = status.questionable.instrument.smua.CAL +
----    status.questionable.instrument.smua.UO
---- status.questionable.instrument.smua.enable = questionableRegister
---- 
---- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
---- ```
-status.questionable.instrument.smua.ntr = 0
-
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -14748,8 +13897,25 @@ status.questionable.instrument.smua.ntr = 0
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smua.ptr = 0
 
+
+--- **This attribute contains the questionable status SMU X summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status instrument SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 7.68000e+02 (which is 768) is read as the value of the condition register, the binary equivalent is 0000 0011 0000 0000. This value indicates that bit B8 and bit B9 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B8 of the questionable status SMU A summary enable register, set status.questionable.instrument.smua.enable = status.questionable.instrument.smua.CAL.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B8 and B9, set questionableRegister to 768 (which is the sum of 256 + 512).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15856.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- questionableRegister = status.questionable.instrument.smua.CAL +
+---    status.questionable.instrument.smua.UO
+--- status.questionable.instrument.smua.enable = questionableRegister
+--- 
+--- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
+--- ```
 ---@class status.questionable.instrument.smub
 status.questionable.instrument.smub = {}
 
@@ -14771,8 +13937,6 @@ status.questionable.instrument.smub = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smub.condition = 0
-
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -14792,8 +13956,6 @@ status.questionable.instrument.smub.condition = 0
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smub.enable = 0
-
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -14813,29 +13975,6 @@ status.questionable.instrument.smub.enable = 0
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smub.event = 0
-
-
-
---- **This attribute contains the questionable status SMU X summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the questionable status instrument SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 7.68000e+02 (which is 768) is read as the value of the condition register, the binary equivalent is 0000 0011 0000 0000. This value indicates that bit B8 and bit B9 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B8 of the questionable status SMU A summary enable register, set status.questionable.instrument.smua.enable = status.questionable.instrument.smua.CAL.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B8 and B9, set questionableRegister to 768 (which is the sum of 256 + 512).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15856.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- questionableRegister = status.questionable.instrument.smua.CAL +
----    status.questionable.instrument.smua.UO
---- status.questionable.instrument.smua.enable = questionableRegister
---- 
---- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
---- ```
-status.questionable.instrument.smub.ntr = 0
-
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -14855,8 +13994,25 @@ status.questionable.instrument.smub.ntr = 0
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
-status.questionable.instrument.smub.ptr = 0
 
+
+--- **This attribute contains the questionable status SMU X summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the questionable status instrument SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 7.68000e+02 (which is 768) is read as the value of the condition register, the binary equivalent is 0000 0011 0000 0000. This value indicates that bit B8 and bit B9 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B8 of the questionable status SMU A summary enable register, set status.questionable.instrument.smua.enable = status.questionable.instrument.smua.CAL.In addition to the above constants, questionableRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set questionableRegister to the sum of their decimal weights. For example, to set bits B8 and B9, set questionableRegister to 768 (which is the sum of 256 + 512).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15856.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- questionableRegister = status.questionable.instrument.smua.CAL +
+---    status.questionable.instrument.smua.UO
+--- status.questionable.instrument.smua.enable = questionableRegister
+--- 
+--- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
+--- ```
 ---@class status.measurement.instrument.smua
 status.measurement.instrument.smua = {}
 
@@ -14876,8 +14032,6 @@ status.measurement.instrument.smua = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smua.condition = 0
-
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -14895,8 +14049,6 @@ status.measurement.instrument.smua.condition = 0
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smua.enable = 0
-
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -14914,27 +14066,6 @@ status.measurement.instrument.smua.enable = 0
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smua.event = 0
-
-
-
---- **This attribute contains the registers of the measurement event SMU X summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the measurement event SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 257 is returned for the enable register. The binary equivalent is 0000 0001 0000 0001. This value indicates that bit B0 (VLMT) and bit B8 (BAV) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the measurement event SMU X summary enable register, set status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set measurementRegister to 258 (which is the sum of 2 + 256). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/28238.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT
---- 
---- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
---- ```
-status.measurement.instrument.smua.ntr = 0
-
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -14952,8 +14083,23 @@ status.measurement.instrument.smua.ntr = 0
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smua.ptr = 0
 
+
+--- **This attribute contains the registers of the measurement event SMU X summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the measurement event SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 257 is returned for the enable register. The binary equivalent is 0000 0001 0000 0001. This value indicates that bit B0 (VLMT) and bit B8 (BAV) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the measurement event SMU X summary enable register, set status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set measurementRegister to 258 (which is the sum of 2 + 256). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/28238.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT
+--- 
+--- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
+--- ```
 ---@class status.measurement.instrument.smub
 status.measurement.instrument.smub = {}
 
@@ -14973,8 +14119,6 @@ status.measurement.instrument.smub = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smub.condition = 0
-
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -14992,8 +14136,6 @@ status.measurement.instrument.smub.condition = 0
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smub.enable = 0
-
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -15011,27 +14153,6 @@ status.measurement.instrument.smub.enable = 0
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smub.event = 0
-
-
-
---- **This attribute contains the registers of the measurement event SMU X summary register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the measurement event SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 257 is returned for the enable register. The binary equivalent is 0000 0001 0000 0001. This value indicates that bit B0 (VLMT) and bit B8 (BAV) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the measurement event SMU X summary enable register, set status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set measurementRegister to 258 (which is the sum of 2 + 256). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/28238.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT
---- 
---- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
---- ```
-status.measurement.instrument.smub.ntr = 0
-
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -15049,8 +14170,23 @@ status.measurement.instrument.smub.ntr = 0
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
-status.measurement.instrument.smub.ptr = 0
 
+
+--- **This attribute contains the registers of the measurement event SMU X summary register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the measurement event SMU X summary registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, assume the value 257 is returned for the enable register. The binary equivalent is 0000 0001 0000 0001. This value indicates that bit B0 (VLMT) and bit B8 (BAV) are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B0 of the measurement event SMU X summary enable register, set status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT.In addition to the above constants, measurementRegister can be set to the decimal equivalent of the bit to set. To set more than one bit of the register, set measurementRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set measurementRegister to 258 (which is the sum of 2 + 256). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/28238.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.measurement.instrument.smua.enable = status.measurement.instrument.smua.VLMT
+--- 
+--- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
+--- ```
 ---@class status.operation.instrument.digio.trigger_overrun
 status.operation.instrument.digio.trigger_overrun = {}
 
@@ -15076,8 +14212,6 @@ status.operation.instrument.digio.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
-status.operation.instrument.digio.trigger_overrun.condition = 0
-
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15101,8 +14235,6 @@ status.operation.instrument.digio.trigger_overrun.condition = 0
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
-status.operation.instrument.digio.trigger_overrun.enable = 0
-
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15126,33 +14258,6 @@ status.operation.instrument.digio.trigger_overrun.enable = 0
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
-status.operation.instrument.digio.trigger_overrun.event = 0
-
-
-
---- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status digital I/O overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitA set bit indicates that the specified digital I/O line generated an action overrun when it was triggered to generate an output trigger.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status digital I/O overrun enable register, set status.operation.instrument.digio.trigger_overrun.enable = status.operation.instrument.digio.trigger_overrun.LINE1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal values. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1,024). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15837.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.instrument.digio.trigger_overrun.LINE1 +
----    status.operation.instrument.digio.trigger_overrun.LINE10
---- status.operation.instrument.digio.trigger_overrun.enable = operationRegister
---- 
---- --Uses constants to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
---- operationRegister = 1026
---- status.operation.instrument.digio.trigger_overrun.enable = operationRegister
---- 
---- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
---- ```
-status.operation.instrument.digio.trigger_overrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15176,8 +14281,29 @@ status.operation.instrument.digio.trigger_overrun.ntr = 0
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
-status.operation.instrument.digio.trigger_overrun.ptr = 0
 
+
+--- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status digital I/O overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 1.02600e+03 (which is 1026) is read as the value of the condition register, the binary equivalent is 0000 0100 0000 0010. This value indicates that bit B1 and bit B10 are set.* Least significant bit** Most significant bitA set bit indicates that the specified digital I/O line generated an action overrun when it was triggered to generate an output trigger.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status digital I/O overrun enable register, set status.operation.instrument.digio.trigger_overrun.enable = status.operation.instrument.digio.trigger_overrun.LINE1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal values. For example, to set bits B1 and B10, set operationRegister to 1,026 (which is the sum of 2 + 1,024). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15837.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.instrument.digio.trigger_overrun.LINE1 +
+---    status.operation.instrument.digio.trigger_overrun.LINE10
+--- status.operation.instrument.digio.trigger_overrun.enable = operationRegister
+--- 
+--- --Uses constants to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
+--- operationRegister = 1026
+--- status.operation.instrument.digio.trigger_overrun.enable = operationRegister
+--- 
+--- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
+--- ```
 ---@class status.operation.instrument.lan.trigger_overrun
 status.operation.instrument.lan.trigger_overrun = {}
 
@@ -15203,8 +14329,6 @@ status.operation.instrument.lan.trigger_overrun = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
-status.operation.instrument.lan.trigger_overrun.condition = 0
-
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -15228,8 +14352,6 @@ status.operation.instrument.lan.trigger_overrun.condition = 0
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
-status.operation.instrument.lan.trigger_overrun.enable = 0
-
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -15253,33 +14375,6 @@ status.operation.instrument.lan.trigger_overrun.enable = 0
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
-status.operation.instrument.lan.trigger_overrun.event = 0
-
-
-
---- **This attribute contains the operation status LAN trigger overrun register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status LAN trigger overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 2.58000e+02 (which is 258) is read as the value of the condition register, the binary equivalent is 0000 0001 0000 0010. This value indicates that bit B1 and bit B8 are set.* Least significant bit** Most significant bitA set bit indicates that the specified LAN trigger generated an action overrun when triggered to generate a trigger packet.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status LAN trigger overrun enable register, set status.operation.instrument.lan.trigger_overrun.enable = status.operation.instrument.lan.trigger_overrun.LAN1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set operationRegister to 258 (which is the sum of 2 + 256).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15839.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- operationRegister = status.operation.instrument.lan.trigger_overrun.LAN1 +
----    status.operation.instrument.lan.trigger_overrun.LAN8
---- status.operation.instrument.lan.trigger_overrun.enable = operationRegister
---- 
---- --Use constants to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
---- operationRegister = 258
---- status.operation.instrument.lan.trigger_overrun.enable = operationRegister
---- 
---- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
---- ```
-status.operation.instrument.lan.trigger_overrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -15303,8 +14398,29 @@ status.operation.instrument.lan.trigger_overrun.ntr = 0
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
-status.operation.instrument.lan.trigger_overrun.ptr = 0
 
+
+--- **This attribute contains the operation status LAN trigger overrun register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status LAN trigger overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 2.58000e+02 (which is 258) is read as the value of the condition register, the binary equivalent is 0000 0001 0000 0010. This value indicates that bit B1 and bit B8 are set.* Least significant bit** Most significant bitA set bit indicates that the specified LAN trigger generated an action overrun when triggered to generate a trigger packet.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status LAN trigger overrun enable register, set status.operation.instrument.lan.trigger_overrun.enable = status.operation.instrument.lan.trigger_overrun.LAN1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B8, set operationRegister to 258 (which is the sum of 2 + 256).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15839.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- operationRegister = status.operation.instrument.lan.trigger_overrun.LAN1 +
+---    status.operation.instrument.lan.trigger_overrun.LAN8
+--- status.operation.instrument.lan.trigger_overrun.enable = operationRegister
+--- 
+--- --Use constants to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
+--- operationRegister = 258
+--- status.operation.instrument.lan.trigger_overrun.enable = operationRegister
+--- 
+--- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
+--- ```
 ---@class status.operation.instrument.smua.trigger_overrrun
 status.operation.instrument.smua.trigger_overrrun = {}
 
@@ -15328,8 +14444,6 @@ status.operation.instrument.smua.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smua.trigger_overrrun.condition = 0
-
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -15351,8 +14465,6 @@ status.operation.instrument.smua.trigger_overrrun.condition = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smua.trigger_overrrun.enable = 0
-
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -15374,31 +14486,6 @@ status.operation.instrument.smua.trigger_overrrun.enable = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smua.trigger_overrrun.event = 0
-
-
-
---- **This attribute contains the operation status SMU X trigger overrun register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status SMU X trigger overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status SMU A trigger overrun enable register, set status.operation.instrument.smua.trigger_overrun.enable =     status.operation.instrument.smua.trigger_overrun.ARM.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15841.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.smua.trigger_overrun.enable =
----    status.operation.instrument.smua.trigger_overrun.ARM
---- 
---- --Uses a constant to sets the ARM bit of the operation status SMU A trigger overrun enable register.
---- status.operation.instrument.smua.trigger_overrun.enable = 18
---- 
---- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
---- ```
-status.operation.instrument.smua.trigger_overrrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -15420,8 +14507,27 @@ status.operation.instrument.smua.trigger_overrrun.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smua.trigger_overrrun.ptr = 0
 
+
+--- **This attribute contains the operation status SMU X trigger overrun register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status SMU X trigger overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status SMU A trigger overrun enable register, set status.operation.instrument.smua.trigger_overrun.enable =     status.operation.instrument.smua.trigger_overrun.ARM.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15841.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.smua.trigger_overrun.enable =
+---    status.operation.instrument.smua.trigger_overrun.ARM
+--- 
+--- --Uses a constant to sets the ARM bit of the operation status SMU A trigger overrun enable register.
+--- status.operation.instrument.smua.trigger_overrun.enable = 18
+--- 
+--- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
+--- ```
 ---@class status.operation.instrument.smub.trigger_overrrun
 status.operation.instrument.smub.trigger_overrrun = {}
 
@@ -15445,8 +14551,6 @@ status.operation.instrument.smub.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smub.trigger_overrrun.condition = 0
-
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -15468,8 +14572,6 @@ status.operation.instrument.smub.trigger_overrrun.condition = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smub.trigger_overrrun.enable = 0
-
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -15491,31 +14593,6 @@ status.operation.instrument.smub.trigger_overrrun.enable = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smub.trigger_overrrun.event = 0
-
-
-
---- **This attribute contains the operation status SMU X trigger overrun register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status SMU X trigger overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status SMU A trigger overrun enable register, set status.operation.instrument.smua.trigger_overrun.enable =     status.operation.instrument.smua.trigger_overrun.ARM.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15841.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.smua.trigger_overrun.enable =
----    status.operation.instrument.smua.trigger_overrun.ARM
---- 
---- --Uses a constant to sets the ARM bit of the operation status SMU A trigger overrun enable register.
---- status.operation.instrument.smua.trigger_overrun.enable = 18
---- 
---- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
---- ```
-status.operation.instrument.smub.trigger_overrrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -15537,8 +14614,27 @@ status.operation.instrument.smub.trigger_overrrun.ntr = 0
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
-status.operation.instrument.smub.trigger_overrrun.ptr = 0
 
+
+--- **This attribute contains the operation status SMU X trigger overrun register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status SMU X trigger overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitFor information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status SMU A trigger overrun enable register, set status.operation.instrument.smua.trigger_overrun.enable =     status.operation.instrument.smua.trigger_overrun.ARM.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15841.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.smua.trigger_overrun.enable =
+---    status.operation.instrument.smua.trigger_overrun.ARM
+--- 
+--- --Uses a constant to sets the ARM bit of the operation status SMU A trigger overrun enable register.
+--- status.operation.instrument.smua.trigger_overrun.enable = 18
+--- 
+--- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
+--- ```
 ---@class status.operation.instrument.trigger_timer.trigger_overrun
 status.operation.instrument.trigger_timer.trigger_overrun = {}
 
@@ -15562,8 +14658,6 @@ status.operation.instrument.trigger_timer.trigger_overrun = {}
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
-status.operation.instrument.trigger_timer.trigger_overrun.condition = 0
-
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -15585,8 +14679,6 @@ status.operation.instrument.trigger_timer.trigger_overrun.condition = 0
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
-status.operation.instrument.trigger_timer.trigger_overrun.enable = 0
-
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -15608,31 +14700,6 @@ status.operation.instrument.trigger_timer.trigger_overrun.enable = 0
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
-status.operation.instrument.trigger_timer.trigger_overrun.event = 0
-
-
-
---- **This attribute contains the operation status trigger timer overrun register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status trigger timer overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitA set bit indicates the specified timer generated an action overrun because it was still processing a delay from a previous trigger when a new trigger was received.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status trigger timer trigger overrun enable register, set status.operation.instrument.trigger_timer.trigger_overrun.enable = status.operation.instrument.trigger_timer.trigger_overrun.TMR1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15845.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.trigger_timer.trigger_overrun.enable =
----    status.operation.instrument.trigger_timer.trigger_overrun.TMR3
---- 
---- --Uses a constant to set the timer 3 bit of the operation status trigger timer overrun enable register.
---- status.operation.instrument.trigger_timer.trigger_overrun.enable = 18
---- 
---- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
---- ```
-status.operation.instrument.trigger_timer.trigger_overrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -15654,8 +14721,27 @@ status.operation.instrument.trigger_timer.trigger_overrun.ntr = 0
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
-status.operation.instrument.trigger_timer.trigger_overrun.ptr = 0
 
+
+--- **This attribute contains the operation status trigger timer overrun register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status trigger timer overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitA set bit indicates the specified timer generated an action overrun because it was still processing a delay from a previous trigger when a new trigger was received.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status trigger timer trigger overrun enable register, set status.operation.instrument.trigger_timer.trigger_overrun.enable = status.operation.instrument.trigger_timer.trigger_overrun.TMR1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15845.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.trigger_timer.trigger_overrun.enable =
+---    status.operation.instrument.trigger_timer.trigger_overrun.TMR3
+--- 
+--- --Uses a constant to set the timer 3 bit of the operation status trigger timer overrun enable register.
+--- status.operation.instrument.trigger_timer.trigger_overrun.enable = 18
+--- 
+--- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
+--- ```
 ---@class status.operation.instrument.tsplink.trigger_overrun
 status.operation.instrument.tsplink.trigger_overrun = {}
 
@@ -15679,8 +14765,6 @@ status.operation.instrument.tsplink.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
-status.operation.instrument.tsplink.trigger_overrun.condition = 0
-
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15702,8 +14786,6 @@ status.operation.instrument.tsplink.trigger_overrun.condition = 0
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
-status.operation.instrument.tsplink.trigger_overrun.enable = 0
-
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15725,31 +14807,6 @@ status.operation.instrument.tsplink.trigger_overrun.enable = 0
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
-status.operation.instrument.tsplink.trigger_overrun.event = 0
-
-
-
---- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status TSP-link overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 10 is read as the value of the condition register, the binary equivalent is 0000 0000 0000 1010. This value indicates that bit B1 and bit B3 are set.* Least significant bit** Most significant bitA set bit indicates that the specified line generated an action overrun when triggered to generate an output trigger.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status TSP-Link overrun enable register, set status.operation.instrument.tsplink.trigger_overrun.enable = status.operation.instrument.tsplink.trigger_overrun.LINE1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B3, set operationRegister to 10 (which is the sum of 2 + 8). 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/15847.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.tsplink.trigger_overrun.enable =
----    status.operation.instrument.tsplink.trigger_overrun.LINE1
---- 
---- --Uses a constant to set the line 1 bit of the operation status TSP-Link overrun enable register.
---- status.operation.instrument.tsplink.trigger_overrun.enable = 10
---- 
---- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
---- ```
-status.operation.instrument.tsplink.trigger_overrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15771,8 +14828,27 @@ status.operation.instrument.tsplink.trigger_overrun.ntr = 0
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
-status.operation.instrument.tsplink.trigger_overrun.ptr = 0
 
+
+--- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status TSP-link overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 10 is read as the value of the condition register, the binary equivalent is 0000 0000 0000 1010. This value indicates that bit B1 and bit B3 are set.* Least significant bit** Most significant bitA set bit indicates that the specified line generated an action overrun when triggered to generate an output trigger.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status TSP-Link overrun enable register, set status.operation.instrument.tsplink.trigger_overrun.enable = status.operation.instrument.tsplink.trigger_overrun.LINE1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B3, set operationRegister to 10 (which is the sum of 2 + 8). 
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/15847.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.tsplink.trigger_overrun.enable =
+---    status.operation.instrument.tsplink.trigger_overrun.LINE1
+--- 
+--- --Uses a constant to set the line 1 bit of the operation status TSP-Link overrun enable register.
+--- status.operation.instrument.tsplink.trigger_overrun.enable = 10
+--- 
+--- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
+--- ```
 ---@class status.operation.instrument.trigger_blender.trigger_overrun
 status.operation.instrument.trigger_blender.trigger_overrun = {}
 
@@ -15796,8 +14872,6 @@ status.operation.instrument.trigger_blender.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
-status.operation.instrument.trigger_blender.trigger_overrun.condition = 0
-
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -15819,8 +14893,6 @@ status.operation.instrument.trigger_blender.trigger_overrun.condition = 0
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
-status.operation.instrument.trigger_blender.trigger_overrun.enable = 0
-
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -15842,31 +14914,6 @@ status.operation.instrument.trigger_blender.trigger_overrun.enable = 0
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
-status.operation.instrument.trigger_blender.trigger_overrun.event = 0
-
-
-
---- **This attribute contains the operation status trigger blender overrun register set.**
----
---- *Type:*  Attribute_RW
----
---- *Details:*<br>
---- These attributes are used to read or write to the operation status trigger blender overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitA set bit value indicates that the specified trigger blender generated an action overrun.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status trigger blender overrun enable register, set status.operation.instrument.trigger_blender.trigger_overrun.enable = status.operation.instrument.trigger_blender.trigger_overrun.BLND1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/29234.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- status.operation.instrument.trigger_blender.trigger_overrun.enable
----    = status.operation.instrument.trigger_blender.trigger_overrun.BLND1
---- 
---- --Uses the constant to set the bit for blender 1 of the operation status trigger blender overrun enable register.
---- status.operation.instrument.trigger_blender.trigger_overrun.enable = 18
---- 
---- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
---- ```
-status.operation.instrument.trigger_blender.trigger_overrun.ntr = 0
-
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -15888,8 +14935,27 @@ status.operation.instrument.trigger_blender.trigger_overrun.ntr = 0
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
-status.operation.instrument.trigger_blender.trigger_overrun.ptr = 0
 
+
+--- **This attribute contains the operation status trigger blender overrun register set.**
+---
+--- *Type:*  Attribute_RW
+---
+--- *Details:*<br>
+--- These attributes are used to read or write to the operation status trigger blender overrun registers. Reading a status register returns a value. The binary equivalent of the returned value indicates which register bits are set. The least significant bit of the binary number is bit B0, and the most significant bit is bit B15. For example, if a value of 18 is read as the value of the condition register, the binary equivalent is 0000 0000 0001 0010. This value indicates that bit B1 and bit B4 are set.* Least significant bit** Most significant bitA set bit value indicates that the specified trigger blender generated an action overrun.For information about .condition, .enable, .event, .ntr, and .ptr registers, refer to Status register set contents and Enable and transition registers. The individual bits of this register are defined in the following table.As an example, to set bit B1 of the operation status trigger blender overrun enable register, set status.operation.instrument.trigger_blender.trigger_overrun.enable = status.operation.instrument.trigger_blender.trigger_overrun.BLND1.In addition to the above constants, operationRegister can be set to the numeric equivalent of the bit to set. To set more than one bit of the register, set operationRegister to the sum of their decimal weights. For example, to set bits B1 and B4, set operationRegister to 18 (which is the sum of 2 + 16).
+---
+---[command help](command:kic.viewHelpDocument?["Commands_26XX/29234.htm"])
+---
+---<br>*Examples:*<br>
+--- ```lua
+--- status.operation.instrument.trigger_blender.trigger_overrun.enable
+---    = status.operation.instrument.trigger_blender.trigger_overrun.BLND1
+--- 
+--- --Uses the constant to set the bit for blender 1 of the operation status trigger blender overrun enable register.
+--- status.operation.instrument.trigger_blender.trigger_overrun.enable = 18
+--- 
+--- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
+--- ```
 
 
 --- **This function sets the real-time clock (sets present time of the system).**

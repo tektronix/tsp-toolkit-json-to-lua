@@ -2,15 +2,15 @@
 
 ---@class io_object
 local io_object={}
----@class script_object
-local script_object={}
+---@class scriptVar
+local scriptVar={}
 ---@class eventID
 
 ---@class file_object
 local file_object ={}
 
----@class bufferMethods
-local bufferMethods={}
+---@class bufferVar
+local bufferVar={}
 ---@class digio
  digio = {}
 
@@ -22,6 +22,9 @@ local bufferMethods={}
 
 ---@class tspnetConnectionID
 local tspnetConnectionID = {}
+
+ ---@class promptID
+local promptID = {}
 
 ---@class dataqueue
 dataqueue = {}
@@ -61,7 +64,7 @@ dataqueue = {}
 ---@return boolean result The resulting value of true or false based on the success of the function
 ---@param value any The data item to add; value can be of any type
 ---@param timeout number The maximum number of seconds to wait for space in the data queue
----@overload fun(value:any):boolean
+---@overload fun(value:any):result:boolean
 function dataqueue.add(value, timeout) end
 
 
@@ -95,7 +98,7 @@ function dataqueue.clear() end
 
 dataqueue.CAPACITY = nil
 
----@alias dataqueueCAPACITYcount
+---@alias dataqueue.CAPACITY
 ---|`dataqueue.CAPACITY`
 
 
@@ -122,9 +125,8 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
----@type dataqueueCAPACITYcount
-dataqueue.CAPACITY = 0
-
+---@type dataqueue.CAPACITY | integer
+dataqueue.CAPACITY = dataqueue.CAPACITY
 
 
 --- **This attribute contains the number of items in the data queue.**
@@ -153,8 +155,8 @@ dataqueue.CAPACITY = 0
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
+---@type number
 dataqueue.count = 0
-
 
 
 --- **This function removes the next entry from the data queue.**
@@ -199,7 +201,7 @@ dataqueue.count = 0
 --- ```
 ---@return any value The next entry in the data queue
 ---@param timeout number The number of seconds to wait for data in the queue
----@overload fun():any
+---@overload fun():value:any
 function dataqueue.next(timeout) end
 ---@class fs
 fs = {}
@@ -319,7 +321,8 @@ function fs.is_dir(path) end
 --- --If it does not exist, create a directory named temp.
 --- ```
 ---@return string path The returned path of the new directory
-function fs.mkdir(newPath) end
+---@param newpath string Location (path) of where to create the new directory
+function fs.mkdir(newpath) end
 
 
 --- **This function returns a list of the file system entries in the directory.**
@@ -346,7 +349,7 @@ function fs.mkdir(newPath) end
 --- --Set entries as the variable for the file system entries in rootDirectory.
 --- --Return the number of files and directories in the directory.
 --- ```
----@return any files A table containing the names of all the file system entries in the specified directory
+---@return string[] files A table containing the names of all the file system entries in the specified directory
 ---@param path string The directory path
 function fs.readdir(path) end
 
@@ -420,8 +423,8 @@ lan = {}
 --- 
 --- --Displays the LXI domain.
 --- ```
+---@type number
 lan.lxidomain = 0
-
 ---@class nodeArr
 local nodeArr = {}
 
@@ -516,8 +519,8 @@ localnode = {}
 --- --Outputs the model number of the local node. For example:
 --- --2460 
 --- ```
-localnode.model = 0
-
+---@type string
+localnode.model = ''
 
 
 --- **This function sets the date and time of the instrument.**
@@ -598,8 +601,8 @@ function localnode.gettime() end
 --- --Outputs the present version level. Example output:
 --- --1.0.0a
 --- ```
-localnode.version = 0
-
+---@type string
+localnode.version = ''
 
 
 --- **This attribute stores the instrument's serial number.**
@@ -620,8 +623,8 @@ localnode.version = 0
 --- --Clears the instrument display.
 --- --Places the serial number of this instrument on the bottom line of the USER swipe screen display. Displays the USER swipe screen.
 --- ```
-localnode.serialno = 0
-
+---@type string
+localnode.serialno = ''
 
 
 --- **This attribute contains the power line frequency setting that is used for NPLC calculations.**
@@ -640,18 +643,18 @@ localnode.serialno = 0
 --- 
 --- --Reads the line frequency setting.
 --- ```
+---@type number
 localnode.linefreq = 0
 
-
+localnode.ACCESS_PROTECTED = nil
 localnode.ACCESS_FULL = nil
 localnode.ACCESS_LOCKOUT = nil
-localnode.ACCESS_PROTECTED = nil
 localnode.ACCESS_EXCLUSIVE = nil
 
 ---@alias localnodeaccessaccessType
+---|`localnode.ACCESS_PROTECTED`
 ---|`localnode.ACCESS_FULL`
 ---|`localnode.ACCESS_LOCKOUT`
----|`localnode.ACCESS_PROTECTED`
 ---|`localnode.ACCESS_EXCLUSIVE`
 
 
@@ -676,8 +679,7 @@ localnode.ACCESS_EXCLUSIVE = nil
 --- --Log out of the interface.
 --- ```
 ---@type localnodeaccessaccessType
-localnode.access = 0
-
+localnode.access = localnode.ACCESS_PROTECTED
 ---@class tsplink
 tsplink = {}
 
@@ -697,8 +699,8 @@ tsplink = {}
 --- 
 --- --Assign the instrument to TSP-Link group number 3.
 --- ```
+---@type number
 tsplink.group = 0
-
 
 
 --- **This attribute defines the node number. **
@@ -716,8 +718,8 @@ tsplink.group = 0
 --- 
 --- --Sets the TSP-Link node for this instrument to number 3.
 --- ```
+---@type number
 tsplink.node = 0
-
 
 
 --- **This function reads the TSP-Link trigger lines as a digital I/O port. **
@@ -761,8 +763,8 @@ function tsplink.readport() end
 --- --Read the state of the TSP-Link system. If it is online, the output is:
 --- --online
 --- ```
+---@type "online" | "offline"
 tsplink.state = 0
-
 
 
 --- **This function writes to all TSP-Link synchronization lines as a digital I/O port. **
@@ -799,8 +801,8 @@ function tsplink.writeport(data) end
 --- 
 --- --Store the TSP-Link master node number in a variable called LinkMaster.
 --- ```
+---@type number
 tsplink.master = 0
-
 
 
 --- **This function defines a trigger model block that clears the reading buffer.**
@@ -834,12 +836,12 @@ trigger.CLEAR_NEVER = nil
 ---|`trigger.CLEAR_NEVER`
 
 
-trigger.WAIT_AND = nil
 trigger.WAIT_OR = nil
+trigger.WAIT_AND = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_WAITlogic
----|`trigger.WAIT_AND`
 ---|`trigger.WAIT_OR`
+---|`trigger.WAIT_AND`
 
 
 
@@ -864,8 +866,8 @@ trigger.WAIT_OR = nil
 ---    ```trigger.CLEAR_ENTER```<br>
 ---    ```trigger.CLEAR_NEVER```<br>
 --- - *logic*: If each event must occur before the trigger model continues<br>
----    ```trigger.WAIT_AND```<br>
 ---    ```trigger.WAIT_OR```<br>
+---    ```trigger.WAIT_AND```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_WAIT, event)
@@ -874,14 +876,14 @@ trigger.WAIT_OR = nil
 trigger.BLOCK_WAIT = 0
 
 
-trigger.COUNT_INFINITE = nil
-trigger.COUNT_STOP = nil
 trigger.COUNT_AUTO = nil
+trigger.COUNT_STOP = nil
+trigger.COUNT_INFINITE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_MEASURE_DIGITIZEcount
----|`trigger.COUNT_INFINITE`
----|`trigger.COUNT_STOP`
 ---|`trigger.COUNT_AUTO`
+---|`trigger.COUNT_STOP`
+---|`trigger.COUNT_INFINITE`
 
 
 
@@ -954,9 +956,9 @@ trigger.COUNT_AUTO = nil
 --- Additional paramteres are:
 --- - *bufferName*: The name of the buffer, which must be an existing buffer; if no buffer is defined, defbuffer1 is used<br>
 --- - *count*: The number of measure or digitize readings to make before moving to the next block in the trigger model; set to<br>
----    ```trigger.COUNT_INFINITE```<br>
----    ```trigger.COUNT_STOP```<br>
 ---    ```trigger.COUNT_AUTO```<br>
+---    ```trigger.COUNT_STOP```<br>
+---    ```trigger.COUNT_INFINITE```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_MEASURE_DIGITIZE)
@@ -1116,12 +1118,12 @@ trigger.BLOCK_CONFIG_NEXT = 0
 trigger.BLOCK_CONFIG_PREV = 0
 
 
-trigger.USER_DELAY_M = nil
 trigger.USER_DELAY_S = nil
+trigger.USER_DELAY_M = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_DELAY_DYNAMICuserDelay
----|`trigger.USER_DELAY_M`
 ---|`trigger.USER_DELAY_S`
+---|`trigger.USER_DELAY_M`
 
 
 
@@ -1154,8 +1156,8 @@ trigger.USER_DELAY_S = nil
 --- ```
 --- Additional paramteres are:
 --- - *userDelay*: The number of the user delay<br>
----    ```trigger.USER_DELAY_M```<br>
 ---    ```trigger.USER_DELAY_S```<br>
+---    ```trigger.USER_DELAY_M```<br>
 trigger.BLOCK_DELAY_DYNAMIC = 0
 
 
@@ -1229,38 +1231,38 @@ trigger.BLOCK_BRANCH_COUNTER = 0
 trigger.BLOCK_BRANCH_ON_EVENT = 0
 
 
-trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_BELOW = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitType
----|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_BELOW`
 
 
-trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_BELOW = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitA
----|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_BELOW`
 
 
-trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_BELOW = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitB
----|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_BELOW`
 
@@ -1283,18 +1285,18 @@ trigger.LIMIT_BELOW = nil
 --- ```
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
----    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 --- - *limitA*: The lower limit that the measurement is tested against; if limitType is set to<br>
----    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 --- - *limitB*: The upper limit that the measurement is tested against; if limitType is set to<br>
----    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the defined criteria<br>
@@ -1417,14 +1419,14 @@ trigger.BLOCK_NOTIFY = 0
 trigger.BLOCK_BRANCH_ALWAYS = 0
 
 
-trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_BELOW = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_DYNAMIClimitType
----|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_BELOW`
 
@@ -1447,8 +1449,8 @@ trigger.LIMIT_BELOW = nil
 --- ```
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
----    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 --- - *limitNumber*: The limit number (1 or 2)<br>
@@ -1482,15 +1484,15 @@ trigger.BLOCK_DELAY_CONSTANT = 0
 
 
 trigger.LOG_INFO = nil
-trigger.LOG_WARN = nil
 trigger.LOG_WARN_ABORT = nil
 trigger.LOG_ERROR = nil
+trigger.LOG_WARN = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_LOG_EVENTeventNumber
 ---|`trigger.LOG_INFO`
----|`trigger.LOG_WARN`
 ---|`trigger.LOG_WARN_ABORT`
 ---|`trigger.LOG_ERROR`
+---|`trigger.LOG_WARN`
 
 
 
@@ -1513,9 +1515,9 @@ trigger.LOG_ERROR = nil
 --- Additional paramteres are:
 --- - *eventNumber*: The event number<br>
 ---    ```trigger.LOG_INFO```<br>
----    ```trigger.LOG_WARN```<br>
 ---    ```trigger.LOG_WARN_ABORT```<br>
 ---    ```trigger.LOG_ERROR```<br>
+---    ```trigger.LOG_WARN```<br>
 --- - *message*: A string up to 31 characters<br>
 trigger.BLOCK_LOG_EVENT = 0
 
@@ -1580,13 +1582,13 @@ trigger.BLOCK_RESET_BRANCH_COUNT = 0
 
 
 trigger.CONT_AUTO = nil
-trigger.CONT_RESTART = nil
 trigger.CONT_OFF = nil
+trigger.CONT_RESTART = nil
 
 ---@alias triggercontinuoussetting
 ---|`trigger.CONT_AUTO`
----|`trigger.CONT_RESTART`
 ---|`trigger.CONT_OFF`
+---|`trigger.CONT_RESTART`
 
 
 
@@ -1606,8 +1608,7 @@ trigger.CONT_OFF = nil
 --- --When the instrument starts up, the measurement method is set to idle.
 --- ```
 ---@type triggercontinuoussetting
-trigger.continuous = 0
-
+trigger.continuous = trigger.CONT_AUTO
 
 
 --- **This attribute contains the source code of a script.**
@@ -1629,8 +1630,8 @@ trigger.continuous = 0
 --- --display.settext(display.TEXT1, "Text on line 1")
 --- --display.settext(display.TEXT2, "Text on line 2")
 --- ```
-script_object.source = 0
-
+---@type string
+scriptVar.source = ''
 ---@class smu
 smu = {}
 
@@ -1659,8 +1660,7 @@ smu.TERMINALS_FRONT = nil
 --- --Use the front-panel terminals for measurements.
 --- ```
 ---@type smuterminalsterminals
-smu.terminals = 0
-
+smu.terminals = smu.TERMINALS_REAR
 
 
 --- **This function turns off the output and resets the commands that begin with smu. to their default settings.**
@@ -1711,28 +1711,28 @@ buffer = {}
 --- --["min"]={["seconds"]=1561123956, ["fractionalseconds"]=0.010184587, ["timestamp"]=1561123956, ["reading"]=8.4974199416e-05}, ["mean"]=0.000132948335, ["stddev"]=4.4270141937e-05, ["max"]={["seconds"]=1561123955, ["fractionalseconds"]=0.833083981, ["timestamp"]=1561123955.8, ["reading"]=0.0002192359033}, ["n"]=12
 --- ```
 ---@return statsVar statsVar A table that contains the entries for buffer statistics; see Details for information on the entries
----@param bufferVar bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@param bufferVar bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
 ---@param absStartTime number An integer that represents the absolute start time in seconds
 ---@param absStartFractional number An integer that represents the portion of the absolute start time that is in fractional seconds
 ---@param absEndTime number An integer that represents the absolute end time in seconds
 ---@param absEndFractional number An integer that represents the portion of the absolute end time that is in fractional seconds
----@overload fun():statsVar
----@overload fun(bufferVar:bufferMethods):statsVar
----@overload fun(bufferVar:bufferMethods,relStartTime:number,relEndTime:number):statsVar
+---@overload fun():statsVar:statsVar
+---@overload fun(bufferVar:bufferVar):statsVar:statsVar
+---@overload fun(bufferVar:bufferVar,relStartTime:number,relEndTime:number):statsVar:statsVar
 function buffer.getstats(bufferVar, absStartTime, absStartFractional, absEndTime, absEndFractional) end
 
-buffer.STYLE_WRITABLE = nil
+buffer.STYLE_WRITABLE_FULL = nil
 buffer.STYLE_FULL = nil
+buffer.STYLE_WRITABLE = nil
 buffer.STYLE_COMPACT = nil
 buffer.STYLE_STANDARD = nil
-buffer.STYLE_WRITABLE_FULL = nil
 
 ---@alias buffermakestyle
----|`buffer.STYLE_WRITABLE`
+---|`buffer.STYLE_WRITABLE_FULL`
 ---|`buffer.STYLE_FULL`
+---|`buffer.STYLE_WRITABLE`
 ---|`buffer.STYLE_COMPACT`
 ---|`buffer.STYLE_STANDARD`
----|`buffer.STYLE_WRITABLE_FULL`
 
 
 
@@ -1751,22 +1751,22 @@ buffer.STYLE_WRITABLE_FULL = nil
 --- 
 --- --Creates a 200-element reading buffer that stores readings with full accuracy named capTest2.
 --- ```
----@return bufferMethods bufferVar The name of the buffer
----@param bufferSize number The maximum number of readings that can be stored in bufferVar; minimum is 10; 0 to maximize buffer size (see Details)
+---@return bufferVar bufferVar The name of the buffer
+---@param bufferSize integer The maximum number of readings that can be stored in bufferVar; minimum is 10; 0 to maximize buffer size (see Details)
 ---@param style buffermakestyle The type of reading buffer to create
----@overload fun(bufferSize:number):bufferMethods
+---@overload fun(bufferSize:integer):bufferVar:bufferVar
 function buffer.make(bufferSize, style) end
 
-buffer.SAVE_RELATIVE_TIME = nil
-buffer.SAVE_RAW_TIME = nil
 buffer.SAVE_TIMESTAMP_TIME = nil
+buffer.SAVE_RELATIVE_TIME = nil
 buffer.SAVE_FORMAT_TIME = nil
+buffer.SAVE_RAW_TIME = nil
 
 ---@alias buffersaveappendtimeFormat
----|`buffer.SAVE_RELATIVE_TIME`
----|`buffer.SAVE_RAW_TIME`
 ---|`buffer.SAVE_TIMESTAMP_TIME`
+---|`buffer.SAVE_RELATIVE_TIME`
 ---|`buffer.SAVE_FORMAT_TIME`
+---|`buffer.SAVE_RAW_TIME`
 
 
 
@@ -1822,13 +1822,14 @@ buffer.SAVE_FORMAT_TIME = nil
 --- 
 --- --Write string data to a file with information about a test file.
 --- ```
----@param bufferVar bufferMethods Indicates the reading buffer to use; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, defbuffer1 is used
+---@param bufferVar bufferVar Indicates the reading buffer to use; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, defbuffer1 is used
+---@param fileName string A string that indicates the name of the file on the USB flash drive in which to save the reading buffer
 ---@param timeFormat buffersaveappendtimeFormat Indicates how date and time information from the buffer is saved in the file on the USB flash drive; the options are
----@param start number Defines the starting point in the buffer to start saving data
----@param endPoint number Defines the ending point in the buffer to stop saving data
----@overload fun(bufferVar:bufferMethods)
----@overload fun(bufferVar:bufferMethods,timeFormat:buffersaveappendtimeFormat)
-function buffer.saveappend(bufferVar, filename, timeFormat, start, endPoint) end
+---@param start integer Defines the starting point in the buffer to start saving data
+---@param end integer Defines the ending point in the buffer to stop saving data
+---@overload fun(bufferVar:bufferVar,fileName:string)
+---@overload fun(bufferVar:bufferVar,fileName:string,timeFormat:buffersaveappendtimeFormat)
+function buffer.saveappend(bufferVar, fileName, timeFormat, start, end) end
 
 
 --- **This function saves data from the specified reading buffer to a USB flash drive.**
@@ -1852,14 +1853,14 @@ function buffer.saveappend(bufferVar, filename, timeFormat, start, endPoint) end
 --- 
 --- --Save readings and raw time stamps from defbuffer1 to a file named defbuf1data on the USB flash drive.
 --- ```
----@param bufferVar bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
+---@param bufferVar bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer
 ---@param fileName string A string that indicates the name of the file on the USB flash drive in which to save the reading buffer
 ---@param what bufferFileSaveDetails Defines which information is saved in the file on the USB flash drive
----@param start number Defines the starting point in the buffer to start saving data
----@param endPoint number Defines the ending point in the buffer to stop saving data
----@overload fun(bufferVar:bufferMethods,fileName:string)
----@overload fun(bufferVar:bufferMethods,fileName:string,what:bufferFileSaveDetails)
-function buffer.save(bufferVar, fileName, what, start, endPoint) end
+---@param start integer Defines the starting point in the buffer to start saving data
+---@param end integer Defines the ending point in the buffer to stop saving data
+---@overload fun(bufferVar:bufferVar,fileName:string)
+---@overload fun(bufferVar:bufferVar,fileName:string,what:bufferFileSaveDetails)
+function buffer.save(bufferVar, fileName, what, start, end) end
 
 
 --- **This function deletes a user-defined reading buffer.**
@@ -1887,7 +1888,7 @@ function buffer.save(bufferVar, fileName, what, start, endPoint) end
 --- --Delete buf400.
 --- --Use collectgarbage() to unallocate the buffer.
 --- ```
----@param bufferName bufferMethods The name of a user-defined reading buffer
+---@param bufferName bufferVar The name of a user-defined reading buffer
 function buffer.delete(bufferName) end
 
 
@@ -1906,7 +1907,7 @@ function buffer.delete(bufferName) end
 --- 
 --- --Clears statistics for defbuffer1.
 --- ```
----@param bufferVar bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1 if not specified
+---@param bufferVar bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; defaults to defbuffer1 if not specified
 ---@overload fun()
 function buffer.clearstats(bufferVar) end
 
@@ -1990,7 +1991,8 @@ function buffer.unit(UNIT_CUSTOMN, unitOfMeasure) end
 --- --Example output:
 --- --0
 --- ```
-bufferMethods.n = 0
+---@type integer
+bufferVar.n = 0
 
 
 --- **This attribute contains the stored readings shown as numbers with units and prefixes.**
@@ -2020,8 +2022,8 @@ bufferMethods.n = 0
 --- --Example output:
 --- --+00.0028 nA, +00.0039 nA, +00.0040 nA
 --- ```
----@type integer[]
-bufferMethods.formattedreadings= {}
+---@type string[]
+bufferVar.formattedreadings = {}
 
 
 --- **This attribute contains the unit of measure that is stored with readings in the reading buffer.**
@@ -2060,8 +2062,8 @@ bufferMethods.formattedreadings= {}
 --- --Output:
 --- --Volt DC, Volt DC, Volt DC
 --- ```
----@type integer[]
-bufferMethods.units= {}
+---@type string[]
+bufferVar.units = {}
 
 
 --- **This attribute sets the number of readings a buffer can store.**
@@ -2107,7 +2109,8 @@ bufferMethods.units= {}
 --- --Output:
 --- --10000
 --- ```
-bufferMethods.capacity = 0
+---@type integer
+bufferVar.capacity = 0
 
 
 --- **This attribute contains the units of measure of the source.**
@@ -2151,8 +2154,8 @@ bufferMethods.capacity = 0
 --- --Output:
 --- --Volt DC, Volt DC, Volt DC
 --- ```
----@type integer[]
-bufferMethods.sourceunits= {}
+---@type string[]
+bufferVar.sourceunits = {}
 
 
 --- **This attribute contains the timestamps, in seconds, when each reading occurred, relative to the timestamp of the first entry in the reading buffer.**
@@ -2183,8 +2186,8 @@ bufferMethods.sourceunits= {}
 --- --Example output:
 --- --0, 0.383541, 0.772005
 --- ```
----@type integer[]
-bufferMethods.relativetimestamps= {}
+---@type number[]
+bufferVar.relativetimestamps = {}
 
 
 --- **This attribute contains the timestamp of a reading in seconds, in UTC format.**
@@ -2210,8 +2213,8 @@ bufferMethods.relativetimestamps= {}
 --- --Example output:
 --- --1362261492, 1362261492, 1362261493, 1362261493, 1362261493, 1362261494
 --- ```
----@type integer[]
-bufferMethods.seconds= {}
+---@type number[]
+bufferVar.seconds = {}
 
 
 --- **This attribute contains the time when the instrument made the reading.**
@@ -2241,8 +2244,8 @@ bufferMethods.seconds= {}
 --- --Output:
 --- --23:09:43, 23:09:43, 23:09:43
 --- ```
----@type integer[]
-bufferMethods.times= {}
+---@type string[]
+bufferVar.times = {}
 
 
 --- **This attribute contains the timestamp when each reading saved in the specified reading buffer occurred.**
@@ -2273,8 +2276,8 @@ bufferMethods.times= {}
 --- --Output:
 --- --03/01/2018 14:46:07.71461483803/01/2018 14:46:08.10046883803/01/2018 14:46:08.487631838
 --- ```
----@type integer[]
-bufferMethods.timestamps= {}
+---@type string[]
+bufferVar.timestamps = {}
 
 
 --- **This function clears all readings and statistics from the specified buffer.**
@@ -2312,7 +2315,7 @@ bufferMethods.timestamps= {}
 --- --Output:
 --- --4.923509754e-07, 3.332266330e-07, 3.974883867e-07
 --- ```
-function bufferMethods.clear() end
+function bufferVar.clear() end
 
 
 --- **This attribute contains the dates of readings that are stored in the reading buffer.**
@@ -2342,15 +2345,15 @@ function bufferMethods.clear() end
 --- --Example output:
 --- --11/27/2017, 11/27/2017, 11/27/2017
 --- ```
----@type integer[]
-bufferMethods.dates= {}
+---@type string[]
+bufferVar.dates = {}
 
-buffer.FILL_CONTINUOUS = nil
 buffer.FILL_ONCE = nil
+buffer.FILL_CONTINUOUS = nil
 
 ---@alias bufferVarfillmodefillMode
----|`buffer.FILL_CONTINUOUS`
 ---|`buffer.FILL_ONCE`
+---|`buffer.FILL_CONTINUOUS`
 
 
 
@@ -2380,7 +2383,7 @@ buffer.FILL_ONCE = nil
 --- --1
 --- ```
 ---@type bufferVarfillmodefillMode
-bufferMethods.fillmode = 0
+bufferVar.fillmode = buffer.FILL_ONCE
 
 
 --- **This attribute contains the source levels formatted as they appear on the front-panel display when the readings in the reading buffer were acquired.**
@@ -2406,8 +2409,8 @@ bufferMethods.fillmode = 0
 --- --Example output:
 --- ---00.00041 mV, +00.00010 mV, -00.00033 mV, +00.00003 mV, -00.00028 mV, -00.00045 mV
 --- ```
----@type integer[]
-bufferMethods.sourceformattedvalues= {}
+---@type string[]
+bufferVar.sourceformattedvalues = {}
 
 
 --- **This attribute contains the fractional second portion of the timestamp of each reading in the reading buffer.**
@@ -2437,8 +2440,8 @@ bufferMethods.sourceformattedvalues= {}
 --- --Example output:
 --- --0.647118937, 0.064543, 0.48196127, 0.89938724, 0.316800064, 0.734218263
 --- ```
----@type integer[]
-bufferMethods.fractionalseconds= {}
+---@type number[]
+bufferVar.fractionalseconds = {}
 
 
 --- **This attribute contains the readings stored in a specified reading buffer.**
@@ -2466,8 +2469,8 @@ bufferMethods.fractionalseconds= {}
 --- ---4.5509945811872e-10, 2, 0.277194856
 --- ---9.1078204006445e-12, 2, 0.569614783
 --- ```
----@type integer[]
-bufferMethods.readings= {}
+---@type number[]
+bufferVar.readings = {}
 
 
 --- **This attribute contains the source levels being output when readings in the reading buffer were acquired.**
@@ -2497,15 +2500,15 @@ bufferMethods.readings= {}
 --- --Example output:
 --- --9.9999874692e-07, 1.0000017028e-06, 1.0000054544e-06
 --- ```
----@type integer[]
-bufferMethods.sourcevalues= {}
+---@type number[]
+bufferVar.sourcevalues = {}
 
-buffer.ON = nil
 buffer.OFF = nil
+buffer.ON = nil
 
 ---@alias bufferVarlogstatelogState
----|`buffer.ON`
 ---|`buffer.OFF`
+---|`buffer.ON`
 
 
 
@@ -2530,7 +2533,7 @@ buffer.OFF = nil
 --- --0
 --- ```
 ---@type bufferVarlogstatelogState
-bufferMethods.logstate = 0
+bufferVar.logstate = buffer.OFF
 
 
 --- **This attribute contains the status values of readings in the reading buffer.**
@@ -2559,22 +2562,22 @@ bufferMethods.logstate = 0
 --- --64, 64
 --- --Indicating that the status is buffer.STAT_LIMIT1_LOW.
 --- ```
----@type integer[]
-bufferMethods.statuses= {}
+---@type bufferVarstatuses
+bufferVar.statuses = 0
 
-buffer.STAT_OVER_TEMP = nil
-buffer.STAT_READBACK = nil
-buffer.STAT_SENSE = nil
-buffer.STAT_OUTPUT = nil
 buffer.STAT_PROTECTION = nil
+buffer.STAT_OUTPUT = nil
+buffer.STAT_OVER_TEMP = nil
+buffer.STAT_SENSE = nil
+buffer.STAT_READBACK = nil
 buffer.STAT_LIMIT = nil
 
 ---@alias bufferVarsourcestatusesstatusInfo
----|`buffer.STAT_OVER_TEMP`
----|`buffer.STAT_READBACK`
----|`buffer.STAT_SENSE`
----|`buffer.STAT_OUTPUT`
 ---|`buffer.STAT_PROTECTION`
+---|`buffer.STAT_OUTPUT`
+---|`buffer.STAT_OVER_TEMP`
+---|`buffer.STAT_SENSE`
+---|`buffer.STAT_READBACK`
 ---|`buffer.STAT_LIMIT`
 
 
@@ -2606,8 +2609,7 @@ buffer.STAT_LIMIT = nil
 --- --Indicating that the status is buffer.STAT_READBACK and buffer.STAT_OUTPUT.
 --- ```
 ---@type bufferVarsourcestatusesstatusInfo
----@type integer[]
-bufferMethods.sourcestatuses= {}
+bufferVar.sourcestatuses = buffer.STAT_PROTECTION
 
 
 --- **This attribute contains the additional values in a reading buffer.**
@@ -2639,8 +2641,8 @@ bufferMethods.sourcestatuses= {}
 --- --Output:
 --- --1, Watt DC, 7, Watt DC, 2, Watt DC, 8, Watt DC, 3, Watt DC, 9, Watt DC, 4, Watt DC, 10, Watt DC, 5, Watt DC, 11, Watt DC, 6, Watt DC, 12, Watt DC
 --- ```
----@type integer[]
-bufferMethods.extravalues= {}
+---@type number[]
+bufferVar.extravalues = {}
 
 
 --- **This attribute indicates the starting index in a reading buffer.**
@@ -2664,7 +2666,8 @@ bufferMethods.extravalues= {}
 --- --Output:
 --- --1, 6, 100
 --- ```
-bufferMethods.startindex = 0
+---@type integer
+bufferVar.startindex = 0
 
 
 --- **This attribute indicates the last index in a reading buffer.**
@@ -2694,7 +2697,8 @@ bufferMethods.startindex = 0
 --- --Output:
 --- --1, 12
 --- ```
-bufferMethods.endindex = 0
+---@type integer
+bufferVar.endindex = 0
 
 
 --- **This attribute contains the measurement and the unit of measure of the additional values in a reading buffer.**
@@ -2735,8 +2739,8 @@ bufferMethods.endindex = 0
 --- --Extra value reading 2: 	+50.741880 p
 --- --Extra value reading 3: 	+51.727043 p
 --- ```
----@type integer[]
-bufferMethods.extraformattedvalues= {}
+---@type string[]
+bufferVar.extraformattedvalues = {}
 
 
 --- **This attribute contains the units of the additional values in a reading buffer.**
@@ -2768,21 +2772,21 @@ bufferMethods.extraformattedvalues= {}
 --- --Output:
 --- --1, Watt DC, 2, Watt DC, 3, Watt DC, 4, Watt DC, 5, Watt DC, 6, Watt DC
 --- ```
----@type integer[]
-bufferMethods.extravalueunits= {}
+---@type string[]
+bufferVar.extravalueunits = {}
 ---@class eventlog
 eventlog = {}
 
-eventlog.SEV_ERROR = nil
-eventlog.SEV_INFO = nil
-eventlog.SEV_WARN = nil
 eventlog.SEV_ALL = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ERROR = nil
 
 ---@alias eventlogsaveeventType
----|`eventlog.SEV_ERROR`
----|`eventlog.SEV_INFO`
----|`eventlog.SEV_WARN`
 ---|`eventlog.SEV_ALL`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ERROR`
 
 
 
@@ -2821,16 +2825,16 @@ function eventlog.save(filename, eventType) end
 --- ```
 function eventlog.clear() end
 
-eventlog.SEV_ERROR = nil
-eventlog.SEV_INFO = nil
-eventlog.SEV_WARN = nil
 eventlog.SEV_ALL = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ERROR = nil
 
 ---@alias eventlognexteventType
----|`eventlog.SEV_ERROR`
----|`eventlog.SEV_INFO`
----|`eventlog.SEV_WARN`
 ---|`eventlog.SEV_ALL`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ERROR`
 
 
 
@@ -2851,26 +2855,26 @@ eventlog.SEV_ALL = nil
 --- --Example output:
 --- ---285 TSP Syntax error at line 1: unexpected symbol near `0' 1 0 1367806152 652040060
 --- ```
----@return any eventNumber The event number
----@return any message A description of the event
----@return any severity The severity of the event
----@return any nodeID The TSP-Link node where the event occurred or 0 if the event occurred on the local node
----@return any timeSeconds The seconds portion of the time when the event occurred
----@return any timeNanoSeconds The fractional seconds portion of the time when the event occurred
+---@return integer eventNumber The event number
+---@return string message A description of the event
+---@return integer severity The severity of the event
+---@return integer nodeID The TSP-Link node where the event occurred or 0 if the event occurred on the local node
+---@return integer timeSeconds The seconds portion of the time when the event occurred
+---@return integer timeNanoSeconds The fractional seconds portion of the time when the event occurred
 ---@param eventType eventlognexteventType Limits the return to specific event log types; set a cumulative integer value that represents the event log types to
----@overload fun():any
+---@overload fun():eventNumber:integer, message:string, severity:integer, nodeID:integer, timeSeconds:integer, timeNanoSeconds:integer
 function eventlog.next(eventType) end
 
-eventlog.SEV_ERROR = nil
-eventlog.SEV_INFO = nil
-eventlog.SEV_WARN = nil
 eventlog.SEV_ALL = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ERROR = nil
 
 ---@alias eventloggetcounteventType
----|`eventlog.SEV_ERROR`
----|`eventlog.SEV_INFO`
----|`eventlog.SEV_WARN`
 ---|`eventlog.SEV_ALL`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ERROR`
 
 
 
@@ -2892,17 +2896,18 @@ eventlog.SEV_ALL = nil
 --- --3
 --- ```
 ---@param eventType eventloggetcounteventType Limits the return to specific event log types; set a cumulative integer value that represents the event log types to
----@overload fun()
+---@return any count A count finds the number of unread events in the event log
+---@overload fun():count:any
 function eventlog.getcount(eventType) end
 
-eventlog.SEV_ERROR = nil
-eventlog.SEV_INFO = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ERROR = nil
 
 ---@alias eventlogposteventType
----|`eventlog.SEV_ERROR`
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ERROR`
 
 
 
@@ -2930,16 +2935,16 @@ eventlog.SEV_WARN = nil
 ---@overload fun(message:string)
 function eventlog.post(message, eventType) end
 
-eventlog.SEV_ERROR = nil
-eventlog.SEV_INFO = nil
-eventlog.SEV_WARN = nil
 eventlog.SEV_ALL = nil
+eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ERROR = nil
 
 ---@alias eventlogsuppresseventType
----|`eventlog.SEV_ERROR`
----|`eventlog.SEV_INFO`
----|`eventlog.SEV_WARN`
 ---|`eventlog.SEV_ALL`
+---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ERROR`
 
 
 
@@ -2964,12 +2969,12 @@ function eventlog.suppress(eventNumber) end
 ---@class display
 display = {}
 
-display.FORMAT_EXPONENT = nil
 display.FORMAT_PREFIX = nil
+display.FORMAT_EXPONENT = nil
 
 ---@alias displayreadingformatformat
----|`display.FORMAT_EXPONENT`
 ---|`display.FORMAT_PREFIX`
+---|`display.FORMAT_EXPONENT`
 
 
 
@@ -2989,13 +2994,12 @@ display.FORMAT_PREFIX = nil
 --- --Change front-panel display to show readings in exponential format.
 --- ```
 ---@type displayreadingformatformat
-display.readingformat = 0
-
+display.readingformat = display.FORMAT_PREFIX
 
 display.TEXT2 = nil
 display.TEXT1 = nil
 
----@alias displaysettextDisplayText
+---@alias displaysettextdisplayArea
 ---|`display.TEXT2`
 ---|`display.TEXT1`
 
@@ -3022,9 +3026,9 @@ display.TEXT1 = nil
 --- --Set the first line to read "A122 Δ A123" and the second line to display ""Results in Ω":
 --- --
 --- ```
----@param DisplayText displaysettextDisplayText display.TEXT1 display.TEXT2
----@param Text any String that contains the message for the top line of the USER swipe screen (up to 20 characters)
-function display.settext(DisplayText, Text) end
+---@param displayArea displaysettextdisplayArea display.TEXT1 display.TEXT2
+---@param text string String that contains the message for the top line of the USER swipe screen (up to 20 characters)
+function display.settext(displayArea, text) end
 
 
 --- **This function clears the text from the front-panel USER swipe screen.**
@@ -3048,30 +3052,30 @@ function display.settext(DisplayText, Text) end
 --- ```
 function display.clear() end
 
-display.SCREEN_HISTOGRAM = nil
-display.SCREEN_USER_SWIPE = nil
-display.SCREEN_READING_TABLE = nil
-display.SCREEN_SOURCE_SWIPE = nil
-display.SCREEN_HOME = nil
-display.SCREEN_SETTINGS_SWIPE = nil
-display.SCREEN_PROCESSING = nil
-display.SCREEN_GRAPH = nil
 display.SCREEN_HOME_LARGE_READING = nil
-display.SCREEN_GRAPH_SWIPE = nil
 display.SCREEN_STATS_SWIPE = nil
+display.SCREEN_SETTINGS_SWIPE = nil
+display.SCREEN_GRAPH = nil
+display.SCREEN_HISTOGRAM = nil
+display.SCREEN_GRAPH_SWIPE = nil
+display.SCREEN_HOME = nil
+display.SCREEN_READING_TABLE = nil
+display.SCREEN_USER_SWIPE = nil
+display.SCREEN_SOURCE_SWIPE = nil
+display.SCREEN_PROCESSING = nil
 
 ---@alias displaychangescreenscreenName
----|`display.SCREEN_HISTOGRAM`
----|`display.SCREEN_USER_SWIPE`
----|`display.SCREEN_READING_TABLE`
----|`display.SCREEN_SOURCE_SWIPE`
----|`display.SCREEN_HOME`
----|`display.SCREEN_SETTINGS_SWIPE`
----|`display.SCREEN_PROCESSING`
----|`display.SCREEN_GRAPH`
 ---|`display.SCREEN_HOME_LARGE_READING`
----|`display.SCREEN_GRAPH_SWIPE`
 ---|`display.SCREEN_STATS_SWIPE`
+---|`display.SCREEN_SETTINGS_SWIPE`
+---|`display.SCREEN_GRAPH`
+---|`display.SCREEN_HISTOGRAM`
+---|`display.SCREEN_GRAPH_SWIPE`
+---|`display.SCREEN_HOME`
+---|`display.SCREEN_READING_TABLE`
+---|`display.SCREEN_USER_SWIPE`
+---|`display.SCREEN_SOURCE_SWIPE`
+---|`display.SCREEN_PROCESSING`
 
 
 
@@ -3099,18 +3103,18 @@ display.SCREEN_STATS_SWIPE = nil
 ---@param screenName displaychangescreenscreenName The screen to display
 function display.changescreen(screenName) end
 
-display.BUTTONS_CANCEL = nil
 display.BUTTONS_OKCANCEL = nil
-display.BUTTONS_OK = nil
+display.BUTTONS_CANCEL = nil
 display.BUTTONS_YESNO = nil
+display.BUTTONS_OK = nil
 display.BUTTONS_NONE = nil
 display.BUTTONS_YESNOCANCEL = nil
 
 ---@alias displaypromptbuttonID
----|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_OKCANCEL`
----|`display.BUTTONS_OK`
+---|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_OK`
 ---|`display.BUTTONS_NONE`
 ---|`display.BUTTONS_YESNOCANCEL`
 
@@ -3147,21 +3151,21 @@ display.BUTTONS_YESNOCANCEL = nil
 --- --If the user presses Yes, the Graph screen is displayed.
 --- --If the user presses No, the user remains on the present screen.
 --- ```
----@return any promptID A set of characters that identifies the prompt; up to 63 characters
+---@return promptID promptID A set of characters that identifies the prompt; up to 63 characters
 ---@param buttonID displaypromptbuttonID The type of prompt to display; choose one of the following options
----@param promptText any A string that contains the text that is displayed above the prompts
+---@param promptText string A string that contains the text that is displayed above the prompts
 function display.prompt(buttonID, promptText) end
 
-display.BUTTON_NO = nil
-display.BUTTON_CANCEL = nil
 display.BUTTON_OK = nil
 display.BUTTON_YES = nil
+display.BUTTON_NO = nil
+display.BUTTON_CANCEL = nil
 
 ---@alias displaywaiteventsubID
----|`display.BUTTON_NO`
----|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_OK`
 ---|`display.BUTTON_YES`
+---|`display.BUTTON_NO`
+---|`display.BUTTON_CANCEL`
 
 
 
@@ -3199,23 +3203,23 @@ display.BUTTON_YES = nil
 ---@return number objectID A number that identifies the object, such as a prompt message, that is displayed on the front panel
 ---@return displaywaiteventsubID subID The returned value after a button is pressed on the front panel
 ---@param timeout number The amount of time to wait before timing out; time is 0 to 300 s, where the default of 0 waits indefinitely
----@overload fun():displaywaiteventsubID
+---@overload fun():objectID:number, subID:displaywaiteventsubID
 function display.waitevent(timeout) end
 
-display.STATE_LCD_25 = nil
-display.STATE_LCD_100 = nil
-display.STATE_LCD_OFF = nil
-display.STATE_LCD_50 = nil
-display.STATE_BLACKOUT = nil
 display.STATE_LCD_75 = nil
+display.STATE_BLACKOUT = nil
+display.STATE_LCD_25 = nil
+display.STATE_LCD_50 = nil
+display.STATE_LCD_OFF = nil
+display.STATE_LCD_100 = nil
 
 ---@alias displaylightstatebrightness
----|`display.STATE_LCD_25`
----|`display.STATE_LCD_100`
----|`display.STATE_LCD_OFF`
----|`display.STATE_LCD_50`
----|`display.STATE_BLACKOUT`
 ---|`display.STATE_LCD_75`
+---|`display.STATE_BLACKOUT`
+---|`display.STATE_LCD_25`
+---|`display.STATE_LCD_50`
+---|`display.STATE_LCD_OFF`
+---|`display.STATE_LCD_100`
 
 
 
@@ -3235,8 +3239,7 @@ display.STATE_LCD_75 = nil
 --- --Set the display brightness to 50%.
 --- ```
 ---@type displaylightstatebrightness
-display.lightstate = 0
-
+display.lightstate = display.STATE_LCD_75
 
 
 --- **This function allows you to remove a prompt on the front-panel display that was created with display.prompt().**
@@ -3257,7 +3260,7 @@ display.lightstate = 0
 --- --This example displays a prompt that is automatically removed in three seconds.
 --- --
 --- ```
----@param promptID any The identifier defined by display.prompt()
+---@param promptID promptID The identifier defined by display.prompt()
 function display.delete(promptID) end
 
 
@@ -3276,8 +3279,8 @@ function display.delete(promptID) end
 --- 
 --- --Set the front panel to use buffer2 as the active reading buffer.
 --- ```
+---@type bufferVar
 display.activebuffer = 0
-
 ---@class beeper
 beeper = {}
 
@@ -3342,8 +3345,8 @@ function status.clear() end
 --- --Converting this output (129) to its binary equivalent yields 1000 0001 
 --- --Therefore, this output indicates that the set bits of the status byte condition register are presently B0 (MSS) and B7 (OSB).
 --- ```
+---@type number
 status.condition = 0
-
 
 
 --- **This attribute stores the settings of the Service Request (SRQ) Enable Register.**
@@ -3370,8 +3373,8 @@ status.condition = 0
 --- 
 --- --Clear the register.
 --- ```
+---@type integer
 status.request_enable = 0
-
 
 
 --- **This function resets all bits in the status model.**
@@ -3435,7 +3438,7 @@ function digio.writeport(data) end
 --- --42
 --- --This is binary 101010
 --- ```
----@return number data The present value of the input lines on the digital I/O port
+---@return integer data The present value of the input lines on the digital I/O port
 function digio.readport() end
 ---@class triggerblenderArr
 local triggerblenderArr = {}
@@ -3480,8 +3483,8 @@ function triggerblenderArr.clear() end
 --- 
 --- --Generate a trigger blender 1 event when a digital I/O trigger happens on line 3 or 5.
 --- ```
-triggerblenderArr.orenable= 0
-
+---@type boolean | true | false
+triggerblenderArr.orenable = 0
 
 
 --- **This attribute indicates whether or not an event was ignored because of the event detector state.**
@@ -3500,8 +3503,8 @@ triggerblenderArr.orenable= 0
 --- --If an event was ignored, the output is true.
 --- --If an event was not ignored, the output is false.
 --- ```
-triggerblenderArr.overrun= 0
-
+---@type boolean
+triggerblenderArr.overrun = true
 
 
 --- **This function resets some of the trigger blender settings to their factory defaults.**
@@ -3544,8 +3547,8 @@ function triggerblenderArr.reset() end
 --- 
 --- --Generate a trigger blender 1 event when a digital I/O trigger happens on line 3 or 5.
 --- ```
----@type eventID[]|0
-triggerblenderArr.stimulus= 0
+---@type triggerEvents[]
+triggerblenderArr.stimulus= trigger.EVENT_NONE
 
 
 
@@ -3617,8 +3620,8 @@ function triggertimerArr.clear() end
 --- 
 --- --Set the trigger timer 1 to delay for 50 µs.
 --- ```
-triggertimerArr.delay= 0
-
+---@type number
+triggertimerArr.delay = 0
 
 
 --- **This attribute sets an array of timer intervals.**
@@ -3648,8 +3651,8 @@ triggertimerArr.delay= 0
 --- --0.0001
 --- --0.00015
 --- ```
-triggertimerArr.delaylist= 0
-
+---@type number[]
+triggertimerArr.delaylist = {}
 
 
 --- **This function waits for a trigger.**
@@ -3730,15 +3733,15 @@ function triggertimerArr.wait(timeout) end
 --- --Output:
 --- --20
 --- ```
-triggertimerArr.count= 0
+---@type number
+triggertimerArr.count = 0
 
-
-trigger.OFF = nil
 trigger.ON = nil
+trigger.OFF = nil
 
 ---@alias triggertimerenablestate
----|`trigger.OFF`
 ---|`trigger.ON`
+---|`trigger.OFF`
 
 
 
@@ -3758,8 +3761,7 @@ trigger.ON = nil
 --- --Enable the trigger timer for timer 3.
 --- ```
 ---@type triggertimerenablestate
-triggertimerArr.enable= 0
-
+triggertimerArr.enable = trigger.ON
 
 
 --- **This function resets trigger timer settings to their default values.**
@@ -3782,14 +3784,14 @@ function triggertimerArr.reset() end
 ---@class smu.measure
 smu.measure = {}
 
+smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
-smu.FUNC_DC_VOLTAGE = nil
 
 ---@alias smumeasurefuncmFunction
+---|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
----|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -3822,8 +3824,7 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --smu.MATH_PERCENT
 --- ```
 ---@type smumeasurefuncmFunction
-smu.measure.func = 0
-
+smu.measure.func = smu.FUNC_DC_VOLTAGE
 
 
 --- **This function makes measurements, places them in a reading buffer, and returns the last reading.**
@@ -3844,17 +3845,17 @@ smu.measure.func = 0
 --- --Create a buffer named voltMeasBuffer. Set the instrument to measure voltage.
 --- --Make a measurement that is stored in the voltMeasBuffer and is also printed.
 --- ```
----@return number[] reading The last reading of the measurement process
----@param bufferName bufferMethods The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is defined, it defaults to defbuffer1
----@overload fun():number[]
+---@return number reading The last reading of the measurement process
+---@param bufferName bufferVar The name of the reading buffer, which may be a default buffer (defbuffer1 or defbuffer2) or a user-defined buffer; if no buffer is defined, it defaults to defbuffer1
+---@overload fun():reading:number
 function smu.measure.read(bufferName) end
 
-smu.SENSE_4WIRE = nil
 smu.SENSE_2WIRE = nil
+smu.SENSE_4WIRE = nil
 
 ---@alias smumeasuresensesensing
----|`smu.SENSE_4WIRE`
 ---|`smu.SENSE_2WIRE`
+---|`smu.SENSE_4WIRE`
 
 
 
@@ -3876,19 +3877,18 @@ smu.SENSE_2WIRE = nil
 --- --Set the sense to 4-wire remote.
 --- ```
 ---@type smumeasuresensesensing
-smu.measure.sense = 0
+smu.measure.sense = smu.SENSE_2WIRE
 
-
+smu.DIGITS_3_5 = nil
+smu.DIGITS_4_5 = nil
 smu.DIGITS_6_5 = nil
 smu.DIGITS_5_5 = nil
-smu.DIGITS_4_5 = nil
-smu.DIGITS_3_5 = nil
 
 ---@alias smumeasuredisplaydigitsdigits
+---|`smu.DIGITS_3_5`
+---|`smu.DIGITS_4_5`
 ---|`smu.DIGITS_6_5`
 ---|`smu.DIGITS_5_5`
----|`smu.DIGITS_4_5`
----|`smu.DIGITS_3_5`
 
 
 
@@ -3909,8 +3909,7 @@ smu.DIGITS_3_5 = nil
 --- --Set the measurement function to voltage with a front-panel display resolution of 6½.
 --- ```
 ---@type smumeasuredisplaydigitsdigits
-smu.measure.displaydigits = 0
-
+smu.measure.displaydigits = smu.DIGITS_3_5
 
 
 --- **This command sets the time that the input signal is measured for the selected function.**
@@ -3930,8 +3929,8 @@ smu.measure.displaydigits = 0
 --- --Set the measurement function to DC Voltage.
 --- --Set the NPLC value to 0.5, which is 0.0083 seconds (0.5/60).
 --- ```
+---@type number
 smu.measure.nplc = 0
-
 
 smu.OFF = nil
 smu.ON = nil
@@ -3965,8 +3964,7 @@ smu.ON = nil
 --- --81592000
 --- ```
 ---@type smumeasureoffsetcompensationstate
-smu.measure.offsetcompensation = 0
-
+smu.measure.offsetcompensation = smu.OFF
 
 smu.OFF = nil
 smu.ON = nil
@@ -3995,8 +3993,7 @@ smu.ON = nil
 --- --Set the range to be set automatically.
 --- ```
 ---@type smumeasureautorangeautoRange
-smu.measure.autorange = 0
-
+smu.measure.autorange = smu.OFF
 
 
 --- **This attribute determines the positive full-scale measure range.**
@@ -4018,8 +4015,8 @@ smu.measure.autorange = 0
 --- --Set the measurement function to voltage.
 --- --Instrument selects the 2 V measurement range.
 --- ```
+---@type number
 smu.measure.range = 0
-
 
 
 --- **This attribute selects the lower limit for measurements of the selected function when the range is selected automatically.**
@@ -4039,17 +4036,17 @@ smu.measure.range = 0
 --- 
 --- --Sets the low range for voltage measurements to 2 V.
 --- ```
+---@type number
 smu.measure.autorangelow = 0
 
-
+smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
-smu.FUNC_DC_VOLTAGE = nil
 
----@alias smumeasureautorangehighmeasFunction
+---@alias smumeasureautorangehighfunction
+---|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
----|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -4070,8 +4067,8 @@ smu.FUNC_DC_VOLTAGE = nil
 --- 
 --- --Sets the measurement function to voltage and turn autorange on. Check the high range for voltage measurements.
 --- ```
+---@type number
 smu.measure.autorangehigh = 0
-
 
 
 --- **This attribute sets the number of measurements to make when a measurement is requested.**
@@ -4167,19 +4164,19 @@ smu.measure.autorangehigh = 0
 --- --199   30.067648716   1.4131290582142e-10
 --- --200   30.219497716   1.5521067764368e-10
 --- ```
+---@type any
 smu.measure.count = 0
 
-
-smu.UNIT_WATT = nil
-smu.UNIT_AMP = nil
-smu.UNIT_VOLT = nil
 smu.UNIT_OHM = nil
+smu.UNIT_AMP = nil
+smu.UNIT_WATT = nil
+smu.UNIT_VOLT = nil
 
 ---@alias smumeasureunitunitOfMeasure
----|`smu.UNIT_WATT`
----|`smu.UNIT_AMP`
----|`smu.UNIT_VOLT`
 ---|`smu.UNIT_OHM`
+---|`smu.UNIT_AMP`
+---|`smu.UNIT_WATT`
+---|`smu.UNIT_VOLT`
 
 
 
@@ -4200,8 +4197,7 @@ smu.UNIT_OHM = nil
 --- --Changes the front-panel display and buffer readings for voltage measurements to be displayed as power readings in watts.
 --- ```
 ---@type smumeasureunitunitOfMeasure
-smu.measure.unit = 0
-
+smu.measure.unit = smu.UNIT_OHM
 
 
 --- **This attribute sets a user-defined delay that you can use in the trigger model.**
@@ -4231,9 +4227,8 @@ smu.measure.unit = 0
 --- --Set trigger block 5 to branch to block 1 ten times.
 --- --Start the trigger model.
 --- ```
----@type integer[]
-smu.measure.userdelay= 0
-
+---@type number[]
+smu.measure.userdelay = {}
 
 
 --- **This function initiates measurements and returns the last actual measurement and time information in UTC format without using the trigger model.**
@@ -4252,10 +4247,10 @@ smu.measure.userdelay= 0
 --- --Print the last measurement and time information from defbuffer1 in UTC format, which will look similar to:
 --- ---1.405293589829e-11  1400904629  0.1950935
 --- ```
----@return number[] reading The last reading of the measurement process
+---@return number reading The last reading of the measurement process
 ---@return number seconds Seconds in UTC format
 ---@return number fractional Fractional seconds
----@overload fun(bufferName:bufferMethods):number
+---@overload fun(bufferName:bufferVar):reading:number, seconds:number, fractional:number
 function smu.measure.readwithtime() end
 
 smu.OFF = nil
@@ -4287,17 +4282,16 @@ smu.ON = nil
 --- --Set the measure range to be automatically restored to match the source limit value after each measurement.
 --- ```
 ---@type smumeasureautorangereboundstate
-smu.measure.autorangerebound = 0
+smu.measure.autorangerebound = smu.OFF
 
-
+smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
-smu.FUNC_DC_VOLTAGE = nil
 
----@alias smumeasuregetattributemeasFunction
+---@alias smumeasuregetattributefunction
+---|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
----|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -4322,19 +4316,19 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --1
 --- --smu.DIGITS_4_5
 --- ```
----@return number value The attribute value
----@param measFunction smumeasuregetattributemeasFunction The measurement function
+---@return any value The attribute value
+---@param function smumeasuregetattributefunction The measurement function
 ---@param setting smuMeasuresetFunctionattribute The attribute for the function; refer to smu.measure.setattribute() for available settings
-function smu.measure.getattribute(measFunction, setting) end
+function smu.measure.getattribute(function, setting) end
 
+smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
-smu.FUNC_DC_VOLTAGE = nil
 
----@alias smumeasuresetattributemeasFunction
+---@alias smumeasuresetattributefunction
+---|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
----|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -4359,10 +4353,10 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --Create a configuration list named MyMeasList.
 --- --Store the settings for the DC Voltage function in MyMeasList at index 1.
 --- ```
----@param measFunction smumeasuresetattributemeasFunction The measurement function
+---@param function smumeasuresetattributefunction The measurement function
 ---@param setting smuMeasuresetFunctionattribute The attribute for the function; refer to Details and the tables following the examples
----@param value number The attribute value
-function smu.measure.setattribute(measFunction, setting, value) end
+---@param value any The attribute value
+function smu.measure.setattribute(function, setting, value) end
 ---@class trigger.model
 trigger.model = {}
 
@@ -4384,24 +4378,24 @@ trigger.model = {}
 --- ```
 function trigger.model.abort() end
 
-trigger.STATE_FAILED = nil
-trigger.STATE_RUNNING = nil
-trigger.STATE_WAITING = nil
-trigger.STATE_EMPTY = nil
-trigger.STATE_ABORTED = nil
 trigger.STATE_ABORTING = nil
-trigger.STATE_IDLE = nil
+trigger.STATE_WAITING = nil
 trigger.STATE_BUILDING = nil
+trigger.STATE_RUNNING = nil
+trigger.STATE_IDLE = nil
+trigger.STATE_EMPTY = nil
+trigger.STATE_FAILED = nil
+trigger.STATE_ABORTED = nil
 
 ---@alias triggermodelstatestatus
----|`trigger.STATE_FAILED`
----|`trigger.STATE_RUNNING`
----|`trigger.STATE_WAITING`
----|`trigger.STATE_EMPTY`
----|`trigger.STATE_ABORTED`
 ---|`trigger.STATE_ABORTING`
----|`trigger.STATE_IDLE`
+---|`trigger.STATE_WAITING`
 ---|`trigger.STATE_BUILDING`
+---|`trigger.STATE_RUNNING`
+---|`trigger.STATE_IDLE`
+---|`trigger.STATE_EMPTY`
+---|`trigger.STATE_FAILED`
+---|`trigger.STATE_ABORTED`
 
 
 
@@ -4422,7 +4416,8 @@ trigger.STATE_BUILDING = nil
 --- --trigger.STATE_WAITING trigger.STATE_EMPTY 9
 --- ```
 ---@return triggermodelstatestatus status The status of the trigger model
----@return any n The last trigger model block that was executed
+---@return triggermodelstatestatus status The status of the parallel/dual trigger model
+---@return integer n The last trigger model block that was executed
 function trigger.model.state() end
 
 
@@ -4446,6 +4441,7 @@ function trigger.model.state() end
 --- -- 4) DELAY_CONSTANT        DELAY: 1.000000000
 --- -- 5) BRANCH_COUNTER        VALUE: 3  BRANCH_BLOCK: 2
 --- ```
+---@return string output Returns the settings for the trigger model
 function trigger.model.getblocklist() end
 
 
@@ -4479,6 +4475,7 @@ function trigger.model.getblocklist() end
 --- --At end of execution, 10 readings are stored in defbuffer1.
 --- ```
 ---@param blockNumber number The sequence of the block in the trigger model
+---@return any output Returns the count value of the trigger model counter block.
 function trigger.model.getbranchcount(blockNumber) end
 
 
@@ -4585,8 +4582,7 @@ smu.ON = nil
 --- --Switch the source output of the instrument to on.
 --- ```
 ---@type smusourceoutputsourceOutput
-smu.source.output = 0
-
+smu.source.output = smu.OFF
 
 
 --- **This attribute contains the source delay.**
@@ -4605,19 +4601,19 @@ smu.source.output = 0
 --- 
 --- --Set the function to voltage. Set a 3 s delay after the source is turned on before a measurement is made.
 --- ```
+---@type number
 smu.source.delay = 0
 
-
+smu.OFFMODE_GUARD = nil
+smu.OFFMODE_HIGHZ = nil
 smu.OFFMODE_NORMAL = nil
 smu.OFFMODE_ZERO = nil
-smu.OFFMODE_HIGHZ = nil
-smu.OFFMODE_GUARD = nil
 
 ---@alias smusourceoffmodesourceOffMode
+---|`smu.OFFMODE_GUARD`
+---|`smu.OFFMODE_HIGHZ`
 ---|`smu.OFFMODE_NORMAL`
 ---|`smu.OFFMODE_ZERO`
----|`smu.OFFMODE_HIGHZ`
----|`smu.OFFMODE_GUARD`
 
 
 
@@ -4637,15 +4633,14 @@ smu.OFFMODE_GUARD = nil
 --- --Sets the output-off state so that the instrument opens the output relay when the output is turned off.
 --- ```
 ---@type smusourceoffmodesourceOffMode
-smu.source.offmode = 0
+smu.source.offmode = smu.OFFMODE_GUARD
 
-
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
 ---@alias smusourcefuncsFunction
----|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -4665,8 +4660,7 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --Sets the source function of the instrument to be a current source.
 --- ```
 ---@type smusourcefuncsFunction
-smu.source.func = 0
-
+smu.source.func = smu.FUNC_DC_VOLTAGE
 
 
 --- **This attribute selects the range for the source for the selected source function.**
@@ -4688,8 +4682,8 @@ smu.source.func = 0
 --- --Turn autorange off.
 --- --Set the source range to 1 A.
 --- ```
+---@type number
 smu.source.range = 0
-
 
 smu.OFF = nil
 smu.ON = nil
@@ -4718,8 +4712,7 @@ smu.ON = nil
 --- --Set the instrument to select the source range automatically.
 --- ```
 ---@type smusourceautorangesourceAutorange
-smu.source.autorange = 0
-
+smu.source.autorange = smu.OFF
 
 
 --- **This attribute immediately selects a fixed amplitude for the selected source function.**
@@ -4738,8 +4731,8 @@ smu.source.autorange = 0
 --- 
 --- --Set the instrument to source voltage and set it to source 1 V.
 --- ```
+---@type number
 smu.source.level = 0
-
 
 smu.DELAY_AUTO = 0
 
@@ -4810,19 +4803,19 @@ smu.ON = nil
 ---@param configListName string A string that contains the name of the configuration list that the instrument will create for this sweep
 ---@param start number The voltage or current source level at which the sweep starts
 ---@param stop number The voltage or current at which the sweep stops
----@param points number The number of source-measure points between the start and stop values of the sweep (2 to 1e6); to calculate the number of source-measure points in a sweep, use the following formula
----@param sDelay smusourcesweeplinearsDelay The delay between measurement points; default is smu.DELAY_AUTO, which enables autodelay, or a specific delay value from 50 µs to 10 ks, or 0 for no delay
----@param count smusourcesweeplinearcount The number of times to run the sweep; default is 1
+---@param points integer The number of source-measure points between the start and stop values of the sweep (2 to 1e6); to calculate the number of source-measure points in a sweep, use the following formula
+---@param sDelay smusourcesweeplinearsDelay | number The delay between measurement points; default is smu.DELAY_AUTO, which enables autodelay, or a specific delay value from 50 µs to 10 ks, or 0 for no delay
+---@param count smusourcesweeplinearcount | integer The number of times to run the sweep; default is 1
 ---@param rangeType smusourcesweeplinearrangeType The source range that is used for the sweep
 ---@param failAbort smusourcesweeplinearfailAbort Complete the sweep if the source limit is exceeded
 ---@param dual smusourcesweeplineardual Determines if the sweep runs from start to stop and then from stop to start
----@param bufferName bufferMethods The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
----@overload fun(configListName:string,start:number,stop:number,points:number)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplinearsDelay)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplinearsDelay,count:smusourcesweeplinearcount)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplinearsDelay,count:smusourcesweeplinearcount,rangeType:smusourcesweeplinearrangeType)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplinearsDelay,count:smusourcesweeplinearcount,rangeType:smusourcesweeplinearrangeType,failAbort:smusourcesweeplinearfailAbort)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplinearsDelay,count:smusourcesweeplinearcount,rangeType:smusourcesweeplinearrangeType,failAbort:smusourcesweeplinearfailAbort,dual:smusourcesweeplineardual)
+---@param bufferName bufferVar The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@overload fun(configListName:string,start:number,stop:number,points:integer)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplinearsDelay | number)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplinearsDelay | number,count:smusourcesweeplinearcount | integer)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplinearsDelay | number,count:smusourcesweeplinearcount | integer,rangeType:smusourcesweeplinearrangeType)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplinearsDelay | number,count:smusourcesweeplinearcount | integer,rangeType:smusourcesweeplinearrangeType,failAbort:smusourcesweeplinearfailAbort)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplinearsDelay | number,count:smusourcesweeplinearcount | integer,rangeType:smusourcesweeplinearrangeType,failAbort:smusourcesweeplinearfailAbort,dual:smusourcesweeplineardual)
 function smu.source.sweeplinear(configListName, start, stop, points, sDelay, count, rangeType, failAbort, dual, bufferName) end
 
 smu.DELAY_AUTO = 0
@@ -4893,18 +4886,18 @@ smu.ON = nil
 ---@param start number The voltage or current source level at which the sweep starts
 ---@param stop number The voltage or current at which the sweep stops
 ---@param step number The step size at which the source level will change; must be more than 0
----@param sDelay smusourcesweeplinearstepsDelay The delay between measurement points; default is smu.DELAY_AUTO, which enables autodelay, a specific delay value from 50 μs to 10 ks, or 0 for no delay
----@param count smusourcesweeplinearstepcount The number of times to run the sweep; default is 1
+---@param sDelay smusourcesweeplinearstepsDelay | number The delay between measurement points; default is smu.DELAY_AUTO, which enables autodelay, a specific delay value from 50 μs to 10 ks, or 0 for no delay
+---@param count smusourcesweeplinearstepcount | integer The number of times to run the sweep; default is 1
 ---@param rangeType smusourcesweeplinearsteprangeType The source range that is used for the sweep
 ---@param failAbort smusourcesweeplinearstepfailAbort Complete the sweep if the source limit is exceeded
 ---@param dual smusourcesweeplinearstepdual Determines if the sweep runs from start to stop and then from stop to start
----@param bufferName bufferMethods The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@param bufferName bufferVar The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
 ---@overload fun(configListName:string,start:number,stop:number,step:number)
----@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay)
----@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay,count:smusourcesweeplinearstepcount)
----@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay,count:smusourcesweeplinearstepcount,rangeType:smusourcesweeplinearsteprangeType)
----@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay,count:smusourcesweeplinearstepcount,rangeType:smusourcesweeplinearsteprangeType,failAbort:smusourcesweeplinearstepfailAbort)
----@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay,count:smusourcesweeplinearstepcount,rangeType:smusourcesweeplinearsteprangeType,failAbort:smusourcesweeplinearstepfailAbort,dual:smusourcesweeplinearstepdual)
+---@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay | number)
+---@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay | number,count:smusourcesweeplinearstepcount | integer)
+---@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay | number,count:smusourcesweeplinearstepcount | integer,rangeType:smusourcesweeplinearsteprangeType)
+---@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay | number,count:smusourcesweeplinearstepcount | integer,rangeType:smusourcesweeplinearsteprangeType,failAbort:smusourcesweeplinearstepfailAbort)
+---@overload fun(configListName:string,start:number,stop:number,step:number,sDelay:smusourcesweeplinearstepsDelay | number,count:smusourcesweeplinearstepcount | integer,rangeType:smusourcesweeplinearsteprangeType,failAbort:smusourcesweeplinearstepfailAbort,dual:smusourcesweeplinearstepdual)
 function smu.source.sweeplinearstep(configListName, start, stop, step, sDelay, count, rangeType, failAbort, dual, bufferName) end
 
 smu.DELAY_AUTO = 0
@@ -4976,21 +4969,21 @@ smu.ON = nil
 ---@param configListName string A string that contains the name of the configuration list that the instrument will create for this sweep
 ---@param start number The voltage or current source level at which the sweep starts
 ---@param stop number The voltage or current at which the sweep stops
----@param points number The number of source-measure points between the start and stop values of the sweep (2 to 1e6); to calculate the number of source-measure points in a sweep, use the following formula
----@param sDelay smusourcesweeplogsDelay The delay between measurement points; default is smu.DELAY_AUTO, which enables autodelay, or a specific delay value from 50 μs to 10 ks, or 0 for no delay
----@param count smusourcesweeplogcount The number of times to run the sweep; default is 1
+---@param points integer The number of source-measure points between the start and stop values of the sweep (2 to 1e6); to calculate the number of source-measure points in a sweep, use the following formula
+---@param sDelay smusourcesweeplogsDelay | number The delay between measurement points; default is smu.DELAY_AUTO, which enables autodelay, or a specific delay value from 50 μs to 10 ks, or 0 for no delay
+---@param count smusourcesweeplogcount | integer The number of times to run the sweep; default is 1
 ---@param rangeType smusourcesweeplograngeType The source range that is used for the sweep
 ---@param failAbort smusourcesweeplogfailAbort Complete the sweep if the source limit is exceeded
 ---@param dual smusourcesweeplogdual Determines if the sweep runs from start to stop and then from stop to start
----@param bufferName bufferMethods The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@param bufferName bufferVar The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
 ---@param asymptote number Default is 0; see Details
----@overload fun(configListName:string,start:number,stop:number,points:number)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay,count:smusourcesweeplogcount)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay,count:smusourcesweeplogcount,rangeType:smusourcesweeplograngeType)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay,count:smusourcesweeplogcount,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay,count:smusourcesweeplogcount,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort,dual:smusourcesweeplogdual)
----@overload fun(configListName:string,start:number,stop:number,points:number,sDelay:smusourcesweeplogsDelay,count:smusourcesweeplogcount,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort,dual:smusourcesweeplogdual,bufferName:bufferMethods)
+---@overload fun(configListName:string,start:number,stop:number,points:integer)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplogsDelay | number)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplogsDelay | number,count:smusourcesweeplogcount | integer)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplogsDelay | number,count:smusourcesweeplogcount | integer,rangeType:smusourcesweeplograngeType)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplogsDelay | number,count:smusourcesweeplogcount | integer,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplogsDelay | number,count:smusourcesweeplogcount | integer,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort,dual:smusourcesweeplogdual)
+---@overload fun(configListName:string,start:number,stop:number,points:integer,sDelay:smusourcesweeplogsDelay | number,count:smusourcesweeplogcount | integer,rangeType:smusourcesweeplograngeType,failAbort:smusourcesweeplogfailAbort,dual:smusourcesweeplogdual,bufferName:bufferVar)
 function smu.source.sweeplog(configListName, start, stop, points, sDelay, count, rangeType, failAbort, dual, bufferName, asymptote) end
 
 smu.OFF = nil
@@ -5037,8 +5030,7 @@ smu.ON = nil
 --- --Get the source values and measurements from the buffer.
 --- ```
 ---@type smusourcereadbackstate
-smu.source.readback = 0
-
+smu.source.readback = smu.OFF
 
 smu.OFF = nil
 smu.ON = nil
@@ -5065,8 +5057,7 @@ smu.ON = nil
 --- --Turn the high capacitance mode on.
 --- ```
 ---@type smusourcehighcstate
-smu.source.highc = 0
-
+smu.source.highc = smu.OFF
 
 smu.INFINITE = nil
 
@@ -5132,16 +5123,16 @@ smu.ON = nil
 --- --Start the sweep.
 --- ```
 ---@param configListName string The name of the source configuration list that the sweep uses; this must be defined before sending this command
----@param index number The index in the configuration list where the sweep starts; default is 1
+---@param index integer The index in the configuration list where the sweep starts; default is 1
 ---@param sDelay number The delay between measurement points; default is 0 for no delay or you can set a specific delay value from 50 us to 10 ks
----@param count smusourcesweeplistcount The number of times to run the sweep; default is 1
+---@param count smusourcesweeplistcount | integer The number of times to run the sweep; default is 1
 ---@param failAbort smusourcesweeplistfailAbort Complete the sweep if the source limit is exceeded
----@param bufferName bufferMethods The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
+---@param bufferName bufferVar The name of a reading buffer; the default buffers (defbuffer1 or defbuffer2) or the name of a user-defined buffer; if no buffer is specified, this parameter defaults to defbuffer1
 ---@overload fun(configListName:string)
----@overload fun(configListName:string,index:number)
----@overload fun(configListName:string,index:number,sDelay:number)
----@overload fun(configListName:string,index:number,sDelay:number,count:smusourcesweeplistcount)
----@overload fun(configListName:string,index:number,sDelay:number,count:smusourcesweeplistcount,failAbort:smusourcesweeplistfailAbort)
+---@overload fun(configListName:string,index:integer)
+---@overload fun(configListName:string,index:integer,sDelay:number)
+---@overload fun(configListName:string,index:integer,sDelay:number,count:smusourcesweeplistcount | integer)
+---@overload fun(configListName:string,index:integer,sDelay:number,count:smusourcesweeplistcount | integer,failAbort:smusourcesweeplistfailAbort)
 function smu.source.sweeplist(configListName, index, sDelay, count, failAbort, bufferName) end
 
 smu.OFF = nil
@@ -5169,8 +5160,7 @@ smu.ON = nil
 --- --Turn off auto delay when current is being sourced.
 --- ```
 ---@type smusourceautodelaystate
-smu.source.autodelay = 0
-
+smu.source.autodelay = smu.OFF
 
 
 --- **This attribute sets a user-defined delay that you can use in the trigger model.**
@@ -5200,16 +5190,15 @@ smu.source.autodelay = 0
 --- --Set trigger block 5 to branch to block 1 ten times.
 --- --Start the trigger model.
 --- ```
----@type integer[]
-smu.source.userdelay= 0
+---@type number[]
+smu.source.userdelay = {}
 
-
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
----@alias smusourcesetattributemeasFunction
----|`smu.FUNC_DC_CURRENT`
+---@alias smusourcesetattributefunction
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -5230,17 +5219,17 @@ smu.FUNC_DC_VOLTAGE = nil
 --- 
 --- --Sets the range, delay, and level settings for DC current, whether or not DC current is the active function.
 --- ```
----@param measFunction smusourcesetattributemeasFunction The source function; set to one of the following values
+---@param function smusourcesetattributefunction The source function; set to one of the following values
 ---@param setting smuSourceGetSetAttributes The parameter to be set; see Details
----@param value number The function or setting value
-function smu.source.setattribute(measFunction, setting, value) end
+---@param value any The function or setting value
+function smu.source.setattribute(function, setting, value) end
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
----@alias smusourcegetattributemeasFunction
----|`smu.FUNC_DC_CURRENT`
+---@alias smusourcegetattributefunction
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -5262,9 +5251,9 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --1.05e-07
 --- ```
 ---@return any value The attribute value
----@param measFunction smusourcegetattributemeasFunction The source function
+---@param function smusourcegetattributefunction The source function
 ---@param setting smuSourceGetSetAttributes The setting of the attribute; refer to smu.source.setattribute() for the list of attributes
-function smu.source.getattribute(measFunction, setting) end
+function smu.source.getattribute(function, setting) end
 ---@class smu.interlock
 smu.interlock = {}
 
@@ -5294,8 +5283,7 @@ smu.ON = nil
 --- --If the interlock is asserted, returns smu.ON.
 --- ```
 ---@type smuinterlocktrippedinterlockStatus
-smu.interlock.tripped = 0
-
+smu.interlock.tripped = smu.OFF
 
 smu.OFF = nil
 smu.ON = nil
@@ -5322,8 +5310,7 @@ smu.ON = nil
 --- --The source output is disabled unless the interlock is engaged.
 --- ```
 ---@type smuinterlockenablestate
-smu.interlock.enable = 0
-
+smu.interlock.enable = smu.OFF
 ---@class triggerlaninArr
 local triggerlaninArr = {}
 
@@ -5346,8 +5333,8 @@ trigger.lanin = {}
 --- 
 --- --Set the edge state of LAN event 1 to falling.
 --- ```
-triggerlaninArr.edge= 0
-
+---@type triggerMode
+triggerlaninArr.edge = 0
 
 
 --- **This function waits for an input trigger.**
@@ -5407,8 +5394,8 @@ function triggerlaninArr.clear() end
 --- --Checks the overrun status of a trigger on LAN5 and outputs the value, such as:
 --- --false
 --- ```
-triggerlaninArr.overrun= 0
-
+---@type boolean
+triggerlaninArr.overrun = true
 ---@class triggerdigoutArr
 local triggerdigoutArr = {}
 
@@ -5432,8 +5419,8 @@ trigger.digout = {}
 --- 
 --- --Set the stimulus for output digital trigger line 2 to be the expiration of trigger timer 3.
 --- ```
----@type eventID|0
-triggerdigoutArr.stimulus= 0
+---@type triggerEvents
+triggerdigoutArr.stimulus= trigger.EVENT_NONE
 
 
 
@@ -5453,8 +5440,8 @@ triggerdigoutArr.stimulus= 0
 --- 
 --- --Sets the pulse width for trigger line 4 to 20 µs.
 --- ```
-triggerdigoutArr.pulsewidth= 0
-
+---@type number
+triggerdigoutArr.pulsewidth = 0
 
 
 --- **This function asserts a trigger pulse on one of the digital I/O lines.**
@@ -5497,12 +5484,12 @@ function triggerdigoutArr.assert() end
 function triggerdigoutArr.release() end
 
 
-trigger.LOGIC_POSITIVE = nil
 trigger.LOGIC_NEGATIVE = nil
+trigger.LOGIC_POSITIVE = nil
 
 ---@alias triggerdigoutlogiclogicType
----|`trigger.LOGIC_POSITIVE`
 ---|`trigger.LOGIC_NEGATIVE`
+---|`trigger.LOGIC_POSITIVE`
 
 
 
@@ -5523,8 +5510,7 @@ trigger.LOGIC_NEGATIVE = nil
 --- --Sets line 4 mode to be a trigger output and sets the output logic of the trigger event generator to negative (asserts a low pulse).
 --- ```
 ---@type triggerdigoutlogiclogicType
-triggerdigoutArr.logic= 0
-
+triggerdigoutArr.logic = trigger.LOGIC_NEGATIVE
 ---@class status.operation
 status.operation = {}
 
@@ -5546,9 +5532,9 @@ status.operation = {}
 --- --Example output:
 --- --4918    4917
 --- ```
----@return number setEvent The event mapped to set this bit; 0 if no mapping
----@return number clearEvent The event mapped to clear this bit; 0 if no mapping
----@param bitNumber number The bit number to check
+---@return integer setEvent The event mapped to set this bit; 0 if no mapping
+---@return integer clearEvent The event mapped to clear this bit; 0 if no mapping
+---@param bitNumber integer The bit number to check
 function status.operation.getmap(bitNumber) end
 
 
@@ -5569,8 +5555,8 @@ function status.operation.getmap(bitNumber) end
 --- 
 --- --Sets the 12 and 14 bits of the operation status enable register using a decimal value.
 --- ```
+---@type number
 status.operation.enable = 0
-
 
 
 --- **This attribute reads the Operation Event Register of the status model.**
@@ -5604,8 +5590,8 @@ status.operation.enable = 0
 --- --Output:
 --- --1
 --- ```
+---@type number
 status.operation.event = 0
-
 
 
 --- **This attribute reads the Operation Event Register of the status model.**
@@ -5623,8 +5609,8 @@ status.operation.event = 0
 --- 
 --- --Returns the contents of the register.
 --- ```
+---@type number
 status.operation.condition = 0
-
 
 
 --- **This function allows you to map events to bits in the Operation Event Register.**
@@ -5642,10 +5628,10 @@ status.operation.condition = 0
 --- 
 --- --When event 2731 (trigger model initiated) occurs, bit 0 in the condition and event registers of the Operation Event Register are set. When event 2732 (trigger model idled) occurs, bit 0 in the condition register is cleared.
 --- ```
----@param bitNumber number The bit number that is mapped to an event (0 to 14)
----@param setEvent number The number of the event that sets the bits in the condition and event registers; 0 if no mapping
----@param clearEvent number The number of the event that clears the bit in the condition register; 0 if no mapping
----@overload fun(bitNumber:number,setEvent:number)
+---@param bitNumber integer The bit number that is mapped to an event (0 to 14)
+---@param setEvent integer The number of the event that sets the bits in the condition and event registers; 0 if no mapping
+---@param clearEvent integer The number of the event that clears the bit in the condition register; 0 if no mapping
+---@overload fun(bitNumber:integer,setEvent:integer)
 function status.operation.setmap(bitNumber, setEvent, clearEvent) end
 ---@class status.questionable
 status.questionable = {}
@@ -5673,8 +5659,8 @@ status.questionable = {}
 --- 
 --- --Uses a decimal value to set bits B9 and B11 of the status questionable enable register.
 --- ```
+---@type number
 status.questionable.event = 0
-
 
 
 --- **This function maps events to bits in the questionable event registers.**
@@ -5692,10 +5678,10 @@ status.questionable.event = 0
 --- 
 --- --When event 4917 (a default buffer is 0% filled) occurs, bit 0 is set in the condition register and the event register of the Questionable Event Register. When event 4918 (a default buffer is 100% filled) occurs, bit 0 in the condition register is cleared.
 --- ```
----@param bitNumber number The bit number that is mapped to an event (0 to 14)
----@param setEvent number The number of the event that sets the bits in the condition and event registers; 0 if no mapping
----@param clearEvent number The number of the event that clears the bit in the condition register; 0 if no mapping
----@overload fun(bitNumber:number,setEvent:number)
+---@param bitNumber integer The bit number that is mapped to an event (0 to 14)
+---@param setEvent integer The number of the event that sets the bits in the condition and event registers; 0 if no mapping
+---@param clearEvent integer The number of the event that clears the bit in the condition register; 0 if no mapping
+---@overload fun(bitNumber:integer,setEvent:integer)
 function status.questionable.setmap(bitNumber, setEvent, clearEvent) end
 
 
@@ -5714,9 +5700,9 @@ function status.questionable.setmap(bitNumber, setEvent, clearEvent) end
 --- 
 --- --Returns the events that were mapped to set and clear bit 9.
 --- ```
----@return number setEvent The event mapped to set this bit; 0 if no mapping
----@return number clearEvent The event mapped to clear this bit; 0 if no mapping
----@param bitNumber number The bit number to check (0 to 14)
+---@return integer setEvent The event mapped to set this bit; 0 if no mapping
+---@return integer clearEvent The event mapped to clear this bit; 0 if no mapping
+---@param bitNumber integer The bit number to check (0 to 14)
 function status.questionable.getmap(bitNumber) end
 
 
@@ -5735,8 +5721,8 @@ function status.questionable.getmap(bitNumber) end
 --- 
 --- --Reads the Questionable Condition Register.
 --- ```
+---@type number
 status.questionable.condition = 0
-
 
 
 --- **This attribute sets or reads the contents of the questionable event enable register of the status model.**
@@ -5756,8 +5742,8 @@ status.questionable.condition = 0
 --- --Set bits 0 and 4 of the Questionable Event Enable Register.
 --- --Returns 17, which indicates the register was set correctly.
 --- ```
+---@type number
 status.questionable.enable = 0
-
 ---@class status.standard
 status.standard = {}
 
@@ -5783,8 +5769,8 @@ status.standard = {}
 --- 
 --- --Uses a decimal value to set the OPC and QYE bits of the standard event status enable register.
 --- ```
+---@type number
 status.standard.enable = 0
-
 
 
 --- **This attribute returns the contents of the Standard Event Status Register set of the status model.**
@@ -5802,8 +5788,8 @@ status.standard.enable = 0
 --- 
 --- --May return the value 129, showing that the Standard Event Status Register contains binary 10000001
 --- ```
+---@type number
 status.standard.event = 0
-
 ---@class digiolineArr
 local digiolineArr = {}
 
@@ -5836,26 +5822,25 @@ digio.STATE_HIGH = nil
 --- --Sets line 1 (bit B1) of the digital I/O port high.
 --- ```
 ---@type digiolinestatestate
-digiolineArr.state= 0
+digiolineArr.state = digio.STATE_LOW
 
-
-digio.MODE_DIGITAL_IN = nil
-digio.MODE_TRIGGER_IN = nil
 digio.MODE_DIGITAL_OPEN_DRAIN = nil
-digio.MODE_DIGITAL_OUT = nil
-digio.MODE_TRIGGER_OPEN_DRAIN = nil
 digio.MODE_TRIGGER_OUT = nil
+digio.MODE_DIGITAL_IN = nil
 digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
+digio.MODE_TRIGGER_IN = nil
+digio.MODE_TRIGGER_OPEN_DRAIN = nil
+digio.MODE_DIGITAL_OUT = nil
 digio.MODE_SYNCHRONOUS_MASTER = nil
 
 ---@alias digiolinemodelineMode
----|`digio.MODE_DIGITAL_IN`
----|`digio.MODE_TRIGGER_IN`
 ---|`digio.MODE_DIGITAL_OPEN_DRAIN`
----|`digio.MODE_DIGITAL_OUT`
----|`digio.MODE_TRIGGER_OPEN_DRAIN`
 ---|`digio.MODE_TRIGGER_OUT`
+---|`digio.MODE_DIGITAL_IN`
 ---|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
+---|`digio.MODE_TRIGGER_IN`
+---|`digio.MODE_TRIGGER_OPEN_DRAIN`
+---|`digio.MODE_DIGITAL_OUT`
 ---|`digio.MODE_SYNCHRONOUS_MASTER`
 
 
@@ -5876,8 +5861,7 @@ digio.MODE_SYNCHRONOUS_MASTER = nil
 --- --Set digital I/O line 1 to be an output trigger line.
 --- ```
 ---@type digiolinemodelineMode
-digiolineArr.mode= 0
-
+digiolineArr.mode = digio.MODE_DIGITAL_OPEN_DRAIN
 
 
 --- **This function resets digital I/O line values to their factory defaults.**
@@ -5919,14 +5903,14 @@ local triggerdiginArr = {}
 ---@type triggerdiginArr[]
 trigger.digin = {}
 
-trigger.EDGE_EITHER = nil
-trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_FALLING = nil
+trigger.EDGE_EITHER = nil
 
 ---@alias triggerdiginedgedetectedEdge
----|`trigger.EDGE_EITHER`
----|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_FALLING`
+---|`trigger.EDGE_EITHER`
 
 
 
@@ -5947,8 +5931,7 @@ trigger.EDGE_RISING = nil
 --- --Sets the trigger mode for digital I/O line 4 to detect a rising-edge trigger as an input.
 --- ```
 ---@type triggerdiginedgedetectedEdge
-triggerdiginArr.edge= 0
-
+triggerdiginArr.edge = trigger.EDGE_RISING
 
 
 --- **This function clears the trigger event on a digital input line.**
@@ -5987,8 +5970,8 @@ function triggerdiginArr.clear() end
 --- --If there is no trigger overrun on digital input 1, the output is:
 --- --false
 --- ```
-triggerdiginArr.overrun= 0
-
+---@type boolean
+triggerdiginArr.overrun = true
 
 
 --- **This function waits for a trigger.**
@@ -6097,8 +6080,8 @@ function triggerlanoutArr.disconnect() end
 --- --Example output:
 --- --false
 --- ```
-triggerlanoutArr.connected= 0
-
+---@type boolean
+triggerlanoutArr.connected = true
 
 
 --- **This attribute specifies the address (in dotted-decimal format) of UDP or TCP listeners.**
@@ -6119,17 +6102,17 @@ triggerlanoutArr.connected= 0
 --- --Set the protocol for LAN trigger 3 to be TCP when sending LAN triggers.
 --- --Use IP address "192.0.32.10" to connect the LAN trigger.
 --- ```
-triggerlanoutArr.ipaddress= 0
-
+---@type string
+triggerlanoutArr.ipaddress = ''
 
 lan.PROTOCOL_MULTICAST = nil
-lan.PROTOCOL_TCP = nil
 lan.PROTOCOL_UDP = nil
+lan.PROTOCOL_TCP = nil
 
 ---@alias triggerlanoutprotocolprotocol
 ---|`lan.PROTOCOL_MULTICAST`
----|`lan.PROTOCOL_TCP`
 ---|`lan.PROTOCOL_UDP`
+---|`lan.PROTOCOL_TCP`
 
 
 
@@ -6149,8 +6132,7 @@ lan.PROTOCOL_UDP = nil
 --- --Get LAN protocol that is being used for sending trigger messages for LAN event 1.
 --- ```
 ---@type triggerlanoutprotocolprotocol
-triggerlanoutArr.protocol= 0
-
+triggerlanoutArr.protocol = lan.PROTOCOL_MULTICAST
 
 
 --- **This attribute specifies events that cause this trigger to assert.**
@@ -6168,16 +6150,16 @@ triggerlanoutArr.protocol= 0
 --- 
 --- --Use the timer 1 trigger event as the source for LAN trigger 5 stimulus.
 --- ```
----@type eventID|0
-triggerlanoutArr.stimulus= 0
+---@type triggerEvents
+triggerlanoutArr.stimulus= trigger.EVENT_NONE
 
 
-trigger.LOGIC_POSITIVE = nil
 trigger.LOGIC_NEGATIVE = nil
+trigger.LOGIC_POSITIVE = nil
 
 ---@alias triggerlanoutlogiclogicType
----|`trigger.LOGIC_POSITIVE`
 ---|`trigger.LOGIC_NEGATIVE`
+---|`trigger.LOGIC_POSITIVE`
 
 
 
@@ -6197,8 +6179,7 @@ trigger.LOGIC_NEGATIVE = nil
 --- --Set the logic for LAN trigger line 2 to positive.
 --- ```
 ---@type triggerlanoutlogiclogicType
-triggerlanoutArr.logic= 0
-
+triggerlanoutArr.logic = trigger.LOGIC_NEGATIVE
 ---@class tsplinklineArr
 local tsplinklineArr = {}
 
@@ -6221,8 +6202,8 @@ tsplink.line = {}
 --- 
 --- --Sets the trigger mode for synchronization line 3 as a trigger open drain line.
 --- ```
-tsplinklineArr.mode= 0
-
+---@type tsplinkLineMode
+tsplinklineArr.mode = 0
 
 
 --- **This function resets some of the TSP-Link trigger attributes to their factory defaults.**
@@ -6243,12 +6224,12 @@ tsplinklineArr.mode= 0
 function tsplinklineArr.reset() end
 
 
-tsplink.STATE_HIGH = nil
 tsplink.STATE_LOW = nil
+tsplink.STATE_HIGH = nil
 
 ---@alias tsplinklinestatelineState
----|`tsplink.STATE_HIGH`
 ---|`tsplink.STATE_LOW`
+---|`tsplink.STATE_HIGH`
 
 
 
@@ -6271,22 +6252,21 @@ tsplink.STATE_LOW = nil
 --- --tsplink.STATE_HIGH
 --- ```
 ---@type tsplinklinestatelineState
-tsplinklineArr.state= 0
-
+tsplinklineArr.state = tsplink.STATE_LOW
 ---@class triggertsplinkinArr
 local triggertsplinkinArr = {}
 
 ---@type triggertsplinkinArr[]
 trigger.tsplinkin = {}
 
-trigger.EDGE_EITHER = nil
-trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_FALLING = nil
+trigger.EDGE_EITHER = nil
 
 ---@alias triggertsplinkinedgedetectedEdge
----|`trigger.EDGE_EITHER`
----|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_FALLING`
+---|`trigger.EDGE_EITHER`
 
 
 
@@ -6307,8 +6287,7 @@ trigger.EDGE_RISING = nil
 --- --Sets synchronization line 3 to detect rising edge triggers as input.
 --- ```
 ---@type triggertsplinkinedgedetectedEdge
-triggertsplinkinArr.edge= 0
-
+triggertsplinkinArr.edge = trigger.EDGE_RISING
 
 
 --- **This function clears the event detector for a LAN trigger.**
@@ -6346,8 +6325,8 @@ function triggertsplinkinArr.clear() end
 --- 
 --- --If an event on line 1 was ignored, displays true; if no additional event occurred, displays false.
 --- ```
-triggertsplinkinArr.overrun= 0
-
+---@type boolean
+triggertsplinkinArr.overrun = true
 
 
 --- **This function waits for a trigger.**
@@ -6379,12 +6358,12 @@ local triggertsplinkoutArr = {}
 ---@type triggertsplinkoutArr[]
 trigger.tsplinkout = {}
 
-trigger.LOGIC_POSITIVE = nil
 trigger.LOGIC_NEGATIVE = nil
+trigger.LOGIC_POSITIVE = nil
 
 ---@alias triggertsplinkoutlogiclogicType
----|`trigger.LOGIC_POSITIVE`
 ---|`trigger.LOGIC_NEGATIVE`
+---|`trigger.LOGIC_POSITIVE`
 
 
 
@@ -6405,8 +6384,7 @@ trigger.LOGIC_NEGATIVE = nil
 --- --Sets the trigger logic for synchronization line 3 to output a positive pulse.
 --- ```
 ---@type triggertsplinkoutlogiclogicType
-triggertsplinkoutArr.logic= 0
-
+triggertsplinkoutArr.logic = trigger.LOGIC_NEGATIVE
 
 
 --- **This function simulates the occurrence of the trigger and generates the corresponding trigger event.**
@@ -6445,8 +6423,8 @@ function triggertsplinkoutArr.assert() end
 --- 
 --- --Sets pulse width for trigger line 3 to 20 μs.
 --- ```
-triggertsplinkoutArr.pulsewidth= 0
-
+---@type number
+triggertsplinkoutArr.pulsewidth = 0
 
 
 --- **This function releases a latched trigger on the given TSP-Link trigger line.**
@@ -6484,22 +6462,22 @@ function triggertsplinkoutArr.release() end
 --- 
 --- --Outputs the event that will start action on TSP-Link trigger line 3.
 --- ```
----@type eventID|0
-triggertsplinkoutArr.stimulus= 0
+---@type triggerEvents
+triggertsplinkoutArr.stimulus= trigger.EVENT_NONE
 
 ---@class display.input
 display.input = {}
 
+display.NFORMAT_PREFIX = nil
 display.NFORMAT_INTEGER = nil
 display.NFORMAT_EXPONENT = nil
 display.NFORMAT_DECIMAL = nil
-display.NFORMAT_PREFIX = nil
 
 ---@alias displayinputnumbernumberFormat
+---|`display.NFORMAT_PREFIX`
 ---|`display.NFORMAT_INTEGER`
 ---|`display.NFORMAT_EXPONENT`
 ---|`display.NFORMAT_DECIMAL`
----|`display.NFORMAT_PREFIX`
 
 
 
@@ -6527,10 +6505,10 @@ display.NFORMAT_PREFIX = nil
 ---@param defaultValue number The value that is initially displayed in the displayed keypad
 ---@param minimumValue number The lowest value that can be entered
 ---@param maximumValue number The highest value that can be entered
----@overload fun(dialogTitle:string):number
----@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat):number
----@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number):number
----@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number,minimumValue:number):number
+---@overload fun(dialogTitle:string):numberEntered:number
+---@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat):numberEntered:number
+---@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number):numberEntered:number
+---@overload fun(dialogTitle:string,numberFormat:displayinputnumbernumberFormat,defaultValue:number,minimumValue:number):numberEntered:number
 function display.input.number(dialogTitle, numberFormat, defaultValue, minimumValue, maximumValue) end
 
 
@@ -6552,37 +6530,35 @@ function display.input.number(dialogTitle, numberFormat, defaultValue, minimumVa
 --- --
 --- --If the user selects Peach, the return is display.BUTTON_OPTION8.
 --- ```
----@return displayInputOption n The number of the button that is selected from the front-panel display; nil if Cancel is pressed on the keypad; buttons are numbered top to bottom, left to right
+---@return display_BUTTON_OPTIONs | nil n The number of the button that is selected from the front-panel display; nil if Cancel is pressed on the keypad; buttons are numbered top to bottom, left to right
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
 ---@param buttonTitle1 string A string that contains the name of the first button; up to 15 characters
----@param buttonTitle2 string A string that contains the name of the second button; up to 15 characters
----@param buttonTitleN string A string that contains the names of subsequent buttons, where N is a number from 3 to 10; you can define up to 10 buttons; each button can be up to 15 characters
----@overload fun(dialogTitle:string,buttonTitle1:string,buttonTitle2:string):displayInputOption
-function display.input.option(dialogTitle, buttonTitle1, buttonTitle2, buttonTitleN, ...) end
+---@param ... string A string that contains the names of subsequent buttons, where N is a number from 2 to 10; you can define up to 10 buttons; each button can be up to 15 characters
+function display.input.option(dialogTitle, buttonTitle1, ...) end
 
 display.BUTTON_OK = nil
-display.BUTTON_CANCEL = nil
 display.BUTTON_YES = nil
 display.BUTTON_NO = nil
+display.BUTTON_CANCEL = nil
 
 ---@alias displayinputpromptbuttonReturn
 ---|`display.BUTTON_OK`
----|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_YES`
 ---|`display.BUTTON_NO`
+---|`display.BUTTON_CANCEL`
 
 
-display.BUTTONS_CANCEL = nil
 display.BUTTONS_OKCANCEL = nil
-display.BUTTONS_OK = nil
+display.BUTTONS_CANCEL = nil
 display.BUTTONS_YESNO = nil
+display.BUTTONS_OK = nil
 display.BUTTONS_YESNOCANCEL = nil
 
 ---@alias displayinputpromptbuttonSet
----|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_OKCANCEL`
----|`display.BUTTONS_OK`
+---|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_OK`
 ---|`display.BUTTONS_YESNOCANCEL`
 
 
@@ -6612,15 +6588,15 @@ display.BUTTONS_YESNOCANCEL = nil
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 63 characters
 function display.input.prompt(buttonSet, dialogTitle) end
 
-display.SFORMAT_ANY = nil
-display.SFORMAT_BUFFER_NAME = nil
 display.SFORMAT_UPPER_LOWER = nil
+display.SFORMAT_BUFFER_NAME = nil
+display.SFORMAT_ANY = nil
 display.SFORMAT_UPPER = nil
 
 ---@alias displayinputstringtextFormat
----|`display.SFORMAT_ANY`
----|`display.SFORMAT_BUFFER_NAME`
 ---|`display.SFORMAT_UPPER_LOWER`
+---|`display.SFORMAT_BUFFER_NAME`
+---|`display.SFORMAT_ANY`
 ---|`display.SFORMAT_UPPER`
 
 
@@ -6646,53 +6622,79 @@ display.SFORMAT_UPPER = nil
 ---@return string|nil textEntered The text that is entered from the front-panel display; nil if Cancel is pressed on the keypad
 ---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
 ---@param textFormat displayinputstringtextFormat The format of the entered text
----@overload fun(dialogTitle:string):string|nil
+---@overload fun(dialogTitle:string):textEntered:string|nil
 function display.input.string(dialogTitle, textFormat) end
 ---@class buffer.write
 buffer.write = {}
 
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_CELSIUS = nil
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_FARAD = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_DAC = nil
-buffer.UNIT_AMP = nil
-buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_CUSTOM1 = nil
-buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_X = nil
 buffer.UNIT_DECIBEL = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_FAHRENHEIT = nil
+buffer.UNIT_CELSIUS = nil
+buffer.UNIT_WATT = nil
+buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_CUSTOM3 = nil
+buffer.UNIT_AMP = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_RATIO = nil
+buffer.UNIT_FARAD = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_AMP_AC = nil
+buffer.UNIT_DAC = nil
+buffer.UNIT_HERTZ = nil
+buffer.UNIT_CUSTOM2 = nil
 
 ---@alias bufferwriteformatunits
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_FARAD`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_DAC`
----|`buffer.UNIT_AMP`
----|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_CUSTOM1`
----|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_X`
 ---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_FAHRENHEIT`
+---|`buffer.UNIT_CELSIUS`
+---|`buffer.UNIT_WATT`
+---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_CUSTOM3`
+---|`buffer.UNIT_AMP`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_RATIO`
+---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_CUSTOM2`
 
 
 buffer.DIGITS_6_5 = nil
-buffer.DIGITS_4_5 = nil
 buffer.DIGITS_3_5 = nil
-buffer.DIGITS_8_5 = nil
+buffer.DIGITS_4_5 = nil
 buffer.DIGITS_5_5 = nil
 buffer.DIGITS_7_5 = nil
+buffer.DIGITS_8_5 = nil
 
 ---@alias bufferwriteformatdisplayDigits
 ---|`buffer.DIGITS_6_5`
----|`buffer.DIGITS_4_5`
 ---|`buffer.DIGITS_3_5`
----|`buffer.DIGITS_8_5`
+---|`buffer.DIGITS_4_5`
 ---|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_7_5`
+---|`buffer.DIGITS_8_5`
 
 
 
@@ -6742,13 +6744,13 @@ buffer.DIGITS_7_5 = nil
 --- --Output:
 --- --1, Watt DC, 7, Watt DC, 2, Watt DC, 8, Watt DC, 3, Watt DC, 9, Watt DC, 4, Watt DC, 10, Watt DC, 5, Watt DC, 11, Watt DC, 6, Watt DC, 12, Watt DC
 --- ```
----@param bufferVar bufferMethods The name of the buffer
+---@param bufferVar bufferVar The name of the buffer
 ---@param units bufferwriteformatunits The units for the first measurement in the buffer index
 ---@param displayDigits bufferwriteformatdisplayDigits The number of digits to use for the first measurement
 ---@param extraUnits bufferwriteformatunits The units for the second measurement in the buffer index; the selections are the same as units (only valid for buffer style WRITABLE_FULL); if not specified, uses the value for units
 ---@param extraDigits bufferwriteformatdisplayDigits The number of digits to use for the second measurement; the selections are the same as displayDigits (only valid for buffer style WRITABLE_FULL); if not specified, uses the value for displayDigits
----@overload fun(bufferVar:bufferMethods,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits)
----@overload fun(bufferVar:bufferMethods,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits,extraUnits:bufferwriteformatunits)
+---@overload fun(bufferVar:bufferVar,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits)
+---@overload fun(bufferVar:bufferVar,units:bufferwriteformatunits,displayDigits:bufferwriteformatdisplayDigits,extraUnits:bufferwriteformatunits)
 function buffer.write.format(bufferVar, units, displayDigits, extraUnits, extraDigits) end
 
 
@@ -6798,19 +6800,19 @@ function buffer.write.format(bufferVar, units, displayDigits, extraUnits, extraD
 --- --Output:
 --- --1, Watt DC, 7, Watt DC, 2, Watt DC, 8, Watt DC, 3, Watt DC, 9, Watt DC, 4, Watt DC, 10, Watt DC, 5, Watt DC, 11, Watt DC, 6, Watt DC, 12, Watt DC
 --- ```
----@param bufferVar bufferMethods The name of the buffer
----@param readingValue number The first value that is recorded in the buffer index
----@param extraValue number A second value that is recorded in the buffer index (only valid for buffer style WRITABLE_FULL)
+---@param bufferVar bufferVar The name of the buffer
+---@param readingValue integer The first value that is recorded in the buffer index
+---@param extraValue integer A second value that is recorded in the buffer index (only valid for buffer style WRITABLE_FULL)
 ---@param seconds number An integer that represents the seconds
 ---@param fractionalSeconds number The portion of the time that represents the fractional seconds
 ---@param status readingStatus Additional information about the reading; see Details
----@overload fun(bufferVar:bufferMethods,readingValue:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,seconds:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,extraValue:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,extraValue:number,seconds:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,seconds:number,fractionalSeconds:number)
----@overload fun(bufferVar:bufferMethods,readingValue:number,seconds:number,fractionalSeconds:number,status:readingStatus)
----@overload fun(bufferVar:bufferMethods,readingValue:number,extraValue:number,seconds:number,fractionalSeconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,seconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,extraValue:integer)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,extraValue:integer,seconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,seconds:number,fractionalSeconds:number)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,seconds:number,fractionalSeconds:number,status:readingStatus)
+---@overload fun(bufferVar:bufferVar,readingValue:integer,extraValue:integer,seconds:number,fractionalSeconds:number)
 function buffer.write.reading(bufferVar, readingValue, extraValue, seconds, fractionalSeconds, status) end
 ---@class smu.measure.math
 smu.measure.math = {}
@@ -6842,17 +6844,16 @@ smu.ON = nil
 --- --When voltage measurements are made, the math format is enabled and set to percent.
 --- ```
 ---@type smumeasuremathenablevalue
-smu.measure.math.enable = 0
+smu.measure.math.enable = smu.OFF
 
-
-smu.MATH_RECIPROCAL = nil
-smu.MATH_PERCENT = nil
 smu.MATH_MXB = nil
+smu.MATH_PERCENT = nil
+smu.MATH_RECIPROCAL = nil
 
 ---@alias smumeasuremathformatoperation
----|`smu.MATH_RECIPROCAL`
----|`smu.MATH_PERCENT`
 ---|`smu.MATH_MXB`
+---|`smu.MATH_PERCENT`
+---|`smu.MATH_RECIPROCAL`
 
 
 
@@ -6874,8 +6875,7 @@ smu.MATH_MXB = nil
 --- --Enables the reciprocal math operation on voltage measurements.
 --- ```
 ---@type smumeasuremathformatoperation
-smu.measure.math.format = 0
-
+smu.measure.math.format = smu.MATH_MXB
 
 
 --- **This attribute specifies the reference constant that is used when math operations are set to percent.**
@@ -6899,8 +6899,8 @@ smu.measure.math.format = 0
 --- --Set the percentage value to 50 for voltage measurements.
 --- --Enable math operations.
 --- ```
+---@type any
 smu.measure.math.percent = 0
-
 ---@class smu.measure.rel
 smu.measure.rel = {}
 
@@ -6952,8 +6952,7 @@ smu.ON = nil
 --- --Acquires a relative offset level value for voltage measurements and turns the relative offset feature on.
 --- ```
 ---@type smumeasurerelenablerelEnable
-smu.measure.rel.enable = 0
-
+smu.measure.rel.enable = smu.OFF
 
 
 --- **This attribute contains the relative offset value.**
@@ -6973,8 +6972,8 @@ smu.measure.rel.enable = 0
 --- 
 --- --Sets the measurement function to current, performs a current measurement, uses it as the relative offset value, and enables the relative offset for current measurements.
 --- ```
+---@type any
 smu.measure.rel.level = 0
-
 ---@class smumeasurelimitArr
 local smumeasurelimitArr = {}
 
@@ -7007,8 +7006,7 @@ smu.ON = nil
 --- --Turns on autoclear for limit 1 when measuring DC current.
 --- ```
 ---@type smumeasurelimitautoclearvalue
-smumeasurelimitArr.autoclear= 0
-
+smumeasurelimitArr.autoclear = smu.OFF
 
 
 --- **This function clears the results of the limit test defined by Y for the selected measurement function.**
@@ -7031,15 +7029,15 @@ function smumeasurelimitArr.clear() end
 
 
 smu.FAIL_NONE = nil
-smu.FAIL_BOTH = nil
-smu.FAIL_HIGH = nil
 smu.FAIL_LOW = nil
+smu.FAIL_HIGH = nil
+smu.FAIL_BOTH = nil
 
 ---@alias smumeasurelimitfailresult
 ---|`smu.FAIL_NONE`
----|`smu.FAIL_BOTH`
----|`smu.FAIL_HIGH`
 ---|`smu.FAIL_LOW`
+---|`smu.FAIL_HIGH`
+---|`smu.FAIL_BOTH`
 
 
 
@@ -7108,8 +7106,7 @@ smu.FAIL_LOW = nil
 --- --limit 2 results = smu.FAIL_LOW
 --- ```
 ---@type smumeasurelimitfailresult
-smumeasurelimitArr.fail= 0
-
+smumeasurelimitArr.fail = smu.FAIL_NONE
 
 smu.OFF = nil
 smu.ON = nil
@@ -7137,17 +7134,16 @@ smu.ON = nil
 --- --Enable testing for limit 1 when measuring voltage.
 --- ```
 ---@type smumeasurelimitenablestate
-smumeasurelimitArr.enable= 0
+smumeasurelimitArr.enable = smu.OFF
 
-
-smu.AUDIBLE_PASS = nil
 smu.AUDIBLE_FAIL = nil
 smu.AUDIBLE_NONE = nil
+smu.AUDIBLE_PASS = nil
 
 ---@alias smumeasurelimitaudiblestate
----|`smu.AUDIBLE_PASS`
 ---|`smu.AUDIBLE_FAIL`
 ---|`smu.AUDIBLE_NONE`
+---|`smu.AUDIBLE_PASS`
 
 
 
@@ -7167,8 +7163,7 @@ smu.AUDIBLE_NONE = nil
 --- --When the beeper sounds:
 --- --Never: smu.AUDIBLE_NONEOn test failure: smu.AUDIBLE_FAILOn test pass: smu.AUDIBL--- ```
 ---@type smumeasurelimitaudiblestate
-smumeasurelimitArr.audible= 0
-
+smumeasurelimitArr.audible = smu.AUDIBLE_FAIL
 ---@class smu.measure.configlist
 smu.measure.configlist = {}
 
@@ -7207,6 +7202,7 @@ function smu.measure.configlist.create(listName) end
 --- 
 --- --Request the name of one measure configuration list that is stored in the instrument. Send the command again until it returns nil to get all stored lists.
 --- ```
+---@return string | nil output Returns the name of one measure configuration list that is stored on the instrument
 function smu.measure.configlist.catalog() end
 
 
@@ -7261,9 +7257,10 @@ function smu.measure.configlist.catalog() end
 --- --smu.measure.rel.level = 0.000000e+00
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@param fieldSeparator string String that represents the separator for the data; use one of the following
----@overload fun(listName:string,index:number)
+---@return string output Returns a list of TSP commands and parameter settings that are stored in the specified configuration index
+---@overload fun(listName:string,index:integer):output:string
 function smu.measure.configlist.query(listName, index, fieldSeparator) end
 
 
@@ -7283,12 +7280,12 @@ function smu.measure.configlist.query(listName, index, fieldSeparator) end
 --- --Because an index was not specified, this command recalls configuration index 1 from a configuration list named MyMeasList.
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the measure configuration list
----@param sourceListName number A string that represents the name of a source configuration list
----@param sourceIndex number A number that defines a specific configuration index in the source configuration list
+---@param index integer A number that defines a specific configuration index in the measure configuration list
+---@param sourceListName string A string that represents the name of a source configuration list
+---@param sourceIndex integer A number that defines a specific configuration index in the source configuration list
 ---@overload fun(listName:string)
----@overload fun(listName:string,index:number)
----@overload fun(listName:string,index:number,sourceListName:number)
+---@overload fun(listName:string,index:integer)
+---@overload fun(listName:string,index:integer,sourceListName:string)
 function smu.measure.configlist.recall(listName, index, sourceListName, sourceIndex) end
 
 
@@ -7308,7 +7305,7 @@ function smu.measure.configlist.recall(listName, index, sourceListName, sourceIn
 --- --Delete a measure configuration list named myMeasList.
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@overload fun(listName:string)
 function smu.measure.configlist.delete(listName, index) end
 
@@ -7329,7 +7326,7 @@ function smu.measure.configlist.delete(listName, index) end
 --- --Stores the active settings of the instrument to the end of the configuration list MyConfigList.
 --- ```
 ---@param listName string A string that represents the name of a measure configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@overload fun(listName:string)
 function smu.measure.configlist.store(listName, index) end
 
@@ -7351,18 +7348,18 @@ function smu.measure.configlist.store(listName, index) end
 --- --Example output:
 --- --1
 --- ```
----@return number indexCount A number that represents the total count of indexes stored in the specified measure configuration list
+---@return integer indexCount A number that represents the total count of indexes stored in the specified measure configuration list
 ---@param listName string A string that represents the name of a measure configuration list
 function smu.measure.configlist.size(listName) end
 
+smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
 smu.FUNC_RESISTANCE = nil
-smu.FUNC_DC_VOLTAGE = nil
 
----@alias smumeasureconfigliststorefuncmeasFunction
+---@alias smumeasureconfigliststorefuncfunction
+---|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
 ---|`smu.FUNC_RESISTANCE`
----|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -7386,10 +7383,10 @@ smu.FUNC_DC_VOLTAGE = nil
 --- -- 
 --- ```
 ---@param listName string Name of the configuration list in which to store the function settings
----@param measFunction smumeasureconfigliststorefuncmeasFunction The measure function settings to save into the configuration list
----@param index number The number of the configuration list index in which to store the settings
----@overload fun(listName:string)
-function smu.measure.configlist.storefunc(listName, measFunction, index) end
+---@param function smumeasureconfigliststorefuncfunction The measure function settings to save into the configuration list
+---@param index integer The number of the configuration list index in which to store the settings
+---@overload fun(listName:string,function:smumeasureconfigliststorefuncfunction)
+function smu.measure.configlist.storefunc(listName, function, index) end
 ---@class smu.source.configlist
 smu.source.configlist = {}
 
@@ -7410,7 +7407,7 @@ smu.source.configlist = {}
 --- --Store the active settings of the instrument to the source configuration list MyConfigList. Settings are saved at the end of the list since no index parameter is specified.
 --- ```
 ---@param listName string A string that represents the name of a source configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@overload fun(listName:string)
 function smu.source.configlist.store(listName, index) end
 
@@ -7492,7 +7489,7 @@ function smu.source.configlist.create(listName) end
 --- --Deletes a configuration list named mySourceList.
 --- ```
 ---@param listName string A string that represents the name of a source configuration list
----@param index number A number that defines a specific configuration index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list
 ---@overload fun(listName:string)
 function smu.source.configlist.delete(listName, index) end
 
@@ -7513,9 +7510,9 @@ function smu.source.configlist.delete(listName, index) end
 --- --Returns the TSP commands and parameter settings that represent the settings in configuration index 2.
 --- ```
 ---@param listName string A string that represents the name of a source configuration list
----@param index number A number that defines a specific configuration index in the configuration list; the default is the first index in the configuration list
+---@param index integer A number that defines a specific configuration index in the configuration list; the default is the first index in the configuration list
 ---@param fieldSeparator string String that represents the separator for the data; use one of the following
----@overload fun(listName:string,index:number)
+---@overload fun(listName:string,index:integer)
 function smu.source.configlist.query(listName, index, fieldSeparator) end
 
 
@@ -7536,7 +7533,7 @@ function smu.source.configlist.query(listName, index, fieldSeparator) end
 --- --Example output:
 --- --2
 --- ```
----@return number indexCount A number that represents the total quantity of indexes stored in the specified source configuration list
+---@return integer indexCount A number that represents the total quantity of indexes stored in the specified source configuration list
 ---@param listName string A string that represents the name of a source configuration list
 function smu.source.configlist.size(listName) end
 
@@ -7557,20 +7554,20 @@ function smu.source.configlist.size(listName) end
 --- --Because an index was not specified, this command recalls configuration index 1 from a configuration list named MySourceList.
 --- ```
 ---@param listName string A string that represents the name of a source configuration list
----@param index number A number that defines a specific configuration index in the source configuration list
+---@param index integer A number that defines a specific configuration index in the source configuration list
 ---@param measureListName string A string that represents the name of a measure configuration list
----@param measureIndex number A number that defines a specific configuration index in the measure configuration list
+---@param measureIndex integer A number that defines a specific configuration index in the measure configuration list
 ---@overload fun(listName:string)
----@overload fun(listName:string,index:number)
----@overload fun(listName:string,index:number,measureListName:string)
+---@overload fun(listName:string,index:integer)
+---@overload fun(listName:string,index:integer,measureListName:string)
 function smu.source.configlist.recall(listName, index, measureListName, measureIndex) end
 
-smu.FUNC_DC_CURRENT = nil
 smu.FUNC_DC_VOLTAGE = nil
+smu.FUNC_DC_CURRENT = nil
 
----@alias smusourceconfigliststorefuncmeasFunction
----|`smu.FUNC_DC_CURRENT`
+---@alias smusourceconfigliststorefuncfunction
 ---|`smu.FUNC_DC_VOLTAGE`
+---|`smu.FUNC_DC_CURRENT`
 
 
 
@@ -7592,10 +7589,10 @@ smu.FUNC_DC_VOLTAGE = nil
 --- --Store the settings for the DC current source function into the configuration list in index 1.
 --- ```
 ---@param ConfigListName string Name of the configuration list in which to store the function settings
----@param measFunction smusourceconfigliststorefuncmeasFunction The function to save into the configuration list
----@param index number The number of the configuration list index in which to store the settings
----@overload fun(ConfigListName:string)
-function smu.source.configlist.storefunc(ConfigListName, measFunction, index) end
+---@param function smusourceconfigliststorefuncfunction The function to save into the configuration list
+---@param index integer The number of the configuration list index in which to store the settings
+---@overload fun(ConfigListName:string,function:smusourceconfigliststorefuncfunction)
+function smu.source.configlist.storefunc(ConfigListName, function, index) end
 ---@class smu.measure.autozero
 smu.measure.autozero = {}
 
@@ -7625,8 +7622,7 @@ smu.ON = nil
 --- --Set autozero off for voltage measurements.
 --- ```
 ---@type smumeasureautozeroenablestate
-smu.measure.autozero.enable = 0
-
+smu.measure.autozero.enable = smu.OFF
 
 
 --- **This function causes the instrument to refresh the reference and zero measurements once.**
@@ -7649,23 +7645,23 @@ function smu.measure.autozero.once() end
 smu.source.protect = {}
 
 smu.PROTECT_60V = nil
-smu.PROTECT_2V = nil
-smu.PROTECT_40V = nil
-smu.PROTECT_10V = nil
-smu.PROTECT_20V = nil
 smu.PROTECT_NONE = nil
+smu.PROTECT_20V = nil
+smu.PROTECT_2V = nil
 smu.PROTECT_5V = nil
 smu.PROTECT_80V = nil
+smu.PROTECT_40V = nil
+smu.PROTECT_10V = nil
 
----@alias smusourceprotectlevelx
+---@alias smusourceprotectlevelPROTECT_x
 ---|`smu.PROTECT_60V`
----|`smu.PROTECT_2V`
----|`smu.PROTECT_40V`
----|`smu.PROTECT_10V`
----|`smu.PROTECT_20V`
 ---|`smu.PROTECT_NONE`
+---|`smu.PROTECT_20V`
+---|`smu.PROTECT_2V`
 ---|`smu.PROTECT_5V`
 ---|`smu.PROTECT_80V`
+---|`smu.PROTECT_40V`
+---|`smu.PROTECT_10V`
 
 
 
@@ -7685,9 +7681,8 @@ smu.PROTECT_80V = nil
 --- 
 --- --Sets the maximum voltage limit of the instrument to 40 V.
 --- ```
----@type smusourceprotectlevelx
-smu.source.protect.level = 0
-
+---@type smusourceprotectlevelPROTECT_x
+smu.source.protect.level = smu.PROTECT_60V
 
 smu.OFF = nil
 smu.ON = nil
@@ -7715,8 +7710,7 @@ smu.ON = nil
 --- --smu.ON
 --- ```
 ---@type smusourceprotecttrippedvalue
-smu.source.protect.tripped = 0
-
+smu.source.protect.tripped = smu.OFF
 ---@class smu.measure.filter
 smu.measure.filter = {}
 
@@ -7741,15 +7735,15 @@ smu.measure.filter = {}
 --- --Set the averaging filter type to moving average, with a filter count of 10.
 --- --Enable the averaging filter.
 --- ```
+---@type any
 smu.measure.filter.count = 0
 
-
-smu.FILTER_REPEAT_AVG = nil
 smu.FILTER_MOVING_AVG = nil
+smu.FILTER_REPEAT_AVG = nil
 
 ---@alias smumeasurefiltertypefilterType
----|`smu.FILTER_REPEAT_AVG`
 ---|`smu.FILTER_MOVING_AVG`
+---|`smu.FILTER_REPEAT_AVG`
 
 
 
@@ -7774,8 +7768,7 @@ smu.FILTER_MOVING_AVG = nil
 --- --Enable the averaging filter.
 --- ```
 ---@type smumeasurefiltertypefilterType
-smu.measure.filter.type = 0
-
+smu.measure.filter.type = smu.FILTER_MOVING_AVG
 
 smu.OFF = nil
 smu.ON = nil
@@ -7807,17 +7800,16 @@ smu.ON = nil
 --- --Enable the averaging filter.
 --- ```
 ---@type smumeasurefilterenablefilterState
-smu.measure.filter.enable = 0
-
+smu.measure.filter.enable = smu.OFF
 ---@type triggertimerArr[]
 triggertimerArr.start = {}
 
-trigger.OFF = nil
 trigger.ON = nil
+trigger.OFF = nil
 
 ---@alias triggertimerstartgeneratestate
----|`trigger.OFF`
 ---|`trigger.ON`
+---|`trigger.OFF`
 
 
 
@@ -7867,6 +7859,7 @@ triggertimerArr.start.generate= 0
 --- --If an event was ignored, the output is true.
 --- --If the event was not ignored, the output is false.
 --- ```
+---@type boolean
 triggertimerArr.start.overrun= 0
 
 
@@ -7890,8 +7883,8 @@ triggertimerArr.start.overrun= 0
 --- --Set timer 1 to delay for 3 ms.
 --- --Set timer 1 to start the timer when an event is detected on digital I/O line 3.
 --- ```
----@type eventID|0
-triggertimerArr.start.stimulus= 0
+---@type triggerEvents
+triggertimerArr.start.stimulus= trigger.EVENT_NONE
 
 
 
@@ -7911,6 +7904,7 @@ triggertimerArr.start.stimulus= 0
 --- 
 --- --Set the trigger timer to start 30 s from the time when the timer is enabled.
 --- ```
+---@type number
 triggertimerArr.start.seconds= 0
 
 
@@ -7930,6 +7924,7 @@ triggertimerArr.start.seconds= 0
 --- 
 --- --Set the trigger timer to start in 0.4 s.
 --- ```
+---@type number
 triggertimerArr.start.fractionalseconds= 0
 
 ---@class smu.source.ilimit
@@ -7952,8 +7947,8 @@ smu.source.ilimit = {}
 --- 
 --- --Set the source function to voltage with the current limit set to 1 A.
 --- ```
+---@type number
 smu.source.ilimit.level = 0
-
 
 
 --- **This attribute indicates if the source exceeded the limits that were set for the selected measurements.**
@@ -7972,8 +7967,8 @@ smu.source.ilimit.level = 0
 --- --Check the state of the source limit for voltage. If the limit was exceeded, the output is:
 --- --smu.ON
 --- ```
+---@type 0|1
 smu.source.ilimit.tripped = 0
-
 ---@class smu.source.vlimit
 smu.source.vlimit = {}
 
@@ -7994,8 +7989,8 @@ smu.source.vlimit = {}
 --- 
 --- --Set the source function to voltage with the current limit set to 1 A.
 --- ```
+---@type number
 smu.source.vlimit.level = 0
-
 
 
 --- **This attribute indicates if the source exceeded the limits that were set for the selected measurements.**
@@ -8014,8 +8009,8 @@ smu.source.vlimit.level = 0
 --- --Check the state of the source limit for voltage. If the limit was exceeded, the output is:
 --- --smu.ON
 --- ```
+---@type 0|1
 smu.source.vlimit.tripped = 0
-
 ---@type smumeasurelimitArr[]
 smumeasurelimitArr.high = {}
 
@@ -8035,6 +8030,7 @@ smumeasurelimitArr.high = {}
 --- 
 --- --The value of the high limit (-9.99999e+11 to +9.99999e+11)
 --- ```
+---@type number
 smumeasurelimitArr.high.value= 0
 
 ---@type smumeasurelimitArr[]
@@ -8056,6 +8052,7 @@ smumeasurelimitArr.low = {}
 --- 
 --- --The low limit value of limit Y (-9.99999E+11 to 9.99999E+11)
 --- ```
+---@type number
 smumeasurelimitArr.low.value= 0
 
 ---@class smu.measure.math.mxb
@@ -8085,8 +8082,8 @@ smu.measure.math.mxb = {}
 --- --Set the offset factor to 50.
 --- --Enable the math function.
 --- ```
+---@type number
 smu.measure.math.mxb.bfactor = 0
-
 
 
 --- **This attribute specifies the scale factor, m, for the y = mx + b math operation.**
@@ -8112,8 +8109,8 @@ smu.measure.math.mxb.bfactor = 0
 --- --Set the offset factor to 50.
 --- --Enable the math function.
 --- ```
+---@type number
 smu.measure.math.mxb.mfactor = 0
-
 ---This is generic function, This function loads a trigger-model template configuration
 ---
 ---**trigger.model.load() - DurationLoop**
@@ -8386,57 +8383,57 @@ smu.measure.math.mxb.mfactor = 0
 --- ```
 ---@param loadFunConst loadFunConstParam
 function trigger.model.load(loadFunConst,...) end
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_DECIBEL = nil
-buffer.UNIT_OHM = nil
-buffer.UNIT_RATIO = nil
-buffer.UNIT_PERCENT = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_CELSIUS = nil
-buffer.UNIT_FARAD = nil
-buffer.UNIT_HERTZ = nil
-buffer.UNIT_WATT = nil
-buffer.UNIT_DAC = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_NONE = nil
-buffer.UNIT_RECIPROCAL = nil
-buffer.UNIT_TOT = nil
-buffer.UNIT_DBM = nil
 buffer.UNIT_X = nil
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_SECOND = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_AMP = nil
+buffer.UNIT_DECIBEL = nil
+buffer.UNIT_TOT = nil
 buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CELSIUS = nil
+buffer.UNIT_WATT = nil
 buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_CUSTOM3 = nil
+buffer.UNIT_AMP = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_RATIO = nil
+buffer.UNIT_FARAD = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_AMP_AC = nil
+buffer.UNIT_DAC = nil
+buffer.UNIT_HERTZ = nil
 buffer.UNIT_CUSTOM2 = nil
 
 ---@alias buffermathunit
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_OHM`
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_PERCENT`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_FARAD`
----|`buffer.UNIT_HERTZ`
----|`buffer.UNIT_WATT`
----|`buffer.UNIT_DAC`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_NONE`
----|`buffer.UNIT_RECIPROCAL`
----|`buffer.UNIT_TOT`
----|`buffer.UNIT_DBM`
 ---|`buffer.UNIT_X`
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_SECOND`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_AMP`
+---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_TOT`
 ---|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CELSIUS`
+---|`buffer.UNIT_WATT`
 ---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_CUSTOM3`
+---|`buffer.UNIT_AMP`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_RATIO`
+---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_HERTZ`
 ---|`buffer.UNIT_CUSTOM2`
 
 
@@ -8483,19 +8480,19 @@ buffer.UNIT_CUSTOM2 = nil
 --- --Extra value reading 2: 4.3310937031e-09
 --- --Extra value reading 3: 1.3476513655e-09
 --- ```
----@param readingBuffer bufferMethods The name of the reading buffer; the reading buffer selected must be set to the style FULL
+---@param readingBuffer bufferVar The name of the reading buffer; the reading buffer selected must be set to the style FULL
 ---@param unit buffermathunit The units to be applied to the value generated by the expression
 ---@param mathExpression mathExpression
 function buffer.math(readingBuffer, unit, mathExpression, ...) end
----@type bufferMethods
+---@type bufferVar
 defbuffer1 = {}
 
----@type bufferMethods
+---@type bufferVar
 defbuffer2 = {}
 
 ---This is generic function to define trigger model setblock.<br>
 ---Signature of this function depends on the BlockType.<br>
----For more details, please look at the manual by viewing hower help of blockType or opening command help
+---For more details, please look at the manual by viewing hover help of blockType or opening command help
 ---@param blockNumber number
 ---@param blockType triggerBlockBranch
 function trigger.model.setblock(blockNumber, blockType,...) end
