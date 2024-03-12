@@ -29,3 +29,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - nodeTable.lua definition file has been added for few models(TSP-336)
 - Language feature has been added for DAQ6510 and DMM6500 command set(TSP-304)
 - Language feature has been added for 24XX and DMM7510 command set(TSP-232)
+
+## [0.14.1]
+
+### Fixed
+- TTI model(2450, 2460, 2461, 2470, DMM7510) command set has been verifyed and found issue is corrected(TSP-569)
