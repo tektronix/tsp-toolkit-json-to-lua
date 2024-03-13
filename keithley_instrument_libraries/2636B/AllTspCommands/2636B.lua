@@ -23,6 +23,9 @@ local bufferVar={}
 ---@class tspnetConnectionID
 local tspnetConnectionID = {}
 
+ ---@class promptID
+local promptID = {}
+
 ---@class userstring
 userstring = {}
 
@@ -198,7 +201,7 @@ function tspnet.clear(connectionID) end
 --- 
 --- --Connect to a device that is not TSP‑enabled.
 --- ```
----@return tsplinkConnectionID connectionID The connection ID to be used as a handle in all other tspnet function calls
+---@return tspnetConnectionID connectionID The connection ID to be used as a handle in all other tspnet function calls
 ---@param ipAddress string IP address to which to connect in a string; accepts IP address or host name when trying to connect
 ---@param portNumber number Port number (default 5025)
 ---@param initString string Initialization string to send to ipAddress
@@ -252,12 +255,9 @@ function tspnet.disconnect(connectionID) end
 --- ```
 ---@param connectionID tspnetConnectionID The connection ID returned from tspnet.connect()
 ---@param commandString string The command to send to the remote device
----@return number value1 The first value decoded from the response message
----@return number value2 The second value decoded from the response message
+---@return number|string|... ... One or more values separated with commas
 ---@param formatString string Format string for the output
----@overload fun(connectionID:tspnetConnectionID,commandString:string):value1:number, value2:number
----@overload fun(connectionID:tspnetConnectionID,commandString:string,formatString:string):value1:number, value2:number
----@overload fun(connectionID:tspnetConnectionID,commandString:string,formatString:string):value1:number, value2:number
+---@overload fun(connectionID:tspnetConnectionID,commandString:string):...:number|string|...
 function tspnet.execute(connectionID, commandString, formatString) end
 
 
@@ -303,13 +303,10 @@ function tspnet.idn(connectionID) end
 --- --Send the "*idn?\r\n" message to the instrument connected as deviceID.
 --- --Display the response that is read from deviceID (based on the *idn? message).
 --- ```
----@return number value1 The first value decoded from the response message
----@return number value2 The second value decoded from the response message
+---@return number|string|... ... One or more values separated with commas
 ---@param connectionID tspnetConnectionID The connection ID returned from tspnet.connect()
 ---@param formatString string Format string for the output, maximum of 10 specifiers
----@overload fun(connectionID:tspnetConnectionID):value1:number, value2:number
----@overload fun(connectionID:tspnetConnectionID,formatString:string):value1:number, value2:number
----@overload fun(connectionID:tspnetConnectionID,formatString:string):value1:number, value2:number
+---@overload fun(connectionID:tspnetConnectionID):...:number|string|...
 function tspnet.read(connectionID, formatString) end
 
 
@@ -354,14 +351,14 @@ function tspnet.reset() end
 
 tspnet.TERM_CRLF3 = nil
 tspnet.TERM_CR2 = nil
-tspnet.TERM_LF4 = nil
 tspnet.TERM_LFCR = nil
+tspnet.TERM_LF4 = nil
 
 ---@alias tspnetterminationtype
 ---|`tspnet.TERM_CRLF3`
 ---|`tspnet.TERM_CR2`
----|`tspnet.TERM_LF4`
 ---|`tspnet.TERM_LFCR`
+---|`tspnet.TERM_LF4`
 
 
 
@@ -405,6 +402,8 @@ function tspnet.termination(connectionID, termSequence) end
 --- 
 --- --Sets the timeout duration to 2 s.
 --- ```
+---@type number
+tspnet.timeout = 0
 
 
 --- **This function writes a string to the remote instrument.**
@@ -430,12 +429,12 @@ beeper = {}
 
 
 
-beeper.ON = 0
-beeper.OFF = 1
+beeper.OFF = 0
+beeper.ON = 1
 
 ---@alias beeperenablestate
----|`beeper.ON`
 ---|`beeper.OFF`
+---|`beeper.ON`
 
 
 
@@ -455,6 +454,8 @@ beeper.OFF = 1
 --- 
 --- --Enables the beeper and generates a two‑second, 2400 Hz tone.
 --- ```
+---@type beeperenablestate
+beeper.enable = beeper.OFF
 
 
 --- **This function generates an audible tone.**
@@ -825,6 +826,8 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
+---@type dataqueueCAPACITYcount
+dataqueue.CAPACITY = dataqueue.CAPACITY
 
 
 --- **This attribute contains the number of items in the data queue.**
@@ -853,6 +856,8 @@ dataqueue.CAPACITY = nil
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
+---@type number
+dataqueue.count = 0
 
 
 --- **This function removes the next entry from the data queue.**
@@ -1002,6 +1007,8 @@ function digio.writeport(data) end
 --- 
 --- --Write‑protects lines 1, 2, 3, and 4.
 --- ```
+---@type number
+digio.writeprotect = 0
 ---@class display
 display = {}
 
@@ -1130,12 +1137,12 @@ function display.gettext(embellished, row, columnStart, columnEnd) end
 ---@overload fun(format:string,default:number,minimum:number)
 function display.inputvalue(format, default, minimum, maximum) end
 
-display.LOCK = nil
 display.UNLOCK = nil
+display.LOCK = nil
 
 ---@alias displaylocallockoutlockout
----|`display.LOCK`
 ---|`display.UNLOCK`
+---|`display.LOCK`
 
 
 
@@ -1154,6 +1161,8 @@ display.UNLOCK = nil
 --- 
 --- --Disables the front‑panel EXIT (LOCAL) key.
 --- ```
+---@type displaylocallockoutlockout
+display.locallockout = display.UNLOCK
 
 
 --- **This function presents a menu on the front‑panel display.**
@@ -1179,12 +1188,12 @@ display.UNLOCK = nil
 ---@param items string Menu items to display on the bottom line
 function display.menu(name, items) end
 
-display.DISABLE = nil
 display.ENABLE = nil
+display.DISABLE = nil
 
 ---@alias displaynumpadnumericKeypad
----|`display.DISABLE`
 ---|`display.ENABLE`
+---|`display.DISABLE`
 
 
 
@@ -1203,6 +1212,8 @@ display.ENABLE = nil
 --- 
 --- --Turn on the numeric keypad feature.
 --- ```
+---@type displaynumpadnumericKeypad
+display.numpad = display.ENABLE
 
 
 --- **This function sets the position of the cursor.**
@@ -1252,7 +1263,7 @@ function display.setcursor(row, column, style) end
 --- --Dim BackgroundBlink $$ 2 dollars
 --- --with the named effect on each word.
 --- ```
-function display.settext(DisplayText, Text) end
+function display.settext(displayArea, text) end
 
 
 --- **This function reads the annunciators (indicators) that are presently turned on.**
@@ -1326,14 +1337,14 @@ function display.prompt(format, units, help, default, minimum, maximum) end
 
 display.SMUB = nil
 display.SMUA_SMUB = nil
-display.SMUA = nil
 display.USER = nil
+display.SMUA = nil
 
 ---@alias displayscreendisplayID
 ---|`display.SMUB`
 ---|`display.SMUA_SMUB`
----|`display.SMUA`
 ---|`display.USER`
+---|`display.SMUA`
 
 
 
@@ -1352,6 +1363,8 @@ display.USER = nil
 --- 
 --- --Selects the source-measure and compliance limit display for SMU A.
 --- ```
+---@type displayscreendisplayID
+display.screen = display.SMUB
 
 
 --- **This function retrieves the key code for the last pressed key.**
@@ -1455,6 +1468,8 @@ function errorqueue.clear() end
 --- --The output below indicates that there are four entries in the error queue:
 --- --4.00000e+00
 --- ```
+---@type integer
+errorqueue.count = 0
 
 
 --- **This function reads the oldest entry from the error queue and removes it from the queue.**
@@ -1525,6 +1540,8 @@ function eventlog.all() end
 --- --Output looks similar to:
 --- --3.00000e+00
 --- ```
+---@type integer
+eventlog.count = 0
 
 
 --- **This function clears the event log.**
@@ -1565,13 +1582,15 @@ eventlog.DISCARD_NEWEST = nil
 --- 
 --- --When the log is full, the event log ignores new entries.
 --- ```
+---@type eventlogoverwritemethodmethod
+eventlog.overwritemethod = eventlog.DISCARD_OLDEST
 
-eventlog.ENABLE = nil
 eventlog.DISABLE = nil
+eventlog.ENABLE = nil
 
 ---@alias eventlogenablestatus
----|`eventlog.ENABLE`
 ---|`eventlog.DISABLE`
+---|`eventlog.ENABLE`
 
 
 
@@ -1595,6 +1614,8 @@ eventlog.DISABLE = nil
 --- --1.00000e+00
 --- --0.00000e+00
 --- ```
+---@type eventlogenablestatus
+eventlog.enable = eventlog.DISABLE
 
 
 --- **This function returns the oldest unread event message from the event log and removes it from the event log.**
@@ -1620,213 +1641,6 @@ eventlog.DISABLE = nil
 --- ```
 ---@return string logString The next log entry
 function eventlog.next() end
----@class fileVar
-fileVar = {}
-
-
-
-
---- **This function closes the file that is represented by the fileVar variable.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This command is equivalent to io.close(fileVar).Note that files are automatically closed when the file descriptors are garbage collected.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/14772.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- local fileName = "/usb1/myfile.txt"
----  
---- if fs.is_file(fileName) then
---- 	os.remove(fileName)
---- 	print("Removing file")
---- else
---- 	print("Nothing removed")
---- end
----  
---- print("\n*** fileVar:close")
---- do
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "w")
---- myfile:write("Line 1")
---- myfile:close()
---- end
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "r")
---- myfile:close()
---- os.remove(fileName)
---- 
---- --Opens file myfile.txt for writing. If no errors were found while opening, writes Removing file and closes the file.
---- ```
-function file_object:close() end
-
-
---- **This function writes buffered data to a file.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- The fileVar:write() or io.write() functions buffer data, which may not be written immediately to the USB flash drive. Use fileVar:flush() to flush this data. Using this function removes the need to close a file after writing to it, allowing the file to be left open to write more data. Data may be lost if the file is not closed or flushed before a script ends. If there is going to be a time delay before more data is written to a file, and you want to keep the file open, flush the file after you write to it to prevent loss of data.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/14786.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- local fileName = "/usb1/myfile.txt"
----  
---- if fs.is_file(fileName) then
---- 	os.remove(fileName)
---- 	print("Removing file")
---- else
---- 	print("Nothing removed")
---- end
----  
---- errorqueue.clear()
---- print("\n*** io.read")
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "w")
---- myfile:write("Line 1\n")
---- myfile:flush()
---- myfile:close()
---- do
---- fileHandle = io.input(fileName)
---- value = io.read("*a")
---- print(value)
---- end
---- fileHandle:close()
----  
---- print(errorqueue.next())
---- 
---- --Writes data to a USB flash drive.
---- ```
-function file_object:flush() end
-
-
---- **This function reads data from a file.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- The format parameters may be any of the following:"*n": Returns a number."*a": Returns the whole file, starting at the current position (returns an empty string if the current file position is at the end of the file)."*l": Returns the next line, skipping the end of line; returns nil if the current file position is at the end of file.n: Returns a string with up to n characters; returns an empty string if n is zero; returns nil if the current file position is at the end of file.If no format parameters are provided, the function performs as if the function is passed the value "*l".Any number of format parameters may be passed to this command, each corresponding to a returned data value.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/14787.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- local fileName = "/usb1/myfile.txt"
----  
---- if fs.is_file(fileName) then
---- 	os.remove(fileName)
---- 	print("Removing file")
---- else
---- 	print("Nothing removed")
---- end
----  
---- print("fileVar:read")
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "w")
---- myfile:write("Line 1")
---- myfile:close()
---- do
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "r")
---- contents = myfile:read("*a")
---- print(contents)
---- end
---- myfile:close()
---- os.remove(fileName)
---- 
---- --Reads data from the input file.
---- ```
----@return number data1 First data read from the file
----@return number data2 Second data read from the file
----@param format1 string A string or number indicating the first type of data to be read
----@param format2 string A string or number indicating the second type of data to be read
----@overload fun():data1:number, data2:number
----@overload fun(format1:string):data1:number, data2:number
----@overload fun(format1:string,...:any):data1:number, data2:number
-function file_object:read(format1, format2) end
-
-
---- **This function sets and gets the present position of a file.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- The whence parameters may be any of the following:"set": Beginning of file"cur": Current position"end": End of fileIf an error is encountered, it is logged to the error queue, and the command returns nil and the error string.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/14788.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- local fileName = "/usb1/myfile.txt"
----  
---- if fs.is_file(fileName) then
---- 	os.remove(fileName)
---- 	print("Removing file")
---- else
---- 	print("Nothing removed")
---- end
----  
---- errorqueue.clear()
----  
---- print("\n*** fileVar:seek")
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "w")
---- myfile:write("Line 1")
---- myfile:close()
---- do
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "r")
---- position = myfile:seek("end", -1)
---- print(position)
---- end
---- myfile:close()
---- os.remove(fileName)
---- 
---- --Get the present position of a file.
---- ```
----@return any position The new file position, measured in bytes from the beginning of the file
----@return string errorMsg A string containing the error message
----@param whence string A string indicating the base against which offset is applied; the default is "cur"
----@param offset number The intended new position, measured in bytes from a base indicated by whence (default is 0)
----@overload fun():position:any, errorMsg:string
----@overload fun(whence:string):position:any, errorMsg:string
-function file_object:seek(whence, offset) end
-
-
---- **This function writes data to a file.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This function may buffer data until a flush (fileVar:flush() or io.flush()) or close (fileVar:close() or io.close()) operation is performed.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/14789.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- local fileName = "/usb1/myfile.txt"
----  
---- if fs.is_file(fileName) then
---- 	os.remove(fileName)
---- 	print("Removing file")
---- else
---- 	print("Nothing removed")
---- end
----  
---- errorqueue.clear()
----  
---- print("\n*** fileVar:write")
---- myfile, myfile_err, myfile_errnum = io.open(fileName, "w")
---- do
---- myfile:write("Line 1")
---- end
---- myfile:close()
---- os.remove(fileName)
---- 
---- --Write data to a file.
---- ```
----@param data1 string The first data to write to the file
----@param data2 string The second data to write to the file
----@overload fun(data:any)
----@overload fun(data1:string,...:any)
-function file_object:write(data1, data2) end
 ---@class format
 format = {}
 
@@ -1855,19 +1669,21 @@ format = {}
 --- -- 
 --- --2.54e+00
 --- ```
+---@type number
+format.asciiprecision = 0
 
-format.LITTLEENDIAN = nil
-format.NETWORK = nil
-format.NORMAL = nil
-format.SWAPPED = nil
 format.BIGENDIANL = nil
+format.NETWORK = nil
+format.SWAPPED = nil
+format.NORMAL = nil
+format.LITTLEENDIAN = nil
 
 ---@alias formatbyteorderorder
----|`format.LITTLEENDIAN`
----|`format.NETWORK`
----|`format.NORMAL`
----|`format.SWAPPED`
 ---|`format.BIGENDIANL`
+---|`format.NETWORK`
+---|`format.SWAPPED`
+---|`format.NORMAL`
+---|`format.LITTLEENDIAN`
 
 
 
@@ -1893,21 +1709,23 @@ format.BIGENDIANL = nil
 --- --#0¤p??
 --- --#0??p¤
 --- ```
+---@type formatbyteorderorder
+format.byteorder = format.BIGENDIANL
 
-format.REAL = nil
-format.REAL32D = nil
 format.DREAL = nil
+format.REAL32D = nil
 format.SREAL = nil
-format.ASCIIS = nil
 format.REAL64 = nil
+format.ASCIIS = nil
+format.REAL = nil
 
 ---@alias formatdatavalue
----|`format.REAL`
----|`format.REAL32D`
 ---|`format.DREAL`
+---|`format.REAL32D`
 ---|`format.SREAL`
----|`format.ASCIIS`
 ---|`format.REAL64`
+---|`format.ASCIIS`
+---|`format.REAL`
 
 
 
@@ -1934,6 +1752,8 @@ format.REAL64 = nil
 --- --3.141592650e+00
 --- --#0ñÔÈSû!   @
 --- ```
+---@type formatdatavalue
+format.data = format.DREAL
 ---@class fs
 fs = {}
 
@@ -2054,6 +1874,7 @@ function fs.is_dir(path) end
 --- --If it does not exist, create a directory named temp.
 --- ```
 ---@return string path The returned path of the new directory
+---@param newpath string Location (path) of where to create the new directory
 function fs.mkdir(newPath) end
 
 
@@ -2081,7 +1902,7 @@ function fs.mkdir(newPath) end
 --- --Set entries as the variable for the file system entries in rootDirectory.
 --- --Return the number of files and directories in the directory.
 --- ```
----@return any files A table containing the names of all the file system entries in the specified directory
+---@return string[] files A table containing the names of all the file system entries in the specified directory
 ---@param path string The directory path
 function fs.readdir(path) end
 
@@ -2161,6 +1982,8 @@ gpib = {}
 --- --Output:
 --- --26
 --- ```
+---@type number
+gpib.address = 0
 ---@class io
 io = {}
 
@@ -2315,13 +2138,14 @@ function io.output(newfile) end
 --- --Read data from the default input file.
 --- ```
 ---@return any data1 The data read from the file
----@return any data2 The data read from the file
+---@return any dataN The data read from the file; the number of return values matches the number of format values given
 ---@param format1 string A string or number indicating the type of data to be read
----@param format2 string A string or number indicating the type of data to be read
----@overload fun():data1:any, data2:any
----@overload fun(format1:string):data1:any, data2:any
----@overload fun(format1:string,...:any):data1:any, data2:any
-function io.read(format1, format2) end
+---@param formatN string A string or number indicating the type of data to be read
+---@param ... any One or more entries (or values) separated by commas
+---@overload fun():data1:any, dataN:any, ...:any
+---@overload fun(format1:string):data1:any, dataN:any, ...:any
+---@overload fun(format1:string,format2:string):data1:any, dataN:any, ...:any
+function io.read(format1, ..., formatN) end
 
 
 --- **This function checks whether or not a given object is a file handle.**
@@ -2403,11 +2227,12 @@ function io.type(obj) end
 --- --Writes data to the default output file.
 --- ```
 ---@param data1 string|number The data to be written
----@param data2 string|number The data to be written
+---@param dataN string|number The data to be written
+---@param ... string|number One or more values separated by commas
 ---@overload fun()
 ---@overload fun(data1:string|number)
----@overload fun(data1:string|number,...:any)
-function io.write(data1, data2) end
+---@overload fun(data1:string|number,data2:string|number)
+function io.write(data1, ..., dataN) end
 
 
 --- **This function assigns a previously opened file, or opens a new file, as the default input file.**
@@ -2473,6 +2298,8 @@ lan.DISABLE = nil
 --- 
 --- --Enable LAN link monitoring.
 --- ```
+---@type lanautoconnectstate
+lan.autoconnect = lan.ENABLE
 
 
 --- **This attribute contains the LAN link timeout period.**
@@ -2490,6 +2317,8 @@ lan.DISABLE = nil
 --- 
 --- --Outputs the present LAN link timeout setting.
 --- ```
+---@type number
+lan.linktimeout = 0
 
 
 --- **This attribute contains the LXI domain.**
@@ -2507,6 +2336,8 @@ lan.DISABLE = nil
 --- 
 --- --Displays the LXI domain.
 --- ```
+---@type number
+lan.lxidomain = 0
 
 lan.ENABLE = nil
 lan.DISABLE = nil
@@ -2529,6 +2360,8 @@ lan.DISABLE = nil
 ---<br>*Examples:*<br>
 --- ```lua
 --- ```
+---@type lannaglestate
+lan.nagle = lan.ENABLE
 
 
 --- **This function resets the LAN interface.**
@@ -2579,6 +2412,8 @@ function lan.restoredefaults() end
 --- 
 --- --Set the amount of time resources are allocated to TCP connection to 30 s.
 --- ```
+---@type number
+lan.timedwait = 0
 ---@class localnode
 localnode = {}
 
@@ -2597,6 +2432,8 @@ localnode = {}
 ---<br>*Examples:*<br>
 --- ```lua
 --- ```
+---@type boolean
+localnode.autolinefreq = true
 
 
 --- **This attribute stores a user-defined description and mDNS service name of the instrument.**
@@ -2615,6 +2452,8 @@ localnode = {}
 --- 
 --- --Set description to System in Lab 05.
 --- ```
+---@type string
+localnode.description = ''
 
 
 --- **This attribute contains the power line frequency setting that is used for NPLC calculations.**
@@ -2635,6 +2474,8 @@ localnode = {}
 --- 
 --- --Sets the line frequency to 60 Hz.
 --- ```
+---@type number
+localnode.linefreq = 0
 
 
 --- **This attribute stores the model number.**
@@ -2653,6 +2494,8 @@ localnode = {}
 --- --Outputs the model number of the local node. For example:
 --- --2602B
 --- ```
+---@type string
+localnode.model = ''
 
 
 --- **This attribute stores the remote access password.**
@@ -2670,16 +2513,18 @@ localnode = {}
 --- 
 --- --Changes the remote interface password to N3wpa55w0rd.
 --- ```
+---@type string
+localnode.password = ''
 
+localnode.PASSWORD_LAN = nil
 localnode.PASSWORD_NONE = nil
 localnode.PASSWORD_ALL = nil
-localnode.PASSWORD_LAN = nil
 localnode.PASSWORD_WEB = nil
 
 ---@alias localnodepasswordmodemode
+---|`localnode.PASSWORD_LAN`
 ---|`localnode.PASSWORD_NONE`
 ---|`localnode.PASSWORD_ALL`
----|`localnode.PASSWORD_LAN`
 ---|`localnode.PASSWORD_WEB`
 
 
@@ -2703,6 +2548,8 @@ localnode.PASSWORD_WEB = nil
 --- --Allows use of passwords on the web interface only.
 --- --Set the password to SMU1234.
 --- ```
+---@type localnodepasswordmodemode
+localnode.passwordmode = localnode.PASSWORD_LAN
 
 
 --- **This attribute determines if the instrument generates prompts in response to command messages.**
@@ -2720,6 +2567,8 @@ localnode.PASSWORD_WEB = nil
 --- 
 --- --Enable prompting.
 --- ```
+---@type localnodepromptsprompting
+localnode.prompts = 0
 
 
 --- **This attribute enables and disables the generation of prompts for IEEE Std 488.2 common commands.**
@@ -2737,6 +2586,8 @@ localnode.PASSWORD_WEB = nil
 --- 
 --- --Disables IEEE Std 488.2 common command prompting.
 --- ```
+---@type localnodeprompts4882prompting
+localnode.prompts4882 = 0
 
 
 --- **This attribute stores the firmware revision level.**
@@ -2756,6 +2607,8 @@ localnode.PASSWORD_WEB = nil
 --- --Sample output:
 --- --1.0.0
 --- ```
+---@type string
+localnode.revision = ''
 
 
 --- **This attribute stores the serial number of the instrument.**
@@ -2775,6 +2628,8 @@ localnode.PASSWORD_WEB = nil
 --- --Clears the instrument display.
 --- --Places the serial number of the instrument on the top line of its display.
 --- ```
+---@type string
+localnode.serialno = ''
 
 
 --- **This attribute sets whether or not the instrument automatically sends generated errors.**
@@ -2792,6 +2647,8 @@ localnode.PASSWORD_WEB = nil
 --- 
 --- --Enables sending of generated errors.
 --- ```
+---@type 0|1
+localnode.showerrors = 0
 
 
 --- **This function resets the local node instrument.**
@@ -2827,6 +2684,8 @@ function localnode.reset() end
 --- 
 --- --Returns the license agreements for the 2600B.
 --- ```
+---@type string
+localnode.license = ''
 ---@class nodeArr
 local nodeArr = {}
 
@@ -3017,6 +2876,8 @@ function script.delete(scriptName) end
 --- 
 --- --Retrieves the source of the anonymous script.
 --- ```
+---@type table
+script.anonymous = {}
 
 
 --- **This function creates a script and enables autorun.**
@@ -3084,6 +2945,8 @@ serial = {}
 --- 
 --- --Sets the baud rate to 1200.
 --- ```
+---@type number
+serial.baud = 0
 
 
 --- **This attribute configures character width (data bits) for the RS-232 port.**
@@ -3101,6 +2964,8 @@ serial = {}
 --- 
 --- --Sets data width to 8.
 --- ```
+---@type number
+serial.databits = 0
 
 serial.FLOW_HARDWARE = nil
 serial.FLOW_NONE = nil
@@ -3126,15 +2991,17 @@ serial.FLOW_NONE = nil
 --- 
 --- --Sets flow control to none.
 --- ```
+---@type serialflowcontrolflow
+serial.flowcontrol = serial.FLOW_HARDWARE
 
-serial.PARITY_EVEN = nil
 serial.PARITY_ODD = nil
 serial.PARITY_NONE = nil
+serial.PARITY_EVEN = nil
 
 ---@alias serialparityparity
----|`serial.PARITY_EVEN`
 ---|`serial.PARITY_ODD`
 ---|`serial.PARITY_NONE`
+---|`serial.PARITY_EVEN`
 
 
 
@@ -3153,6 +3020,8 @@ serial.PARITY_NONE = nil
 --- 
 --- --Sets parity to none.
 --- ```
+---@type serialparityparity
+serial.parity = serial.PARITY_ODD
 
 
 --- **This function reads available characters (data) from the serial port.**
@@ -3218,6 +3087,8 @@ setup = {}
 --- 
 --- --Set the instrument to use the factory default setup when power is turned on.
 --- ```
+---@type integer
+setup.poweron = 0
 
 
 --- **This function saves the present setup as a user-saved setup.**
@@ -3299,7 +3170,7 @@ function smua.abort() end
 --- --Creates a 200 element reading buffer (mybuffer2) for SMU channel A.
 --- ```
 ---@return bufferVar bufferVar The created reading buffer
----@param bufferSize number Maximum number of readings that can be stored
+---@param bufferSize integer Maximum number of readings that can be stored
 function smua.makebuffer(bufferSize) end
 
 
@@ -3446,7 +3317,6 @@ function smua.measurepandstep(sourceValue) end
 ---@param sourceValue number Source value to be set after the measurement is made
 ---@return number iReading The current reading before stepping the source
 ---@return number vReading The voltage reading before stepping the source
----@overload fun(sourceValue:number):iReading:number, vReading:number
 function smua.measureivandstep(sourceValue) end
 
 
@@ -3465,6 +3335,10 @@ function smua.measureivandstep(sourceValue) end
 --- 
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
+---@type bufferVar
+
+---@type bufferVar
+smua.nvbuffer1 = 0
 
 
 --- **This attribute contains a dedicated reading buffer.**
@@ -3482,6 +3356,10 @@ function smua.measureivandstep(sourceValue) end
 --- 
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
+---@type bufferVar
+
+---@type bufferVar
+smua.nvbuffer2 = 0
 
 
 --- **This function turns off the output and resets the commands that begin with smuX. to their default settings.**
@@ -3522,13 +3400,13 @@ function smua.reset() end
 function smua.savebuffer(buffer) end
 
 smua.SENSE_LOCAL = nil
-smua.SENSE_REMOTE = nil
 smua.SENSE_CALA = nil
+smua.SENSE_REMOTE = nil
 
 ---@alias smuasensesenseMode
 ---|`smua.SENSE_LOCAL`
----|`smua.SENSE_REMOTE`
 ---|`smua.SENSE_CALA`
+---|`smua.SENSE_REMOTE`
 
 
 
@@ -3547,6 +3425,8 @@ smua.SENSE_CALA = nil
 --- 
 --- --Selects remote sensing for SMU channel A.
 --- ```
+---@type smuasensesenseMode
+smua.sense = smua.SENSE_LOCAL
 ---@class smub
 smub = {}
 
@@ -3587,7 +3467,7 @@ function smub.abort() end
 --- --Creates a 200 element reading buffer (mybuffer2) for SMU channel A.
 --- ```
 ---@return bufferVar bufferVar The created reading buffer
----@param bufferSize number Maximum number of readings that can be stored
+---@param bufferSize integer Maximum number of readings that can be stored
 function smub.makebuffer(bufferSize) end
 
 
@@ -3734,7 +3614,6 @@ function smub.measurepandstep(sourceValue) end
 ---@param sourceValue number Source value to be set after the measurement is made
 ---@return number iReading The current reading before stepping the source
 ---@return number vReading The voltage reading before stepping the source
----@overload fun(sourceValue:number):iReading:number, vReading:number
 function smub.measureivandstep(sourceValue) end
 
 
@@ -3753,6 +3632,10 @@ function smub.measureivandstep(sourceValue) end
 --- 
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
+---@type bufferVar
+
+---@type bufferVar
+smub.nvbuffer1 = 0
 
 
 --- **This attribute contains a dedicated reading buffer.**
@@ -3770,6 +3653,10 @@ function smub.measureivandstep(sourceValue) end
 --- 
 --- --Store voltage readings from SMU channel A into SMU channel A dedicated reading buffer 1.
 --- ```
+---@type bufferVar
+
+---@type bufferVar
+smub.nvbuffer2 = 0
 
 
 --- **This function turns off the output and resets the commands that begin with smuX. to their default settings.**
@@ -3810,13 +3697,13 @@ function smub.reset() end
 function smub.savebuffer(buffer) end
 
 smub.SENSE_LOCAL = nil
-smub.SENSE_REMOTE = nil
 smub.SENSE_CALA = nil
+smub.SENSE_REMOTE = nil
 
 ---@alias smubsensesenseMode
 ---|`smub.SENSE_LOCAL`
----|`smub.SENSE_REMOTE`
 ---|`smub.SENSE_CALA`
+---|`smub.SENSE_REMOTE`
 
 
 
@@ -3835,6 +3722,8 @@ smub.SENSE_CALA = nil
 --- 
 --- --Selects remote sensing for SMU channel A.
 --- ```
+---@type smubsensesenseMode
+smub.sense = smub.SENSE_LOCAL
 
 
 
@@ -3854,7 +3743,7 @@ smub.SENSE_CALA = nil
 --- 
 --- --Append new readings to contents of the reading buffer named buffer1.
 --- ```
----@type any
+---@type 0|1
 bufferVar.appendmode = 0
 
 
@@ -3877,7 +3766,7 @@ bufferVar.appendmode = 0
 --- --1.57020e+09
 --- --This output indicates that the timestamp is 1,570,200,000 seconds (which is Friday, October 4, 2019 at 14:40:00 pm).
 --- ```
----@type any
+---@type number
 bufferVar.basetimestamp = 0
 
 
@@ -3901,7 +3790,7 @@ bufferVar.basetimestamp = 0
 --- --1.49789e+05
 --- --The above output indicates that the buffer can hold 149789 readings.
 --- ```
----@type number
+---@type integer
 bufferVar.capacity = 0
 
 
@@ -3956,7 +3845,7 @@ function bufferVar.clearcache() end
 --- 
 --- --Include source values with readings for dedicated reading buffer 1.
 --- ```
----@type any
+---@type 0|1
 bufferVar.collectsourcevalues = 0
 
 
@@ -3975,7 +3864,7 @@ bufferVar.collectsourcevalues = 0
 --- 
 --- --Include timestamps with readings for dedicated reading buffer 1.
 --- ```
----@type any
+---@type 0|1
 bufferVar.collecttimestamps = 0
 
 
@@ -3998,7 +3887,7 @@ bufferVar.collecttimestamps = 0
 --- --1.25000+02
 --- --The above output indicates that there are 125 readings stored in the buffer.
 --- ```
----@type number
+---@type integer
 bufferVar.n = 0
 
 
@@ -4018,7 +3907,7 @@ bufferVar.n = 0
 --- 
 --- --Sets the timestamp resolution of dedicated reading buffer 1 to 8 μs.
 --- ```
----@type any
+---@type number
 bufferVar.timestampresolution = 0
 
 
@@ -4037,7 +3926,7 @@ bufferVar.timestampresolution = 0
 --- 
 --- --Enables reading buffer cache of dedicated reading buffer 1 (source‑measure unit (SMU) channel A).
 --- ```
----@type any
+---@type 0|1
 bufferVar.cachemode = 0
 
 
@@ -4056,7 +3945,7 @@ bufferVar.cachemode = 0
 --- 
 --- --Sets fill count of dedicated reading buffer 1 to 50.
 --- ```
----@type any
+---@type integer
 bufferVar.fillcount = 0
 
 smua.FILL_WINDOW = nil
@@ -4107,8 +3996,8 @@ bufferVar.fillmode = smua.FILL_WINDOW
 --- --Example output:
 --- --Current, Current, Current, Current, Current
 --- ```
----@type any
-bufferVar.measurefunctions = 0
+---@type string[]
+bufferVar.measurefunctions = {}
 
 
 --- **This attribute contains the measurement range values that were used for readings stored in a specified buffer.**
@@ -4131,8 +4020,8 @@ bufferVar.measurefunctions = 0
 --- --Example output:
 --- --1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07,1.00000e-07, 1.00000e-07
 --- ```
----@type any
-bufferVar.measureranges = 0
+---@type number[]
+bufferVar.measureranges = {}
 
 
 --- **This attribute contains the source function that was being used when the readings were stored in a specified reading buffer.**
@@ -4156,8 +4045,8 @@ bufferVar.measureranges = 0
 --- --Example output:
 --- --Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage, Voltage
 --- ```
----@type any
-bufferVar.sourcefunctions = 0
+---@type string[]
+bufferVar.sourcefunctions = {}
 
 
 --- **This attribute indicates the state of the source output for readings that are stored in a specified buffer.**
@@ -4177,8 +4066,8 @@ bufferVar.sourcefunctions = 0
 --- --Example output:
 --- --On
 --- ```
----@type any
-bufferVar.sourceoutputstates = 0
+---@type string[]
+bufferVar.sourceoutputstates = {}
 
 
 --- **This attribute contains the source range that was used for readings stored in a specified reading buffer.**
@@ -4201,8 +4090,8 @@ bufferVar.sourceoutputstates = 0
 --- --Example output:
 --- --1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04, 1.00000e-04
 --- ```
----@type any
-bufferVar.sourceranges = 0
+---@type number[]
+bufferVar.sourceranges = {}
 
 
 --- **When enabled by the bufferVar.collectsourcevalues attribute, this attribute contains the source levels being output when readings in the reading buffer were acquired.**
@@ -4228,8 +4117,8 @@ bufferVar.sourceranges = 0
 --- --1.00000e-04, 1.00000e-04,
 --- --1.00000e-04, 1.00000e-04
 --- ```
----@type any
-bufferVar.sourcevalues = 0
+---@type number[]
+bufferVar.sourcevalues = {}
 
 
 --- **This attribute contains the readings stored in a specified reading buffer.**
@@ -4249,8 +4138,8 @@ bufferVar.sourcevalues = 0
 --- --Output:
 --- --8.81658e-08
 --- ```
----@type number
-bufferVar.readings = 0
+---@type number[]
+bufferVar.readings = {}
 
 
 --- **This attribute contains the status values of readings in the reading buffer.**
@@ -4289,8 +4178,8 @@ bufferVar.readings = 0
 --- --3.99470e-06
 --- --4.00000e+00
 --- ```
----@type bufferVarstatuses
-bufferVar.statuses = 0
+---@type number[]
+bufferVar.statuses = {}
 
 
 --- **When enabled by the bufferVar.collecttimestamps attribute, this attribute contains the timestamp when each reading saved in the specified reading buffer occurred.**
@@ -4309,8 +4198,8 @@ bufferVar.statuses = 0
 --- 
 --- --Get the timestamp of the first reading stored in source‑measure unit (SMU) A, buffer 1.
 --- ```
----@type any
-bufferVar.timestamps = 0
+---@type number[]
+bufferVar.timestamps = {}
 ---@class timer
 timer = {}
 
@@ -4360,6 +4249,8 @@ tsplink = {}
 --- 
 --- --Assign the instrument to TSP-Link group number 3.
 --- ```
+---@type number
+tsplink.group = 0
 
 
 --- **This attribute reads the node number assigned to the master node. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -4377,6 +4268,8 @@ tsplink = {}
 --- 
 --- --Store the TSP-Link master node number in a variable called LinkMaster.
 --- ```
+---@type number
+tsplink.master = 0
 
 
 --- **This attribute defines the node number. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -4394,6 +4287,8 @@ tsplink = {}
 --- 
 --- --Sets the TSP‑Link node for this instrument to number 3.
 --- ```
+---@type number
+tsplink.node = 0
 
 
 --- **This function reads the state of a TSP-Link synchronization line. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -4414,8 +4309,8 @@ tsplink = {}
 --- --Output:
 --- --1.000000e+00
 --- ```
----@return number data The state of the synchronization line
----@param N any The trigger line (1 to 3)
+---@return 0|1 data The state of the synchronization line
+---@param N number The trigger line (1 to 3)
 function tsplink.readbit(N) end
 
 
@@ -4484,6 +4379,8 @@ function tsplink.reset(expectedNodes) end
 --- --Read the state of the TSP‑Link system. If it is online, the output is:
 --- --online
 --- ```
+---@type string
+tsplink.state = ''
 
 
 --- **This function sets a TSP-Link trigger line high or low. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -4540,6 +4437,8 @@ function tsplink.writeport(data) end
 --- 
 --- --Write‑protects TSP-Link trigger lines 1 and 3.
 --- ```
+---@type number
+tsplink.writeprotect = 0
 ---@class trigger
 trigger = {}
 
@@ -4628,6 +4527,8 @@ status = {}
 --- 
 --- --Sets the MSB and OSB bits of the system node enable register using a decimal value.
 --- ```
+---@type number
+status.node_enable = 0
 
 
 --- **This attribute stores the status node event register.**
@@ -4649,6 +4550,8 @@ status = {}
 --- --1.29000e+02
 --- --Converting this output (129) to its binary equivalent yields 1000 0001. Therefore, this output indicates that the set bits of the status byte condition register are presently B0 (MSB) and B7 (OSB).
 --- ```
+---@type number
+status.node_event = 0
 
 
 --- **This function resets all bits in the status model.**
@@ -4690,6 +4593,8 @@ function status.reset() end
 --- 
 --- --Uses a decimal value to set the MSB and OSB bits of the service request (SRQ) enable register.
 --- ```
+---@type number
+status.request_enable = 0
 
 
 --- **This attribute stores the service request (SRQ) event register.**
@@ -4712,6 +4617,8 @@ function status.reset() end
 --- --Converting this output (129) to its binary equivalent yields 1000 0001.
 --- --Therefore, this output indicates that the set bits of the status request event register are presently B0 (MSB) and B7 (OSB).
 --- ```
+---@type number
+status.request_event = 0
 
 
 --- **This attribute stores the status byte condition register.**
@@ -4734,6 +4641,8 @@ function status.reset() end
 --- --Converting this output (129) to its binary equivalent yields 1000 0001 
 --- --Therefore, this output indicates that the set bits of the status byte condition register are presently B0 (MSS) and B7 (OSB).
 --- ```
+---@type number
+status.condition = 0
 
 
 
@@ -4755,7 +4664,7 @@ function status.reset() end
 --- --Assume a script named test5 is in the runtime environment.
 --- --The next time the instrument is turned on, test5 script automatically loads and runs.
 --- ```
----@type any
+---@type "yes"|"no"
 scriptVar.autorun = 0
 
 
@@ -4818,8 +4727,8 @@ function scriptVar.save(filename) end
 --- --Output:
 --- --display.clear() display.settext('Hello from my test')
 --- ```
----@type any
-scriptVar.source = 0
+---@type string
+scriptVar.source = ''
 
 
 --- **This function generates a script listing.**
@@ -4867,8 +4776,8 @@ function scriptVar.list() end
 --- 
 --- --This example calls the script.new() function to create a script with no name, runs the script, names the script test7, and then saves the script in nonvolatile memory.
 --- ```
----@type any
-scriptVar.name = 0
+---@type string
+scriptVar.name = ''
 ---@class os
 os = {}
 
@@ -4939,9 +4848,9 @@ function os.rename(oldname, newname) end
 --- 
 --- --Sets the date and time to Mar 31, 2019 at 2:25 pm.
 --- ```
----@return any utcTime Time value in UTC time
----@param timespec any The date and time (year, month, day, hour, and minute)
----@overload fun():utcTime:any
+---@return number utcTime Time value in UTC time
+---@param timespec table The date and time (year, month, day, hour, and minute)
+---@overload fun():utcTime:number
 function os.time(timespec) end
 ---@class tspnet.tsp
 tspnet.tsp = {}
@@ -4983,6 +4892,8 @@ function tspnet.tsp.abort(connectionID) end
 --- 
 --- --Configure the instrument so that it does not send an abort command when connecting to a TSP‑enabled instrument.
 --- ```
+---@type boolean
+tspnet.tsp.abortonconnect = true
 
 
 --- **This function copies a reading buffer synchronous table from a remote instrument to a TSP-enabled instrument.**
@@ -5097,8 +5008,8 @@ function digiotriggerArr.clear() end
 --- 
 --- --Uses a trigger event on digital I/O trigger line 3 to be the stimulus for digital I/O trigger line 5.
 --- ```
-digiotriggerArr.EVENT_ID= 0
-
+---@type any
+digiotriggerArr.EVENT_ID = 0
 
 
 --- **This attribute sets the mode in which the trigger event detector and the output trigger generator operate on the given trigger line. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -5116,8 +5027,8 @@ digiotriggerArr.EVENT_ID= 0
 --- 
 --- --Sets the trigger mode for I/O line 4 to digio.TRIG_RISING.
 --- ```
-digiotriggerArr.mode= 0
-
+---@type triggerMode
+digiotriggerArr.mode = 0
 
 
 --- **This attribute returns the event detector overrun status. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -5137,8 +5048,8 @@ digiotriggerArr.mode= 0
 --- --If there is no trigger overrun, the following text is output:
 --- --false
 --- ```
-digiotriggerArr.overrun= 0
-
+---@type boolean
+digiotriggerArr.overrun = true
 
 
 --- **This function releases an indefinite length or latched trigger. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -5180,8 +5091,8 @@ function digiotriggerArr.release() end
 --- --Output if a trigger is detected:
 --- --true
 --- ```
----@return any triggered The value is true if a trigger is detected, or false if no triggers are detected during the timeout period
----@param timeout any Timeout in seconds
+---@return boolean triggered The value is true if a trigger is detected, or false if no triggers are detected during the timeout period
+---@param timeout number Timeout in seconds
 function digiotriggerArr.wait(timeout) end
 
 
@@ -5201,8 +5112,8 @@ function digiotriggerArr.wait(timeout) end
 --- 
 --- --Sets the pulse width for trigger line 4 to 20 μs.
 --- ```
-digiotriggerArr.pulsewidth= 0
-
+---@type number
+digiotriggerArr.pulsewidth = 0
 
 
 --- **This function resets trigger values to their factory defaults. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -5253,8 +5164,8 @@ function digiotriggerArr.reset() end
 --- 
 --- --Set the trigger stimulus of digital I/O line 3 to be the source complete event.
 --- ```
----@type eventID|0
-digiotriggerArr.stimulus= 0
+---@type any
+digiotriggerArr.stimulus= trigger.EVENT_NONE
 
 ---@class display.loadmenu
 display.loadmenu = {}
@@ -5310,12 +5221,12 @@ function display.loadmenu.catalog() end
 ---@param displayName string The name to be deleted from the USER menu
 function display.loadmenu.delete(displayName) end
 
-display.SAVE = nil
 display.DONT_SAVE = nil
+display.SAVE = nil
 
----@alias displayloadmenuaddmemory
----|`display.SAVE`
+---@alias display
 ---|`display.DONT_SAVE`
+---|`display.SAVE`
 
 
 
@@ -5345,7 +5256,7 @@ display.DONT_SAVE = nil
 --- ```
 ---@param displayName string The name that is added to the USER menu
 ---@param code string The code that is run from the USER menu
----@param memory displayloadmenuaddmemory Determines if code is saved to nonvolatile memory
+---@param memory display Determines if code is saved to nonvolatile memory
 ---@overload fun(displayName:string,code:string)
 function display.loadmenu.add(displayName, code, memory) end
 ---@class display.smua
@@ -5354,13 +5265,13 @@ display.smua = {}
 
 
 display.DIGITS_5_5 = nil
-display.DIGITS_6_5 = nil
 display.DIGITS_4_5 = nil
+display.DIGITS_6_5 = nil
 
 ---@alias displaysmuadigitsdigits
 ---|`display.DIGITS_5_5`
----|`display.DIGITS_6_5`
 ---|`display.DIGITS_4_5`
+---|`display.DIGITS_6_5`
 
 
 
@@ -5379,19 +5290,21 @@ display.DIGITS_4_5 = nil
 --- 
 --- --Select 5½ digit resolution for SMU A.
 --- ```
+---@type displaysmuadigitsdigits
+display.smua.digits = display.DIGITS_5_5
 ---@class display.smub
 display.smub = {}
 
 
 
 display.DIGITS_5_5 = nil
-display.DIGITS_6_5 = nil
 display.DIGITS_4_5 = nil
+display.DIGITS_6_5 = nil
 
 ---@alias displaysmubdigitsdigits
 ---|`display.DIGITS_5_5`
----|`display.DIGITS_6_5`
 ---|`display.DIGITS_4_5`
+---|`display.DIGITS_6_5`
 
 
 
@@ -5410,6 +5323,8 @@ display.DIGITS_4_5 = nil
 --- 
 --- --Select 5½ digit resolution for SMU A.
 --- ```
+---@type displaysmubdigitsdigits
+display.smub.digits = display.DIGITS_5_5
 ---@class display.trigger
 display.trigger = {}
 
@@ -5483,17 +5398,19 @@ function display.trigger.wait(timeout) end
 --- 
 --- --Sets the variable overrun equal to the present state of the event detector built into the display. 
 --- ```
+---@type boolean
+display.trigger.overrun = true
 ---@class lan.config
 lan.config = {}
 
 
 
-lan.FULL = nil
 lan.HALF = nil
+lan.FULL = nil
 
 ---@alias lanconfigduplexduplex
----|`lan.FULL`
 ---|`lan.HALF`
+---|`lan.FULL`
 
 
 
@@ -5512,6 +5429,8 @@ lan.HALF = nil
 --- 
 --- --Set the LAN duplex mode to full.
 --- ```
+---@type lanconfigduplexduplex
+lan.config.duplex = lan.HALF
 
 
 --- **This attribute contains the LAN default gateway address.**
@@ -5530,6 +5449,8 @@ lan.HALF = nil
 --- --Outputs the default gateway address. For example, you might see the output:
 --- --192.168.0.1
 --- ```
+---@type string
+lan.config.gateway = ''
 
 
 --- **This command specifies the LAN IP address.**
@@ -5547,13 +5468,15 @@ lan.HALF = nil
 --- 
 --- --Retrieves the presently set LAN IP address.
 --- ```
+---@type string
+lan.config.ipaddress = ''
 
-lan.AUTO = nil
 lan.MANUAL = nil
+lan.AUTO = nil
 
 ---@alias lanconfigmethodmethod
----|`lan.AUTO`
 ---|`lan.MANUAL`
+---|`lan.AUTO`
 
 
 
@@ -5574,6 +5497,8 @@ lan.MANUAL = nil
 --- --For example:
 --- --1.00000e+00
 --- ```
+---@type lanconfigmethodmethod
+lan.config.method = lan.MANUAL
 
 
 --- **This attribute contains the LAN speed used when restarting in manual configuration mode.**
@@ -5591,6 +5516,8 @@ lan.MANUAL = nil
 --- 
 --- --Configure LAN speed for 100.
 --- ```
+---@type number
+lan.config.speed = 0
 
 
 --- **This attribute contains the LAN subnet mask.**
@@ -5609,17 +5536,19 @@ lan.MANUAL = nil
 --- --Outputs the LAN subnet mask, such as:
 --- --255.255.255.0
 --- ```
+---@type string
+lan.config.subnetmask = ''
 ---@class lan.status
 lan.status = {}
 
 
 
-lan.FULL = nil
 lan.HALF = nil
+lan.FULL = nil
 
 ---@alias lanstatusduplexduplex
----|`lan.FULL`
 ---|`lan.HALF`
+---|`lan.FULL`
 
 
 
@@ -5639,6 +5568,8 @@ lan.HALF = nil
 --- --Outputs the present LAN duplex mode, such as:
 --- --1.00000e+00
 --- ```
+---@type lanstatusduplexduplex
+lan.status.duplex = lan.HALF
 
 
 --- **This attribute contains the gateway address presently in use by the LAN interface.**
@@ -5657,6 +5588,8 @@ lan.HALF = nil
 --- --Outputs the gateway address, such as:
 --- --192.168.0.1
 --- ```
+---@type string
+lan.status.gateway = ''
 
 
 --- **This attribute contains the LAN IP address presently in use by the LAN interface.**
@@ -5675,6 +5608,8 @@ lan.HALF = nil
 --- --Outputs the LAN IP address currently in use, such as:
 --- --192.168.0.2
 --- ```
+---@type string
+lan.status.ipaddress = ''
 
 
 --- **This attribute contains the LAN MAC address.**
@@ -5693,6 +5628,8 @@ lan.HALF = nil
 --- --Outputs the MAC address of the instrument, for example:
 --- --08:00:11:00:00:57
 --- ```
+---@type string
+lan.status.macaddress = ''
 
 
 --- **This attribute contains the LAN speed.**
@@ -5711,6 +5648,8 @@ lan.HALF = nil
 --- --Outputs the transmission speed of the instrument presently in use, such as:
 --- --1.00000e+02
 --- ```
+---@type number
+lan.status.speed = 0
 
 
 --- **This attribute contains the LAN subnet mask that is presently in use by the LAN interface.**
@@ -5729,6 +5668,8 @@ lan.HALF = nil
 --- --Outputs the subnet mask of the instrument that is presently in use, such as:
 --- --255.255.255.0
 --- ```
+---@type string
+lan.status.subnetmask = ''
 ---@class lantriggerArr
 local lantriggerArr = {}
 
@@ -5815,8 +5756,8 @@ function lantriggerArr.connect() end
 --- --Example output:
 --- --false
 --- ```
-lantriggerArr.connected= 0
-
+---@type boolean
+lantriggerArr.connected = true
 
 
 --- **This function disconnects the LAN trigger.**
@@ -5850,8 +5791,8 @@ function lantriggerArr.disconnect() end
 --- 
 --- --Route occurrences of triggers on LAN trigger 1 to digital I/O trigger 14.
 --- ```
-lantriggerArr.EVENT_ID= 0
-
+---@type any
+lantriggerArr.EVENT_ID = 0
 
 
 --- **This attribute specifies the address (in dotted‑decimal format) of UDP or TCP listeners.**
@@ -5872,8 +5813,8 @@ lantriggerArr.EVENT_ID= 0
 --- --Set the protocol for LAN trigger 3 to be lan.TCP when sending LAN triggers.
 --- --Use IP address "192.168.1.100" to connect the LAN trigger.
 --- ```
-lantriggerArr.ipaddress= 0
-
+---@type string
+lantriggerArr.ipaddress = ''
 
 
 --- **This attribute sets the trigger operation and detection mode of the specified LAN event.**
@@ -5891,8 +5832,8 @@ lantriggerArr.ipaddress= 0
 --- 
 --- --Outputs the present LAN trigger mode of LAN event 1.
 --- ```
-lantriggerArr.mode= 0
-
+---@type lanTriggerMode
+lantriggerArr.mode = 0
 
 
 --- **This attribute contains the overrun status of the LAN event detector.**
@@ -5912,17 +5853,17 @@ lantriggerArr.mode= 0
 --- --Checks the overrun status of a trigger on LAN5 and outputs the value, such as:
 --- --false
 --- ```
-lantriggerArr.overrun= 0
+---@type boolean
+lantriggerArr.overrun = true
 
-
-lan.MULTICAST = nil
-lan.UDP2 = nil
 lan.TCP1 = nil
+lan.UDP2 = nil
+lan.MULTICAST = nil
 
 ---@alias lantriggerprotocolprotocol
----|`lan.MULTICAST`
----|`lan.UDP2`
 ---|`lan.TCP1`
+---|`lan.UDP2`
+---|`lan.MULTICAST`
 
 
 
@@ -5941,8 +5882,8 @@ lan.TCP1 = nil
 --- 
 --- --Get LAN protocol to use for sending trigger messages for LAN event 1.
 --- ```
-lantriggerArr.protocol= 0
-
+---@type lantriggerprotocolprotocol
+lantriggerArr.protocol = lan.TCP1
 
 
 --- **This attribute sets the simulated line state for the LAN trigger.**
@@ -5960,8 +5901,8 @@ lantriggerArr.protocol= 0
 --- 
 --- --Get the present simulated line state for the LAN event 1.
 --- ```
-lantriggerArr.pseudostate= 0
-
+---@type 0|1
+lantriggerArr.pseudostate = 0
 
 
 --- **This function waits for an input trigger.**
@@ -5979,7 +5920,7 @@ lantriggerArr.pseudostate= 0
 --- 
 --- --Wait for a trigger with LAN packet 5 with a timeout of 3 seconds.
 --- ```
----@return any triggered Trigger detection indication (true or false)
+---@return boolean triggered Trigger detection indication (true or false)
 ---@param timeout number Maximum amount of time in seconds to wait for the trigger event
 function lantriggerArr.wait(timeout) end
 
@@ -6000,8 +5941,8 @@ function lantriggerArr.wait(timeout) end
 --- 
 --- --Use timer 1 trigger event as the source for LAN packet 5 trigger stimulus.
 --- ```
----@type eventID|0
-lantriggerArr.stimulus= 0
+---@type any
+lantriggerArr.stimulus= trigger.EVENT_NONE
 
 ---@class smua.cal
 smua.cal = {}
@@ -6026,16 +5967,16 @@ smua.cal = {}
 --- ```
 function smua.cal.lock() end
 
+smua.CALSET_PREVIOUS = nil
+smua.CALSET_DEFAULT = nil
 smua.CALSET_FACTORY = nil
 smua.CALSET_NOMINAL = nil
-smua.CALSET_DEFAULT = nil
-smua.CALSET_PREVIOUS = nil
 
 ---@alias smuacalrestorecalset
+---|`smua.CALSET_PREVIOUS`
+---|`smua.CALSET_DEFAULT`
 ---|`smua.CALSET_FACTORY`
 ---|`smua.CALSET_NOMINAL`
----|`smua.CALSET_DEFAULT`
----|`smua.CALSET_PREVIOUS`
 
 
 
@@ -6111,6 +6052,8 @@ function smua.cal.unlock(password) end
 --- 
 --- --Sets the adjustment date for SMU channel A to the current time set on the instrument.
 --- ```
+---@type number
+smua.cal.adjustdate = 0
 
 
 --- **This attribute stores the calibration date of the active calibration set.**
@@ -6128,6 +6071,8 @@ function smua.cal.unlock(password) end
 --- 
 --- --Sets calibration date for SMU channel A to the present time set on the instrument.
 --- ```
+---@type number
+smua.cal.date = 0
 
 
 --- **This attribute stores the calibration due date for the next calibration.**
@@ -6145,6 +6090,8 @@ function smua.cal.unlock(password) end
 --- 
 --- --Sets the SMU channel A calibration due date equal to one year from the present time set on the instrument.
 --- ```
+---@type number
+smua.cal.due = 0
 
 
 --- **This attribute stores the password required to enable calibration.**
@@ -6162,15 +6109,17 @@ function smua.cal.unlock(password) end
 --- 
 --- --Assigns a new calibration password for SMU channel A.
 --- ```
+---@type string
+smua.cal.password = ''
 
 smua.CAL_AUTO = nil
-smua.CAL_NEGATIVE = nil
 smua.CAL_POSITIVE = nil
+smua.CAL_NEGATIVE = nil
 
 ---@alias smuacalpolaritycalPolarity
 ---|`smua.CAL_AUTO`
----|`smua.CAL_NEGATIVE`
 ---|`smua.CAL_POSITIVE`
+---|`smua.CAL_NEGATIVE`
 
 
 
@@ -6189,15 +6138,17 @@ smua.CAL_POSITIVE = nil
 --- 
 --- --Selects positive calibration constants for all subsequent measurements on SMU channel A.
 --- ```
+---@type smuacalpolaritycalPolarity
+smua.cal.polarity = smua.CAL_AUTO
 
+smua.CALSTATE_CALIBRATING = nil
 smua.CALSTATE_UNLOCKED = nil
 smua.CALSTATE_LOCKED = nil
-smua.CALSTATE_CALIBRATING = nil
 
 ---@alias smuacalstatecalState
+---|`smua.CALSTATE_CALIBRATING`
 ---|`smua.CALSTATE_UNLOCKED`
 ---|`smua.CALSTATE_LOCKED`
----|`smua.CALSTATE_CALIBRATING`
 
 
 
@@ -6220,6 +6171,8 @@ smua.CALSTATE_CALIBRATING = nil
 --- --0.000000e+00
 --- --The above output indicates that calibration is locked.
 --- ```
+---@type smuacalstatecalState
+smua.cal.state = smua.CALSTATE_CALIBRATING
 ---@class smub.cal
 smub.cal = {}
 
@@ -6243,16 +6196,16 @@ smub.cal = {}
 --- ```
 function smub.cal.lock() end
 
+smub.CALSET_PREVIOUS = nil
+smub.CALSET_DEFAULT = nil
 smub.CALSET_FACTORY = nil
 smub.CALSET_NOMINAL = nil
-smub.CALSET_DEFAULT = nil
-smub.CALSET_PREVIOUS = nil
 
 ---@alias smubcalrestorecalset
+---|`smub.CALSET_PREVIOUS`
+---|`smub.CALSET_DEFAULT`
 ---|`smub.CALSET_FACTORY`
 ---|`smub.CALSET_NOMINAL`
----|`smub.CALSET_DEFAULT`
----|`smub.CALSET_PREVIOUS`
 
 
 
@@ -6328,6 +6281,8 @@ function smub.cal.unlock(password) end
 --- 
 --- --Sets the adjustment date for SMU channel A to the current time set on the instrument.
 --- ```
+---@type number
+smub.cal.adjustdate = 0
 
 
 --- **This attribute stores the calibration date of the active calibration set.**
@@ -6345,6 +6300,8 @@ function smub.cal.unlock(password) end
 --- 
 --- --Sets calibration date for SMU channel A to the present time set on the instrument.
 --- ```
+---@type number
+smub.cal.date = 0
 
 
 --- **This attribute stores the calibration due date for the next calibration.**
@@ -6362,6 +6319,8 @@ function smub.cal.unlock(password) end
 --- 
 --- --Sets the SMU channel A calibration due date equal to one year from the present time set on the instrument.
 --- ```
+---@type number
+smub.cal.due = 0
 
 
 --- **This attribute stores the password required to enable calibration.**
@@ -6379,15 +6338,17 @@ function smub.cal.unlock(password) end
 --- 
 --- --Assigns a new calibration password for SMU channel A.
 --- ```
+---@type string
+smub.cal.password = ''
 
 smub.CAL_AUTO = nil
-smub.CAL_NEGATIVE = nil
 smub.CAL_POSITIVE = nil
+smub.CAL_NEGATIVE = nil
 
 ---@alias smubcalpolaritycalPolarity
 ---|`smub.CAL_AUTO`
----|`smub.CAL_NEGATIVE`
 ---|`smub.CAL_POSITIVE`
+---|`smub.CAL_NEGATIVE`
 
 
 
@@ -6406,15 +6367,17 @@ smub.CAL_POSITIVE = nil
 --- 
 --- --Selects positive calibration constants for all subsequent measurements on SMU channel A.
 --- ```
+---@type smubcalpolaritycalPolarity
+smub.cal.polarity = smub.CAL_AUTO
 
+smub.CALSTATE_CALIBRATING = nil
 smub.CALSTATE_UNLOCKED = nil
 smub.CALSTATE_LOCKED = nil
-smub.CALSTATE_CALIBRATING = nil
 
 ---@alias smubcalstatecalState
+---|`smub.CALSTATE_CALIBRATING`
 ---|`smub.CALSTATE_UNLOCKED`
 ---|`smub.CALSTATE_LOCKED`
----|`smub.CALSTATE_CALIBRATING`
 
 
 
@@ -6437,6 +6400,8 @@ smub.CALSTATE_CALIBRATING = nil
 --- --0.000000e+00
 --- --The above output indicates that calibration is locked.
 --- ```
+---@type smubcalstatecalState
+smub.cal.state = smub.CALSTATE_CALIBRATING
 ---@class smua.contact
 smua.contact = {}
 
@@ -6471,10 +6436,10 @@ smua.contact = {}
 --- --The user sends the contact check LO calibration command.
 --- --The user sends the contact check HI calibration command.
 --- ```
----@param cp1Measured any The value measured by this SMU for point 1
----@param cp1Reference any The reference measurement for point 1 as measured externally
----@param cp2Measured any The value measured by this SMU for point 2
----@param cp2Reference any The reference measurement for point 2 as measured externally
+---@param cp1Measured number The value measured by this SMU for point 1
+---@param cp1Reference number The reference measurement for point 1 as measured externally
+---@param cp2Measured number The value measured by this SMU for point 2
+---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smua.contact.calibratehi(cp1Measured, cp1Reference, cp2Measured, cp2Reference) end
 
 
@@ -6506,10 +6471,10 @@ function smua.contact.calibratehi(cp1Measured, cp1Reference, cp2Measured, cp2Ref
 --- --The user sends the contact check LO calibration command.
 --- --The user sends the contact check HI calibration command.
 --- ```
----@param cp1Measured any The value measured by this SMU for point 1
----@param cp1Reference any The reference measurement for point 1 as measured externally
----@param cp2Measured any The value measured by this SMU for point 2
----@param cp2Reference any The reference measurement for point 2 as measured externally
+---@param cp1Measured number The value measured by this SMU for point 1
+---@param cp1Reference number The reference measurement for point 1 as measured externally
+---@param cp2Measured number The value measured by this SMU for point 2
+---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smua.contact.calibratelo(cp1Measured, cp1Reference, cp2Measured, cp2Reference) end
 
 
@@ -6530,6 +6495,7 @@ function smua.contact.calibratelo(cp1Measured, cp1Reference, cp2Measured, cp2Ref
 --- 
 --- --Takes action if contact check on SMU channel A fails.
 --- ```
+---@return boolean result  This function returns true if the contact resistance is below the threshold; this function returns false if it is above the threshold
 function smua.contact.check() end
 
 
@@ -6557,18 +6523,18 @@ function smua.contact.check() end
 --- --Output contact resistances to the host.
 --- --Terminate execution.
 --- ```
----@return any rhi The measured aggregate contact resistance on the HI/sense HI side
----@return any rlo The measured aggregate contact resistance on the LO/sense LO side
+---@return number rhi The measured aggregate contact resistance on the HI/sense HI side
+---@return number rlo The measured aggregate contact resistance on the LO/sense LO side
 function smua.contact.r() end
 
 smua.CONTACT_SLOW = nil
-smua.CONTACT_FAST1 = nil
-smua.CONTACT_MEDIUM2 = nil
+smua.CONTACT_FAST = nil
+smua.CONTACT_MEDIUM = nil
 
 ---@alias smuacontactspeedspeedSetting
 ---|`smua.CONTACT_SLOW`
----|`smua.CONTACT_FAST1`
----|`smua.CONTACT_MEDIUM2`
+---|`smua.CONTACT_FAST`
+---|`smua.CONTACT_MEDIUM`
 
 
 
@@ -6587,6 +6553,8 @@ smua.CONTACT_MEDIUM2 = nil
 --- 
 --- --Configure contact check for higher accuracy on SMU channel A.
 --- ```
+---@type smuacontactspeedspeedSetting
+smua.contact.speed = smua.CONTACT_SLOW
 
 
 --- **This attribute stores the resistance threshold for the smuX.contact.check() function. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -6604,6 +6572,8 @@ smua.CONTACT_MEDIUM2 = nil
 --- 
 --- --Set the contact check threshold for SMU channel A to 5 Ω.
 --- ```
+---@type number
+smua.contact.threshold = 0
 ---@class smub.contact
 smub.contact = {}
 
@@ -6638,10 +6608,10 @@ smub.contact = {}
 --- --The user sends the contact check LO calibration command.
 --- --The user sends the contact check HI calibration command.
 --- ```
----@param cp1Measured any The value measured by this SMU for point 1
----@param cp1Reference any The reference measurement for point 1 as measured externally
----@param cp2Measured any The value measured by this SMU for point 2
----@param cp2Reference any The reference measurement for point 2 as measured externally
+---@param cp1Measured number The value measured by this SMU for point 1
+---@param cp1Reference number The reference measurement for point 1 as measured externally
+---@param cp2Measured number The value measured by this SMU for point 2
+---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smub.contact.calibratehi(cp1Measured, cp1Reference, cp2Measured, cp2Reference) end
 
 
@@ -6673,10 +6643,10 @@ function smub.contact.calibratehi(cp1Measured, cp1Reference, cp2Measured, cp2Ref
 --- --The user sends the contact check LO calibration command.
 --- --The user sends the contact check HI calibration command.
 --- ```
----@param cp1Measured any The value measured by this SMU for point 1
----@param cp1Reference any The reference measurement for point 1 as measured externally
----@param cp2Measured any The value measured by this SMU for point 2
----@param cp2Reference any The reference measurement for point 2 as measured externally
+---@param cp1Measured number The value measured by this SMU for point 1
+---@param cp1Reference number The reference measurement for point 1 as measured externally
+---@param cp2Measured number The value measured by this SMU for point 2
+---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smub.contact.calibratelo(cp1Measured, cp1Reference, cp2Measured, cp2Reference) end
 
 
@@ -6697,6 +6667,7 @@ function smub.contact.calibratelo(cp1Measured, cp1Reference, cp2Measured, cp2Ref
 --- 
 --- --Takes action if contact check on SMU channel A fails.
 --- ```
+---@return boolean result  This function returns true if the contact resistance is below the threshold; this function returns false if it is above the threshold
 function smub.contact.check() end
 
 
@@ -6724,18 +6695,18 @@ function smub.contact.check() end
 --- --Output contact resistances to the host.
 --- --Terminate execution.
 --- ```
----@return any rhi The measured aggregate contact resistance on the HI/sense HI side
----@return any rlo The measured aggregate contact resistance on the LO/sense LO side
+---@return number rhi The measured aggregate contact resistance on the HI/sense HI side
+---@return number rlo The measured aggregate contact resistance on the LO/sense LO side
 function smub.contact.r() end
 
 smub.CONTACT_SLOW = nil
-smub.CONTACT_FAST1 = nil
-smub.CONTACT_MEDIUM2 = nil
+smub.CONTACT_FAST = nil
+smub.CONTACT_MEDIUM = nil
 
 ---@alias smubcontactspeedspeedSetting
 ---|`smub.CONTACT_SLOW`
----|`smub.CONTACT_FAST1`
----|`smub.CONTACT_MEDIUM2`
+---|`smub.CONTACT_FAST`
+---|`smub.CONTACT_MEDIUM`
 
 
 
@@ -6754,6 +6725,8 @@ smub.CONTACT_MEDIUM2 = nil
 --- 
 --- --Configure contact check for higher accuracy on SMU channel A.
 --- ```
+---@type smubcontactspeedspeedSetting
+smub.contact.speed = smub.CONTACT_SLOW
 
 
 --- **This attribute stores the resistance threshold for the smuX.contact.check() function. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -6771,6 +6744,8 @@ smub.CONTACT_MEDIUM2 = nil
 --- 
 --- --Set the contact check threshold for SMU channel A to 5 Ω.
 --- ```
+---@type number
+smub.contact.threshold = 0
 ---@class smua.measure
 smua.measure = {}
 
@@ -6792,15 +6767,17 @@ smua.measure = {}
 --- 
 --- --Turns off the SMU channel A analog filter.
 --- ```
+---@type 0|1
+smua.measure.analogfilter = 0
 
+smua.AUTORANGE_ON = nil
 smua.AUTORANGE_FOLLOW_LIMIT = nil
 smua.AUTORANGE_OFF = nil
-smua.AUTORANGE_ON = nil
 
 ---@alias smuameasureautorangevautoRange
+---|`smua.AUTORANGE_ON`
 ---|`smua.AUTORANGE_FOLLOW_LIMIT`
 ---|`smua.AUTORANGE_OFF`
----|`smua.AUTORANGE_ON`
 
 
 
@@ -6819,15 +6796,17 @@ smua.AUTORANGE_ON = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
+---@type smuameasureautorangevautoRange
+smua.measure.autorangev = smua.AUTORANGE_ON
 
+smua.AUTORANGE_ON = nil
 smua.AUTORANGE_FOLLOW_LIMIT = nil
 smua.AUTORANGE_OFF = nil
-smua.AUTORANGE_ON = nil
 
 ---@alias smuameasureautorangeiautoRange
+---|`smua.AUTORANGE_ON`
 ---|`smua.AUTORANGE_FOLLOW_LIMIT`
 ---|`smua.AUTORANGE_OFF`
----|`smua.AUTORANGE_ON`
 
 
 
@@ -6846,15 +6825,17 @@ smua.AUTORANGE_ON = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
+---@type smuameasureautorangeiautoRange
+smua.measure.autorangei = smua.AUTORANGE_ON
 
+smua.AUTOZERO_ONCE = nil
 smua.AUTOZERO_OFF = nil
 smua.AUTOZERO_AUTO = nil
-smua.AUTOZERO_ONCE = nil
 
 ---@alias smuameasureautozeroazMode
+---|`smua.AUTOZERO_ONCE`
 ---|`smua.AUTOZERO_OFF`
 ---|`smua.AUTOZERO_AUTO`
----|`smua.AUTOZERO_ONCE`
 
 
 
@@ -6873,6 +6854,8 @@ smua.AUTOZERO_ONCE = nil
 --- 
 --- --Performs autozero once for SMU channel A.
 --- ```
+---@type smuameasureautozeroazMode
+smua.measure.autozero = smua.AUTOZERO_ONCE
 
 
 --- **This function generates and activates new measurement calibration constants.**
@@ -6944,6 +6927,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets a 10 ms measurement delay for SMU channel A.
 --- ```
+---@type smuameasuredelaymDelay
+smua.measure.delay = smua.DELAY_OFF
 
 
 --- **This attribute stores a multiplier to the delays that are used when smuX.measure.delay is set to smuX.DELAY_AUTO.**
@@ -6961,6 +6946,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Doubles the measure delay for SMU channel A.
 --- ```
+---@type number
+smua.measure.delayfactor = 0
 
 
 --- **This attribute contains a delay multiplier that is only used during range changes when the high-capacitance mode is active.**
@@ -6978,6 +6965,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Increases the delay used during range changes for SMU channel A by a factor of 5.
 --- ```
+---@type integer
+smua.measure.highcrangedelayfactor = 0
 
 
 --- **This attribute sets the interval between multiple measurements.**
@@ -6995,6 +6984,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets the measure interval for SMU channel A to 0.5 s.
 --- ```
+---@type number
+smua.measure.interval = 0
 
 
 --- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
@@ -7012,6 +7003,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets voltage low range for SMU channel A to 1 V.
 --- ```
+---@type number
+smua.measure.lowrangev = 0
 
 
 --- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
@@ -7029,6 +7022,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets voltage low range for SMU channel A to 1 V.
 --- ```
+---@type number
+smua.measure.lowrangei = 0
 
 
 --- **This command sets the integration aperture for measurements.**
@@ -7046,6 +7041,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets the integration time for SMU channel A to 0.5.
 --- ```
+---@type number
+smua.measure.nplc = 0
 
 
 --- **This function starts an asynchronous (background) measurement.**
@@ -7141,7 +7138,6 @@ function smua.measure.overlappedp(rbuffer) end
 --- ```
 ---@param ibuffer bufferVar A reading buffer object where current readings are stored
 ---@param vbuffer bufferVar A reading buffer object where voltage readings are stored
----@overload fun(rbuffer:bufferVar)
 function smua.measure.overlappediv(ibuffer, vbuffer) end
 
 
@@ -7160,6 +7156,8 @@ function smua.measure.overlappediv(ibuffer, vbuffer) end
 --- 
 --- --Selects the 1 V measurement range for SMU channel A.
 --- ```
+---@type number
+smua.measure.rangev = 0
 
 
 --- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
@@ -7177,6 +7175,8 @@ function smua.measure.overlappediv(ibuffer, vbuffer) end
 --- 
 --- --Selects the 1 V measurement range for SMU channel A.
 --- ```
+---@type number
+smua.measure.rangei = 0
 
 
 --- **This function makes one or more measurements.**
@@ -7195,9 +7195,9 @@ function smua.measure.overlappediv(ibuffer, vbuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smua.measure.v(readingBuffer) end
 
 
@@ -7217,9 +7217,9 @@ function smua.measure.v(readingBuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smua.measure.i(readingBuffer) end
 
 
@@ -7239,9 +7239,9 @@ function smua.measure.i(readingBuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smua.measure.r(readingBuffer) end
 
 
@@ -7261,9 +7261,9 @@ function smua.measure.r(readingBuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smua.measure.p(readingBuffer) end
 
 
@@ -7288,8 +7288,6 @@ function smua.measure.p(readingBuffer) end
 ---@param iReadingBuffer bufferVar A reading buffer object where current readings are stored
 ---@param vReadingBuffer bufferVar A reading buffer object where voltage readings are stored
 ---@overload fun():iReading:number, vReading:number
----@overload fun():iReading:number, vReading:number
----@overload fun(readingBuffer:bufferVar):iReading:number, vReading:number
 ---@overload fun(iReadingBuffer:bufferVar):iReading:number, vReading:number
 function smua.measure.iv(iReadingBuffer, vReadingBuffer) end
 
@@ -7309,6 +7307,8 @@ function smua.measure.iv(iReadingBuffer, vReadingBuffer) end
 --- 
 --- --Sets the SMU channel A measure count to 10.
 --- ```
+---@type integer
+smua.measure.count = 0
 ---@class smub.measure
 smub.measure = {}
 
@@ -7330,15 +7330,17 @@ smub.measure = {}
 --- 
 --- --Turns off the SMU channel A analog filter.
 --- ```
+---@type 0|1
+smub.measure.analogfilter = 0
 
+smub.AUTORANGE_ON = nil
 smub.AUTORANGE_FOLLOW_LIMIT = nil
 smub.AUTORANGE_OFF = nil
-smub.AUTORANGE_ON = nil
 
 ---@alias smubmeasureautorangevautoRange
+---|`smub.AUTORANGE_ON`
 ---|`smub.AUTORANGE_FOLLOW_LIMIT`
 ---|`smub.AUTORANGE_OFF`
----|`smub.AUTORANGE_ON`
 
 
 
@@ -7357,15 +7359,17 @@ smub.AUTORANGE_ON = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
+---@type smubmeasureautorangevautoRange
+smub.measure.autorangev = smub.AUTORANGE_ON
 
+smub.AUTORANGE_ON = nil
 smub.AUTORANGE_FOLLOW_LIMIT = nil
 smub.AUTORANGE_OFF = nil
-smub.AUTORANGE_ON = nil
 
 ---@alias smubmeasureautorangeiautoRange
+---|`smub.AUTORANGE_ON`
 ---|`smub.AUTORANGE_FOLLOW_LIMIT`
 ---|`smub.AUTORANGE_OFF`
----|`smub.AUTORANGE_ON`
 
 
 
@@ -7384,15 +7388,17 @@ smub.AUTORANGE_ON = nil
 --- 
 --- --Enables voltage measurement autoranging for SMU channel A.
 --- ```
+---@type smubmeasureautorangeiautoRange
+smub.measure.autorangei = smub.AUTORANGE_ON
 
+smub.AUTOZERO_ONCE = nil
 smub.AUTOZERO_OFF = nil
 smub.AUTOZERO_AUTO = nil
-smub.AUTOZERO_ONCE = nil
 
 ---@alias smubmeasureautozeroazMode
+---|`smub.AUTOZERO_ONCE`
 ---|`smub.AUTOZERO_OFF`
 ---|`smub.AUTOZERO_AUTO`
----|`smub.AUTOZERO_ONCE`
 
 
 
@@ -7411,6 +7417,8 @@ smub.AUTOZERO_ONCE = nil
 --- 
 --- --Performs autozero once for SMU channel A.
 --- ```
+---@type smubmeasureautozeroazMode
+smub.measure.autozero = smub.AUTOZERO_ONCE
 
 
 --- **This function generates and activates new measurement calibration constants.**
@@ -7482,6 +7490,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets a 10 ms measurement delay for SMU channel A.
 --- ```
+---@type smubmeasuredelaymDelay
+smub.measure.delay = smub.DELAY_OFF
 
 
 --- **This attribute stores a multiplier to the delays that are used when smuX.measure.delay is set to smuX.DELAY_AUTO.**
@@ -7499,6 +7509,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Doubles the measure delay for SMU channel A.
 --- ```
+---@type number
+smub.measure.delayfactor = 0
 
 
 --- **This attribute contains a delay multiplier that is only used during range changes when the high-capacitance mode is active.**
@@ -7516,6 +7528,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Increases the delay used during range changes for SMU channel A by a factor of 5.
 --- ```
+---@type integer
+smub.measure.highcrangedelayfactor = 0
 
 
 --- **This attribute sets the interval between multiple measurements.**
@@ -7533,6 +7547,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets the measure interval for SMU channel A to 0.5 s.
 --- ```
+---@type number
+smub.measure.interval = 0
 
 
 --- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
@@ -7550,6 +7566,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets voltage low range for SMU channel A to 1 V.
 --- ```
+---@type number
+smub.measure.lowrangev = 0
 
 
 --- **This attribute sets the lowest measurement range that is used when the instrument is autoranging.**
@@ -7567,6 +7585,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets voltage low range for SMU channel A to 1 V.
 --- ```
+---@type number
+smub.measure.lowrangei = 0
 
 
 --- **This command sets the integration aperture for measurements.**
@@ -7584,6 +7604,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets the integration time for SMU channel A to 0.5.
 --- ```
+---@type number
+smub.measure.nplc = 0
 
 
 --- **This function starts an asynchronous (background) measurement.**
@@ -7679,7 +7701,6 @@ function smub.measure.overlappedp(rbuffer) end
 --- ```
 ---@param ibuffer bufferVar A reading buffer object where current readings are stored
 ---@param vbuffer bufferVar A reading buffer object where voltage readings are stored
----@overload fun(rbuffer:bufferVar)
 function smub.measure.overlappediv(ibuffer, vbuffer) end
 
 
@@ -7698,6 +7719,8 @@ function smub.measure.overlappediv(ibuffer, vbuffer) end
 --- 
 --- --Selects the 1 V measurement range for SMU channel A.
 --- ```
+---@type number
+smub.measure.rangev = 0
 
 
 --- **This attribute contains the positive full‑scale value of the measurement range for voltage or current.**
@@ -7715,6 +7738,8 @@ function smub.measure.overlappediv(ibuffer, vbuffer) end
 --- 
 --- --Selects the 1 V measurement range for SMU channel A.
 --- ```
+---@type number
+smub.measure.rangei = 0
 
 
 --- **This function makes one or more measurements.**
@@ -7733,9 +7758,9 @@ function smub.measure.overlappediv(ibuffer, vbuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smub.measure.v(readingBuffer) end
 
 
@@ -7755,9 +7780,9 @@ function smub.measure.v(readingBuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smub.measure.i(readingBuffer) end
 
 
@@ -7777,9 +7802,9 @@ function smub.measure.i(readingBuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smub.measure.r(readingBuffer) end
 
 
@@ -7799,9 +7824,9 @@ function smub.measure.r(readingBuffer) end
 --- 
 --- --Makes 10 voltage measurements using SMU channel A and stores them in a buffer.
 --- ```
----@return any reading Returned value of the last (or only) reading of the measurement process
+---@return number reading Returned value of the last (or only) reading of the measurement process
 ---@param readingBuffer bufferVar A reading buffer object where all readings are stored
----@overload fun():reading:any
+---@overload fun():reading:number
 function smub.measure.p(readingBuffer) end
 
 
@@ -7826,8 +7851,6 @@ function smub.measure.p(readingBuffer) end
 ---@param iReadingBuffer bufferVar A reading buffer object where current readings are stored
 ---@param vReadingBuffer bufferVar A reading buffer object where voltage readings are stored
 ---@overload fun():iReading:number, vReading:number
----@overload fun():iReading:number, vReading:number
----@overload fun(readingBuffer:bufferVar):iReading:number, vReading:number
 ---@overload fun(iReadingBuffer:bufferVar):iReading:number, vReading:number
 function smub.measure.iv(iReadingBuffer, vReadingBuffer) end
 
@@ -7847,17 +7870,19 @@ function smub.measure.iv(iReadingBuffer, vReadingBuffer) end
 --- 
 --- --Sets the SMU channel A measure count to 10.
 --- ```
+---@type integer
+smub.measure.count = 0
 ---@class smua.source
 smua.source = {}
 
 
 
-smua.AUTORANGE_OFF = nil
 smua.AUTORANGE_ON = nil
+smua.AUTORANGE_OFF = nil
 
 ---@alias smuasourceautorangevsourceAutorange
----|`smua.AUTORANGE_OFF`
 ---|`smua.AUTORANGE_ON`
+---|`smua.AUTORANGE_OFF`
 
 
 
@@ -7876,13 +7901,15 @@ smua.AUTORANGE_ON = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
+---@type smuasourceautorangevsourceAutorange
+smua.source.autorangev = smua.AUTORANGE_ON
 
-smua.AUTORANGE_OFF = nil
 smua.AUTORANGE_ON = nil
+smua.AUTORANGE_OFF = nil
 
 ---@alias smuasourceautorangeisourceAutorange
----|`smua.AUTORANGE_OFF`
 ---|`smua.AUTORANGE_ON`
+---|`smua.AUTORANGE_OFF`
 
 
 
@@ -7901,6 +7928,8 @@ smua.AUTORANGE_ON = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
+---@type smuasourceautorangeisourceAutorange
+smua.source.autorangei = smua.AUTORANGE_ON
 
 
 --- **This attribute contains the state of source compliance. **
@@ -7923,6 +7952,8 @@ smua.AUTORANGE_ON = nil
 --- --true
 --- --This output indicates that a configured limit has been reached (voltage, current, or power limit).
 --- ```
+---@type boolean
+smua.source.compliance = true
 
 smua.DELAY_OFF = nil
 smua.DELAY_AUTO = nil
@@ -7948,6 +7979,8 @@ smua.DELAY_AUTO = nil
 --- 
 --- --Sets the delay for SMU channel A to automatic (a range-dependent delay is inserted whenever the source is changed).
 --- ```
+---@type smuasourcedelaysDelay
+smua.source.delay = smua.DELAY_OFF
 
 
 --- **This function generates and activates new source calibration constants.**
@@ -7966,9 +7999,9 @@ smua.DELAY_AUTO = nil
 --- --Generates and activates new source calibration constants for the 1 A range. For point 1, it uses 1e−10 as the source value and 1e−5 as the reference measurement. For point 2, it uses 0.9 for the source value and 0.903 for the reference measurement.
 --- ```
 ---@param range number The measurement range to adjust
----@param cp1Expected any The source value set for point 1
+---@param cp1Expected number The source value set for point 1
 ---@param cp1Reference number The reference measurement for point 1 as measured externally
----@param cp2Expected any The source value set for point 2
+---@param cp2Expected number The source value set for point 2
 ---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smua.source.calibratev(range, cp1Expected, cp1Reference, cp2Expected, cp2Reference) end
 
@@ -7989,9 +8022,9 @@ function smua.source.calibratev(range, cp1Expected, cp1Reference, cp2Expected, c
 --- --Generates and activates new source calibration constants for the 1 A range. For point 1, it uses 1e−10 as the source value and 1e−5 as the reference measurement. For point 2, it uses 0.9 for the source value and 0.903 for the reference measurement.
 --- ```
 ---@param range number The measurement range to adjust
----@param cp1Expected any The source value set for point 1
+---@param cp1Expected number The source value set for point 1
 ---@param cp1Reference number The reference measurement for point 1 as measured externally
----@param cp2Expected any The source value set for point 2
+---@param cp2Expected number The source value set for point 2
 ---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smua.source.calibratei(range, cp1Expected, cp1Reference, cp2Expected, cp2Reference) end
 
@@ -8019,13 +8052,15 @@ smua.OUTPUT_DCVOLTS = nil
 --- 
 --- --Sets the source function of SMU channel A to be a current source.
 --- ```
+---@type smuasourcefuncsFunction
+smua.source.func = smua.OUTPUT_DCAMPS
 
-smua.ENABLE = nil
 smua.DISABLE = nil
+smua.ENABLE = nil
 
 ---@alias smuasourcehighchighC
----|`smua.ENABLE`
 ---|`smua.DISABLE`
+---|`smua.ENABLE`
 
 
 
@@ -8044,6 +8079,8 @@ smua.DISABLE = nil
 --- 
 --- --Activates high-capacitance mode for SMU channel A.
 --- ```
+---@type smuasourcehighchighC
+smua.source.highc = smua.DISABLE
 
 
 --- **This attribute sets the source level.**
@@ -8061,6 +8098,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
+---@type number
+smua.source.levelv = 0
 
 
 --- **This attribute sets the source level.**
@@ -8078,6 +8117,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
+---@type number
+smua.source.leveli = 0
 
 
 --- **This attribute sets the lowest source range that is used during autoranging.**
@@ -8095,6 +8136,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
 --- ```
+---@type number
+smua.source.lowrangev = 0
 
 
 --- **This attribute sets the lowest source range that is used during autoranging.**
@@ -8112,6 +8155,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
 --- ```
+---@type number
+smua.source.lowrangei = 0
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -8129,6 +8174,8 @@ smua.DISABLE = nil
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
+---@type number
+smua.source.offlimitv = 0
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -8146,15 +8193,17 @@ smua.DISABLE = nil
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
+---@type number
+smua.source.offlimiti = 0
 
+smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_NORMAL = nil
 smua.OUTPUT_ZERO = nil
-smua.OUTPUT_HIGH_Z = nil
 
 ---@alias smuasourceoffmodesourceOffMode
+---|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_NORMAL`
 ---|`smua.OUTPUT_ZERO`
----|`smua.OUTPUT_HIGH_Z`
 
 
 
@@ -8173,14 +8222,16 @@ smua.OUTPUT_HIGH_Z = nil
 --- 
 --- --Sets the output‑off mode for SMU channel A to open the output relay when the output is turned off.
 --- ```
+---@type smuasourceoffmodesourceOffMode
+smua.source.offmode = smua.OUTPUT_HIGH_Z
 
-smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_ON = nil
+smua.OUTPUT_HIGH_Z = nil
 smua.OUTPUT_OFF = nil
 
 ---@alias smuasourceoutputsourceOutput
----|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_ON`
+---|`smua.OUTPUT_HIGH_Z`
 ---|`smua.OUTPUT_OFF`
 
 
@@ -8200,6 +8251,8 @@ smua.OUTPUT_OFF = nil
 --- 
 --- --Turns on the SMU channel A source output.
 --- ```
+---@type smuasourceoutputsourceOutput
+smua.source.output = smua.OUTPUT_ON
 
 smua.OE_NONE = nil
 smua.OE_OUTPUT_OFF = nil
@@ -8225,6 +8278,8 @@ smua.OE_OUTPUT_OFF = nil
 --- 
 --- --Sets SMU channel A to turn off the output if the output enable line goes low (deasserted).
 --- ```
+---@type smuasourceoutputenableactionoutputAction
+smua.source.outputenableaction = smua.OE_NONE
 
 
 --- **This attribute contains the source range.**
@@ -8242,6 +8297,8 @@ smua.OE_OUTPUT_OFF = nil
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
+---@type number
+smua.source.rangev = 0
 
 
 --- **This attribute contains the source range.**
@@ -8259,23 +8316,25 @@ smua.OE_OUTPUT_OFF = nil
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
+---@type number
+smua.source.rangei = 0
 
+smua.SETTLE_SMOOTH = nil
 smua.SETTLE_FAST_POLARITY = nil
 smua.SETTLE_FAST_ = nil
-smua.SETTLE_FAST_ALL = nil
-smua.SETTLE_SMOOTH_100NA = nil
-smua.SETTLE_DIRECT_IRANGE = nil
-smua.SETTLE_SMOOTH = nil
 smua.SETTLE_FAST_RANGE = nil
+smua.SETTLE_DIRECT_IRANGE = nil
+smua.SETTLE_SMOOTH_100NA = nil
+smua.SETTLE_FAST_ALL = nil
 
 ---@alias smuasourcesettlingsettleOption
+---|`smua.SETTLE_SMOOTH`
 ---|`smua.SETTLE_FAST_POLARITY`
 ---|`smua.SETTLE_FAST_`
----|`smua.SETTLE_FAST_ALL`
----|`smua.SETTLE_SMOOTH_100NA`
----|`smua.SETTLE_DIRECT_IRANGE`
----|`smua.SETTLE_SMOOTH`
 ---|`smua.SETTLE_FAST_RANGE`
+---|`smua.SETTLE_DIRECT_IRANGE`
+---|`smua.SETTLE_SMOOTH_100NA`
+---|`smua.SETTLE_FAST_ALL`
 
 
 
@@ -8294,13 +8353,15 @@ smua.SETTLE_FAST_RANGE = nil
 --- 
 --- --Selects fast polarity changing for SMU channel A.
 --- ```
+---@type smuasourcesettlingsettleOption
+smua.source.settling = smua.SETTLE_SMOOTH
 
-smua.ENABLE = nil
 smua.DISABLE = nil
+smua.ENABLE = nil
 
 ---@alias smuasourcesinksinkMode
----|`smua.ENABLE`
 ---|`smua.DISABLE`
+---|`smua.ENABLE`
 
 
 
@@ -8319,6 +8380,8 @@ smua.DISABLE = nil
 --- 
 --- --Enables sink mode for SMU channel A.
 --- ```
+---@type smuasourcesinksinkMode
+smua.source.sink = smua.DISABLE
 
 
 --- **This attribute sets compliance limits.**
@@ -8336,6 +8399,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
+---@type number
+smua.source.limitv = 0
 
 
 --- **This attribute sets compliance limits.**
@@ -8353,6 +8418,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
+---@type number
+smua.source.limiti = 0
 
 
 --- **This attribute sets compliance limits.**
@@ -8370,6 +8437,8 @@ smua.DISABLE = nil
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
+---@type number
+smua.source.limitp = 0
 
 smua.OUTPUT_DCAMPS = nil
 smua.OUTPUT_DCVOLTS = nil
@@ -8396,17 +8465,19 @@ smua.OUTPUT_DCVOLTS = nil
 --- 
 --- --Sets the normal output-off mode to source 0 V when the output is turned off for SMU channel A.
 --- ```
+---@type smuasourceofffuncofffunc
+smua.source.offfunc = smua.OUTPUT_DCAMPS
 ---@class smub.source
 smub.source = {}
 
 
 
-smub.AUTORANGE_OFF = nil
 smub.AUTORANGE_ON = nil
+smub.AUTORANGE_OFF = nil
 
 ---@alias smubsourceautorangevsourceAutorange
----|`smub.AUTORANGE_OFF`
 ---|`smub.AUTORANGE_ON`
+---|`smub.AUTORANGE_OFF`
 
 
 
@@ -8425,13 +8496,15 @@ smub.AUTORANGE_ON = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
+---@type smubsourceautorangevsourceAutorange
+smub.source.autorangev = smub.AUTORANGE_ON
 
-smub.AUTORANGE_OFF = nil
 smub.AUTORANGE_ON = nil
+smub.AUTORANGE_OFF = nil
 
 ---@alias smubsourceautorangeisourceAutorange
----|`smub.AUTORANGE_OFF`
 ---|`smub.AUTORANGE_ON`
+---|`smub.AUTORANGE_OFF`
 
 
 
@@ -8450,6 +8523,8 @@ smub.AUTORANGE_ON = nil
 --- 
 --- --Enables volts source autorange for SMU channel A.
 --- ```
+---@type smubsourceautorangeisourceAutorange
+smub.source.autorangei = smub.AUTORANGE_ON
 
 
 --- **This attribute contains the state of source compliance. **
@@ -8472,6 +8547,8 @@ smub.AUTORANGE_ON = nil
 --- --true
 --- --This output indicates that a configured limit has been reached (voltage, current, or power limit).
 --- ```
+---@type boolean
+smub.source.compliance = true
 
 smub.DELAY_OFF = nil
 smub.DELAY_AUTO = nil
@@ -8497,6 +8574,8 @@ smub.DELAY_AUTO = nil
 --- 
 --- --Sets the delay for SMU channel A to automatic (a range-dependent delay is inserted whenever the source is changed).
 --- ```
+---@type smubsourcedelaysDelay
+smub.source.delay = smub.DELAY_OFF
 
 
 --- **This function generates and activates new source calibration constants.**
@@ -8515,9 +8594,9 @@ smub.DELAY_AUTO = nil
 --- --Generates and activates new source calibration constants for the 1 A range. For point 1, it uses 1e−10 as the source value and 1e−5 as the reference measurement. For point 2, it uses 0.9 for the source value and 0.903 for the reference measurement.
 --- ```
 ---@param range number The measurement range to adjust
----@param cp1Expected any The source value set for point 1
+---@param cp1Expected number The source value set for point 1
 ---@param cp1Reference number The reference measurement for point 1 as measured externally
----@param cp2Expected any The source value set for point 2
+---@param cp2Expected number The source value set for point 2
 ---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smub.source.calibratev(range, cp1Expected, cp1Reference, cp2Expected, cp2Reference) end
 
@@ -8538,9 +8617,9 @@ function smub.source.calibratev(range, cp1Expected, cp1Reference, cp2Expected, c
 --- --Generates and activates new source calibration constants for the 1 A range. For point 1, it uses 1e−10 as the source value and 1e−5 as the reference measurement. For point 2, it uses 0.9 for the source value and 0.903 for the reference measurement.
 --- ```
 ---@param range number The measurement range to adjust
----@param cp1Expected any The source value set for point 1
+---@param cp1Expected number The source value set for point 1
 ---@param cp1Reference number The reference measurement for point 1 as measured externally
----@param cp2Expected any The source value set for point 2
+---@param cp2Expected number The source value set for point 2
 ---@param cp2Reference number The reference measurement for point 2 as measured externally
 function smub.source.calibratei(range, cp1Expected, cp1Reference, cp2Expected, cp2Reference) end
 
@@ -8568,13 +8647,15 @@ smub.OUTPUT_DCVOLTS = nil
 --- 
 --- --Sets the source function of SMU channel A to be a current source.
 --- ```
+---@type smubsourcefuncsFunction
+smub.source.func = smub.OUTPUT_DCAMPS
 
-smub.ENABLE = nil
 smub.DISABLE = nil
+smub.ENABLE = nil
 
 ---@alias smubsourcehighchighC
----|`smub.ENABLE`
 ---|`smub.DISABLE`
+---|`smub.ENABLE`
 
 
 
@@ -8593,6 +8674,8 @@ smub.DISABLE = nil
 --- 
 --- --Activates high-capacitance mode for SMU channel A.
 --- ```
+---@type smubsourcehighchighC
+smub.source.highc = smub.DISABLE
 
 
 --- **This attribute sets the source level.**
@@ -8610,6 +8693,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
+---@type number
+smub.source.levelv = 0
 
 
 --- **This attribute sets the source level.**
@@ -8627,6 +8712,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets voltage source of SMU channel A to 1 V.
 --- ```
+---@type number
+smub.source.leveli = 0
 
 
 --- **This attribute sets the lowest source range that is used during autoranging.**
@@ -8644,6 +8731,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
 --- ```
+---@type number
+smub.source.lowrangev = 0
 
 
 --- **This attribute sets the lowest source range that is used during autoranging.**
@@ -8661,6 +8750,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets volts low range for Models 2601B, 2602B, 2604B SMU A to 1 V. This prevents the source from using the 100 mV range when sourcing voltage.
 --- ```
+---@type number
+smub.source.lowrangei = 0
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -8678,6 +8769,8 @@ smub.DISABLE = nil
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
+---@type number
+smub.source.offlimitv = 0
 
 
 --- **This attribute sets the limit (current or voltage) used when the source‑measure unit (SMU) is in normal output-off mode.**
@@ -8695,15 +8788,17 @@ smub.DISABLE = nil
 --- 
 --- --Changes the normal output-off mode limit to 10 mA for SMU channel A.
 --- ```
+---@type number
+smub.source.offlimiti = 0
 
+smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_NORMAL = nil
 smub.OUTPUT_ZERO = nil
-smub.OUTPUT_HIGH_Z = nil
 
 ---@alias smubsourceoffmodesourceOffMode
+---|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_NORMAL`
 ---|`smub.OUTPUT_ZERO`
----|`smub.OUTPUT_HIGH_Z`
 
 
 
@@ -8722,14 +8817,16 @@ smub.OUTPUT_HIGH_Z = nil
 --- 
 --- --Sets the output‑off mode for SMU channel A to open the output relay when the output is turned off.
 --- ```
+---@type smubsourceoffmodesourceOffMode
+smub.source.offmode = smub.OUTPUT_HIGH_Z
 
-smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_ON = nil
+smub.OUTPUT_HIGH_Z = nil
 smub.OUTPUT_OFF = nil
 
 ---@alias smubsourceoutputsourceOutput
----|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_ON`
+---|`smub.OUTPUT_HIGH_Z`
 ---|`smub.OUTPUT_OFF`
 
 
@@ -8749,6 +8846,8 @@ smub.OUTPUT_OFF = nil
 --- 
 --- --Turns on the SMU channel A source output.
 --- ```
+---@type smubsourceoutputsourceOutput
+smub.source.output = smub.OUTPUT_ON
 
 smub.OE_NONE = nil
 smub.OE_OUTPUT_OFF = nil
@@ -8774,6 +8873,8 @@ smub.OE_OUTPUT_OFF = nil
 --- 
 --- --Sets SMU channel A to turn off the output if the output enable line goes low (deasserted).
 --- ```
+---@type smubsourceoutputenableactionoutputAction
+smub.source.outputenableaction = smub.OE_NONE
 
 
 --- **This attribute contains the source range.**
@@ -8791,6 +8892,8 @@ smub.OE_OUTPUT_OFF = nil
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
+---@type number
+smub.source.rangev = 0
 
 
 --- **This attribute contains the source range.**
@@ -8808,23 +8911,25 @@ smub.OE_OUTPUT_OFF = nil
 --- 
 --- --Selects the 1 V source range for SMU channel A.
 --- ```
+---@type number
+smub.source.rangei = 0
 
+smub.SETTLE_SMOOTH = nil
 smub.SETTLE_FAST_POLARITY = nil
 smub.SETTLE_FAST_ = nil
-smub.SETTLE_FAST_ALL = nil
-smub.SETTLE_SMOOTH_100NA = nil
-smub.SETTLE_DIRECT_IRANGE = nil
-smub.SETTLE_SMOOTH = nil
 smub.SETTLE_FAST_RANGE = nil
+smub.SETTLE_DIRECT_IRANGE = nil
+smub.SETTLE_SMOOTH_100NA = nil
+smub.SETTLE_FAST_ALL = nil
 
 ---@alias smubsourcesettlingsettleOption
+---|`smub.SETTLE_SMOOTH`
 ---|`smub.SETTLE_FAST_POLARITY`
 ---|`smub.SETTLE_FAST_`
----|`smub.SETTLE_FAST_ALL`
----|`smub.SETTLE_SMOOTH_100NA`
----|`smub.SETTLE_DIRECT_IRANGE`
----|`smub.SETTLE_SMOOTH`
 ---|`smub.SETTLE_FAST_RANGE`
+---|`smub.SETTLE_DIRECT_IRANGE`
+---|`smub.SETTLE_SMOOTH_100NA`
+---|`smub.SETTLE_FAST_ALL`
 
 
 
@@ -8843,13 +8948,15 @@ smub.SETTLE_FAST_RANGE = nil
 --- 
 --- --Selects fast polarity changing for SMU channel A.
 --- ```
+---@type smubsourcesettlingsettleOption
+smub.source.settling = smub.SETTLE_SMOOTH
 
-smub.ENABLE = nil
 smub.DISABLE = nil
+smub.ENABLE = nil
 
 ---@alias smubsourcesinksinkMode
----|`smub.ENABLE`
 ---|`smub.DISABLE`
+---|`smub.ENABLE`
 
 
 
@@ -8868,6 +8975,8 @@ smub.DISABLE = nil
 --- 
 --- --Enables sink mode for SMU channel A.
 --- ```
+---@type smubsourcesinksinkMode
+smub.source.sink = smub.DISABLE
 
 
 --- **This attribute sets compliance limits.**
@@ -8885,6 +8994,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
+---@type number
+smub.source.limitv = 0
 
 
 --- **This attribute sets compliance limits.**
@@ -8902,6 +9013,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
+---@type number
+smub.source.limiti = 0
 
 
 --- **This attribute sets compliance limits.**
@@ -8919,6 +9032,8 @@ smub.DISABLE = nil
 --- 
 --- --Sets the voltage limit of SMU channel A to 15 V.
 --- ```
+---@type number
+smub.source.limitp = 0
 
 smub.OUTPUT_DCAMPS = nil
 smub.OUTPUT_DCVOLTS = nil
@@ -8945,6 +9060,8 @@ smub.OUTPUT_DCVOLTS = nil
 --- 
 --- --Sets the normal output-off mode to source 0 V when the output is turned off for SMU channel A.
 --- ```
+---@type smubsourceofffuncofffunc
+smub.source.offfunc = smub.OUTPUT_DCAMPS
 ---@class smua.trigger
 smua.trigger = {}
 
@@ -8975,12 +9092,12 @@ trigger.ARMED_EVENT_ID = nil
 ---@type eventID
 smua.trigger.ARMED_EVENT_ID= nil
 
-smua.ENABLE = nil
 smua.DISABLE = nil
+smua.ENABLE = nil
 
 ---@alias smuatriggerautoclearautoClear
----|`smua.ENABLE`
 ---|`smua.DISABLE`
+---|`smua.ENABLE`
 
 
 
@@ -8999,6 +9116,8 @@ smua.DISABLE = nil
 --- 
 --- --Automatically clear the event detectors for the trigger mode state.
 --- ```
+---@type smuatriggerautoclearautoClear
+smua.trigger.autoclear = smua.DISABLE
 
 
 --- **This attribute sets the trigger count in the trigger model.**
@@ -9050,6 +9169,8 @@ smua.DISABLE = nil
 --- --Start the trigger model.
 --- --Wait for the sweep to complete.
 --- ```
+---@type integer
+smua.trigger.count = 0
 
 trigger.IDLE_EVENT_ID = nil
 
@@ -9289,12 +9410,12 @@ trigger.ARMED_EVENT_ID = nil
 ---@type eventID
 smub.trigger.ARMED_EVENT_ID= nil
 
-smub.ENABLE = nil
 smub.DISABLE = nil
+smub.ENABLE = nil
 
 ---@alias smubtriggerautoclearautoClear
----|`smub.ENABLE`
 ---|`smub.DISABLE`
+---|`smub.ENABLE`
 
 
 
@@ -9313,6 +9434,8 @@ smub.DISABLE = nil
 --- 
 --- --Automatically clear the event detectors for the trigger mode state.
 --- ```
+---@type smubtriggerautoclearautoClear
+smub.trigger.autoclear = smub.DISABLE
 
 
 --- **This attribute sets the trigger count in the trigger model.**
@@ -9364,6 +9487,8 @@ smub.DISABLE = nil
 --- --Start the trigger model.
 --- --Wait for the sweep to complete.
 --- ```
+---@type integer
+smub.trigger.count = 0
 
 trigger.IDLE_EVENT_ID = nil
 
@@ -9681,8 +9806,8 @@ function tsplinktriggerArr.clear() end
 --- 
 --- --Sets the trigger stimulus of trigger timer 1 to the TSP-Link trigger 2 event.
 --- ```
-tsplinktriggerArr.EVENT_ID= 0
-
+---@type any
+tsplinktriggerArr.EVENT_ID = 0
 
 
 --- **This attribute defines the trigger operation and detection mode. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -9700,8 +9825,8 @@ tsplinktriggerArr.EVENT_ID= 0
 --- 
 --- --Sets the trigger mode for synchronization line 3 to tsplink.TRIG_RISINGM.
 --- ```
-tsplinktriggerArr.mode= 0
-
+---@type triggerMode
+tsplinktriggerArr.mode = 0
 
 
 --- **This attribute indicates if the event detector ignored an event while in the detected state. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -9719,8 +9844,8 @@ tsplinktriggerArr.mode= 0
 --- 
 --- --If an event was ignored, displays true; if an event was not ignored, displays false.
 --- ```
-tsplinktriggerArr.overrun= 0
-
+---@type boolean
+tsplinktriggerArr.overrun = true
 
 
 --- **This attribute sets the length of time that the trigger line is asserted for output triggers. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -9738,8 +9863,8 @@ tsplinktriggerArr.overrun= 0
 --- 
 --- --Sets pulse width for trigger line 3 to 20 μs.
 --- ```
-tsplinktriggerArr.pulsewidth= 0
-
+---@type number
+tsplinktriggerArr.pulsewidth = 0
 
 
 --- **This function releases a latched trigger on the given TSP‑Link trigger line. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -9819,8 +9944,8 @@ function tsplinktriggerArr.reset() end
 --- 
 --- --Prints the event that starts TSP-Link trigger line 3 action.
 --- ```
----@type eventID|0
-tsplinktriggerArr.stimulus= 0
+---@type any
+tsplinktriggerArr.stimulus= trigger.EVENT_NONE
 
 ---@class triggerblenderArr
 local triggerblenderArr = {}
@@ -9865,8 +9990,8 @@ function triggerblenderArr.clear() end
 --- 
 --- --Set the trigger stimulus of digital I/O trigger 1 to be controlled by the trigger blender 2 event.
 --- ```
-triggerblenderArr.EVENT_ID= 0
-
+---@type any
+triggerblenderArr.EVENT_ID = 0
 
 
 --- **This attribute selects whether the blender performs OR operations or AND operations.**
@@ -9886,8 +10011,8 @@ triggerblenderArr.EVENT_ID= 0
 --- 
 --- --Generate a trigger blender 1 event when a digital I/O trigger happens on line 3 or 5.
 --- ```
-triggerblenderArr.orenable= 0
-
+---@type boolean
+triggerblenderArr.orenable = true
 
 
 --- **This attribute indicates whether or not an event was ignored because of the event detector state.**
@@ -9906,8 +10031,8 @@ triggerblenderArr.orenable= 0
 --- --If an event was ignored, the output is true.
 --- --If an event was not ignored, the output is false.
 --- ```
-triggerblenderArr.overrun= 0
-
+---@type boolean
+triggerblenderArr.overrun = true
 
 
 --- **This function waits for a blender trigger event to occur.**
@@ -9976,8 +10101,8 @@ function triggerblenderArr.reset() end
 --- 
 --- --Generate a trigger blender 1 event when a digital I/O trigger happens on line 3 or 5.
 --- ```
----@type eventID[]|0
-triggerblenderArr.stimulus= 0
+---@type any
+triggerblenderArr.stimulus= trigger.EVENT_NONE
 
 ---@class triggertimerArr
 local triggertimerArr = {}
@@ -10022,8 +10147,8 @@ function triggertimerArr.clear() end
 --- 
 --- --Set the trigger timer 1 to delay for 50 µs.
 --- ```
-triggertimerArr.delay= 0
-
+---@type number
+triggertimerArr.delay = 0
 
 
 --- **This attribute sets an array of timer intervals.**
@@ -10050,8 +10175,8 @@ triggertimerArr.delay= 0
 --- --0.0001
 --- --0.00015
 --- ```
-triggertimerArr.delaylist= 0
-
+---@type table
+triggertimerArr.delaylist = {}
 
 
 --- **This constant specifies the trigger timer event number.**
@@ -10069,8 +10194,8 @@ triggertimerArr.delaylist= 0
 --- 
 --- --Sets the trigger stimulus of trigger timer 1 to the TSP-Link trigger 2 event.
 --- ```
-triggertimerArr.EVENT_ID= 0
-
+---@type any
+triggertimerArr.EVENT_ID = 0
 
 
 --- **This attribute indicates if an event was ignored because of the event detector state.**
@@ -10089,8 +10214,8 @@ triggertimerArr.EVENT_ID= 0
 --- --If an event was ignored, the output is true.
 --- --If the event was not ignored, the output is false.
 --- ```
-triggertimerArr.overrun= 0
-
+---@type boolean
+triggertimerArr.overrun = true
 
 
 --- **This attribute enables or disables the timer trigger pass‑through mode.**
@@ -10108,8 +10233,8 @@ triggertimerArr.overrun= 0
 --- 
 --- --Enables pass‑through mode on trigger timer 1.
 --- ```
-triggertimerArr.passthrough= 0
-
+---@type boolean
+triggertimerArr.passthrough = true
 
 
 --- **This function waits for a trigger.**
@@ -10151,8 +10276,8 @@ function triggertimerArr.wait(timeout) end
 --- 
 --- --Read trigger count for timer number 1.
 --- ```
-triggertimerArr.count= 0
-
+---@type number
+triggertimerArr.count = 0
 
 
 --- **This function resets some of the trigger timer settings to their factory defaults.**
@@ -10189,8 +10314,8 @@ function triggertimerArr.reset() end
 --- 
 --- --Prints the event that starts a trigger 1 timer action.
 --- ```
----@type eventID|0
-triggertimerArr.stimulus= 0
+---@type any
+triggertimerArr.stimulus= trigger.EVENT_NONE
 
 ---@class status.operation
 status.operation = {}
@@ -10219,6 +10344,8 @@ status.operation = {}
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
+---@type number
+status.operation.condition = 0
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -10242,6 +10369,8 @@ status.operation = {}
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
+---@type number
+status.operation.enable = 0
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -10265,6 +10394,8 @@ status.operation = {}
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
+---@type number
+status.operation.event = 0
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -10288,6 +10419,8 @@ status.operation = {}
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
+---@type number
+status.operation.ntr = 0
 
 
 --- **These attributes manage the operation status register set of the status model.**
@@ -10311,6 +10444,8 @@ status.operation = {}
 --- 
 --- --Uses a decimal value to set the USER and PROG bits of the operation status enable register.
 --- ```
+---@type number
+status.operation.ptr = 0
 ---@class status.questionable
 status.questionable = {}
 
@@ -10332,6 +10467,8 @@ status.questionable = {}
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
+---@type number
+status.questionable.condition = 0
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -10349,6 +10486,8 @@ status.questionable = {}
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
+---@type number
+status.questionable.enable = 0
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -10366,6 +10505,8 @@ status.questionable = {}
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
+---@type number
+status.questionable.event = 0
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -10383,6 +10524,8 @@ status.questionable = {}
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
+---@type number
+status.questionable.ntr = 0
 
 
 --- **These attributes manage the questionable status register set of the status model.**
@@ -10400,6 +10543,8 @@ status.questionable = {}
 --- 
 --- --Uses a constant to set the OTEMP bit of the questionable status enable register.
 --- ```
+---@type number
+status.questionable.ptr = 0
 ---@class status.standard
 status.standard = {}
 
@@ -10427,6 +10572,8 @@ status.standard = {}
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
+---@type number
+status.standard.condition = 0
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -10450,6 +10597,8 @@ status.standard = {}
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
+---@type number
+status.standard.enable = 0
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -10473,6 +10622,8 @@ status.standard = {}
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
+---@type number
+status.standard.event = 0
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -10496,6 +10647,8 @@ status.standard = {}
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
+---@type number
+status.standard.ntr = 0
 
 
 --- **These attributes manage the standard event status register set of the status model.**
@@ -10519,6 +10672,8 @@ status.standard = {}
 --- 
 --- --Uses the decimal value to set the OPC and EXE bits of the standard event status enable register.
 --- ```
+---@type number
+status.standard.ptr = 0
 ---@class status.system
 status.system = {}
 
@@ -10546,6 +10701,8 @@ status.system = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
+---@type number
+status.system.condition = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10569,6 +10726,8 @@ status.system = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
+---@type number
+status.system.enable = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10592,6 +10751,8 @@ status.system = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
+---@type number
+status.system.event = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10615,6 +10776,8 @@ status.system = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
+---@type number
+status.system.ntr = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 1 through 14. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10638,6 +10801,8 @@ status.system = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary enable register.
 --- ```
+---@type number
+status.system.ptr = 0
 ---@class status.system2
 status.system2 = {}
 
@@ -10665,6 +10830,8 @@ status.system2 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
+---@type number
+status.system2.condition = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10688,6 +10855,8 @@ status.system2 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
+---@type number
+status.system2.enable = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10711,6 +10880,8 @@ status.system2 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
+---@type number
+status.system2.event = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10734,6 +10905,8 @@ status.system2 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
+---@type number
+status.system2.ntr = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 15 through 28. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10757,6 +10930,8 @@ status.system2 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 2 enable register.
 --- ```
+---@type number
+status.system2.ptr = 0
 ---@class status.system3
 status.system3 = {}
 
@@ -10784,6 +10959,8 @@ status.system3 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
+---@type number
+status.system3.condition = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10807,6 +10984,8 @@ status.system3 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
+---@type number
+status.system3.enable = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10830,6 +11009,8 @@ status.system3 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
+---@type number
+status.system3.event = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10853,6 +11034,8 @@ status.system3 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
+---@type number
+status.system3.ntr = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 29 through 42. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10876,6 +11059,8 @@ status.system3 = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the system summary 3 enable register.
 --- ```
+---@type number
+status.system3.ptr = 0
 ---@class status.system4
 status.system4 = {}
 
@@ -10903,6 +11088,8 @@ status.system4 = {}
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
+---@type number
+status.system4.condition = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10926,6 +11113,8 @@ status.system4 = {}
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
+---@type number
+status.system4.enable = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10949,6 +11138,8 @@ status.system4 = {}
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
+---@type number
+status.system4.event = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10972,6 +11163,8 @@ status.system4 = {}
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
+---@type number
+status.system4.ntr = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 43 through 56. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -10995,6 +11188,8 @@ status.system4 = {}
 --- 
 --- --Uses a decimal value to set bit B11 and bit B14 of the system summary 4 enable register.
 --- ```
+---@type number
+status.system4.ptr = 0
 ---@class status.system5
 status.system5 = {}
 
@@ -11022,6 +11217,8 @@ status.system5 = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
+---@type number
+status.system5.condition = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -11045,6 +11242,8 @@ status.system5 = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
+---@type number
+status.system5.enable = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -11068,6 +11267,8 @@ status.system5 = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
+---@type number
+status.system5.event = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -11091,6 +11292,8 @@ status.system5 = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
+---@type number
+status.system5.ntr = 0
 
 
 --- **These attributes manage the TSP-Link® system summary register of the status model for nodes 57 through 64. These commands are not available on the 2604B, 2614B, or 2634B.**
@@ -11114,6 +11317,8 @@ status.system5 = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the system summary 5 enable register.
 --- ```
+---@type number
+status.system5.ptr = 0
 ---@class script.user
 script.user = {}
 
@@ -11174,7 +11379,7 @@ smua.buffer = {}
 --- --min= -2.4557113647461e-05
 --- --max= -2.322196996829e-05
 --- ```
----@return statistics statistics The statistical data about the data in the reading buffer
+---@return statsVar statistics The statistical data about the data in the reading buffer
 ---@param bufferVar bufferVar The reading buffer to process
 function smua.buffer.getstats(bufferVar) end
 
@@ -11232,7 +11437,7 @@ smub.buffer = {}
 --- --min= -2.4557113647461e-05
 --- --max= -2.322196996829e-05
 --- ```
----@return statistics statistics The statistical data about the data in the reading buffer
+---@return statsVar statistics The statistical data about the data in the reading buffer
 ---@param bufferVar bufferVar The reading buffer to process
 function smub.buffer.getstats(bufferVar) end
 
@@ -11254,30 +11459,6 @@ function smub.buffer.getstats(bufferVar) end
 --- ```
 ---@param bufferVar bufferVar The reading buffer to process
 function smub.buffer.recalculatestats(bufferVar) end
----@class script.factory
-script.factory = {}
-
-
-
-
---- **This function returns an iterator that can be used in a for loop to iterate over all the factory scripts.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Accessing this catalog of scripts allows you to process the factory scripts. The entries are enumerated in no particular order.Each time the body of the function executes, name takes on the name of one of the factory scripts. The for loop repeats until all scripts have been iterated.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/19931.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- for name in script.factory.catalog() do
----    print(name)
---- end
---- 
---- --Retrieve the catalog listing for factory scripts.
---- ```
-function script.factory.catalog() end
 ---@class status.measurement
 status.measurement = {}
 
@@ -11299,6 +11480,8 @@ status.measurement = {}
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
+---@type number
+status.measurement.condition = 0
 
 
 --- **This attribute contains the measurement event register set.**
@@ -11316,6 +11499,8 @@ status.measurement = {}
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
+---@type number
+status.measurement.enable = 0
 
 
 --- **This attribute contains the measurement event register set.**
@@ -11333,6 +11518,8 @@ status.measurement = {}
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
+---@type number
+status.measurement.event = 0
 
 
 --- **This attribute contains the measurement event register set.**
@@ -11350,6 +11537,8 @@ status.measurement = {}
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
+---@type number
+status.measurement.ntr = 0
 
 
 --- **This attribute contains the measurement event register set.**
@@ -11367,6 +11556,8 @@ status.measurement = {}
 --- 
 --- --Sets the BAV bit of the measurement event enable register.
 --- ```
+---@type number
+status.measurement.ptr = 0
 ---@class triggergeneratorArr
 local triggergeneratorArr = {}
 
@@ -11410,8 +11601,8 @@ function triggergeneratorArr.assert() end
 --- 
 --- --Uses a trigger event on generator 2 to be the stimulus for digital I/O trigger line 5.
 --- ```
-triggergeneratorArr.EVENT_ID= 0
-
+---@type any
+triggergeneratorArr.EVENT_ID = 0
 ---@class display.smua.measure
 display.smua.measure = {}
 
@@ -11445,6 +11636,8 @@ display.MEASURE_DCVOLTS = nil
 --- 
 --- --Selects the current measure function for SMU A.
 --- ```
+---@type displaysmuameasurefuncfunc
+display.smua.measure.func = display.MEASURE_DCAMPS
 ---@class display.smub.measure
 display.smub.measure = {}
 
@@ -11478,6 +11671,8 @@ display.MEASURE_DCVOLTS = nil
 --- 
 --- --Selects the current measure function for SMU A.
 --- ```
+---@type displaysmubmeasurefuncfunc
+display.smub.measure.func = display.MEASURE_DCAMPS
 ---@class lan.config.dns
 lan.config.dns = {}
 
@@ -11521,6 +11716,8 @@ lan.config.dns.address = 0
 --- --Outputs the present dynamic DNS domain. For example, if the domain is "Matrix", the response is:
 --- --Matrix
 --- ```
+---@type string
+lan.config.dns.domain = ''
 
 lan.ENABLE = nil
 lan.DISABLE = nil
@@ -11548,6 +11745,8 @@ lan.DISABLE = nil
 --- --If dynamic DNS registration is enabled, the response is:
 --- --1.00000e+00
 --- ```
+---@type lanconfigdnsdynamicstate
+lan.config.dns.dynamic = lan.ENABLE
 
 lan.ENABLE = nil
 lan.DISABLE = nil
@@ -11575,6 +11774,8 @@ lan.DISABLE = nil
 --- --If it is enabled, the output is:
 --- --1.00000e+00
 --- ```
+---@type lanconfigdnsverifystate
+lan.config.dns.verify = lan.ENABLE
 
 
 --- **This attribute defines the dynamic DNS host name.**
@@ -11592,6 +11793,8 @@ lan.DISABLE = nil
 --- 
 --- --Outputs the present dynamic DNS host name.
 --- ```
+---@type string
+lan.config.dns.hostname = ''
 ---@class lan.status.dns
 lan.status.dns = {}
 
@@ -11634,6 +11837,8 @@ lan.status.dns.address = 0
 --- 
 --- --Outputs the dynamic DNS host name.
 --- ```
+---@type string
+lan.status.dns.name = ''
 ---@class lan.status.port
 lan.status.port = {}
 
@@ -11656,6 +11861,8 @@ lan.status.port = {}
 --- --Outputs the LAN dead socket termination port number, such as:
 --- --5.03000e+03
 --- ```
+---@type integer
+lan.status.port.dst = 0
 
 
 --- **This attribute contains the LAN raw socket connection port number.**
@@ -11674,6 +11881,8 @@ lan.status.port = {}
 --- --Outputs the LAN raw socket port number, such as:
 --- --5.02500e+03
 --- ```
+---@type integer
+lan.status.port.rawsocket = 0
 
 
 --- **This attribute contains the LAN Telnet connection port number.**
@@ -11693,6 +11902,8 @@ lan.status.port = {}
 --- --Output:
 --- --2.30000e+01
 --- ```
+---@type integer
+lan.status.port.telnet = 0
 
 
 --- **This attribute contains the LAN VXI-11 connection port number.**
@@ -11711,6 +11922,8 @@ lan.status.port = {}
 --- --Outputs the VXI-11 number, such as:
 --- --1.02400e+03
 --- ```
+---@type number
+lan.status.port.vxi11 = 0
 ---@class smua.measure.filter
 smua.measure.filter = {}
 
@@ -11736,13 +11949,15 @@ smua.measure.filter = {}
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
+---@type integer
+smua.measure.filter.count = 0
 
-smua.FILTER_OFF = nil
 smua.FILTER_ON = nil
+smua.FILTER_OFF = nil
 
 ---@alias smuameasurefilterenablefilterState
----|`smua.FILTER_OFF`
 ---|`smua.FILTER_ON`
+---|`smua.FILTER_OFF`
 
 
 
@@ -11765,6 +11980,8 @@ smua.FILTER_ON = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
+---@type smuameasurefilterenablefilterState
+smua.measure.filter.enable = smua.FILTER_ON
 
 smua.FILTER_MEDIAN = nil
 smua.FILTER_REPEAT_AVG = nil
@@ -11796,6 +12013,8 @@ smua.FILTER_MOVING_AVG = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
+---@type smuameasurefiltertypefilterType
+smua.measure.filter.type = smua.FILTER_MEDIAN
 ---@class smub.measure.filter
 smub.measure.filter = {}
 
@@ -11821,13 +12040,15 @@ smub.measure.filter = {}
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
+---@type integer
+smub.measure.filter.count = 0
 
-smub.FILTER_OFF = nil
 smub.FILTER_ON = nil
+smub.FILTER_OFF = nil
 
 ---@alias smubmeasurefilterenablefilterState
----|`smub.FILTER_OFF`
 ---|`smub.FILTER_ON`
+---|`smub.FILTER_OFF`
 
 
 
@@ -11850,6 +12071,8 @@ smub.FILTER_ON = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
+---@type smubmeasurefilterenablefilterState
+smub.measure.filter.enable = smub.FILTER_ON
 
 smub.FILTER_MEDIAN = nil
 smub.FILTER_REPEAT_AVG = nil
@@ -11881,6 +12104,8 @@ smub.FILTER_MOVING_AVG = nil
 --- --Sets the filter type to moving average.
 --- --Enables the filter.
 --- ```
+---@type smubmeasurefiltertypefilterType
+smub.measure.filter.type = smub.FILTER_MEDIAN
 ---@class smua.measure.rel
 smua.measure.rel = {}
 
@@ -11910,6 +12135,8 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smuameasurerelenablevrelEnable
+smua.measure.rel.enablev = smua.REL_ON
 
 smua.REL_ON = nil
 smua.REL_OFF = nil
@@ -11935,6 +12162,8 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smuameasurerelenableirelEnable
+smua.measure.rel.enablei = smua.REL_ON
 
 smua.REL_ON = nil
 smua.REL_OFF = nil
@@ -11960,6 +12189,8 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smuameasurerelenablerrelEnable
+smua.measure.rel.enabler = smua.REL_ON
 
 smua.REL_ON = nil
 smua.REL_OFF = nil
@@ -11985,6 +12216,8 @@ smua.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smuameasurerelenableprelEnable
+smua.measure.rel.enablep = smua.REL_ON
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12002,6 +12235,8 @@ smua.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smua.measure.rel.levelv = 0
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12019,6 +12254,8 @@ smua.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smua.measure.rel.leveli = 0
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12036,6 +12273,8 @@ smua.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smua.measure.rel.levelr = 0
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12053,6 +12292,8 @@ smua.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smua.measure.rel.levelp = 0
 ---@class smub.measure.rel
 smub.measure.rel = {}
 
@@ -12082,6 +12323,8 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smubmeasurerelenablevrelEnable
+smub.measure.rel.enablev = smub.REL_ON
 
 smub.REL_ON = nil
 smub.REL_OFF = nil
@@ -12107,6 +12350,8 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smubmeasurerelenableirelEnable
+smub.measure.rel.enablei = smub.REL_ON
 
 smub.REL_ON = nil
 smub.REL_OFF = nil
@@ -12132,6 +12377,8 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smubmeasurerelenablerrelEnable
+smub.measure.rel.enabler = smub.REL_ON
 
 smub.REL_ON = nil
 smub.REL_OFF = nil
@@ -12157,6 +12404,8 @@ smub.REL_OFF = nil
 --- 
 --- --Enables relative voltage measurements for SMU channel A.
 --- ```
+---@type smubmeasurerelenableprelEnable
+smub.measure.rel.enablep = smub.REL_ON
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12174,6 +12423,8 @@ smub.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smub.measure.rel.levelv = 0
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12191,6 +12442,8 @@ smub.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smub.measure.rel.leveli = 0
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12208,6 +12461,8 @@ smub.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smub.measure.rel.levelr = 0
 
 
 --- **This attribute sets the offset value for relative measurements.**
@@ -12225,6 +12480,8 @@ smub.REL_OFF = nil
 --- 
 --- --Performs a voltage measurement using SMU channel A and then uses it as the relative offset value.
 --- ```
+---@type number
+smub.measure.rel.levelp = 0
 ---@class smua.trigger.arm
 smua.trigger.arm = {}
 
@@ -12246,6 +12503,8 @@ smua.trigger.arm = {}
 --- 
 --- --Sets the SMU channel A to iterate through the arm layer of the trigger model five times and then return to the idle state.
 --- ```
+---@type integer
+smua.trigger.arm.count = 0
 
 
 --- **This function sets the arm event detector to the detected state.**
@@ -12305,6 +12564,8 @@ smub.trigger.arm = {}
 --- 
 --- --Sets the SMU channel A to iterate through the arm layer of the trigger model five times and then return to the idle state.
 --- ```
+---@type integer
+smub.trigger.arm.count = 0
 
 
 --- **This function sets the arm event detector to the detected state.**
@@ -12348,12 +12609,12 @@ smua.trigger.endpulse = {}
 
 
 
-smua.SOURCE_IDLE1 = nil
 smua.SOURCE_HOLD = nil
+smua.SOURCE_IDLE1 = nil
 
 ---@alias smuatriggerendpulseactionpulseAction
----|`smua.SOURCE_IDLE1`
 ---|`smua.SOURCE_HOLD`
+---|`smua.SOURCE_IDLE1`
 
 
 
@@ -12373,6 +12634,8 @@ smua.SOURCE_HOLD = nil
 --- 
 --- --Configure the end pulse action to achieve a pulse and configure trigger timer 1 to control the end of pulse.
 --- ```
+---@type smuatriggerendpulseactionpulseAction
+smua.trigger.endpulse.action = smua.SOURCE_HOLD
 
 
 --- **This function sets the end pulse event detector to the detected state.**
@@ -12451,12 +12714,12 @@ smub.trigger.endpulse = {}
 
 
 
-smub.SOURCE_IDLE1 = nil
 smub.SOURCE_HOLD = nil
+smub.SOURCE_IDLE1 = nil
 
 ---@alias smubtriggerendpulseactionpulseAction
----|`smub.SOURCE_IDLE1`
 ---|`smub.SOURCE_HOLD`
+---|`smub.SOURCE_IDLE1`
 
 
 
@@ -12476,6 +12739,8 @@ smub.SOURCE_HOLD = nil
 --- 
 --- --Configure the end pulse action to achieve a pulse and configure trigger timer 1 to control the end of pulse.
 --- ```
+---@type smubtriggerendpulseactionpulseAction
+smub.trigger.endpulse.action = smub.SOURCE_HOLD
 
 
 --- **This function sets the end pulse event detector to the detected state.**
@@ -12554,12 +12819,12 @@ smua.trigger.endsweep = {}
 
 
 
-smua.SOURCE_IDLE = nil
 smua.SOURCE_HOLD = nil
+smua.SOURCE_IDLE = nil
 
 ---@alias smuatriggerendsweepactionaction
----|`smua.SOURCE_IDLE`
 ---|`smua.SOURCE_HOLD`
+---|`smua.SOURCE_IDLE`
 
 
 
@@ -12578,17 +12843,19 @@ smua.SOURCE_HOLD = nil
 --- 
 --- --Sets SMU channel A to return the source back to the idle source level at the end of a sweep.
 --- ```
+---@type smuatriggerendsweepactionaction
+smua.trigger.endsweep.action = smua.SOURCE_HOLD
 ---@class smub.trigger.endsweep
 smub.trigger.endsweep = {}
 
 
 
-smub.SOURCE_IDLE = nil
 smub.SOURCE_HOLD = nil
+smub.SOURCE_IDLE = nil
 
 ---@alias smubtriggerendsweepactionaction
----|`smub.SOURCE_IDLE`
 ---|`smub.SOURCE_HOLD`
+---|`smub.SOURCE_IDLE`
 
 
 
@@ -12607,19 +12874,21 @@ smub.SOURCE_HOLD = nil
 --- 
 --- --Sets SMU channel A to return the source back to the idle source level at the end of a sweep.
 --- ```
+---@type smubtriggerendsweepactionaction
+smub.trigger.endsweep.action = smub.SOURCE_HOLD
 ---@class smua.trigger.measure
 smua.trigger.measure = {}
 
 
 
-smua.ENABLE = nil
-smua.DISABLE = nil
 smua.ASYNC = nil
+smua.DISABLE = nil
+smua.ENABLE = nil
 
 ---@alias smuatriggermeasureactionaction
----|`smua.ENABLE`
----|`smua.DISABLE`
 ---|`smua.ASYNC`
+---|`smua.DISABLE`
+---|`smua.ENABLE`
 
 
 
@@ -12640,6 +12909,8 @@ smua.ASYNC = nil
 --- --Configure sweep voltage measurements.
 --- --Enable voltage measurements during the sweep.
 --- ```
+---@type smuatriggermeasureactionaction
+smua.trigger.measure.action = smua.ASYNC
 
 
 --- **This function sets the measurement event detector to the detected state.**
@@ -12778,21 +13049,20 @@ function smua.trigger.measure.p(rbuffer) end
 --- ```
 ---@param ibuffer bufferVar A reading buffer object where current readings are stored
 ---@param vbuffer bufferVar A reading buffer object where voltage readings are stored
----@overload fun(rbuffer:bufferVar)
 function smua.trigger.measure.iv(ibuffer, vbuffer) end
 ---@class smub.trigger.measure
 smub.trigger.measure = {}
 
 
 
-smub.ENABLE = nil
-smub.DISABLE = nil
 smub.ASYNC = nil
+smub.DISABLE = nil
+smub.ENABLE = nil
 
 ---@alias smubtriggermeasureactionaction
----|`smub.ENABLE`
----|`smub.DISABLE`
 ---|`smub.ASYNC`
+---|`smub.DISABLE`
+---|`smub.ENABLE`
 
 
 
@@ -12813,6 +13083,8 @@ smub.ASYNC = nil
 --- --Configure sweep voltage measurements.
 --- --Enable voltage measurements during the sweep.
 --- ```
+---@type smubtriggermeasureactionaction
+smub.trigger.measure.action = smub.ASYNC
 
 
 --- **This function sets the measurement event detector to the detected state.**
@@ -12951,19 +13223,18 @@ function smub.trigger.measure.p(rbuffer) end
 --- ```
 ---@param ibuffer bufferVar A reading buffer object where current readings are stored
 ---@param vbuffer bufferVar A reading buffer object where voltage readings are stored
----@overload fun(rbuffer:bufferVar)
 function smub.trigger.measure.iv(ibuffer, vbuffer) end
 ---@class smua.trigger.source
 smua.trigger.source = {}
 
 
 
-smua.ENABLE = nil
 smua.DISABLE = nil
+smua.ENABLE = nil
 
 ---@alias smuatriggersourceactionaction
----|`smua.ENABLE`
 ---|`smua.DISABLE`
+---|`smua.ENABLE`
 
 
 
@@ -12984,6 +13255,8 @@ smua.DISABLE = nil
 --- --Configure list sweep for SMU channel A (sweep through 3 V, 1 V, 4 V, 5 V, and 2 V).
 --- --Enable the source action.
 --- ```
+---@type smuatriggersourceactionaction
+smua.trigger.source.action = smua.DISABLE
 
 smua.LIMIT_AUTO = nil
 
@@ -13007,6 +13280,8 @@ smua.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
+---@type smuatriggersourcelimitvsweepSourceLimit
+smua.trigger.source.limitv = smua.LIMIT_AUTO
 
 smua.LIMIT_AUTO = nil
 
@@ -13030,6 +13305,8 @@ smua.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
+---@type smuatriggersourcelimitisweepSourceLimit
+smua.trigger.source.limiti = smua.LIMIT_AUTO
 
 
 --- **This function configures a linear source sweep.**
@@ -13048,7 +13325,7 @@ smua.LIMIT_AUTO = nil
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 function smua.trigger.source.linearv(startValue, endValue, points) end
 
@@ -13069,7 +13346,7 @@ function smua.trigger.source.linearv(startValue, endValue, points) end
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 function smua.trigger.source.lineari(startValue, endValue, points) end
 
@@ -13128,7 +13405,7 @@ function smua.trigger.source.listi(sweepList) end
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
 function smua.trigger.source.logv(startValue, endValue, points, asymptote) end
@@ -13150,7 +13427,7 @@ function smua.trigger.source.logv(startValue, endValue, points, asymptote) end
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
 function smua.trigger.source.logi(startValue, endValue, points, asymptote) end
@@ -13205,12 +13482,12 @@ smub.trigger.source = {}
 
 
 
-smub.ENABLE = nil
 smub.DISABLE = nil
+smub.ENABLE = nil
 
 ---@alias smubtriggersourceactionaction
----|`smub.ENABLE`
 ---|`smub.DISABLE`
+---|`smub.ENABLE`
 
 
 
@@ -13231,6 +13508,8 @@ smub.DISABLE = nil
 --- --Configure list sweep for SMU channel A (sweep through 3 V, 1 V, 4 V, 5 V, and 2 V).
 --- --Enable the source action.
 --- ```
+---@type smubtriggersourceactionaction
+smub.trigger.source.action = smub.DISABLE
 
 smub.LIMIT_AUTO = nil
 
@@ -13254,6 +13533,8 @@ smub.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
+---@type smubtriggersourcelimitvsweepSourceLimit
+smub.trigger.source.limitv = smub.LIMIT_AUTO
 
 smub.LIMIT_AUTO = nil
 
@@ -13277,6 +13558,8 @@ smub.LIMIT_AUTO = nil
 --- 
 --- --Sets the voltage sweep limit to 10 V.
 --- ```
+---@type smubtriggersourcelimitisweepSourceLimit
+smub.trigger.source.limiti = smub.LIMIT_AUTO
 
 
 --- **This function configures a linear source sweep.**
@@ -13295,7 +13578,7 @@ smub.LIMIT_AUTO = nil
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 function smub.trigger.source.linearv(startValue, endValue, points) end
 
@@ -13316,7 +13599,7 @@ function smub.trigger.source.linearv(startValue, endValue, points) end
 --- --Sweeps from 0 V to 10 V in 1 V steps.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 function smub.trigger.source.lineari(startValue, endValue, points) end
 
@@ -13375,7 +13658,7 @@ function smub.trigger.source.listi(sweepList) end
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
 function smub.trigger.source.logv(startValue, endValue, points, asymptote) end
@@ -13397,7 +13680,7 @@ function smub.trigger.source.logv(startValue, endValue, points, asymptote) end
 --- --Sweeps SMU channel A from 1 V to 10 V in 10 steps with an asymptote of 0 V.
 --- ```
 ---@param startValue number Source value of the first point
----@param endValue any Source value of the last point
+---@param endValue number Source value of the last point
 ---@param points number The number of points used to calculate the step size
 ---@param asymptote number The asymptotic offset value
 function smub.trigger.source.logi(startValue, endValue, points, asymptote) end
@@ -13475,6 +13758,8 @@ status.operation.instrument = {}
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
+---@type number
+status.operation.instrument.condition = 0
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -13499,6 +13784,8 @@ status.operation.instrument = {}
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
+---@type number
+status.operation.instrument.enable = 0
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -13523,6 +13810,8 @@ status.operation.instrument = {}
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
+---@type number
+status.operation.instrument.event = 0
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -13547,6 +13836,8 @@ status.operation.instrument = {}
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
+---@type number
+status.operation.instrument.ntr = 0
 
 
 --- **This attribute contains the operation status instrument summary register set. **
@@ -13571,6 +13862,8 @@ status.operation.instrument = {}
 --- 
 --- --Sets bit B1 and bit B10 of the operation status instrument summary enable register using a decimal value.
 --- ```
+---@type number
+status.operation.instrument.ptr = 0
 ---@class status.operation.remote
 status.operation.remote = {}
 
@@ -13595,6 +13888,8 @@ status.operation.remote = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
+---@type number
+status.operation.remote.condition = 0
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -13615,6 +13910,8 @@ status.operation.remote = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
+---@type number
+status.operation.remote.enable = 0
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -13635,6 +13932,8 @@ status.operation.remote = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
+---@type number
+status.operation.remote.event = 0
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -13655,6 +13954,8 @@ status.operation.remote = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
+---@type number
+status.operation.remote.ntr = 0
 
 
 --- **This attribute contains the operation status remote summary register set. **
@@ -13675,6 +13976,8 @@ status.operation.remote = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B11 of the operation status remote summary enable register.
 --- ```
+---@type number
+status.operation.remote.ptr = 0
 ---@class status.operation.user
 status.operation.user = {}
 
@@ -13702,6 +14005,8 @@ status.operation.user = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
+---@type number
+status.operation.user.condition = 0
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -13725,6 +14030,8 @@ status.operation.user = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
+---@type number
+status.operation.user.enable = 0
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -13748,6 +14055,8 @@ status.operation.user = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
+---@type number
+status.operation.user.event = 0
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -13771,6 +14080,8 @@ status.operation.user = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
+---@type number
+status.operation.user.ntr = 0
 
 
 --- **These attributes manage the operation status user register set of the status model.**
@@ -13794,6 +14105,8 @@ status.operation.user = {}
 --- 
 --- --Uses the decimal value to set bits B11 and B14 of the operation status user enable register.
 --- ```
+---@type number
+status.operation.user.ptr = 0
 ---@class status.questionable.instrument
 status.questionable.instrument = {}
 
@@ -13815,6 +14128,8 @@ status.questionable.instrument = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.condition = 0
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -13832,6 +14147,8 @@ status.questionable.instrument = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.enable = 0
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -13849,6 +14166,8 @@ status.questionable.instrument = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.event = 0
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -13866,6 +14185,8 @@ status.questionable.instrument = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.ntr = 0
 
 
 --- **This attribute contains the questionable status instrument summary register set. **
@@ -13883,6 +14204,8 @@ status.questionable.instrument = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status instrument summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.ptr = 0
 ---@class status.questionable.unstable_output
 status.questionable.unstable_output = {}
 
@@ -13904,6 +14227,8 @@ status.questionable.unstable_output = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
+---@type number
+status.questionable.unstable_output.condition = 0
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -13921,6 +14246,8 @@ status.questionable.unstable_output = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
+---@type number
+status.questionable.unstable_output.enable = 0
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -13938,6 +14265,8 @@ status.questionable.unstable_output = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
+---@type number
+status.questionable.unstable_output.event = 0
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -13955,6 +14284,8 @@ status.questionable.unstable_output = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
+---@type number
+status.questionable.unstable_output.ntr = 0
 
 
 --- **This attribute contains the questionable status unstable output summary register set.**
@@ -13972,6 +14303,8 @@ status.questionable.unstable_output = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status unstable output summary enable register bit.
 --- ```
+---@type number
+status.questionable.unstable_output.ptr = 0
 ---@class display.smua.limit
 display.smua.limit = {}
 
@@ -14001,6 +14334,8 @@ display.LIMIT_P = nil
 --- 
 --- --Specifies the power limit value is displayed for SMU Channel A.
 --- ```
+---@type displaysmualimitfuncfunc
+display.smua.limit.func = display.LIMIT_IV
 ---@class display.smub.limit
 display.smub.limit = {}
 
@@ -14030,6 +14365,8 @@ display.LIMIT_P = nil
 --- 
 --- --Specifies the power limit value is displayed for SMU Channel A.
 --- ```
+---@type displaysmublimitfuncfunc
+display.smub.limit.func = display.LIMIT_IV
 ---@class status.measurement.buffer_available
 status.measurement.buffer_available = {}
 
@@ -14051,6 +14388,8 @@ status.measurement.buffer_available = {}
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
+---@type number
+status.measurement.buffer_available.condition = 0
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -14068,6 +14407,8 @@ status.measurement.buffer_available = {}
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
+---@type number
+status.measurement.buffer_available.enable = 0
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -14085,6 +14426,8 @@ status.measurement.buffer_available = {}
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
+---@type number
+status.measurement.buffer_available.event = 0
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -14102,6 +14445,8 @@ status.measurement.buffer_available = {}
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
+---@type number
+status.measurement.buffer_available.ntr = 0
 
 
 --- **This attribute contains the measurement event buffer available summary register set.**
@@ -14119,6 +14464,8 @@ status.measurement.buffer_available = {}
 --- 
 --- --Sets the SMUA bit of the measurement event buffer available summary enable register.
 --- ```
+---@type number
+status.measurement.buffer_available.ptr = 0
 ---@class status.measurement.current_limit
 status.measurement.current_limit = {}
 
@@ -14140,6 +14487,8 @@ status.measurement.current_limit = {}
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
+---@type number
+status.measurement.current_limit.condition = 0
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -14157,6 +14506,8 @@ status.measurement.current_limit = {}
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
+---@type number
+status.measurement.current_limit.enable = 0
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -14174,6 +14525,8 @@ status.measurement.current_limit = {}
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
+---@type number
+status.measurement.current_limit.event = 0
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -14191,6 +14544,8 @@ status.measurement.current_limit = {}
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
+---@type number
+status.measurement.current_limit.ntr = 0
 
 
 --- **This attribute contains the measurement event current limit summary registers.**
@@ -14208,6 +14563,8 @@ status.measurement.current_limit = {}
 --- 
 --- --Sets the SMUA bit of the Measurement Event Current Limit Summary Enable Register.
 --- ```
+---@type number
+status.measurement.current_limit.ptr = 0
 ---@class status.measurement.instrument
 status.measurement.instrument = {}
 
@@ -14229,6 +14586,8 @@ status.measurement.instrument = {}
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.condition = 0
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -14246,6 +14605,8 @@ status.measurement.instrument = {}
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.enable = 0
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -14263,6 +14624,8 @@ status.measurement.instrument = {}
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.event = 0
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -14280,6 +14643,8 @@ status.measurement.instrument = {}
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.ntr = 0
 
 
 --- **This attribute contains the registers of the measurement event instrument summary register set.**
@@ -14297,6 +14662,8 @@ status.measurement.instrument = {}
 --- 
 --- --Sets the SMU A bit of the measurement event instrument summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.ptr = 0
 ---@class status.measurement.reading_overflow
 status.measurement.reading_overflow = {}
 
@@ -14318,6 +14685,8 @@ status.measurement.reading_overflow = {}
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.reading_overflow.condition = 0
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -14335,6 +14704,8 @@ status.measurement.reading_overflow = {}
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.reading_overflow.enable = 0
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -14352,6 +14723,8 @@ status.measurement.reading_overflow = {}
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.reading_overflow.event = 0
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -14369,6 +14742,8 @@ status.measurement.reading_overflow = {}
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.reading_overflow.ntr = 0
 
 
 --- **This attribute contains the measurement event reading overflow summary register set. **
@@ -14386,6 +14761,8 @@ status.measurement.reading_overflow = {}
 --- 
 --- --Sets the SMU A bit of the measurement reading overflow summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.reading_overflow.ptr = 0
 ---@class status.operation.calibrating
 status.operation.calibrating = {}
 
@@ -14407,6 +14784,8 @@ status.operation.calibrating = {}
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
+---@type number
+status.operation.calibrating.condition = 0
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -14424,6 +14803,8 @@ status.operation.calibrating = {}
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
+---@type number
+status.operation.calibrating.enable = 0
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -14441,6 +14822,8 @@ status.operation.calibrating = {}
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
+---@type number
+status.operation.calibrating.event = 0
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -14458,6 +14841,8 @@ status.operation.calibrating = {}
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
+---@type number
+status.operation.calibrating.ntr = 0
 
 
 --- **This attribute contains the operation status calibration summary register set.  **
@@ -14475,6 +14860,8 @@ status.operation.calibrating = {}
 --- 
 --- --Sets the SMUA bit of the operation status calibration summary enable register using a constant.
 --- ```
+---@type number
+status.operation.calibrating.ptr = 0
 ---@class status.operation.measuring
 status.operation.measuring = {}
 
@@ -14496,6 +14883,8 @@ status.operation.measuring = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
+---@type number
+status.operation.measuring.condition = 0
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -14513,6 +14902,8 @@ status.operation.measuring = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
+---@type number
+status.operation.measuring.enable = 0
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -14530,6 +14921,8 @@ status.operation.measuring = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
+---@type number
+status.operation.measuring.event = 0
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -14547,6 +14940,8 @@ status.operation.measuring = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
+---@type number
+status.operation.measuring.ntr = 0
 
 
 --- **This attribute contains the operation status measuring summary register set. **
@@ -14564,6 +14959,8 @@ status.operation.measuring = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status measuring summary enable register.
 --- ```
+---@type number
+status.operation.measuring.ptr = 0
 ---@class status.operation.sweeping
 status.operation.sweeping = {}
 
@@ -14585,6 +14982,8 @@ status.operation.sweeping = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
+---@type number
+status.operation.sweeping.condition = 0
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -14602,6 +15001,8 @@ status.operation.sweeping = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
+---@type number
+status.operation.sweeping.enable = 0
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -14619,6 +15020,8 @@ status.operation.sweeping = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
+---@type number
+status.operation.sweeping.event = 0
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -14636,6 +15039,8 @@ status.operation.sweeping = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
+---@type number
+status.operation.sweeping.ntr = 0
 
 
 --- **This attribute contains the operation status sweeping summary register set. **
@@ -14653,6 +15058,8 @@ status.operation.sweeping = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the operation status sweeping summary enable register.
 --- ```
+---@type number
+status.operation.sweeping.ptr = 0
 ---@class status.operation.trigger_overrun
 status.operation.trigger_overrun = {}
 
@@ -14675,6 +15082,8 @@ status.operation.trigger_overrun = {}
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
+---@type number
+status.operation.trigger_overrun.condition = 0
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -14693,6 +15102,8 @@ status.operation.trigger_overrun = {}
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
+---@type number
+status.operation.trigger_overrun.enable = 0
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -14711,6 +15122,8 @@ status.operation.trigger_overrun = {}
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
+---@type number
+status.operation.trigger_overrun.event = 0
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -14729,6 +15142,8 @@ status.operation.trigger_overrun = {}
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
+---@type number
+status.operation.trigger_overrun.ntr = 0
 
 
 --- **This attribute contains the operation status trigger overrun summary register set. **
@@ -14747,6 +15162,8 @@ status.operation.trigger_overrun = {}
 --- 
 --- --Uses constants to set bit B1 and bit B10 of the operation status trigger overrun summary enable register.
 --- ```
+---@type number
+status.operation.trigger_overrun.ptr = 0
 ---@class status.questionable.calibration
 status.questionable.calibration = {}
 
@@ -14768,6 +15185,8 @@ status.questionable.calibration = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
+---@type number
+status.questionable.calibration.condition = 0
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -14785,6 +15204,8 @@ status.questionable.calibration = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
+---@type number
+status.questionable.calibration.enable = 0
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -14802,6 +15223,8 @@ status.questionable.calibration = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
+---@type number
+status.questionable.calibration.event = 0
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -14819,6 +15242,8 @@ status.questionable.calibration = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
+---@type number
+status.questionable.calibration.ntr = 0
 
 
 --- **This attribute contains the questionable status calibration summary register set. **
@@ -14836,6 +15261,8 @@ status.questionable.calibration = {}
 --- 
 --- --Uses a constant to set the SMUA bit of the questionable status calibration summary enable register.
 --- ```
+---@type number
+status.questionable.calibration.ptr = 0
 ---@class status.questionable.over_temperature
 status.questionable.over_temperature = {}
 
@@ -14857,6 +15284,8 @@ status.questionable.over_temperature = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
+---@type number
+status.questionable.over_temperature.condition = 0
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -14874,6 +15303,8 @@ status.questionable.over_temperature = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
+---@type number
+status.questionable.over_temperature.enable = 0
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -14891,6 +15322,8 @@ status.questionable.over_temperature = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
+---@type number
+status.questionable.over_temperature.event = 0
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -14908,6 +15341,8 @@ status.questionable.over_temperature = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
+---@type number
+status.questionable.over_temperature.ntr = 0
 
 
 --- **This attribute contains the questionable status over temperature summary register set. **
@@ -14925,6 +15360,8 @@ status.questionable.over_temperature = {}
 --- 
 --- --Uses a constant to set the SMU A bit in the questionable status over temperature summary enable register.
 --- ```
+---@type number
+status.questionable.over_temperature.ptr = 0
 ---@class status.measurement.voltage_limit
 status.measurement.voltage_limit = {}
 
@@ -14946,6 +15383,8 @@ status.measurement.voltage_limit = {}
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.voltage_limit.condition = 0
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -14963,6 +15402,8 @@ status.measurement.voltage_limit = {}
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.voltage_limit.enable = 0
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -14980,6 +15421,8 @@ status.measurement.voltage_limit = {}
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.voltage_limit.event = 0
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -14997,6 +15440,8 @@ status.measurement.voltage_limit = {}
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.voltage_limit.ntr = 0
 
 
 --- **This attribute contains the measurement event voltage limit summary register set. **
@@ -15014,6 +15459,8 @@ status.measurement.voltage_limit = {}
 --- 
 --- --Sets the SMUA bit of the measurement event voltage limit summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.voltage_limit.ptr = 0
 ---@class status.operation.instrument.digio
 status.operation.instrument.digio = {}
 
@@ -15038,6 +15485,8 @@ status.operation.instrument.digio = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.condition = 0
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15058,6 +15507,8 @@ status.operation.instrument.digio = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.enable = 0
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15078,6 +15529,8 @@ status.operation.instrument.digio = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.event = 0
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15098,6 +15551,8 @@ status.operation.instrument.digio = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.ntr = 0
 
 
 --- **This attribute contains the operation status digital I/O summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15118,6 +15573,8 @@ status.operation.instrument.digio = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status digital I/O summary enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.ptr = 0
 ---@class status.operation.instrument.lan
 status.operation.instrument.lan = {}
 
@@ -15145,6 +15602,8 @@ status.operation.instrument.lan = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.condition = 0
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -15168,6 +15627,8 @@ status.operation.instrument.lan = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.enable = 0
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -15191,6 +15652,8 @@ status.operation.instrument.lan = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.event = 0
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -15214,6 +15677,8 @@ status.operation.instrument.lan = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.ntr = 0
 
 
 --- **This attribute contains the operation status LAN summary register set.**
@@ -15237,6 +15702,8 @@ status.operation.instrument.lan = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B10 of the operation status LAN summary enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.ptr = 0
 ---@class status.operation.instrument.smua
 status.operation.instrument.smua = {}
 
@@ -15261,6 +15728,8 @@ status.operation.instrument.smua = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.condition = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15281,6 +15750,8 @@ status.operation.instrument.smua = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.enable = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15301,6 +15772,8 @@ status.operation.instrument.smua = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.event = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15321,6 +15794,8 @@ status.operation.instrument.smua = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.ntr = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15341,6 +15816,8 @@ status.operation.instrument.smua = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.ptr = 0
 ---@class status.operation.instrument.smub
 status.operation.instrument.smub = {}
 
@@ -15365,6 +15842,8 @@ status.operation.instrument.smub = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.condition = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15385,6 +15864,8 @@ status.operation.instrument.smub = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.enable = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15405,6 +15886,8 @@ status.operation.instrument.smub = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.event = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15425,6 +15908,8 @@ status.operation.instrument.smub = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.ntr = 0
 
 
 --- **This attribute contains the operation status SMU X summary register set.**
@@ -15445,6 +15930,8 @@ status.operation.instrument.smub = {}
 --- 
 --- --Use the decimal value to set bits B0 and B10 of the operation status SMU A summary enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.ptr = 0
 ---@class status.operation.instrument.trigger_blender
 status.operation.instrument.trigger_blender = {}
 
@@ -15466,6 +15953,8 @@ status.operation.instrument.trigger_blender = {}
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.condition = 0
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -15483,6 +15972,8 @@ status.operation.instrument.trigger_blender = {}
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.enable = 0
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -15500,6 +15991,8 @@ status.operation.instrument.trigger_blender = {}
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.event = 0
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -15517,6 +16010,8 @@ status.operation.instrument.trigger_blender = {}
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.ntr = 0
 
 
 --- **This attribute contains the operation status trigger blender summary register set.**
@@ -15534,6 +16029,8 @@ status.operation.instrument.trigger_blender = {}
 --- 
 --- --Uses a decimal value to set the TRGOVR bit of the operation status trigger blender summary enable.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.ptr = 0
 ---@class status.operation.instrument.trigger_timer
 status.operation.instrument.trigger_timer = {}
 
@@ -15555,6 +16052,8 @@ status.operation.instrument.trigger_timer = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.condition = 0
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -15572,6 +16071,8 @@ status.operation.instrument.trigger_timer = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.enable = 0
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -15589,6 +16090,8 @@ status.operation.instrument.trigger_timer = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.event = 0
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -15606,6 +16109,8 @@ status.operation.instrument.trigger_timer = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.ntr = 0
 
 
 --- **This attribute contains the operation status trigger timer summary register set. **
@@ -15623,6 +16128,8 @@ status.operation.instrument.trigger_timer = {}
 --- 
 --- --Uses the decimal value to set the TRGOVR bit of the operation status trigger timer summary enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.ptr = 0
 ---@class status.operation.instrument.tsplink
 status.operation.instrument.tsplink = {}
 
@@ -15644,6 +16151,8 @@ status.operation.instrument.tsplink = {}
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.condition = 0
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15661,6 +16170,8 @@ status.operation.instrument.tsplink = {}
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.enable = 0
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15678,6 +16189,8 @@ status.operation.instrument.tsplink = {}
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.event = 0
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15695,6 +16208,8 @@ status.operation.instrument.tsplink = {}
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.ntr = 0
 
 
 --- **This attribute contains the operation status TSP-Link summary register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -15712,6 +16227,8 @@ status.operation.instrument.tsplink = {}
 --- 
 --- --Uses the decimal value to set the trigger overrun bit of the operation status TSP-Link summary enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.ptr = 0
 ---@class status.questionable.instrument.smua
 status.questionable.instrument.smua = {}
 
@@ -15735,6 +16252,8 @@ status.questionable.instrument.smua = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smua.condition = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15754,6 +16273,8 @@ status.questionable.instrument.smua = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smua.enable = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15773,6 +16294,8 @@ status.questionable.instrument.smua = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smua.event = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15792,6 +16315,8 @@ status.questionable.instrument.smua = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smua.ntr = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15811,6 +16336,8 @@ status.questionable.instrument.smua = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smua.ptr = 0
 ---@class status.questionable.instrument.smub
 status.questionable.instrument.smub = {}
 
@@ -15834,6 +16361,8 @@ status.questionable.instrument.smub = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smub.condition = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15853,6 +16382,8 @@ status.questionable.instrument.smub = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smub.enable = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15872,6 +16403,8 @@ status.questionable.instrument.smub = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smub.event = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15891,6 +16424,8 @@ status.questionable.instrument.smub = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smub.ntr = 0
 
 
 --- **This attribute contains the questionable status SMU X summary register set.**
@@ -15910,6 +16445,8 @@ status.questionable.instrument.smub = {}
 --- 
 --- --Uses constants to set bit B8 and bit B9 of the questionable status SMU A summary enable register.
 --- ```
+---@type number
+status.questionable.instrument.smub.ptr = 0
 ---@class status.measurement.instrument.smua
 status.measurement.instrument.smua = {}
 
@@ -15931,6 +16468,8 @@ status.measurement.instrument.smua = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smua.condition = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -15948,6 +16487,8 @@ status.measurement.instrument.smua = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smua.enable = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -15965,6 +16506,8 @@ status.measurement.instrument.smua = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smua.event = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -15982,6 +16525,8 @@ status.measurement.instrument.smua = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smua.ntr = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -15999,6 +16544,8 @@ status.measurement.instrument.smua = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smua.ptr = 0
 ---@class status.measurement.instrument.smub
 status.measurement.instrument.smub = {}
 
@@ -16020,6 +16567,8 @@ status.measurement.instrument.smub = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smub.condition = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -16037,6 +16586,8 @@ status.measurement.instrument.smub = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smub.enable = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -16054,6 +16605,8 @@ status.measurement.instrument.smub = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smub.event = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -16071,6 +16624,8 @@ status.measurement.instrument.smub = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smub.ntr = 0
 
 
 --- **This attribute contains the registers of the measurement event SMU X summary register set.**
@@ -16088,6 +16643,8 @@ status.measurement.instrument.smub = {}
 --- 
 --- --Sets the VLMT bit of the measurement event SMU A summary enable register using a constant.
 --- ```
+---@type number
+status.measurement.instrument.smub.ptr = 0
 ---@class status.operation.instrument.digio.trigger_overrun
 status.operation.instrument.digio.trigger_overrun = {}
 
@@ -16115,6 +16672,8 @@ status.operation.instrument.digio.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.trigger_overrun.condition = 0
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16138,6 +16697,8 @@ status.operation.instrument.digio.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.trigger_overrun.enable = 0
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16161,6 +16722,8 @@ status.operation.instrument.digio.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.trigger_overrun.event = 0
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16184,6 +16747,8 @@ status.operation.instrument.digio.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.trigger_overrun.ntr = 0
 
 
 --- **This attribute contains the operation status digital I/O overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16207,6 +16772,8 @@ status.operation.instrument.digio.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bit B1 and bit B10 of the operation status digital I/O overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.digio.trigger_overrun.ptr = 0
 ---@class status.operation.instrument.lan.trigger_overrun
 status.operation.instrument.lan.trigger_overrun = {}
 
@@ -16234,6 +16801,8 @@ status.operation.instrument.lan.trigger_overrun = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.trigger_overrun.condition = 0
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -16257,6 +16826,8 @@ status.operation.instrument.lan.trigger_overrun = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.trigger_overrun.enable = 0
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -16280,6 +16851,8 @@ status.operation.instrument.lan.trigger_overrun = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.trigger_overrun.event = 0
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -16303,6 +16876,8 @@ status.operation.instrument.lan.trigger_overrun = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.trigger_overrun.ntr = 0
 
 
 --- **This attribute contains the operation status LAN trigger overrun register set.**
@@ -16326,6 +16901,8 @@ status.operation.instrument.lan.trigger_overrun = {}
 --- 
 --- --Use the decimal value to set bit B1 and bit B8 of the operation status LAN trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.lan.trigger_overrun.ptr = 0
 ---@class status.operation.instrument.smua.trigger_overrrun
 status.operation.instrument.smua.trigger_overrrun = {}
 
@@ -16351,6 +16928,8 @@ status.operation.instrument.smua.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.trigger_overrrun.condition = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16372,6 +16951,8 @@ status.operation.instrument.smua.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.trigger_overrrun.enable = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16393,6 +16974,8 @@ status.operation.instrument.smua.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.trigger_overrrun.event = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16414,6 +16997,8 @@ status.operation.instrument.smua.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.trigger_overrrun.ntr = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16435,6 +17020,8 @@ status.operation.instrument.smua.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smua.trigger_overrrun.ptr = 0
 ---@class status.operation.instrument.smub.trigger_overrrun
 status.operation.instrument.smub.trigger_overrrun = {}
 
@@ -16460,6 +17047,8 @@ status.operation.instrument.smub.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.trigger_overrrun.condition = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16481,6 +17070,8 @@ status.operation.instrument.smub.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.trigger_overrrun.enable = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16502,6 +17093,8 @@ status.operation.instrument.smub.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.trigger_overrrun.event = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16523,6 +17116,8 @@ status.operation.instrument.smub.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.trigger_overrrun.ntr = 0
 
 
 --- **This attribute contains the operation status SMU X trigger overrun register set.**
@@ -16544,6 +17139,8 @@ status.operation.instrument.smub.trigger_overrrun = {}
 --- 
 --- --Uses the decimal value to set bits B1 and B4 of the operation status SMU A trigger overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.smub.trigger_overrrun.ptr = 0
 ---@class status.operation.instrument.trigger_timer.trigger_overrun
 status.operation.instrument.trigger_timer.trigger_overrun = {}
 
@@ -16569,6 +17166,8 @@ status.operation.instrument.trigger_timer.trigger_overrun = {}
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.trigger_overrun.condition = 0
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -16590,6 +17189,8 @@ status.operation.instrument.trigger_timer.trigger_overrun = {}
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.trigger_overrun.enable = 0
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -16611,6 +17212,8 @@ status.operation.instrument.trigger_timer.trigger_overrun = {}
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.trigger_overrun.event = 0
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -16632,6 +17235,8 @@ status.operation.instrument.trigger_timer.trigger_overrun = {}
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.trigger_overrun.ntr = 0
 
 
 --- **This attribute contains the operation status trigger timer overrun register set.**
@@ -16653,6 +17258,8 @@ status.operation.instrument.trigger_timer.trigger_overrun = {}
 --- 
 --- --Uses a constant to set timer bits B1 and B4 of the operation status trigger timer overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_timer.trigger_overrun.ptr = 0
 ---@class status.operation.instrument.tsplink.trigger_overrun
 status.operation.instrument.tsplink.trigger_overrun = {}
 
@@ -16678,6 +17285,8 @@ status.operation.instrument.tsplink.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.trigger_overrun.condition = 0
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16699,6 +17308,8 @@ status.operation.instrument.tsplink.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.trigger_overrun.enable = 0
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16720,6 +17331,8 @@ status.operation.instrument.tsplink.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.trigger_overrun.event = 0
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16741,6 +17354,8 @@ status.operation.instrument.tsplink.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.trigger_overrun.ntr = 0
 
 
 --- **This attribute contains the operation status TSP-Link overrun register set. This command is not available on the 2604B, 2614B, or 2634B.**
@@ -16762,6 +17377,8 @@ status.operation.instrument.tsplink.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set bits for lines 1 and 3 of the operation status TSP-Link overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.tsplink.trigger_overrun.ptr = 0
 ---@class status.operation.instrument.trigger_blender.trigger_overrun
 status.operation.instrument.trigger_blender.trigger_overrun = {}
 
@@ -16787,6 +17404,8 @@ status.operation.instrument.trigger_blender.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.trigger_overrun.condition = 0
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -16808,6 +17427,8 @@ status.operation.instrument.trigger_blender.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.trigger_overrun.enable = 0
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -16829,6 +17450,8 @@ status.operation.instrument.trigger_blender.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.trigger_overrun.event = 0
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -16850,6 +17473,8 @@ status.operation.instrument.trigger_blender.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
+---@type number
+status.operation.instrument.trigger_blender.trigger_overrun.ntr = 0
 
 
 --- **This attribute contains the operation status trigger blender overrun register set.**
@@ -16871,656 +17496,8 @@ status.operation.instrument.trigger_blender.trigger_overrun = {}
 --- 
 --- --Uses the decimal value to set the bits for blenders 1 and 4 of the operation status trigger blender overrun enable register.
 --- ```
-
-
---- **This KISweep factory script function performs a linear current sweep with voltage measured at every step (point).**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for voltage measurements, current source values, and timestamps are stored in smuX.nvbuffer1.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.Performs a linear current sweep with voltage measured at every step (point):The linear step size is automatically calculated as follows:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12177.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- SweepILinMeasureV(smua, -1e-3, 1e-3, 0, 100)
---- 
---- --This function performs a 100-point linear current sweep starting at −1 mA and stopping at +1 mA. Voltage is measured at every step (point) in the sweep. Because stime is set for 0 s, voltage is measured as quickly as possible after each current step.
---- ```
----@param starti number Sweep start current in amperes
----@param stopi number Sweep stop current in amperes
----@param stime number Settling time in seconds; occurs after stepping the source and before making a measurement
----@param points number Number of sweep points (must be ≥ 2)
-function SweepILinMeasureV(smuX, starti, stopi, stime, points) end
-
-
---- **This KISweep factory script function performs a linear voltage sweep with current measured at every step (point).**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for current measurements, voltage source values, and timestamps are stored in smuX.nvbuffer1.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.Performs a linear voltage sweep with current measured at every step (point):The linear step size is automatically calculated as follows:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12181.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- SweepVLinMeasureI(smua, -1, 1, 1e-3, 1000)
---- 
---- --This function performs a 1000-point linear voltage sweep starting at -1 V and stopping at +1 V. Current is measured at every step (point) in the sweep after a 1 ms source settling period.
---- ```
----@param startv number Sweep start voltage in volts
----@param stopv number Sweep stop voltage in volts
----@param stime number Settling time in seconds; occurs after stepping the source and before making a measurement
----@param points number Number of sweep points (must be ≥ 2)
-function SweepVLinMeasureI(smuX, startv, stopv, stime, points) end
-
-
---- **This KISweep factory script function performs a logarithmic current sweep with voltage measured at every step (point).**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for voltage measurements, current source values, and timestamps are stored in smuX.nvbuffer1.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.Performs a logarithmic current sweep with voltage measured at every step (point):The source level at each step (SourceStepLevel) is automatically calculated as follows:For example, for a five-point sweep (points = 5), a measurement is performed at MeasurePoint 1, 2, 3, 4, and 5.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12184.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- MeasurePoint
---- 
---- --LogStepSize
---- ```
----@param starti number Sweep start current in amperes
----@param stopi number Sweep stop current in amperes
----@param stime number Settling time in seconds; occurs after stepping the source and before making a measurement
----@param points number Number of sweep points (must be ≥ 2)
-function SweepILogMeasureV(smuX, starti, stopi, stime, points) end
-
-
---- **This KISweep factory script function performs a current list sweep with voltage measured at every step (point).**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for voltage measurements, current source values, and timestamps are stored in smuX.nvbuffer1.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.Performs a current list sweep with voltage measured at every step (point):
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12190.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- testilist = {-100e-9, 100e-9, -1e-6, 1e-6, -1e-3, 1e-3}
----  
---- SweepIListMeasureV(smua, testilist, 500e-3, 6)
---- 
---- --This function performs a six‑point current list sweep starting at the first point in testilist. Voltage is measured at every step (point) in the sweep. The source is allowed to settle on each step for 500 ms before a measurement is performed.
---- ```
----@param ilist table Arbitrary list of current source values; ilist = {value1, value2, ...valueN}
----@param stime number Settling time in seconds; occurs after stepping the source and before making a measurement
----@param points number Number of sweep points (must be ≥ 2)
-function SweepIListMeasureV(smuX, ilist, stime, points) end
-
-
---- **This KISweep factory script function performs a logarithmic voltage sweep with current measured at every step (point).**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for current measurements, voltage source values, and timestamps are stored in smuX.nvbuffer1.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.Performs a logarithmic voltage sweep with current measured at every step (point):The source level at each step (SourceStepLevel) is automatically calculated as follows:For example, for a five-point sweep (points = 5), a measurement is made at MeasurePoint 1, 2, 3, 4, and 5.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12192.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- MeasurePoint
---- 
---- --LogStepSize
---- ```
----@param startv number Sweep start voltage in volts
----@param stopv number Sweep stop voltage in volts
----@param stime number Settling time in seconds; occurs after stepping the source and before making a measurement
----@param points number Number of sweep points (must be ≥ 2)
-function SweepVLogMeasureI(smuX, startv, stopv, stime, points) end
-
-
---- **This KIPulse factory script function performs a specified number of pulse I, measure V cycles.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed voltage measurements, current levels, and timestamps are stored in smua.nvbuffer1.If any parameters are omitted or nil, the operator is prompted to enter them using the front panel.To perform the specified number of pulse I, measure V cycles, this function:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12918.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- PulseIMeasureV(smua, 0.001, 1.0,
----    20e-3, 40e-3, 10)
---- 
---- --SMU A outputs 1 mA and dwells for 40 ms, outputs 1 A and dwells for 20 ms. The voltage measurements occur during each 20 ms dwell period. After the measurement, the output returns to 1 mA and dwells for 40 ms. This pulse‑measure process repeats nine more times.
---- ```
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in amperes
----@param level number Pulse level in amperes
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
-function PulseIMeasureV(smu, bias, level, ton, toff, points) end
-
-
---- **This KIPulse factory script function performs a specified number of pulse V, measure I cycles.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- If any parameters are omitted or nil, the operator is prompted to enter them using the front panel. Data for pulsed current measurements, voltage levels, and timestamps are stored in smuX.nvbuffer1.To perform the specified number of pulse V, measure I cycles, this function:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12923.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.measure.nplc = 0.001
---- PulseVMeasureI(smua, -1, 1, 1E-3, 2E-3, 20)
---- 
---- --SMU A outputs −1 V and dwells for 2 ms, outputs 1 V and dwells for 1 ms. The current measurements occur during each 1 ms dwell period. After the measurement, the output returns to −1 V and dwells for 2 ms. This pulse-measure process repeats 19 more times.
---- ```
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in volts
----@param level number Pulse level in volts
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
-function PulseVMeasureI(smu, bias, level, ton, toff, points) end
-
-
---- **This KIPulse factory script function configures a current pulse train with a voltage measurement at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed voltage measurements are stored in the reading buffer specified by the buffer input parameter.This function configures a current pulse train with a voltage measurement at each point. Measurements are made at the end of the ton time. This function does not cause the specified smu to output a pulse train. It simply checks to see if all the pulse dimensions can be achieved, and if they are, assigns the indicated tag or index to the pulse train. The InitiatePulseTest(tag) and InitiatePulseTestDual(tag1, tag2) functions are used to initiate a pulse train assigned to a valid tag.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12926.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ConfigPulseIMeasureV(smua, 0, 5, 10, 0.001, 0.080, 1, smua.nvbuffer1, 1)
---- 
---- --Set up a pulse train that uses channel A. The pulse amplitude is 5 A and returns to 0 A after 1 ms. The pulse remains at 0 A for 80 ms and the voltage limit is 10 V during the pulse. The pulse train consists of only 1 pulse, and this pulse is assigned a tag index of 1.
---- ```
----@return any f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors were encountered 
----@return any msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string that indicates successful configuration
----@param smu any Instrument channel (for example, smua refers to SMU channel A)
----@param bias any Bias level in amperes
----@param level any Pulse level in amperes
----@param limit any Voltage limit (for example, compliance) in volts
----@param ton any Pulse on time in seconds
----@param toff any Pulse off time in seconds
----@param points any Number of pulse-measure cycles
----@param buffer any Reading buffer where pulsed measurements are stored; if this is nil when the function is called, no measurements are made when the pulse train is initiated
----@param tag any Numeric identifier to be assigned to the defined pulse train
----@param sync_in any Defines a digital I/O trigger input line; if programmed, the pulse train waits for a trigger input before executing each pulse
----@param sync_out any Defines a digital I/O trigger output line; if programmed, the pulse train generates a trigger output immediately before the start of ton
----@param sync_in_timeout any Specifies the length of time (in seconds) to wait for input trigger; default value is 10 s
----@param sync_in_abort any Specifies whether or not to abort the pulse if an input trigger is not received; if pulse aborts because of a missed trigger, a timer timeout message is returned; true or false
----@overload fun(smu:any,bias:any,level:any,limit:any,ton:any,toff:any,points:any,buffer:any,tag:any):f:any, msg:any
----@overload fun(smu:any,bias:any,level:any,limit:any,ton:any,toff:any,points:any,buffer:any,tag:any,sync_in:any):f:any, msg:any
----@overload fun(smu:any,bias:any,level:any,limit:any,ton:any,toff:any,points:any,buffer:any,tag:any,sync_in:any,sync_out:any):f:any, msg:any
----@overload fun(smu:any,bias:any,level:any,limit:any,ton:any,toff:any,points:any,buffer:any,tag:any,sync_in:any,sync_out:any,sync_in_timeout:any):f:any, msg:any
-function ConfigPulseIMeasureV(smu, bias, level, limit, ton, toff, points, buffer, tag, sync_in, sync_out, sync_in_timeout, sync_in_abort) end
-
-
---- **This KIPulse factory script function initiates the pulse configuration assigned to tag.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This function only initiates configured pulse trains assigned to a valid tag. Configure the pulse before initiating it using one of the ConfigurePulse* functions (refer to the Also see section).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12929.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.reset()
----  
---- smua.source.rangev = 5
---- smua.source.rangei = 1
---- smua.source.levelv = 0
----  
---- smua.measure.rangev = 5
---- smua.measure.rangei = 1
---- smua.measure.nplc = 0.01
---- smua.measure.autozero = smua.AUTOZERO_ONCE
----  
---- smua.nvbuffer1.clear()
---- smua.nvbuffer1.appendmode = 1
----  
---- smua.source.output = smua.OUTPUT_ON
----  
---- f1, msg1 = ConfigPulseVMeasureI(smua, 0, 5, 1, 0.002, 0.2, 10, smua.nvbuffer1, 1)
----  
---- if f1 == true then
----    f2, msg2 = InitiatePulseTest(1)
----    print("Initiate message:", msg2)
---- else
----    print("Config errors:", msg1)
---- end
---- 
---- --Configure channel A to generate a pulse train. If no errors are encountered, initiate the pulse train. Channel A pulses voltage from a bias level of 0 V to a pulse level of 5 V. The pulse level is present for 2 ms and the bias level for 200 ms, with a 1 A limit setting. A total of 10 pulses is generated, and the measurement data is stored in smua.nvbuffer1. This pulse train is assigned to tag = 1.
---- ```
----@return boolean f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors are encountered
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string that indicates successful configuration
----@param tag number Numeric identifier of the pulse configuration to be initiated
-function InitiatePulseTest(tag) end
-
-
---- **This KIPulse factory script function initiates the pulse configuration assigned tag1 and tag2.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- The pulse trains associated with the indicated tags are generated simultaneously. This is useful when testing devices such as voltage regulators, where the input signal and output load must be applied to the instrument at the same time. When using this function, each tag1 pulse encapsulates each tag2 pulse in time. Specifically, the tag1 pulse transitions from its bias level to its pulse level before the tag2 pulse. Both the tag1 and tag2 pulses return to their respective bias levels at approximately the same time. Measurements for both pulse trains occur at the same time (see the waveform in the figure below).To provide this encapsulation, the following rules are enforced:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12934.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.reset()
----  
---- smua.source.rangev = 5
---- smua.source.rangei = 1
---- smua.source.levelv = 0
----  
---- smua.measure.rangev = 5
---- smua.measure.rangei = 1
---- smua.measure.nplc = 0.01
---- smua.measure.autozero = smua.AUTOZERO_ONCE
----  
---- smua.nvbuffer1.clear()
---- smua.nvbuffer1.appendmode = 1
----  
---- smua.source.output = smua.OUTPUT_ON
----  
---- smub.reset()
---- smub.source.func = smub.OUTPUT_DCAMPS
---- smub.source.rangei = 1
---- smub.source.rangev = 5
---- smub.source.leveli = 0
---- smub.measure.rangei = 1
---- smub.measure.rangev = 5
---- smub.measure.nplc = 0.01
---- smub.measure.autozero = smub.AUTOZERO_ONCE
---- smub.nvbuffer1.clear()
---- smub.nvbuffer1.appendmode = 1
---- smub.source.output = smub.OUTPUT_ON
----  
---- f1, msg1 = ConfigPulseVMeasureI(smua, 0, 5, 1, 0.002, 0.2, 10, smua.nvbuffer1, 1)
---- f2, msg2 = ConfigPulseIMeasureV(smub, 0,-1, 5, 0.001, 0.2, 10, smub.nvbuffer1, 2)
---- if (f1 == true) and (f2 == true) then
----    f3, msg3 = InitiatePulseTestDual(1, 2)
----    print("Initiate message:", msg3)
---- else
----    print("Config errors:", msg1, msg2)
---- end
---- 
---- --Set up channels A and B for pulse operation, configure pulse trains for each channel, and then initiate the pulse trains if no errors are encountered.
---- --Channel A pulses voltage from a bias level of 0 V to pulse level of 5 V. The pulse level is present for 2 ms, and the bias level for 200 ms with a 1 A limit setting.
---- --A total of 10 pulses is generated on channel A and the measurement data is stored in smua.nvbuffer1. This pulse train is assigned to tag = 1.
---- --Channel B pulses current from a bias level of 0 A to pulse level of 1 A. The pulse level is present for 1 ms, and the bias level for 200 ms with a 5 V limit setting.
---- --A total of 10 pulses is generated on channel B, and the measurement data is stored in smub.nvbuffer1. This pulse train is assigned to tag = 2.
---- ```
----@return boolean f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors were encountered 
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string indicating successful configuration
----@param tag1 number Numeric identifier of the first pulse configuration to be initiated
----@param tag2 number Numeric identifier of the second pulse configuration to be initiated
-function InitiatePulseTestDual(tag1, tag2) end
-
-
---- **This KIPulse factory script function configures a linear pulsed current sweep with a voltage measurement at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed voltage measurements are stored in the reading buffer specified by the buffer input parameter.This function configures a linear pulsed current sweep with a voltage measurement at each point. Measurements are made at the end of the ton time.The magnitude of the first pulse is start amperes; the magnitude of the last pulse is stop amperes. The magnitude of each pulse in between is step amperes larger than the previous pulse, where:step = (stop - start) / (points - 1)This function does not cause the specified smu to output a pulse train. It does check to see if all the pulse dimensions can be achieved, and if they can, assigns the indicated tag or index to the pulse train. The InitiatePulseTest(tag) and InitiatePulseTestDual(tag1, tag2) functions are used to initiate a pulse train assigned to a valid tag.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12937.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ConfigPulseIMeasureVSweepLin(smua, 0, 0.01, 0.05, 1, 1e-3, 0.1, 20, smua.nvbuffer2, 3)
---- 
---- --Set up a pulsed sweep that uses channel A. The pulsed sweep starts at 10 mA, ends at 50 mA, and returns to a 0 mA bias level between pulses. Each pulsed step is on for 1 ms, and then at the bias level for 100 ms. The voltage limit is 1 V during the entire pulsed sweep. The pulse train is comprised of 20 pulsed steps and the pulse train is assigned a tag index of 3.
---- ```
----@return boolean f A Boolean flag; this flag is true if the pulse was successfully configured, false when errors were encountered
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string indicating successful configuration
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in amperes
----@param start any Pulse sweep start level in amperes
----@param stop any Pulse sweep stop level in amperes
----@param limit number Voltage limit (for example, compliance) in volts
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
----@param buffer table Reading buffer where pulsed measurements are stored; if this is nil when the function is called, no measurements are made when the pulse train is initiated
----@param tag number Numeric identifier to be assigned to the defined pulse train
----@param sync_in number Defines a digital I/O trigger input line; if programmed, the pulse train waits for a trigger input before executing each pulse
----@param sync_out any Defines a digital I/O trigger output line; if programmed, the pulse train generates a trigger output immediately before the start of ton
----@param sync_in_timeout number Specifies the length of time (in seconds) to wait for input trigger; default value is 10 s
----@param sync_in_abort number Specifies whether or not to abort pulse if input trigger is not received; if pulse aborts because of a missed trigger, a timer timeout message is returned; true or false
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any,sync_in_timeout:number):f:boolean, msg:string
-function ConfigPulseIMeasureVSweepLin(smu, bias, start, stop, limit, ton, toff,points, buffer, tag, sync_in, sync_out, sync_in_timeout, sync_in_abort) end
-
-
---- **This KIPulse factory script function configures a voltage pulse train with a current measurement at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed current measurements are stored in the reading buffer specified by the buffer input parameter.This function configures a linear pulsed voltage sweep with a current measurement at each point. Measurements are made at the end of the ton time.The magnitude of the first pulse is start volts; the magnitude of the last pulse is stop volts. The magnitude of each pulse in between is step volts larger than the previous pulse, where:step = (stop - start) / (points - 1)This function does not cause the specified smu to output a pulse train. It does check to see if all the pulse dimensions can be achieved, and if they can, assigns the indicated tag or index to the pulse train.The InitiatePulseTest(tag) and InitiatePulseTestDual(tag1, tag2) functions are used to initiate a pulse train assigned to a valid tag. 
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12940.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ConfigPulseVMeasureISweepLin(smua, 0, 1, 10, 1, 10e-3, 20e-3, 16, smua.nvbuffer1, 4)
---- 
---- --Set up a pulsed sweep that uses channel A. The pulsed sweep starts at 1 V, ends at 10 V, and returns to a 0 V bias level between pulses. Each pulsed step is on for 10 ms, and then at the bias level for 20 ms. 
---- --The current limit is 1 A during the entire pulsed sweep. The pulse train is comprised of 16 pulsed steps, and the pulse train is assigned a tag index of 4.
---- ```
----@return boolean f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors were encountered 
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string indicating successful configuration
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in volts
----@param start any Pulse sweep start level in volts
----@param stop any Pulse sweep stop level in volts
----@param limit number Current limit (for example, compliance) in amperes
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
----@param buffer table Reading buffer where pulsed measurements are stored; if this is nil when the function is called, no measurements are made when the pulse train is initiated
----@param tag number Numeric identifier to be assigned to the defined pulse train
----@param sync_in number Defines a digital I/O trigger input line; if programmed, the pulse train waits for a trigger input before executing each pulse
----@param sync_out any Defines a digital I/O trigger output line; if programmed, the pulse train generates a trigger output immediately before the start of ton
----@param sync_in_timeout number Specifies the length of time (in seconds) to wait for input trigger; default value is 10 s
----@param sync_in_abort number Specifies whether or not to abort pulse if input trigger is not received; if pulse aborts because of a missed trigger, a timer timeout message is returned; true or false
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any,sync_in_timeout:number):f:boolean, msg:string
-function ConfigPulseVMeasureISweepLin(smu, bias, start, stop, limit, ton, toff, points, buffer, tag, sync_in, sync_out, sync_in_timeout, sync_in_abort) end
-
-
---- **This KIPulse factory script function configures a voltage pulse train with a current measurement at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed current measurements are stored in the reading buffer specified by the buffer input parameter.This function configures a logarithmic pulsed voltage sweep with a current measurement at each point. Measurements are made at the end of the ton time.The magnitude of the first pulse is start volts; the magnitude of the last pulse is stop volts. The magnitude of each pulse in between is LogStepn volts larger than the previous pulse, where:LogStepSize = (log10(stop) - log10(start)) / (points -1)LogStepn = (n - 1) * (LogStepSize), where n = [2, points]SourceStepLeveln = antilog(LogStepn) * startThis function does not cause the specified smu to output a pulse train. It does check to see if all the pulse dimensions can be achieved, and if they can, assigns the indicated tag or index to the pulse train. The InitiatePulseTest(tag) and InitiatePulseTestDual(tag1, tag2) functions are used to initiate a pulse train assigned to a valid tag.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12946.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ConfigPulseVMeasureISweepLog(smua, 0, 1, 10, 1, 10e-3, 20e-3, 10, smua.nvbuffer1, 6)
---- 
---- --Set up a pulsed logarithmic sweep that uses SMU channel A. The pulsed sweep starts at 1 V, ends at 10 V, and returns to a 0 V bias level between pulses. Each pulsed step is on for 10 ms, and then at the bias level for 20 ms. 
---- --The current limit is 1 A during the entire pulsed sweep. The pulse train is comprised of 10 pulsed steps, and the pulse train is assigned a tag index of 6.
---- ```
----@return boolean f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors were encountered
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string indicating successful configuration
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in volts
----@param start any Pulse sweep start level in volts
----@param stop any Pulse sweep stop level in volts
----@param limit number Current limit (for example, compliance) in amperes
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
----@param buffer table Reading buffer where pulsed measurements are stored; if this is nil when the function is called, no measurements are made when the pulse train is initiated
----@param tag number Numeric identifier to be assigned to the defined pulse train
----@param sync_in number Defines a digital I/O trigger input line; if programmed, the pulse train waits for a trigger input before executing each pulse
----@param sync_out any Defines a digital I/O trigger output line; if programmed, the pulse train generates a trigger output immediately before the start of ton
----@param sync_in_timeout number Specifies the length of time (in seconds) to wait for input trigger; default value is 10 s
----@param sync_in_abort number Specifies whether or not to abort pulse if input trigger is not received; if pulse aborts because of a missed trigger, a timer timeout message is returned; true or false
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any,sync_in_timeout:number):f:boolean, msg:string
-function ConfigPulseVMeasureISweepLog(smu, bias, start, stop, limit, ton, toff, points, buffer, tag, sync_in, sync_out, sync_in_timeout, sync_in_abort) end
-
-
---- **This KIPulse factory script function allows you to inspect the settings of the preconfigured pulse train assigned to tag.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Once a pulse train is configured and assigned to a tag, you can use the QueryPulseConfig() command to inspect the settings of this preconfigured pulse train.This function returns a table that contains the settings associated with the tag input parameter.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12949.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.reset()
----  
---- smua.source.rangev = 5
---- smua.source.rangei = 1
---- smua.source.levelv = 0
----  
---- smua.measure.rangev = 5
---- smua.measure.rangei = 1
---- smua.measure.nplc = 0.01
---- smua.measure.autozero = smua.AUTOZERO_ONCE
----  
---- smua.nvbuffer1.clear()
---- smua.nvbuffer1.appendmode = 1
----  
---- smua.source.output = smua.OUTPUT_ON
----  
---- f1, msg1 = ConfigPulseVMeasureI(smua, 0, 5,
----    1, 0.002, 0.2, 10, smua.nvbuffer1, 1)
----  
---- print(QueryPulseConfig(1).tostring())
---- 
---- --Configure channel A to generate a pulse train, query configuration, and then display as a string. Channel A pulses voltage from a bias level of 0 V to a pulse level of 5 V. The pulse level is present for 2 ms, and the bias level for 200 ms with a 1 A limit setting. A total of 10 pulses is generated, and the measurement data is stored in smua.nvbuffer1. This pulse train is assigned to tag = 1.
---- --Output:
---- -->> tag = 1
---- -->> smu = smua
---- -->> func = volts
---- -->> type = pulse
---- -->> bias = 0
---- -->> level = 5
---- -->> limit = 1
---- -->> time on = 0.002
---- -->> time off = 0.2
---- -->> points = 10
---- -->> measure = yes
---- -->> sync_in = 0
---- -->> sync_out = 0
---- -->> sync_in_timeout = 0
---- -->> sync_out_abort = 0
---- -->> { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 }
---- ```
----@param tag number Numeric identifier to be assigned to the defined pulse train
----@return any tbl Returned table
-function QueryPulseConfig(tag) end
-
-
---- **This KIHighC factory script function performs a current leakage measurement after stepping the output voltage.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This function causes the SMU to:When measuring leakage current:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12951.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.source.highc = smua.ENABLE
---- smua.source.levelv = 5
---- smua.source.output = smua.OUTPUT_ON
---- delay(1)
---- imeas = i_leakage_measure(smua, 0, 1, 300e-3, 10e-6, 0.1)
---- 
---- --Enable high-capacitance mode. Charge the capacitor at 5 V for 1 second set by delay(1).
---- -- 
---- --The parameters passed on to the i_leakage_measure() function in this example are:
---- --smu = smua
---- --levelv = 0 V
---- --limiti = 1 A
---- --sourcedelay = 300 ms
---- --measurei = 10 µA range
---- --measuredelay = 100 ms
---- --The levels and delays depend on the value and type of capacitor used.
---- ```
----@return number imeas The measured current
----@param levelv number Voltage level to step to when this function is called
----@param limiti number Current limit setting for the voltage step
----@param sourcedelay number Delay to wait before lowering the current limit for measurement
----@param measurei number Current limit (and measure range); the current limit is lower at this level and because high-capacitance mode is active, the measure range follows
----@param measuredelay number Delay to wait after lowering the current limit before making the measurement
-function i_leakage_measure(smuX, levelv, limiti, sourcedelay, measurei, measuredelay) end
-
-
---- **This KIHighC factory script function measures the current and compares it to a threshold. This continues until either the measured current drops below the threshold or the timeout expires.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- This function causes the SMU to:When testing the leakage current threshold:
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12953.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- smua.source.highc = smua.ENABLE
---- smua.source.levelv = 5
---- smua.source.output = smua.OUTPUT_ON
---- delay(1)
---- pass = i_leakage_threshold(smua, 0, 1, 300e-3, 10e-6, 100e-3, 1e-6, 1)
---- 
---- --Enable high-capacitance mode.
---- --Charge the capacitor. 
---- -- 
---- --The parameters passed on to the i_threshold_measure() function in this example are:
---- --smu = smua
---- --levelv = 0 V
---- --limiti = 1 A
---- --sourcedelay = 300 ms
---- --measurei = 10 µA range
---- --measuredelay = 100 ms
---- --threshold = 1 µA
---- --timeout = 1 s
---- --The levels and delays depend on the value and type of capacitor used.
---- --Sets pass = true if the current is measured below 1 µA in less than 1 second.
---- ```
----@return boolean f A Boolean flag; this flag is true when the current is below the threshold, false if threshold is not reached before timeout expires
----@param levelv number Voltage level to step to when this function is called
----@param limiti number Current limit setting for the voltage step
----@param sourcedelay number Delay to wait before lowering the current limit for measurement
----@param measurei number Current limit (and measure range); the current limit is lower at this level and because high-capacitance mode is active, the measure range follows
----@param measuredelay number Delay before the first measurement after measure range is changed
----@param threshold number The specified current that establishes the test limit
----@param timeout number Amount of time (in seconds) to wait for the current to drop to threshold after all the delays have occurred
-function i_leakage_threshold(smuX, levelv, limiti, sourcedelay, measurei, measuredelay, threshold, timeout) end
-
-
---- **This KIParlib factory script function performs a linear voltage sweep and calculates the transconductance (Gm) at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Output data includes transconductance values, reading buffer with measured currents, reading buffer with measured currents and voltages.The gm_vsweep() function performs a linear voltage sweep, measuring voltage and current, and then calculating the transconductance (Gm) at each point using the central difference method. It can return an array of Gm values, a reading buffer with the measured currents, and a reading buffer with the measured voltages.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12955.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- gm_array = gm_vsweep(smua, 0, 5, 20)
----  
---- gm_array, ibuf = gm_vsweep(smua, 0, 5, 20)
----  
----  
---- gm_array, ibuf, vbuf = gm_vsweep(smua, 0, 5, 20)
---- 
---- --SMU A returns Gm values only.
---- -- 
---- --SMU A returns Gm and reading buffer with measured currents.
---- -- 
---- --SMU A returns Gm and reading buffers with measured currents and voltages.
---- ```
----@return any gm_array A Lua table containing the calculated Gm values at each point
----@return any ibuf A reading buffer containing the measured current at each point
----@return any vbuf A reading buffer containing the measured voltage at each point
----@param smu any Instrument channel (for example, smua refers to SMU channel A)
----@param start_v any Starting voltage level of the sweep 
----@param stop_v any Ending voltage level of the sweep 
----@param points any Number of measurements between start_v and stop_v (must be ≥ 2)
-function gm_vsweep(smu, start_v, stop_v, points) end
-
-
---- **This KIParlib factory script function performs a linear current sweep and calculates the transconductance (Gm) at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Output data includes transconductance values, reading buffer with measured voltages, reading buffer with measured voltages and currents.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.The gm_isweep() function performs a linear current sweep, measuring voltage and current, and then calculating the transconductance (Gm) at each point using the central difference method. It can return an array of Gm values, a reading buffer with the measured voltages, and a reading buffer with the measured currents.
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12957.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- gm_array = gm_isweep(smua, 0, 0.01, 20)
----  
----  
---- gm_array, vbuf = gm_isweep(smua, 0, 0.01, 20)
----  
----  
---- gm_array, vbuf, ibuf = gm_isweep(smua, 0,
----    0.01, 20)
---- 
---- --Source‑measure unit (SMU) A returns Gm values only.
---- -- 
---- --SMU A returns Gm and reading buffer with measured voltages.
---- -- 
---- --SMU A returns Gm and reading buffers with measured voltages and currents.
---- ```
----@return any gm_array A Lua table containing the calculated Gm values at each point
----@return number vbuf A reading buffer containing the measured voltage at each point
----@return number ibuf A reading buffer containing the measured current at each point
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param start_i number Starting current level of the sweep 
----@param stop_i number Ending current level of the sweep 
----@param points number Number of measurements between start_i and stop_i (must be ≥2)
-function gm_isweep(smu, start_i, stop_i, points) end
-
-
---- **This KISavebuffer factory script function saves a specified reading buffer as either a CSV file or an XML file.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Use this function to save the specified buffer to a USB flash drive.This function only saves to a USB flash drive. You are not required to qualify the path to the USB flash drive, but you can add /usb1/ before the fileName (see Example 2).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/12959.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- savebuffer(smua.nvbuffer1, "csv", "mybuffer.csv")
---- 
---- --Save smua dedicated reading buffer 1 as a CSV file named mybuffer.csv.
---- savebuffer(smua.nvbuffer1, "csv", "/usb1/mybuffer.csv")
---- 
---- --Save smua dedicated reading buffer 1 to an installed USB flash drive as a CSV file named mybuffer.csv.
---- ```
----@param buffer any The reading buffer to save
----@param formatType string A string indicating which file type to use
----@param fileName string The file name of the saved buffer
-function savebuffer(buffer, formatType, fileName) end
+---@type number
+status.operation.instrument.trigger_blender.trigger_overrun.ptr = 0
 
 
 --- **This function resets commands to their default settings.**
@@ -17563,7 +17540,7 @@ function reset(system) end
 --- 
 --- --Sets the date and time to Mar 31, 2020 at 2:25 pm.
 --- ```
----@param time any The time in seconds since January 1, 1970 UTC
+---@param time number The time in seconds since January 1, 1970 UTC
 function settime(time) end
 
 
@@ -17739,13 +17716,14 @@ function file_object:flush() end
 --- --Reads data from the input file.
 --- ```
 ---@return number data1 First data read from the file
----@return number data2 Second data read from the file
+---@return any datan Last data read from the file
 ---@param format1 string A string or number indicating the first type of data to be read
----@param format2 string A string or number indicating the second type of data to be read
----@overload fun():data1:number, data2:number
----@overload fun(format1:string):data1:number, data2:number
----@overload fun(format1:string,...:any):data1:number, data2:number
-function file_object:read(format1, format2) end
+---@param formatn any A string or number indicating the last type of data to be read
+---@param ... any One or more entries (or values) separated by commas
+---@overload fun():data1:number, datan:any, ...:any
+---@overload fun(format1:string):data1:number, datan:any, ...:any
+---@overload fun(format1:string,format2:string):data1:number, datan:any, ...:any
+function file_object:read(format1, ..., formatn) end
 
 
 --- **This function sets and gets the present position of a file.**
@@ -17784,12 +17762,12 @@ function file_object:read(format1, format2) end
 --- 
 --- --Get the present position of a file.
 --- ```
----@return any position The new file position, measured in bytes from the beginning of the file
+---@return string position The new file position, measured in bytes from the beginning of the file
 ---@return string errorMsg A string containing the error message
 ---@param whence string A string indicating the base against which offset is applied; the default is "cur"
 ---@param offset number The intended new position, measured in bytes from a base indicated by whence (default is 0)
----@overload fun():position:any, errorMsg:string
----@overload fun(whence:string):position:any, errorMsg:string
+---@overload fun():position:string, errorMsg:string
+---@overload fun(whence:string):position:string, errorMsg:string
 function file_object:seek(whence, offset) end
 
 
@@ -17826,10 +17804,11 @@ function file_object:seek(whence, offset) end
 --- --Write data to a file.
 --- ```
 ---@param data1 string The first data to write to the file
----@param data2 string The second data to write to the file
+---@param datan any The last data to write to the file
+---@param ... any One or more entries (or values) separated by commas
 ---@overload fun(data:any)
----@overload fun(data1:string,...:any)
-function file_object:write(data1, data2) end
+---@overload fun(data1:string,data2:string)
+function file_object:write(data1, ..., datan) end
 
 
 --- **This function retrieves the local time zone.**
@@ -17991,10 +17970,8 @@ function opc() end
 --- --2.54e+00, 2.54e+00, 3.10e+00
 --- ```
 ---@param value1 number First value to print in the configured format
----@param value2 number Second value to print in the configured format
----@overload fun(value1:number)
----@overload fun(value1:number,...:any)
-function printnumber(value1, value2) end
+---@param ... number One or more values separated with commas
+function printnumber(value1, ...) end
 
 
 --- **This function generates a response message.**
@@ -18021,123 +17998,8 @@ function printnumber(value1, value2) end
 --- --true
 --- ```
 ---@param value1 any The first argument to output
----@param value2 any The second argument to output
----@overload fun(value1:any)
----@overload fun(value1:any,...:any)
-function print(value1, value2) end
-
-
---- **This KISweep factory script function performs a voltage list sweep with current measured at every step (point).**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for current measurements, voltage source values, and timestamps are stored in smuX.nvbuffer1.If all parameters are omitted when this function is called, this function is executed with the parameters set to the default values.Performs a voltage list sweep with current measured at every step (point):
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/19138.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- myvlist = {-0.1, 0.1, -1, 1, -6, 6, -40, 40, 0, 0}
---- SweepVListMeasureI(smua, myvlist, 500E-3, 10)
---- 
---- --This function performs a 10‑point voltage list sweep starting at the first point in myvlist. Current is measured at every step (point) in the sweep. The source is allowed to settle on each step for 500 ms before a measurement is performed.
---- ```
----@param vlist table Arbitrary list of voltage source values; vlist = {value1, value2, ... valueN}
----@param stime number Settling time in seconds; occurs after stepping the source and before making a measurement
----@param points number Number of sweep points (must be ≥ 2)
-function SweepVListMeasureI(smuX, vlist, stime, points) end
-
-
---- **This KIPulse factory script function configures a voltage pulse train with a current measurement at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed voltage measurements are stored in the reading buffer specified by the buffer input parameter.This function configures a logarithmic pulsed current sweep with a voltage measurement at each point. Measurements are made at the end of the ton time.The magnitude of the first pulse is start amperes; the magnitude of the last pulse is stop amperes. The magnitude of each pulse in between is LogStepn amperes larger than the previous pulse, where:LogStepSize = (log10(stop) - log10(start)) / (points -1)LogStepn = (n - 1) * (LogStepSize), where n = [2, points]SourceStepLeveln = antilog(LogStepn) * startThis function does not cause the specified smu to output a pulse train. It simply checks to see if all of the pulse dimensions can be achieved, and if they can, assigns the indicated tag or index to the pulse train. To initiate a pulse train assigned to a valid tag, use InitiatePulseTest(tag) and InitiatePulseTestDual(tag1, tag2).
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/29313.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ConfigPulseIMeasureVSweepLog(smua, 0, 1e-3, 0.01, 1, 1e-3, 10e-3, 10,   smua.nvbuffer1, 5)
---- 
---- --Set up a pulsed logarithmic sweep that uses channel A. The pulsed sweep starts at 1 mA, ends at 10 mA, and returns to a 0 A bias level between pulses. Each pulsed step is on for 1 ms, and then at the bias level for 10 ms. The voltage limit is 1 V during the entire pulsed sweep. The pulse train is comprised of 10 pulsed steps, and the pulse train is assigned a tag index of 5.
---- ```
----@return boolean f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors were encountered 
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string indicating successful configuration
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in amperes
----@param start any Pulse sweep start level in amperes
----@param stop any Pulse sweep stop level in amperes
----@param limit number Voltage limit (for example, compliance) in volts
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
----@param buffer table Reading buffer where pulsed measurements are stored; if this is nil when the function is called, no measurements are made when the pulse train is initiated
----@param tag number Numeric identifier to be assigned to the defined pulse train
----@param sync_in number Defines a digital I/O trigger input line; if programmed, the pulse train waits for a trigger input before executing each pulse
----@param sync_out any Defines a digital I/O trigger output line; if programmed, the pulse train generates a trigger output immediately before the start of ton
----@param sync_in_timeout number Specifies the length of time (in seconds) to wait for input trigger; default value is 10 s
----@param sync_in_abort number Specifies whether or not to abort pulse if input trigger is not received; if pulse aborts because of a missed trigger, a timer timeout message is returned; true or false 
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any):f:boolean, msg:string
----@overload fun(smu:table,bias:number,start:any,stop:any,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any,sync_in_timeout:number):f:boolean, msg:string
-function ConfigPulseIMeasureVSweepLog(smu, bias, start, stop, limit, ton, toff, points, buffer, tag, sync_in, sync_out, sync_in_timeout, sync_in_abort) end
-
-
---- **This KIPulse factory script function configures a voltage pulse train with a current measurement at each point.**
----
---- *Type:*  Function
----
---- *Details:*<br>
---- Data for pulsed current measurements are stored in the reading buffer specified by the buffer input parameter.This function configures a voltage pulse train with a current measurement at each point. Measurements are made at the end of the ton time. This function does not cause the specified smu to output a pulse train. It does check to see if all the pulse dimensions can be achieved, and if they can, assigns the indicated tag or index to the pulse train. To initiate a pulse train assigned to a valid tag, use InitiatePulseTest(tag) and InitiatePulseTestDual(tag1, tag2) .
----
----[command help](command:kic.viewHelpDocument?["Commands_26XX/29314.htm"])
----
----<br>*Examples:*<br>
---- ```lua
---- ConfigPulseVMeasureI(smua, 0, 20, 1, 0.001, 0.080, 10, smua.nvbuffer1, 2)
---- 
---- --Set up a pulse train that uses channel A. The pulse amplitude is 20 V and returns to 0 V after 1 ms. The pulse remains at 0 V for 80 ms, and the current limit is 1 A during the pulse. The pulse train consists of 10 pulses, and the pulse train is assigned a tag index of 2.
---- local timelist = { 1, 2, 3, 4, 5 }
----  
---- f, msg = ConfigPulseVMeasureI(smua, 0, 1,
----    100e-3, 1, timelist, 5, nil, 1)
---- 
---- --Variable off time between pulses in a pulse train.
---- --Configure a pulse with 1 second on-time and variable off-time, no measurement.
---- rbi = smua.makebuffer(10)
---- rbv = smua.makebuffer(10)
---- rbi.appendmode = 1
---- rbv.appendmode = 1
---- rbs = { i = rbi, v = rbv }
----  
---- f, msg = ConfigPulseVMeasureI(smua, 0, 10, 1e-3, 1e-3, 1e-3, 2, rbs, 1)
---- 
---- --Simultaneous IV measurement during pulse.
---- ```
----@return boolean f A Boolean flag; this flag is true when the pulse was successfully configured, false when errors were encountered 
----@return string msg A string message; if the f flag is false, msg contains an error message; if it is true, msg contains a string indicating successful configuration
----@param smu table Instrument channel (for example, smua refers to SMU channel A)
----@param bias number Bias level in volts
----@param level number Pulse level in volts
----@param limit number Current limit (for example, compliance) in amperes
----@param ton number Pulse on time in seconds
----@param toff number Pulse off time in seconds
----@param points number Number of pulse-measure cycles
----@param buffer table Reading buffer where pulsed measurements are stored; if this is nil when the function is called, no measurements are made when the pulse train is initiated
----@param tag number Numeric identifier to be assigned to the defined pulse train
----@param sync_in number Defines a digital I/O trigger input line; if programmed, the pulse train waits for a trigger input before executing each pulse
----@param sync_out any Defines a digital I/O trigger output line; if programmed, the pulse train generates a trigger output immediately before the start of ton
----@param sync_in_timeout number Specifies the length of time (in seconds) to wait for input trigger; default value is 10 s
----@param sync_in_abort number Specifies whether or not to abort pulse if input trigger is not received; if pulse aborts because of a missed trigger, a timer timeout message is returned; true or false
----@overload fun(smu:table,bias:number,level:number,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,level:number,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number):f:boolean, msg:string
----@overload fun(smu:table,bias:number,level:number,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any):f:boolean, msg:string
----@overload fun(smu:table,bias:number,level:number,limit:number,ton:number,toff:number,points:number,buffer:table,tag:number,sync_in:number,sync_out:any,sync_in_timeout:number):f:boolean, msg:string
-function ConfigPulseVMeasureI(smu, bias, level, limit, ton, toff, points, buffer, tag, sync_in, sync_out, sync_in_timeout, sync_in_abort) end
+---@param ... any One or more values separated with commas
+function print(value1, ...) end
 
 
 --- **This function prints data from tables or reading buffer subtables.**
@@ -18160,10 +18022,8 @@ function ConfigPulseVMeasureI(smu, bias, level, limit, ton, toff, points, buffer
 --- --Example of output data (rb1.readings):
 --- --4.07205e-05, 4.10966e-05, 4.06867e-05, 4.08865e-05, 4.08220e-05, 4.08988e-05, 4.08250e-05, 4.09741e-05, 4.07174e-05, 4.07881e-05
 --- ```
----@param startIndex number Beginning index of the buffer to print; this must be more than one and less than endIndex
----@param endIndex number Ending index of the buffer to print; this must be more than startIndex and less than the index of the last entry in the tables
+---@param startIndex integer Beginning index of the buffer to print; this must be more than one and less than endIndex
+---@param endIndex integer Ending index of the buffer to print; this must be more than startIndex and less than the index of the last entry in the tables
 ---@param bufferVar bufferVar First table or reading buffer subtable to print
----@param bufferVar2 bufferVar Second table or reading buffer subtable to print
----@overload fun(startIndex:number,endIndex:number,bufferVar:bufferVar)
----@overload fun(startIndex:number,endIndex:number,bufferVar:bufferVar,...:any)
-function printbuffer(startIndex, endIndex, bufferVar, bufferVar2) end
+---@param ... bufferVar One or more tables or reading buffer subtables separated with commas
+function printbuffer(startIndex, endIndex, bufferVar, ...) end

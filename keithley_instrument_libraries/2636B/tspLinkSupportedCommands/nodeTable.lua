@@ -1,8 +1,7 @@
 ---@meta
 
----@class 2636B
-2636B = {settime = settime,
- beeper = beeper,
+---@class model2636B
+model2636B = {beeper = beeper,
  dataqueue = dataqueue,
  digio = digio,
  display = display,
@@ -13,7 +12,6 @@
  io = io,
  lan = lan,
  localnode = localnode,
- gettimezone = gettimezone,
  serial = serial,
  setup = setup,
  smua = smua,
@@ -24,8 +22,7 @@
  tsplink = tsplink,
  trigger = trigger,
  status = status,
- os = os,
- script = script
+ os = os
 }
 --#region node details
 --#endregion

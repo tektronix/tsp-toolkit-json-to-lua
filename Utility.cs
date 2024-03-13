@@ -356,19 +356,24 @@ namespace jsonToLuaParser
 
             if (cmd.command_type == CommandType.Function)
             {
+                List<string> command_returns = cmd.command_return.ToUpper().Split(',')
+                                          .Select(st => st.Trim())
+                                          .ToList();
+
+                int start = cmd.signature.IndexOf("(") + 1;
+                int end = cmd.signature.IndexOf(")", start);
+                string[] s;
+                try
+                {
+                    s = cmd.signature.ToUpper().Substring(start, end - start).Replace(" ", "").Split(',');
+                }
+                catch (System.Exception)
+                {
+                    s = new string[] { };
+                }
                 foreach (var param in cmd.param_info)
                 {
-                    int start = cmd.signature.IndexOf("(") + 1;
-                    int end = cmd.signature.IndexOf(")", start);
-                    string[] s;
-                    try
-                    {
-                        s = cmd.signature.ToUpper().Substring(start, end - start).Replace(" ", "").Split(',');
-                    }
-                    catch (System.Exception)
-                    {
-                        s = new string[] { };
-                    }
+                    
                     if (s.Contains(param.Name.ToUpper()))
                     {
                         string temp = "\"" + param.Name + "\"";
@@ -380,7 +385,7 @@ namespace jsonToLuaParser
                         command_help += " " + param.Type + " ";
                         command_help += param.Description + "\n";
                     }
-                    else if (cmd.command_return.ToUpper().Contains(param.Name.ToUpper()))
+                    else if (command_returns.Contains(param.Name.ToUpper()))
                     {
                         command_help += "---@return ";
 

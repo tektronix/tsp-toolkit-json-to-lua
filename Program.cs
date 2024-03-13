@@ -84,14 +84,22 @@ namespace jsonToLuaParser
             for (int i = 0; i < MAX_DEPT; i++)
             {
                 instrTable[i] = new Dictionary<string, Dictionary<string, CommandInfo>>();
-            }      
+            }
+
+            var factoryScriptCommands = cmdList.Where(cmd => cmd.description.Contains("factory script")).ToList(); // get factoryScriptCommands and remove it, its there for 26xx models
+
+            cmdList = cmdList.Except(factoryScriptCommands).ToList(); // remove all factoryScriptCommands commands
+
             var directFunctioncommands = cmdList.Where(cmd => !cmd.name.Contains('.')).ToList();
 
             var triggerModelLoadCommands = cmdList.Where(cmd => cmd.name.Contains("trigger.model.load()")).ToList(); // get trigger.model.load() commands
 
             var bufferMathCommand = cmdList.Where(cmd => cmd.name.Contains("buffer.math()")).ToList();
 
-       
+           
+
+            cmdList = cmdList.Except(directFunctioncommands).ToList(); // remove all directFunctioncommands commands and handle it speratley
+
             cmdList = cmdList.Except(triggerModelLoadCommands).ToList(); // remove all trigger.model.load() commands and handle it speratley
 
             cmdList = cmdList.Except(bufferMathCommand).ToList(); // remove "buffer.math()" commands and handle it speratley
@@ -189,7 +197,7 @@ function trigger.model.load(loadFunConst,...) end";
             nodeTable.Remove("node[N] = node[N]"); // for now removing this command from nodeTable because its creating problem in lua definitions
             nodeTable.Remove("slot[slot] = slot[slot]"); // for now removing this command from nodeTable because its creating problem in lua definition
             var nodeTable_str = @"{" + string.Join(",\n ", nodeTable) + "\n}";
-            var nodeTableDetails = $"---@meta\n\n---@class {file_name}\n{file_name} = {nodeTable_str}" +
+            var nodeTableDetails = $"---@meta\n\n---@class model{file_name}\nmodel{file_name} = {nodeTable_str}" +
                 $"\n--#region node details\n--#endregion";
 
 
