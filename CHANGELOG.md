@@ -16,7 +16,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
     Security -- in case of vulnerabilities.
 -->
 
-## Unreleased
+
+## [0.14.2]
+
+### Added
+- 2600B series SMU language support has been added
+### Fixed
+- Beta priority command set for 2600B series SMU definitions has been verified and found issue is corrected(TSP-589)
+- Enum order issue has been corrected
+
+## [0.14.1]
+
+### Fixed
+- TTI model(2450, 2460, 2461, 2470, DMM7510) command set has been verified and found issue is corrected(TSP-569)
 
 
 
@@ -30,7 +42,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Language feature has been added for DAQ6510 and DMM6500 command set(TSP-304)
 - Language feature has been added for 24XX and DMM7510 command set(TSP-232)
 
-## [0.14.1]
 
-### Fixed
-- TTI model(2450, 2460, 2461, 2470, DMM7510) command set has been verifyed and found issue is corrected(TSP-569)
+
+[0.14.2]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.14.2
+[0.14.1]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.14.1
+[0.11.2]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.11.2
