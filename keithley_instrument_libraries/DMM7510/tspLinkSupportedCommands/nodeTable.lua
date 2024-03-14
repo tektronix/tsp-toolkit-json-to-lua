@@ -1,7 +1,7 @@
 ---@meta
 
----@class DMM7510
-DMM7510 = {dataqueue = dataqueue,
+---@class modelDMM7510
+modelDMM7510 = {dataqueue = dataqueue,
  fs = fs,
  lan = lan,
  localnode = localnode,

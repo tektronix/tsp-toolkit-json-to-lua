@@ -204,16 +204,6 @@ function trigger.model.load(loadFunConst,...) end";
             if (file_name.Contains("26"))
             {
 
-                Utility.append_nvbuffer_type(ref outStr, "smua.nvbuffer1 = 0");
-                Utility.append_nvbuffer_type(ref outStr, "smua.nvbuffer2 = 0");
-                Utility.append_nvbuffer_type(ref outStr, "smub.nvbuffer1 = 0");
-                Utility.append_nvbuffer_type(ref outStr, "smub.nvbuffer2 = 0");
-
-                Utility.append_nvbuffer_type(ref tsplinkStr, "smua.nvbuffer1 = 0");
-                Utility.append_nvbuffer_type(ref tsplinkStr, "smua.nvbuffer2 = 0");
-                Utility.append_nvbuffer_type(ref tsplinkStr, "smub.nvbuffer1 = 0");
-                Utility.append_nvbuffer_type(ref tsplinkStr, "smub.nvbuffer2 = 0");
-
             }
 
             else if (file_name.Contains("37"))

@@ -1,6 +1,6 @@
 {
   "name": "@tek-engineering/keithley_instrument_libraries",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "",
   "main": "index.js",
   "scripts": {

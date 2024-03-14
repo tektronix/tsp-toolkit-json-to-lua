@@ -429,28 +429,28 @@ tspnet.timeout = 0
 ---@param inputString string The string to be written
 function tspnet.write(connectionID, inputString) end
 
-tspnet.TERM_CR = nil
-tspnet.TERM_LFCR = nil
 tspnet.TERM_LF = nil
+tspnet.TERM_CR = nil
 tspnet.TERM_CRLF = nil
+tspnet.TERM_LFCR = nil
 
 ---@alias tspnetterminationtype
----|`tspnet.TERM_CR`
----|`tspnet.TERM_LFCR`
 ---|`tspnet.TERM_LF`
+---|`tspnet.TERM_CR`
 ---|`tspnet.TERM_CRLF`
+---|`tspnet.TERM_LFCR`
 
 
-tspnet.TERM_CR = nil
-tspnet.TERM_LFCR = nil
 tspnet.TERM_LF = nil
+tspnet.TERM_CR = nil
 tspnet.TERM_CRLF = nil
+tspnet.TERM_LFCR = nil
 
 ---@alias tspnetterminationtermSequence
----|`tspnet.TERM_CR`
----|`tspnet.TERM_LFCR`
 ---|`tspnet.TERM_LF`
+---|`tspnet.TERM_CR`
 ---|`tspnet.TERM_CRLF`
+---|`tspnet.TERM_LFCR`
 
 
 
@@ -910,12 +910,12 @@ lan = {}
 ---@type number
 lan.lxidomain = 0
 
-lan.MODE_MANUAL = nil
 lan.MODE_AUTO = nil
+lan.MODE_MANUAL = nil
 
 ---@alias lanipconfigmethod
----|`lan.MODE_MANUAL`
 ---|`lan.MODE_AUTO`
+---|`lan.MODE_MANUAL`
 
 
 
@@ -1113,15 +1113,15 @@ localnode.model = ''
 ---@overload fun()
 function localnode.settime(year, month, day, hour, minute, second) end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
 eventlog.SEV_ALL = nil
 
 ---@alias localnodeshoweventserrorMode
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ALL`
 
 
@@ -1145,7 +1145,7 @@ eventlog.SEV_ALL = nil
 --- --1805, Settings conflict: setting input edge when line 3 set for digital
 --- ```
 ---@type localnodeshoweventserrorMode
-localnode.showevents = eventlog.SEV_INFO
+localnode.showevents = eventlog.SEV_ERROR
 
 
 --- **This function retrieves the instrument date and time.**
@@ -1228,16 +1228,16 @@ localnode.serialno = ''
 ---@type number
 localnode.linefreq = 0
 
-localnode.ACCESS_LOCKOUT = nil
-localnode.ACCESS_PROTECTED = nil
 localnode.ACCESS_FULL = nil
 localnode.ACCESS_EXCLUSIVE = nil
+localnode.ACCESS_PROTECTED = nil
+localnode.ACCESS_LOCKOUT = nil
 
 ---@alias localnodeaccessaccessType
----|`localnode.ACCESS_LOCKOUT`
----|`localnode.ACCESS_PROTECTED`
 ---|`localnode.ACCESS_FULL`
 ---|`localnode.ACCESS_EXCLUSIVE`
+---|`localnode.ACCESS_PROTECTED`
+---|`localnode.ACCESS_LOCKOUT`
 
 
 
@@ -1261,7 +1261,7 @@ localnode.ACCESS_EXCLUSIVE = nil
 --- --Log out of the interface.
 --- ```
 ---@type localnodeaccessaccessType
-localnode.access = localnode.ACCESS_LOCKOUT
+localnode.access = localnode.ACCESS_FULL
 
 localnode.DISABLE = nil
 localnode.ENABLE = nil
@@ -1609,12 +1609,12 @@ trigger.CLEAR_NEVER = nil
 ---|`trigger.CLEAR_NEVER`
 
 
-trigger.WAIT_OR = nil
 trigger.WAIT_AND = nil
+trigger.WAIT_OR = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_WAITlogic
----|`trigger.WAIT_OR`
 ---|`trigger.WAIT_AND`
+---|`trigger.WAIT_OR`
 
 
 
@@ -1639,8 +1639,8 @@ trigger.WAIT_AND = nil
 ---    ```trigger.CLEAR_ENTER```<br>
 ---    ```trigger.CLEAR_NEVER```<br>
 --- - *logic*: If each event must occur before the trigger model continues<br>
----    ```trigger.WAIT_OR```<br>
 ---    ```trigger.WAIT_AND```<br>
+---    ```trigger.WAIT_OR```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_WAIT, event)
@@ -1906,40 +1906,40 @@ trigger.BLOCK_BRANCH_COUNTER = 0
 trigger.BLOCK_BRANCH_ON_EVENT = 0
 
 
-trigger.LIMIT_OUTSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_BELOW = nil
 trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitType
----|`trigger.LIMIT_OUTSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_BELOW`
 ---|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
-trigger.LIMIT_OUTSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_BELOW = nil
 trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitA
----|`trigger.LIMIT_OUTSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_BELOW`
 ---|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
-trigger.LIMIT_OUTSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_BELOW = nil
 trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitB
----|`trigger.LIMIT_OUTSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_BELOW`
 ---|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
 
@@ -1960,20 +1960,20 @@ trigger.LIMIT_ABOVE = nil
 --- ```
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *limitA*: The lower limit that the measurement is tested against; if limitType is set to<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *limitB*: The upper limit that the measurement is tested against; if limitType is set to<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the defined criteria<br>
 --- - *measureBlock*: The block number of the measure/digitize block that makes the measurements to be compared; if this is 0 or undefined, the trigger model uses the previous measure/digitize block<br>
 --
@@ -2094,16 +2094,16 @@ trigger.BLOCK_NOTIFY = 0
 trigger.BLOCK_BRANCH_ALWAYS = 0
 
 
-trigger.LIMIT_OUTSIDE = nil
+trigger.LIMIT_ABOVE = nil
 trigger.LIMIT_BELOW = nil
 trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_DYNAMIClimitType
----|`trigger.LIMIT_OUTSIDE`
+---|`trigger.LIMIT_ABOVE`
 ---|`trigger.LIMIT_BELOW`
 ---|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
 
@@ -2124,10 +2124,10 @@ trigger.LIMIT_ABOVE = nil
 --- ```
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
+---    ```trigger.LIMIT_ABOVE```<br>
 ---    ```trigger.LIMIT_BELOW```<br>
 ---    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *limitNumber*: The limit number (1 or 2)<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the criteria set in the configuration list<br>
 --- - *measureBlock*: The block number of the measure/digitize block that makes the measurements to be compared; if this is 0 or undefined, the trigger model uses the previous measure/digitize block<br>
@@ -2158,16 +2158,16 @@ trigger.BLOCK_BRANCH_LIMIT_DYNAMIC = 0
 trigger.BLOCK_DELAY_CONSTANT = 0
 
 
-trigger.LOG_WARN_ABORT = nil
 trigger.LOG_INFO = nil
-trigger.LOG_ERROR = nil
 trigger.LOG_WARN = nil
+trigger.LOG_ERROR = nil
+trigger.LOG_WARN_ABORT = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_LOG_EVENTeventNumber
----|`trigger.LOG_WARN_ABORT`
 ---|`trigger.LOG_INFO`
----|`trigger.LOG_ERROR`
 ---|`trigger.LOG_WARN`
+---|`trigger.LOG_ERROR`
+---|`trigger.LOG_WARN_ABORT`
 
 
 
@@ -2189,10 +2189,10 @@ trigger.LOG_WARN = nil
 --- ```
 --- Additional paramteres are:
 --- - *eventNumber*: The event number<br>
----    ```trigger.LOG_WARN_ABORT```<br>
 ---    ```trigger.LOG_INFO```<br>
----    ```trigger.LOG_ERROR```<br>
 ---    ```trigger.LOG_WARN```<br>
+---    ```trigger.LOG_ERROR```<br>
+---    ```trigger.LOG_WARN_ABORT```<br>
 --- - *message*: A string up to 31 characters<br>
 trigger.BLOCK_LOG_EVENT = 0
 
@@ -2256,14 +2256,14 @@ trigger.BLOCK_NOP = 0
 trigger.BLOCK_RESET_BRANCH_COUNT = 0
 
 
-trigger.CONT_RESTART = nil
 trigger.CONT_OFF = nil
 trigger.CONT_AUTO = nil
+trigger.CONT_RESTART = nil
 
 ---@alias triggercontinuoussetting
----|`trigger.CONT_RESTART`
 ---|`trigger.CONT_OFF`
 ---|`trigger.CONT_AUTO`
+---|`trigger.CONT_RESTART`
 
 
 
@@ -2283,7 +2283,7 @@ trigger.CONT_AUTO = nil
 --- --When the instrument starts up, the measurement method is set to idle.
 --- ```
 ---@type triggercontinuoussetting
-trigger.continuous = trigger.CONT_RESTART
+trigger.continuous = trigger.CONT_OFF
 ---@class dmm
 dmm = {}
 
@@ -2510,17 +2510,17 @@ buffer = {}
 function buffer.getstats(bufferVar, absStartTime, absStartFractional, absEndTime, absEndFractional) end
 
 buffer.STYLE_COMPACT = nil
-buffer.STYLE_WRITABLE = nil
-buffer.STYLE_FULL = nil
-buffer.STYLE_WRITABLE_FULL = nil
 buffer.STYLE_STANDARD = nil
+buffer.STYLE_FULL = nil
+buffer.STYLE_WRITABLE = nil
+buffer.STYLE_WRITABLE_FULL = nil
 
 ---@alias buffermakestyle
 ---|`buffer.STYLE_COMPACT`
----|`buffer.STYLE_WRITABLE`
----|`buffer.STYLE_FULL`
----|`buffer.STYLE_WRITABLE_FULL`
 ---|`buffer.STYLE_STANDARD`
+---|`buffer.STYLE_FULL`
+---|`buffer.STYLE_WRITABLE`
+---|`buffer.STYLE_WRITABLE_FULL`
 
 
 
@@ -3187,12 +3187,12 @@ bufferVar.fractionalseconds = {}
 ---@type number[]
 bufferVar.readings = {}
 
-buffer.ON = nil
 buffer.OFF = nil
+buffer.ON = nil
 
 ---@alias bufferVarlogstatelogState
----|`buffer.ON`
 ---|`buffer.OFF`
+---|`buffer.ON`
 
 
 
@@ -3217,7 +3217,7 @@ buffer.OFF = nil
 --- --0
 --- ```
 ---@type bufferVarlogstatelogState
-bufferVar.logstate = buffer.ON
+bufferVar.logstate = buffer.OFF
 
 
 --- **This attribute contains the status values of readings in the reading buffer.**
@@ -3512,15 +3512,15 @@ eventlog = {}
 
 
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
 eventlog.SEV_ALL = nil
 
 ---@alias eventlogsaveeventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ALL`
 
 
@@ -3560,15 +3560,15 @@ function eventlog.save(filename, eventType) end
 --- ```
 function eventlog.clear() end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
 eventlog.SEV_ALL = nil
 
 ---@alias eventlognexteventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ALL`
 
 
@@ -3600,15 +3600,15 @@ eventlog.SEV_ALL = nil
 ---@overload fun():eventNumber:integer, message:string, severity:integer, nodeID:integer, timeSeconds:integer, timeNanoSeconds:integer
 function eventlog.next(eventType) end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
 eventlog.SEV_ALL = nil
 
 ---@alias eventloggetcounteventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ALL`
 
 
@@ -3669,15 +3669,15 @@ eventlog.SEV_WARN = nil
 ---@overload fun(message:string)
 function eventlog.post(message, eventType) end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
 eventlog.SEV_ALL = nil
 
 ---@alias eventlogsuppresseventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ALL`
 
 
@@ -3705,12 +3705,12 @@ display = {}
 
 
 
-display.FORMAT_PREFIX = nil
 display.FORMAT_EXPONENT = nil
+display.FORMAT_PREFIX = nil
 
 ---@alias displayreadingformatformat
----|`display.FORMAT_PREFIX`
 ---|`display.FORMAT_EXPONENT`
+---|`display.FORMAT_PREFIX`
 
 
 
@@ -3730,14 +3730,14 @@ display.FORMAT_EXPONENT = nil
 --- --Change front-panel display to show readings in exponential format.
 --- ```
 ---@type displayreadingformatformat
-display.readingformat = display.FORMAT_PREFIX
+display.readingformat = display.FORMAT_EXPONENT
 
-display.TEXT2 = nil
 display.TEXT1 = nil
+display.TEXT2 = nil
 
 ---@alias displaysettextdisplayArea
----|`display.TEXT2`
 ---|`display.TEXT1`
+---|`display.TEXT2`
 
 
 
@@ -3788,32 +3788,32 @@ function display.settext(displayArea, text) end
 --- ```
 function display.clear() end
 
-display.SCREEN_PROCESSING = nil
 display.SCREEN_HOME = nil
-display.SCREEN_FUNCTIONS_SWIPE = nil
-display.SCREEN_SECONDARY_SWIPE = nil
-display.SCREEN_STATS_SWIPE = nil
-display.SCREEN_USER_SWIPE = nil
-display.SCREEN_SETTINGS_SWIPE = nil
+display.SCREEN_HOME_LARGE_READING = nil
 display.SCREEN_READING_TABLE = nil
 display.SCREEN_GRAPH = nil
-display.SCREEN_HOME_LARGE_READING = nil
-display.SCREEN_GRAPH_SWIPE = nil
 display.SCREEN_HISTOGRAM = nil
+display.SCREEN_FUNCTIONS_SWIPE = nil
+display.SCREEN_GRAPH_SWIPE = nil
+display.SCREEN_SECONDARY_SWIPE = nil
+display.SCREEN_SETTINGS_SWIPE = nil
+display.SCREEN_STATS_SWIPE = nil
+display.SCREEN_USER_SWIPE = nil
+display.SCREEN_PROCESSING = nil
 
 ---@alias displaychangescreenscreenName
----|`display.SCREEN_PROCESSING`
 ---|`display.SCREEN_HOME`
----|`display.SCREEN_FUNCTIONS_SWIPE`
----|`display.SCREEN_SECONDARY_SWIPE`
----|`display.SCREEN_STATS_SWIPE`
----|`display.SCREEN_USER_SWIPE`
----|`display.SCREEN_SETTINGS_SWIPE`
+---|`display.SCREEN_HOME_LARGE_READING`
 ---|`display.SCREEN_READING_TABLE`
 ---|`display.SCREEN_GRAPH`
----|`display.SCREEN_HOME_LARGE_READING`
----|`display.SCREEN_GRAPH_SWIPE`
 ---|`display.SCREEN_HISTOGRAM`
+---|`display.SCREEN_FUNCTIONS_SWIPE`
+---|`display.SCREEN_GRAPH_SWIPE`
+---|`display.SCREEN_SECONDARY_SWIPE`
+---|`display.SCREEN_SETTINGS_SWIPE`
+---|`display.SCREEN_STATS_SWIPE`
+---|`display.SCREEN_USER_SWIPE`
+---|`display.SCREEN_PROCESSING`
 
 
 
@@ -3841,20 +3841,20 @@ display.SCREEN_HISTOGRAM = nil
 ---@param screenName displaychangescreenscreenName The screen to display
 function display.changescreen(screenName) end
 
+display.BUTTONS_NONE = nil
+display.BUTTONS_OK = nil
 display.BUTTONS_CANCEL = nil
+display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_YESNO = nil
 display.BUTTONS_YESNOCANCEL = nil
-display.BUTTONS_OK = nil
-display.BUTTONS_OKCANCEL = nil
-display.BUTTONS_NONE = nil
 
 ---@alias displaypromptbuttonID
+---|`display.BUTTONS_NONE`
+---|`display.BUTTONS_OK`
 ---|`display.BUTTONS_CANCEL`
+---|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_YESNO`
 ---|`display.BUTTONS_YESNOCANCEL`
----|`display.BUTTONS_OK`
----|`display.BUTTONS_OKCANCEL`
----|`display.BUTTONS_NONE`
 
 
 
@@ -3896,15 +3896,15 @@ display.BUTTONS_NONE = nil
 ---@param promptText string A string that contains the text that is displayed above the prompts
 function display.prompt(buttonID, promptText) end
 
-display.BUTTON_OK = nil
-display.BUTTON_NO = nil
 display.BUTTON_YES = nil
+display.BUTTON_NO = nil
+display.BUTTON_OK = nil
 display.BUTTON_CANCEL = nil
 
 ---@alias displaywaiteventsubID
----|`display.BUTTON_OK`
----|`display.BUTTON_NO`
 ---|`display.BUTTON_YES`
+---|`display.BUTTON_NO`
+---|`display.BUTTON_OK`
 ---|`display.BUTTON_CANCEL`
 
 
@@ -3947,20 +3947,20 @@ display.BUTTON_CANCEL = nil
 ---@overload fun():objectID:number, subID:displaywaiteventsubID
 function display.waitevent(timeout) end
 
-display.STATE_LCD_25 = nil
-display.STATE_LCD_50 = nil
-display.STATE_BLACKOUT = nil
-display.STATE_LCD_OFF = nil
 display.STATE_LCD_100 = nil
 display.STATE_LCD_75 = nil
+display.STATE_LCD_50 = nil
+display.STATE_LCD_25 = nil
+display.STATE_LCD_OFF = nil
+display.STATE_BLACKOUT = nil
 
 ---@alias displaylightstatebrightness
----|`display.STATE_LCD_25`
----|`display.STATE_LCD_50`
----|`display.STATE_BLACKOUT`
----|`display.STATE_LCD_OFF`
 ---|`display.STATE_LCD_100`
 ---|`display.STATE_LCD_75`
+---|`display.STATE_LCD_50`
+---|`display.STATE_LCD_25`
+---|`display.STATE_LCD_OFF`
+---|`display.STATE_BLACKOUT`
 
 
 
@@ -3980,7 +3980,7 @@ display.STATE_LCD_75 = nil
 --- --Set the display brightness to 50%.
 --- ```
 ---@type displaylightstatebrightness
-display.lightstate = display.STATE_LCD_25
+display.lightstate = display.STATE_LCD_100
 
 
 --- **This function allows you to remove a prompt on the front-panel display that was created with display.prompt().**
@@ -4047,13 +4047,13 @@ file = {}
 ---@param path string A string that contains the path of the directory
 function file.mkdir(path) end
 
-file.MODE_READ = nil
 file.MODE_APPEND = nil
+file.MODE_READ = nil
 file.MODE_WRITE = nil
 
 ---@alias fileopenaccessType
----|`file.MODE_READ`
 ---|`file.MODE_APPEND`
+---|`file.MODE_READ`
 ---|`file.MODE_WRITE`
 
 
@@ -4082,14 +4082,14 @@ file.MODE_WRITE = nil
 ---@param accessType fileopenaccessType The type of action to do
 function file.open(fileName, accessType) end
 
-file.READ_ALL = nil
-file.READ_NUMBER = nil
 file.READ_LINE = nil
+file.READ_NUMBER = nil
+file.READ_ALL = nil
 
 ---@alias filereadreadAction
----|`file.READ_ALL`
----|`file.READ_NUMBER`
 ---|`file.READ_LINE`
+---|`file.READ_NUMBER`
+---|`file.READ_ALL`
 
 
 
@@ -4336,14 +4336,14 @@ format.byteorder = format.BIGENDIAN
 ---@type number
 format.asciiprecision = 0
 
+format.ASCII = nil
 format.REAL32 = nil
 format.REAL64 = nil
-format.ASCII = nil
 
 ---@alias formatdatavalue
+---|`format.ASCII`
 ---|`format.REAL32`
 ---|`format.REAL64`
----|`format.ASCII`
 
 
 
@@ -4371,7 +4371,7 @@ format.ASCII = nil
 --- --#0ñÔÈSû!   @
 --- ```
 ---@type formatdatavalue
-format.data = format.REAL32
+format.data = format.ASCII
 ---@class beeper
 beeper = {}
 
@@ -4628,31 +4628,31 @@ acal = {}
 ---@type any
 acal.count = 0
 
-acal.ACTION_NONE = nil
 acal.ACTION_RUN = nil
 acal.ACTION_NOTIFY = nil
+acal.ACTION_NONE = nil
 
 ---@alias any
----|`acal.ACTION_NONE`
 ---|`acal.ACTION_RUN`
 ---|`acal.ACTION_NOTIFY`
+---|`acal.ACTION_NONE`
 
 
-acal.INTERVAL_1DAY = nil
-acal.INTERVAL_16HR = nil
-acal.INTERVAL_7DAY = nil
 acal.INTERVAL_8HR = nil
-acal.INTERVAL_30DAY = nil
+acal.INTERVAL_16HR = nil
+acal.INTERVAL_1DAY = nil
+acal.INTERVAL_7DAY = nil
 acal.INTERVAL_14DAY = nil
+acal.INTERVAL_30DAY = nil
 acal.INTERVAL_90DAY = nil
 
 ---@alias any
----|`acal.INTERVAL_1DAY`
----|`acal.INTERVAL_16HR`
----|`acal.INTERVAL_7DAY`
 ---|`acal.INTERVAL_8HR`
----|`acal.INTERVAL_30DAY`
+---|`acal.INTERVAL_16HR`
+---|`acal.INTERVAL_1DAY`
+---|`acal.INTERVAL_7DAY`
 ---|`acal.INTERVAL_14DAY`
+---|`acal.INTERVAL_30DAY`
 ---|`acal.INTERVAL_90DAY`
 
 
@@ -5149,12 +5149,12 @@ function triggertimerArr.wait(timeout) end
 ---@type number
 triggertimerArr.count = 0
 
-trigger.ON = nil
 trigger.OFF = nil
+trigger.ON = nil
 
 ---@alias triggertimerenablestate
----|`trigger.ON`
 ---|`trigger.OFF`
+---|`trigger.ON`
 
 
 
@@ -5174,7 +5174,7 @@ trigger.OFF = nil
 --- --Enable the trigger timer for timer 3.
 --- ```
 ---@type triggertimerenablestate
-triggertimerArr.enable = trigger.ON
+triggertimerArr.enable = trigger.OFF
 
 
 --- **This function resets trigger timer settings to their default values.**
@@ -5328,18 +5328,18 @@ dmm.measure.func = 0
 ---@overload fun():reading:number
 function dmm.measure.read(bufferName) end
 
+dmm.DIGITS_3_5 = nil
 dmm.DIGITS_4_5 = nil
+dmm.DIGITS_5_5 = nil
 dmm.DIGITS_6_5 = nil
 dmm.DIGITS_7_5 = nil
-dmm.DIGITS_5_5 = nil
-dmm.DIGITS_3_5 = nil
 
 ---@alias dmmmeasuredisplaydigitsvalue
+---|`dmm.DIGITS_3_5`
 ---|`dmm.DIGITS_4_5`
+---|`dmm.DIGITS_5_5`
 ---|`dmm.DIGITS_6_5`
 ---|`dmm.DIGITS_7_5`
----|`dmm.DIGITS_5_5`
----|`dmm.DIGITS_3_5`
 
 
 
@@ -5360,14 +5360,14 @@ dmm.DIGITS_3_5 = nil
 --- --Set the measurement function to voltage with a front-panel display resolution of 5½.
 --- ```
 ---@type dmmmeasuredisplaydigitsvalue
-dmm.measure.displaydigits = dmm.DIGITS_4_5
+dmm.measure.displaydigits = dmm.DIGITS_3_5
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasureautorangestate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -5388,7 +5388,7 @@ dmm.OFF = nil
 --- --Select the measurement function to be DC voltage. Set autorange on.
 --- ```
 ---@type dmmmeasureautorangestate
-dmm.measure.autorange = dmm.ON
+dmm.measure.autorange = dmm.OFF
 
 
 --- **This function determines the aperture setting for the selected function.**
@@ -5430,14 +5430,14 @@ dmm.measure.aperture = 0
 ---@type number
 dmm.measure.dbreference = 0
 
+dmm.DETECTBW_3HZ = nil
 dmm.DETECTBW_30HZ = nil
 dmm.DETECTBW_300HZ = nil
-dmm.DETECTBW_3HZ = nil
 
 ---@alias dmmmeasuredetectorbandwidthvalue
+---|`dmm.DETECTBW_3HZ`
 ---|`dmm.DETECTBW_30HZ`
 ---|`dmm.DETECTBW_300HZ`
----|`dmm.DETECTBW_3HZ`
 
 
 
@@ -5459,14 +5459,14 @@ dmm.DETECTBW_3HZ = nil
 --- --Set the bandwidth to 3 Hz.
 --- ```
 ---@type dmmmeasuredetectorbandwidthvalue
-dmm.measure.detectorbandwidth = dmm.DETECTBW_30HZ
+dmm.measure.detectorbandwidth = dmm.DETECTBW_3HZ
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -5487,21 +5487,21 @@ dmm.OFF = nil
 --- --Set the measure function to 4-wire resistance and enable dry circuit.
 --- ```
 ---@type any
-dmm.measure.drycircuit = dmm.ON
+dmm.measure.drycircuit = dmm.OFF
 
+dmm.RTD_PT100 = nil
+dmm.RTD_PT385 = nil
 dmm.RTD_PT3916 = nil
 dmm.RTD_D100 = nil
-dmm.RTD_PT100 = nil
 dmm.RTD_F100 = nil
-dmm.RTD_PT385 = nil
 dmm.RTD_USER = nil
 
 ---@alias dmmmeasurefourrtdRTDType
+---|`dmm.RTD_PT100`
+---|`dmm.RTD_PT385`
 ---|`dmm.RTD_PT3916`
 ---|`dmm.RTD_D100`
----|`dmm.RTD_PT100`
 ---|`dmm.RTD_F100`
----|`dmm.RTD_PT385`
 ---|`dmm.RTD_USER`
 
 
@@ -5526,21 +5526,21 @@ dmm.RTD_USER = nil
 --- --Set the RTD type to PT3916.
 --- ```
 ---@type dmmmeasurefourrtdRTDType
-dmm.measure.fourrtd = dmm.RTD_PT3916
+dmm.measure.fourrtd = dmm.RTD_PT100
 
-dmm.RTD_PT3916 = 3
-dmm.RTD_D100 = nil
-dmm.RTD_PT100 = nil
-dmm.RTD_F100 = nil
+dmm.RTD_PT100 = 3
 dmm.RTD_PT385 = nil
+dmm.RTD_PT3916 = nil
+dmm.RTD_D100 = nil
+dmm.RTD_F100 = nil
 dmm.RTD_USER = nil
 
 ---@alias dmmmeasurethreertdvalue
+---|`dmm.RTD_PT100`
+---|`dmm.RTD_PT385`
 ---|`dmm.RTD_PT3916`
 ---|`dmm.RTD_D100`
----|`dmm.RTD_PT100`
 ---|`dmm.RTD_F100`
----|`dmm.RTD_PT385`
 ---|`dmm.RTD_USER`
 
 
@@ -5565,17 +5565,17 @@ dmm.RTD_USER = nil
 --- --Set the RTD type to D100.
 --- ```
 ---@type dmmmeasurethreertdvalue
-dmm.measure.threertd = dmm.RTD_PT3916
+dmm.measure.threertd = dmm.RTD_PT100
 
-dmm.TRANS_THREERTD = nil
 dmm.TRANS_THERMOCOUPLE = nil
 dmm.TRANS_THERMISTOR = nil
+dmm.TRANS_THREERTD = nil
 dmm.TRANS_FOURRTD = nil
 
 ---@alias dmmmeasuretransducertype
----|`dmm.TRANS_THREERTD`
 ---|`dmm.TRANS_THERMOCOUPLE`
 ---|`dmm.TRANS_THERMISTOR`
+---|`dmm.TRANS_THREERTD`
 ---|`dmm.TRANS_FOURRTD`
 
 
@@ -5600,7 +5600,7 @@ dmm.TRANS_FOURRTD = nil
 --- --Set the RTD type to D100.
 --- ```
 ---@type dmmmeasuretransducertype
-dmm.measure.transducer = dmm.TRANS_THREERTD
+dmm.measure.transducer = dmm.TRANS_THERMOCOUPLE
 
 
 --- **This attribute contains the alpha value of a user-defined RTD.**
@@ -5706,14 +5706,14 @@ dmm.measure.rtddelta = 0
 ---@type number
 dmm.measure.rtdzero = 0
 
+dmm.THERM_2252 = nil
 dmm.THERM_5000 = nil
 dmm.THERM_10000 = nil
-dmm.THERM_2252 = nil
 
 ---@alias dmmmeasurethermistorvalue
+---|`dmm.THERM_2252`
 ---|`dmm.THERM_5000`
 ---|`dmm.THERM_10000`
----|`dmm.THERM_2252`
 
 
 
@@ -5737,25 +5737,25 @@ dmm.THERM_2252 = nil
 --- --Set the thermistor type to 2252.
 --- ```
 ---@type dmmmeasurethermistorvalue
-dmm.measure.thermistor = dmm.THERM_5000
+dmm.measure.thermistor = dmm.THERM_2252
 
-dmm.THERMOCOUPLE_J = nil
-dmm.THERMOCOUPLE_R = nil
-dmm.THERMOCOUPLE_E = nil
-dmm.THERMOCOUPLE_S = nil
 dmm.THERMOCOUPLE_B = nil
-dmm.THERMOCOUPLE_N = nil
+dmm.THERMOCOUPLE_E = nil
+dmm.THERMOCOUPLE_J = nil
 dmm.THERMOCOUPLE_K = nil
+dmm.THERMOCOUPLE_N = nil
+dmm.THERMOCOUPLE_R = nil
+dmm.THERMOCOUPLE_S = nil
 dmm.THERMOCOUPLE_T = nil
 
 ---@alias dmmmeasurethermocouplevalue
----|`dmm.THERMOCOUPLE_J`
----|`dmm.THERMOCOUPLE_R`
----|`dmm.THERMOCOUPLE_E`
----|`dmm.THERMOCOUPLE_S`
 ---|`dmm.THERMOCOUPLE_B`
----|`dmm.THERMOCOUPLE_N`
+---|`dmm.THERMOCOUPLE_E`
+---|`dmm.THERMOCOUPLE_J`
 ---|`dmm.THERMOCOUPLE_K`
+---|`dmm.THERMOCOUPLE_N`
+---|`dmm.THERMOCOUPLE_R`
+---|`dmm.THERMOCOUPLE_S`
 ---|`dmm.THERMOCOUPLE_T`
 
 
@@ -5780,16 +5780,16 @@ dmm.THERMOCOUPLE_T = nil
 --- --Set the thermocouple type to J.
 --- ```
 ---@type dmmmeasurethermocouplevalue
-dmm.measure.thermocouple = dmm.THERMOCOUPLE_J
+dmm.measure.thermocouple = dmm.THERMOCOUPLE_B
 
 dmm.REFJUNCTION_SIMULATED = nil
-dmm.REFJUNCTION_EXTERNAL = nil
 dmm.REFJUNCTION_INTERNAL = nil
+dmm.REFJUNCTION_EXTERNAL = nil
 
 ---@alias any
 ---|`dmm.REFJUNCTION_SIMULATED`
----|`dmm.REFJUNCTION_EXTERNAL`
 ---|`dmm.REFJUNCTION_INTERNAL`
+---|`dmm.REFJUNCTION_EXTERNAL`
 
 
 
@@ -5813,12 +5813,12 @@ dmm.REFJUNCTION_INTERNAL = nil
 ---@type any
 dmm.measure.refjunction = dmm.REFJUNCTION_SIMULATED
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -5838,14 +5838,14 @@ dmm.OFF = nil
 --- --Describe
 --- ```
 ---@type any
-dmm.measure.inputdivider = dmm.ON
+dmm.measure.inputdivider = dmm.OFF
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasurelinesyncstate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -5866,7 +5866,7 @@ dmm.OFF = nil
 --- --Set line synchronization on for DC current measurements.
 --- ```
 ---@type dmmmeasurelinesyncstate
-dmm.measure.linesync = dmm.ON
+dmm.measure.linesync = dmm.OFF
 
 
 --- **This attribute sets the number of measurements to make when a measurement is requested.**
@@ -5909,12 +5909,12 @@ dmm.measure.count = 0
 ---@type number
 dmm.measure.nplc = 0
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -5938,7 +5938,7 @@ dmm.OFF = nil
 --- --Set open lead detection off.
 --- ```
 ---@type any
-dmm.measure.opendetector = dmm.ON
+dmm.measure.opendetector = dmm.OFF
 
 
 --- **This attribute determines the positive full-scale measure range.**
@@ -5963,20 +5963,20 @@ dmm.measure.opendetector = dmm.ON
 ---@type number
 dmm.measure.range = 0
 
-dmm.UNIT_CELSIUS = nil
-dmm.UNIT_DBM = nil
-dmm.UNIT_FAHRENHEIT = nil
-dmm.UNIT_DB = nil
-dmm.UNIT_KELVIN = nil
 dmm.UNIT_VOLT = nil
+dmm.UNIT_DB = nil
+dmm.UNIT_DBM = nil
+dmm.UNIT_CELSIUS = nil
+dmm.UNIT_KELVIN = nil
+dmm.UNIT_FAHRENHEIT = nil
 
 ---@alias dmmmeasureunitvalue
----|`dmm.UNIT_CELSIUS`
----|`dmm.UNIT_DBM`
----|`dmm.UNIT_FAHRENHEIT`
----|`dmm.UNIT_DB`
----|`dmm.UNIT_KELVIN`
 ---|`dmm.UNIT_VOLT`
+---|`dmm.UNIT_DB`
+---|`dmm.UNIT_DBM`
+---|`dmm.UNIT_CELSIUS`
+---|`dmm.UNIT_KELVIN`
+---|`dmm.UNIT_FAHRENHEIT`
 
 
 
@@ -5997,7 +5997,7 @@ dmm.UNIT_VOLT = nil
 --- --Changes the front-panel display and buffer readings for voltage measurements to be displayed as decibel readings.
 --- ```
 ---@type dmmmeasureunitvalue
-dmm.measure.unit = dmm.UNIT_CELSIUS
+dmm.measure.unit = dmm.UNIT_VOLT
 
 dmm.DELAY_ON = nil
 dmm.DELAY_OFF = nil
@@ -6159,26 +6159,26 @@ trigger.model = {}
 --- ```
 function trigger.model.abort() end
 
-trigger.STATE_PAUSED = nil
-trigger.STATE_RUNNING = nil
 trigger.STATE_ABORTED = nil
 trigger.STATE_ABORTING = nil
-trigger.STATE_WAITING = nil
-trigger.STATE_IDLE = nil
+trigger.STATE_BUILDING = nil
 trigger.STATE_EMPTY = nil
 trigger.STATE_FAILED = nil
-trigger.STATE_BUILDING = nil
+trigger.STATE_IDLE = nil
+trigger.STATE_PAUSED = nil
+trigger.STATE_RUNNING = nil
+trigger.STATE_WAITING = nil
 
 ---@alias triggermodelstatestatus
----|`trigger.STATE_PAUSED`
----|`trigger.STATE_RUNNING`
 ---|`trigger.STATE_ABORTED`
 ---|`trigger.STATE_ABORTING`
----|`trigger.STATE_WAITING`
----|`trigger.STATE_IDLE`
+---|`trigger.STATE_BUILDING`
 ---|`trigger.STATE_EMPTY`
 ---|`trigger.STATE_FAILED`
----|`trigger.STATE_BUILDING`
+---|`trigger.STATE_IDLE`
+---|`trigger.STATE_PAUSED`
+---|`trigger.STATE_RUNNING`
+---|`trigger.STATE_WAITING`
 
 
 
@@ -6834,12 +6834,12 @@ digio.line = {}
 
 
 
-digio.STATE_HIGH = nil
 digio.STATE_LOW = nil
+digio.STATE_HIGH = nil
 
 ---@alias digiolinestatestate
----|`digio.STATE_HIGH`
 ---|`digio.STATE_LOW`
+---|`digio.STATE_HIGH`
 
 
 
@@ -6860,26 +6860,26 @@ digio.STATE_LOW = nil
 --- --Sets line 1 (bit B1) of the digital I/O port high.
 --- ```
 ---@type digiolinestatestate
-digiolineArr.state = digio.STATE_HIGH
+digiolineArr.state = digio.STATE_LOW
 
-digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
 digio.MODE_DIGITAL_IN = nil
-digio.MODE_SYNCHRONOUS_MASTER = nil
 digio.MODE_DIGITAL_OUT = nil
 digio.MODE_DIGITAL_OPEN_DRAIN = nil
-digio.MODE_TRIGGER_OPEN_DRAIN = nil
 digio.MODE_TRIGGER_IN = nil
 digio.MODE_TRIGGER_OUT = nil
+digio.MODE_TRIGGER_OPEN_DRAIN = nil
+digio.MODE_SYNCHRONOUS_MASTER = nil
+digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
 
 ---@alias digiolinemodelineMode
----|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
 ---|`digio.MODE_DIGITAL_IN`
----|`digio.MODE_SYNCHRONOUS_MASTER`
 ---|`digio.MODE_DIGITAL_OUT`
 ---|`digio.MODE_DIGITAL_OPEN_DRAIN`
----|`digio.MODE_TRIGGER_OPEN_DRAIN`
 ---|`digio.MODE_TRIGGER_IN`
 ---|`digio.MODE_TRIGGER_OUT`
+---|`digio.MODE_TRIGGER_OPEN_DRAIN`
+---|`digio.MODE_SYNCHRONOUS_MASTER`
+---|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
 
 
 
@@ -6899,7 +6899,7 @@ digio.MODE_TRIGGER_OUT = nil
 --- --Set digital I/O line 1 to be an output trigger line.
 --- ```
 ---@type digiolinemodelineMode
-digiolineArr.mode = digio.MODE_SYNCHRONOUS_ACCEPTOR
+digiolineArr.mode = digio.MODE_DIGITAL_IN
 
 
 --- **This function resets digital I/O line values to their factory defaults.**
@@ -6943,14 +6943,14 @@ trigger.digin = {}
 
 
 
-trigger.EDGE_EITHER = nil
 trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_EITHER = nil
 
 ---@alias triggerdiginedgedetectedEdge
----|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_EITHER`
 
 
 
@@ -6971,7 +6971,7 @@ trigger.EDGE_RISING = nil
 --- --Sets the trigger mode for digital I/O line 4 to detect a rising-edge trigger as an input.
 --- ```
 ---@type triggerdiginedgedetectedEdge
-triggerdiginArr.edge = trigger.EDGE_EITHER
+triggerdiginArr.edge = trigger.EDGE_FALLING
 
 
 --- **This function clears the trigger event on a digital input line.**
@@ -7147,13 +7147,13 @@ triggerlanoutArr.connected = true
 ---@type string
 triggerlanoutArr.ipaddress = ''
 
-lan.PROTOCOL_UDP = nil
 lan.PROTOCOL_TCP = nil
+lan.PROTOCOL_UDP = nil
 lan.PROTOCOL_MULTICAST = nil
 
 ---@alias triggerlanoutprotocolprotocol
----|`lan.PROTOCOL_UDP`
 ---|`lan.PROTOCOL_TCP`
+---|`lan.PROTOCOL_UDP`
 ---|`lan.PROTOCOL_MULTICAST`
 
 
@@ -7174,7 +7174,7 @@ lan.PROTOCOL_MULTICAST = nil
 --- --Get LAN protocol that is being used for sending trigger messages for LAN event 1.
 --- ```
 ---@type triggerlanoutprotocolprotocol
-triggerlanoutArr.protocol = lan.PROTOCOL_UDP
+triggerlanoutArr.protocol = lan.PROTOCOL_TCP
 
 
 --- **This attribute specifies events that cause this trigger to assert.**
@@ -7305,14 +7305,14 @@ trigger.tsplinkin = {}
 
 
 
-trigger.EDGE_EITHER = nil
 trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_EITHER = nil
 
 ---@alias triggertsplinkinedgedetectedEdge
----|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_EITHER`
 
 
 
@@ -7333,7 +7333,7 @@ trigger.EDGE_RISING = nil
 --- --Sets synchronization line 3 to detect rising edge triggers as input.
 --- ```
 ---@type triggertsplinkinedgedetectedEdge
-triggertsplinkinArr.edge = trigger.EDGE_EITHER
+triggertsplinkinArr.edge = trigger.EDGE_FALLING
 
 
 --- **This function clears the event detector for a LAN trigger.**
@@ -7518,16 +7518,16 @@ display.input = {}
 
 
 
-display.NFORMAT_PREFIX = nil
 display.NFORMAT_INTEGER = nil
 display.NFORMAT_DECIMAL = nil
 display.NFORMAT_EXPONENT = nil
+display.NFORMAT_PREFIX = nil
 
 ---@alias displayinputnumbernumberFormat
----|`display.NFORMAT_PREFIX`
 ---|`display.NFORMAT_INTEGER`
 ---|`display.NFORMAT_DECIMAL`
 ---|`display.NFORMAT_EXPONENT`
+---|`display.NFORMAT_PREFIX`
 
 
 
@@ -7581,35 +7581,34 @@ function display.input.number(dialogTitle, numberFormat, defaultValue, minimumVa
 --- --
 --- --If the user selects Peach, the return is display.BUTTON_OPTION8.
 --- ```
----@return display_BUTTON_OPTIONs | nil n The number of the button that is selected from the front-panel display; nil if Cancel is pressed on the keypad; buttons are numbered top to bottom, left to right
----@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
+---@return displayInputOption displayOption---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
 ---@param buttonTitle1 string A string that contains the name of the first button; up to 15 characters
 ---@return displayInputOption displayOption---@return displayInputOption displayOptionfunction display.input.option(dialogTitle, buttonTitle1, ...) end
 
 display.BUTTON_OK = nil
-display.BUTTON_NO = nil
 display.BUTTON_CANCEL = nil
 display.BUTTON_YES = nil
+display.BUTTON_NO = nil
 
 ---@alias displayinputpromptbuttonReturn
 ---|`display.BUTTON_OK`
----|`display.BUTTON_NO`
 ---|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_YES`
+---|`display.BUTTON_NO`
 
 
-display.BUTTONS_CANCEL = nil
-display.BUTTONS_YESNOCANCEL = nil
-display.BUTTONS_YESNO = nil
 display.BUTTONS_OK = nil
+display.BUTTONS_CANCEL = nil
 display.BUTTONS_OKCANCEL = nil
+display.BUTTONS_YESNO = nil
+display.BUTTONS_YESNOCANCEL = nil
 
 ---@alias displayinputpromptbuttonSet
----|`display.BUTTONS_CANCEL`
----|`display.BUTTONS_YESNOCANCEL`
----|`display.BUTTONS_YESNO`
 ---|`display.BUTTONS_OK`
+---|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_OKCANCEL`
+---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_YESNOCANCEL`
 
 
 
@@ -7640,14 +7639,14 @@ function display.input.prompt(buttonSet, dialogTitle) end
 
 display.SFORMAT_ANY = nil
 display.SFORMAT_UPPER_LOWER = nil
-display.SFORMAT_BUFFER_NAME = nil
 display.SFORMAT_UPPER = nil
+display.SFORMAT_BUFFER_NAME = nil
 
 ---@alias displayinputstringtextFormat
 ---|`display.SFORMAT_ANY`
 ---|`display.SFORMAT_UPPER_LOWER`
----|`display.SFORMAT_BUFFER_NAME`
 ---|`display.SFORMAT_UPPER`
+---|`display.SFORMAT_BUFFER_NAME`
 
 
 
@@ -7703,16 +7702,16 @@ dmm.digitize = {}
 ---@overload fun():reading:number
 function dmm.digitize.read(bufferName) end
 
-dmm.DIGITS_4_5 = nil
 dmm.DIGITS_6_5 = nil
-dmm.DIGITS_3_5 = nil
 dmm.DIGITS_5_5 = nil
+dmm.DIGITS_4_5 = nil
+dmm.DIGITS_3_5 = nil
 
 ---@alias dmmdigitizedisplaydigitsvalue
----|`dmm.DIGITS_4_5`
 ---|`dmm.DIGITS_6_5`
----|`dmm.DIGITS_3_5`
 ---|`dmm.DIGITS_5_5`
+---|`dmm.DIGITS_4_5`
+---|`dmm.DIGITS_3_5`
 
 
 
@@ -7734,14 +7733,14 @@ dmm.DIGITS_5_5 = nil
 --- --Set the front panel to display 3½ digits.
 --- ```
 ---@type dmmdigitizedisplaydigitsvalue
-dmm.digitize.displaydigits = dmm.DIGITS_4_5
+dmm.digitize.displaydigits = dmm.DIGITS_6_5
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -7762,7 +7761,7 @@ dmm.OFF = nil
 --- --Describe
 --- ```
 ---@type any
-dmm.digitize.inputdivider = dmm.ON
+dmm.digitize.inputdivider = dmm.OFF
 
 
 --- **This attribute sets a user-defined delay that you can use in the trigger model.**
@@ -7832,13 +7831,13 @@ dmm.digitize.count = 0
 dmm.digitize.range = 0
 
 dmm.FUNC_DIGITIZE_CURRENT = nil
-dmm.FUNC_NONE = nil
 dmm.FUNC_DIGITIZE_VOLTAGE = nil
+dmm.FUNC_NONE = nil
 
 ---@alias dmmdigitizefunc
 ---|`dmm.FUNC_DIGITIZE_CURRENT`
----|`dmm.FUNC_NONE`
 ---|`dmm.FUNC_DIGITIZE_VOLTAGE`
+---|`dmm.FUNC_NONE`
 
 
 
@@ -7938,15 +7937,15 @@ dmm.digitize.samplerate = 0
 ---@overload fun():reading:number, seconds:number, fractional:number
 function dmm.digitize.readwithtime(bufferName) end
 
-dmm.UNIT_DBM = nil
-dmm.UNIT_DB = nil
 dmm.UNIT_VOLT = nil
+dmm.UNIT_DB = nil
+dmm.UNIT_DBM = nil
 dmm.UNIT_AMP = nil
 
 ---@alias dmmdigitizeunitvalue
----|`dmm.UNIT_DBM`
----|`dmm.UNIT_DB`
 ---|`dmm.UNIT_VOLT`
+---|`dmm.UNIT_DB`
+---|`dmm.UNIT_DBM`
 ---|`dmm.UNIT_AMP`
 
 
@@ -7969,7 +7968,7 @@ dmm.UNIT_AMP = nil
 --- --Set the units to display in decibels.
 --- ```
 ---@type dmmdigitizeunitvalue
-dmm.digitize.unit = dmm.UNIT_DBM
+dmm.digitize.unit = dmm.UNIT_VOLT
 
 dmm.IMPEDANCE_10M = nil
 dmm.IMPEDANCE_AUTO = nil
@@ -8063,14 +8062,14 @@ trigger.extin = {}
 --- ```
 function trigger.extin.clear() end
 
-trigger.EDGE_EITHER = nil
 trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
+trigger.EDGE_EITHER = nil
 
 ---@alias any
----|`trigger.EDGE_EITHER`
 ---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
+---|`trigger.EDGE_EITHER`
 
 
 
@@ -8090,7 +8089,7 @@ trigger.EDGE_RISING = nil
 --- --Sets the external I/O input line to detect rising-edge triggers as inputs.
 --- ```
 ---@type any
-trigger.extin.edge = trigger.EDGE_EITHER
+trigger.extin.edge = trigger.EDGE_FALLING
 
 
 --- **This attribute returns the event detector overrun status.**
@@ -8435,74 +8434,74 @@ buffer.write = {}
 
 
 
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_SECOND = nil
-buffer.UNIT_RATIO = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_OHM = nil
-buffer.UNIT_NONE = nil
 buffer.UNIT_AMP = nil
-buffer.UNIT_PERCENT = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_AMP_AC = nil
 buffer.UNIT_CELSIUS = nil
-buffer.UNIT_TOT = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_CUSTOM3 = nil
 buffer.UNIT_DAC = nil
+buffer.UNIT_DBM = nil
 buffer.UNIT_DECIBEL = nil
-buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_FAHRENHEIT = nil
 buffer.UNIT_FARAD = nil
 buffer.UNIT_HERTZ = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_RATIO = nil
 buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_VOLT_AC = nil
 buffer.UNIT_WATT = nil
 buffer.UNIT_X = nil
 
 ---@alias bufferwriteformatunits
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_SECOND`
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_OHM`
----|`buffer.UNIT_NONE`
 ---|`buffer.UNIT_AMP`
----|`buffer.UNIT_PERCENT`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_AMP_AC`
 ---|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_TOT`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_CUSTOM3`
 ---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_DBM`
 ---|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_FAHRENHEIT`
 ---|`buffer.UNIT_FARAD`
 ---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_RATIO`
 ---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_VOLT_AC`
 ---|`buffer.UNIT_WATT`
 ---|`buffer.UNIT_X`
 
 
 buffer.DIGITS_3_5 = nil
-buffer.DIGITS_5_5 = nil
 buffer.DIGITS_4_5 = nil
-buffer.DIGITS_8_5 = nil
+buffer.DIGITS_5_5 = nil
 buffer.DIGITS_6_5 = nil
 buffer.DIGITS_7_5 = nil
+buffer.DIGITS_8_5 = nil
 
 ---@alias bufferwriteformatdisplayDigits
 ---|`buffer.DIGITS_3_5`
----|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_4_5`
----|`buffer.DIGITS_8_5`
+---|`buffer.DIGITS_5_5`
 ---|`buffer.DIGITS_6_5`
 ---|`buffer.DIGITS_7_5`
+---|`buffer.DIGITS_8_5`
 
 
 
@@ -8837,12 +8836,12 @@ dmm.measure.autozero = {}
 --- ```
 function dmm.digitize.autozero.once() end
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasureautozeroenablestate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -8863,18 +8862,18 @@ dmm.OFF = nil
 --- --Set autozero off for voltage measurements.
 --- ```
 ---@type dmmmeasureautozeroenablestate
-dmm.measure.autozero.enable = dmm.ON
+dmm.measure.autozero.enable = dmm.OFF
 ---@type triggertimerArr[]
 triggertimerArr.start = {}
 
 
 
-trigger.ON = nil
 trigger.OFF = nil
+trigger.ON = nil
 
 ---@alias triggertimerstartgeneratestate
----|`trigger.ON`
 ---|`trigger.OFF`
+---|`trigger.ON`
 
 
 
@@ -9021,12 +9020,12 @@ dmm.measure.filter = {}
 ---@type number
 dmm.measure.filter.count = 0
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasurefilterenablefilterState
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9051,7 +9050,7 @@ dmm.OFF = nil
 --- --Enable the averaging filter.
 --- ```
 ---@type dmmmeasurefilterenablefilterState
-dmm.measure.filter.enable = dmm.ON
+dmm.measure.filter.enable = dmm.OFF
 
 dmm.FILTER_REPEAT_AVG = nil
 dmm.FILTER_MOVING_AVG = nil
@@ -9212,12 +9211,12 @@ dmm.measure.limit = {}
 
 
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasurelimitArrautoclearvalue
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9237,7 +9236,7 @@ dmm.OFF = nil
 --- --dmm.FUNC_RESISTANCE
 --- ```
 ---@type dmmmeasurelimitArrautoclearvalue
-dmmmeasurelimitArr.autoclear = dmm.ON
+dmmmeasurelimitArr.autoclear = dmm.OFF
 
 
 --- **This function clears the results of the limit test defined by Y.**
@@ -9258,15 +9257,15 @@ dmmmeasurelimitArr.autoclear = dmm.ON
 function dmmmeasurelimitArr.clear() end
 
 
+dmm.FAIL_NONE = nil
 dmm.FAIL_HIGH = nil
 dmm.FAIL_LOW = nil
-dmm.FAIL_NONE = nil
 dmm.FAIL_BOTH = nil
 
 ---@alias dmmmeasurelimitArrfailvalue
+---|`dmm.FAIL_NONE`
 ---|`dmm.FAIL_HIGH`
 ---|`dmm.FAIL_LOW`
----|`dmm.FAIL_NONE`
 ---|`dmm.FAIL_BOTH`
 
 
@@ -9287,14 +9286,14 @@ dmm.FAIL_BOTH = nil
 --- --dmm.FUNC_RESISTANCE
 --- ```
 ---@type dmmmeasurelimitArrfailvalue
-dmmmeasurelimitArr.fail = dmm.FAIL_HIGH
+dmmmeasurelimitArr.fail = dmm.FAIL_NONE
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasurelimitArrenablestate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9314,16 +9313,16 @@ dmm.OFF = nil
 --- --dmm.FUNC_RESISTANCE
 --- ```
 ---@type dmmmeasurelimitArrenablestate
-dmmmeasurelimitArr.enable = dmm.ON
+dmmmeasurelimitArr.enable = dmm.OFF
 
-dmm.AUDIBLE_PASS = nil
-dmm.AUDIBLE_FAIL = nil
 dmm.AUDIBLE_NONE = nil
+dmm.AUDIBLE_FAIL = nil
+dmm.AUDIBLE_PASS = nil
 
 ---@alias dmmmeasurelimitArraudiblestate
----|`dmm.AUDIBLE_PASS`
----|`dmm.AUDIBLE_FAIL`
 ---|`dmm.AUDIBLE_NONE`
+---|`dmm.AUDIBLE_FAIL`
+---|`dmm.AUDIBLE_PASS`
 
 
 
@@ -9343,7 +9342,7 @@ dmm.AUDIBLE_NONE = nil
 --- --dmm.FUNC_RESISTANCE
 --- ```
 ---@type dmmmeasurelimitArraudiblestate
-dmmmeasurelimitArr.audible = dmm.AUDIBLE_PASS
+dmmmeasurelimitArr.audible = dmm.AUDIBLE_NONE
 ---@class dmmdigitizelimitArr
 local dmmdigitizelimitArr = {}
 
@@ -9352,12 +9351,12 @@ dmm.digitize.limit = {}
 
 
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmdigitizelimitArrautoclearstate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9378,7 +9377,7 @@ dmm.OFF = nil
 --- --Turns off autoclear for limit 1 when measuring digitize voltage.
 --- ```
 ---@type dmmdigitizelimitArrautoclearstate
-dmmdigitizelimitArr.autoclear = dmm.ON
+dmmdigitizelimitArr.autoclear = dmm.OFF
 
 
 --- **This attribute clears the results of the limit test defined by Y.**
@@ -9401,15 +9400,15 @@ dmmdigitizelimitArr.autoclear = dmm.ON
 function dmmdigitizelimitArr.clear() end
 
 
+dmm.FAIL_NONE = nil
 dmm.FAIL_HIGH = nil
 dmm.FAIL_LOW = nil
-dmm.FAIL_NONE = nil
 dmm.FAIL_BOTH = nil
 
 ---@alias dmmdigitizelimitArrfailvalue
+---|`dmm.FAIL_NONE`
 ---|`dmm.FAIL_HIGH`
 ---|`dmm.FAIL_LOW`
----|`dmm.FAIL_NONE`
 ---|`dmm.FAIL_BOTH`
 
 
@@ -9430,14 +9429,14 @@ dmm.FAIL_BOTH = nil
 --- --The results of the limit test for limit Y:
 --- --dmm.FAIL_NONE: Test passed; measurement under or equal to the high limitdmm.FAIL_HIGH: Test failed; measurement exceeded high limitdmm.FAIL_LOW: Test failed; measurement exceeded low limitdmm.FAIL_BOTH: Test failed; measurement exceeded both --- ```
 ---@type dmmdigitizelimitArrfailvalue
-dmmdigitizelimitArr.fail = dmm.FAIL_HIGH
+dmmdigitizelimitArr.fail = dmm.FAIL_NONE
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmdigitizelimitArrenablestate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9457,16 +9456,16 @@ dmm.OFF = nil
 --- --Limit Y testing:
 --- --Disable: dmm.OFFEnable: --- ```
 ---@type dmmdigitizelimitArrenablestate
-dmmdigitizelimitArr.enable = dmm.ON
+dmmdigitizelimitArr.enable = dmm.OFF
 
-dmm.AUDIBLE_PASS = nil
-dmm.AUDIBLE_FAIL = nil
 dmm.AUDIBLE_NONE = nil
+dmm.AUDIBLE_FAIL = nil
+dmm.AUDIBLE_PASS = nil
 
 ---@alias dmmdigitizelimitArraudiblevalue
----|`dmm.AUDIBLE_PASS`
----|`dmm.AUDIBLE_FAIL`
 ---|`dmm.AUDIBLE_NONE`
+---|`dmm.AUDIBLE_FAIL`
+---|`dmm.AUDIBLE_PASS`
 
 
 
@@ -9486,18 +9485,18 @@ dmm.AUDIBLE_NONE = nil
 --- --When the beeper sounds:
 --- --Never: dmm.AUDIBLE_NONEOn test failure: dmm.AUDIBLE_FAILOn test pass: dmm.AUDIBL--- ```
 ---@type dmmdigitizelimitArraudiblevalue
-dmmdigitizelimitArr.audible = dmm.AUDIBLE_PASS
+dmmdigitizelimitArr.audible = dmm.AUDIBLE_NONE
 ---@class dmm.measure.math
 dmm.measure.math = {}
 
 
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasuremathenablevalue
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9540,16 +9539,16 @@ dmm.OFF = nil
 --- ---100.00210915
 --- ```
 ---@type dmmmeasuremathenablevalue
-dmm.measure.math.enable = dmm.ON
+dmm.measure.math.enable = dmm.OFF
 
 dmm.MATH_MXB = nil
-dmm.MATH_RECIPROCAL = nil
 dmm.MATH_PERCENT = nil
+dmm.MATH_RECIPROCAL = nil
 
 ---@alias dmmmeasuremathformatoperation
 ---|`dmm.MATH_MXB`
----|`dmm.MATH_RECIPROCAL`
 ---|`dmm.MATH_PERCENT`
+---|`dmm.MATH_RECIPROCAL`
 
 
 
@@ -9680,12 +9679,12 @@ dmm.digitize.math = {}
 
 
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmdigitizemathenablevalue
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -9728,16 +9727,16 @@ dmm.OFF = nil
 --- ---99.998932056
 --- ```
 ---@type dmmdigitizemathenablevalue
-dmm.digitize.math.enable = dmm.ON
+dmm.digitize.math.enable = dmm.OFF
 
 dmm.MATH_MXB = nil
-dmm.MATH_RECIPROCAL = nil
 dmm.MATH_PERCENT = nil
+dmm.MATH_RECIPROCAL = nil
 
 ---@alias dmmdigitizemathformatoperation
 ---|`dmm.MATH_MXB`
----|`dmm.MATH_RECIPROCAL`
 ---|`dmm.MATH_PERCENT`
+---|`dmm.MATH_RECIPROCAL`
 
 
 
@@ -9790,14 +9789,14 @@ dmm.measure.offsetcompensation = {}
 
 
 
-dmm.ON = 4
+dmm.OFF = 4
+dmm.ON = nil
 dmm.OCOMP_AUTO = nil
-dmm.OFF = nil
 
 ---@alias any
+---|`dmm.OFF`
 ---|`dmm.ON`
 ---|`dmm.OCOMP_AUTO`
----|`dmm.OFF`
 
 
 
@@ -9821,7 +9820,7 @@ dmm.OFF = nil
 --- --Make a measurement.
 --- ```
 ---@type any
-dmm.measure.offsetcompensation.enable = dmm.ON
+dmm.measure.offsetcompensation.enable = dmm.OFF
 ---@class dmm.measure.rel
 dmm.measure.rel = {}
 
@@ -9976,12 +9975,12 @@ dmm.measure.threshold.range = 0
 ---@type any
 dmm.measure.threshold.level = 0
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias dmmmeasurethresholdautorangestate
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -10003,7 +10002,7 @@ dmm.OFF = nil
 --- --Set the threshold autorange on.
 --- ```
 ---@type dmmmeasurethresholdautorangestate
-dmm.measure.threshold.autorange = dmm.ON
+dmm.measure.threshold.autorange = dmm.OFF
 ---@class dmm.digitize.coupling
 dmm.digitize.coupling = {}
 
@@ -10037,12 +10036,12 @@ dmm.COUPLING_DC = nil
 ---@type any
 dmm.digitize.coupling.type = dmm.COUPLING_AC
 
-dmm.AC_FILTER_FAST = nil
 dmm.AC_FILTER_SLOW = nil
+dmm.AC_FILTER_FAST = nil
 
 ---@alias any
----|`dmm.AC_FILTER_FAST`
 ---|`dmm.AC_FILTER_SLOW`
+---|`dmm.AC_FILTER_FAST`
 
 
 
@@ -10066,7 +10065,7 @@ dmm.AC_FILTER_SLOW = nil
 --- --Set the filter to fast.
 --- ```
 ---@type any
-dmm.digitize.coupling.acfilter = dmm.AC_FILTER_FAST
+dmm.digitize.coupling.acfilter = dmm.AC_FILTER_SLOW
 
 
 --- **This attribute allows you to optimize the amplitude to compensate for signal loss across the coupling capacitor when AC coupling is selected.**
@@ -10095,16 +10094,16 @@ dmm.digitize.analogtrigger = {}
 
 
 
-dmm.MODE_OFF = nil
 dmm.MODE_EDGE = nil
-dmm.MODE_WINDOW = nil
 dmm.MODE_PULSE = nil
+dmm.MODE_WINDOW = nil
+dmm.MODE_OFF = nil
 
 ---@alias dmmdigitizeanalogtriggermodesetting
----|`dmm.MODE_OFF`
 ---|`dmm.MODE_EDGE`
----|`dmm.MODE_WINDOW`
 ---|`dmm.MODE_PULSE`
+---|`dmm.MODE_WINDOW`
+---|`dmm.MODE_OFF`
 
 
 
@@ -10132,14 +10131,14 @@ dmm.MODE_PULSE = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmdigitizeanalogtriggermodesetting
-dmm.digitize.analogtrigger.mode = dmm.MODE_OFF
+dmm.digitize.analogtrigger.mode = dmm.MODE_EDGE
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -10160,22 +10159,22 @@ dmm.OFF = nil
 --- --Set the measure function to DC voltage and turn high frequency rejection for the analog trigger to on.
 --- ```
 ---@type any
-dmm.digitize.analogtrigger.highfreqreject = dmm.ON
+dmm.digitize.analogtrigger.highfreqreject = dmm.OFF
 ---@class dmm.measure.analogtrigger
 dmm.measure.analogtrigger = {}
 
 
 
-dmm.MODE_OFF = nil
 dmm.MODE_EDGE = nil
-dmm.MODE_WINDOW = nil
 dmm.MODE_PULSE = nil
+dmm.MODE_WINDOW = nil
+dmm.MODE_OFF = nil
 
 ---@alias dmmmeasureanalogtriggermodesetting
----|`dmm.MODE_OFF`
 ---|`dmm.MODE_EDGE`
----|`dmm.MODE_WINDOW`
 ---|`dmm.MODE_PULSE`
+---|`dmm.MODE_WINDOW`
+---|`dmm.MODE_OFF`
 
 
 
@@ -10205,14 +10204,14 @@ dmm.MODE_PULSE = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmmeasureanalogtriggermodesetting
-dmm.measure.analogtrigger.mode = dmm.MODE_OFF
+dmm.measure.analogtrigger.mode = dmm.MODE_EDGE
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -10233,7 +10232,7 @@ dmm.OFF = nil
 --- --Set the measure function to DC voltage and turn high frequency rejection for the analog trigger to on.
 --- ```
 ---@type any
-dmm.measure.analogtrigger.highfreqreject = dmm.ON
+dmm.measure.analogtrigger.highfreqreject = dmm.OFF
 ---@class dmm.digitize.comparator
 dmm.digitize.comparator = {}
 
@@ -10733,12 +10732,12 @@ dmm.measure.offsetcompensation.delay = {}
 
 
 
-dmm.ON = nil
 dmm.OFF = nil
+dmm.ON = nil
 
 ---@alias any
----|`dmm.ON`
 ---|`dmm.OFF`
+---|`dmm.ON`
 
 
 
@@ -10760,7 +10759,7 @@ dmm.OFF = nil
 --- --Describe
 --- ```
 ---@type any
-dmm.measure.offsetcompensation.delay.auto = dmm.ON
+dmm.measure.offsetcompensation.delay.auto = dmm.OFF
 
 
 --- **This attribute describes something.**
@@ -10806,12 +10805,12 @@ dmm.digitize.analogtrigger.pulse = {}
 
 
 
-dmm.CONDITION_LESS = nil
 dmm.CONDITION_GREATER = nil
+dmm.CONDITION_LESS = nil
 
 ---@alias any
----|`dmm.CONDITION_LESS`
 ---|`dmm.CONDITION_GREATER`
+---|`dmm.CONDITION_LESS`
 
 
 
@@ -10841,7 +10840,7 @@ dmm.CONDITION_GREATER = nil
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
 ---@type any
-dmm.digitize.analogtrigger.pulse.condition = dmm.CONDITION_LESS
+dmm.digitize.analogtrigger.pulse.condition = dmm.CONDITION_GREATER
 
 
 --- **This attribute defines the threshold value for the pulse width.**
@@ -10872,12 +10871,12 @@ dmm.digitize.analogtrigger.pulse.condition = dmm.CONDITION_LESS
 ---@type any
 dmm.digitize.analogtrigger.pulse.width = 0
 
-dmm.POLARITY_BELOW = nil
 dmm.POLARITY_ABOVE = nil
+dmm.POLARITY_BELOW = nil
 
 ---@alias any
----|`dmm.POLARITY_BELOW`
 ---|`dmm.POLARITY_ABOVE`
+---|`dmm.POLARITY_BELOW`
 
 
 
@@ -10907,7 +10906,7 @@ dmm.POLARITY_ABOVE = nil
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
 ---@type any
-dmm.digitize.analogtrigger.pulse.polarity = dmm.POLARITY_BELOW
+dmm.digitize.analogtrigger.pulse.polarity = dmm.POLARITY_ABOVE
 
 
 --- **This attribute defines the pulse level that generates an analog trigger event.**
@@ -10942,12 +10941,12 @@ dmm.measure.analogtrigger.pulse = {}
 
 
 
-dmm.CONDITION_LESS = nil
 dmm.CONDITION_GREATER = nil
+dmm.CONDITION_LESS = nil
 
 ---@alias any
----|`dmm.CONDITION_LESS`
 ---|`dmm.CONDITION_GREATER`
+---|`dmm.CONDITION_LESS`
 
 
 
@@ -10981,7 +10980,7 @@ dmm.CONDITION_GREATER = nil
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
 ---@type any
-dmm.measure.analogtrigger.pulse.condition = dmm.CONDITION_LESS
+dmm.measure.analogtrigger.pulse.condition = dmm.CONDITION_GREATER
 
 
 --- **This attribute defines the pulse level that generates an analog trigger event.**
@@ -11049,12 +11048,12 @@ dmm.measure.analogtrigger.pulse.level = 0
 ---@type any
 dmm.measure.analogtrigger.pulse.width = 0
 
-dmm.POLARITY_BELOW = nil
 dmm.POLARITY_ABOVE = nil
+dmm.POLARITY_BELOW = nil
 
 ---@alias any
----|`dmm.POLARITY_BELOW`
 ---|`dmm.POLARITY_ABOVE`
+---|`dmm.POLARITY_BELOW`
 
 
 
@@ -11088,7 +11087,7 @@ dmm.POLARITY_ABOVE = nil
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
 ---@type any
-dmm.measure.analogtrigger.pulse.polarity = dmm.POLARITY_BELOW
+dmm.measure.analogtrigger.pulse.polarity = dmm.POLARITY_ABOVE
 ---@class dmm.digitize.analogtrigger.edge
 dmm.digitize.analogtrigger.edge = {}
 
@@ -11119,12 +11118,12 @@ dmm.digitize.analogtrigger.edge = {}
 ---@type number
 dmm.digitize.analogtrigger.edge.level = 0
 
-dmm.SLOPE_FALLING = nil
 dmm.SLOPE_RISING = nil
+dmm.SLOPE_FALLING = nil
 
 ---@alias dmmdigitizeanalogtriggeredgeslopevalue
----|`dmm.SLOPE_FALLING`
 ---|`dmm.SLOPE_RISING`
+---|`dmm.SLOPE_FALLING`
 
 
 
@@ -11150,7 +11149,7 @@ dmm.SLOPE_RISING = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmdigitizeanalogtriggeredgeslopevalue
-dmm.digitize.analogtrigger.edge.slope = dmm.SLOPE_FALLING
+dmm.digitize.analogtrigger.edge.slope = dmm.SLOPE_RISING
 ---@class dmm.digitize.analogtrigger.window
 dmm.digitize.analogtrigger.window = {}
 
@@ -11278,12 +11277,12 @@ dmm.measure.analogtrigger.edge = {}
 ---@type number
 dmm.measure.analogtrigger.edge.level = 0
 
-dmm.SLOPE_FALLING = nil
 dmm.SLOPE_RISING = nil
+dmm.SLOPE_FALLING = nil
 
 ---@alias dmmmeasureanalogtriggeredgeslopevalue
----|`dmm.SLOPE_FALLING`
 ---|`dmm.SLOPE_RISING`
+---|`dmm.SLOPE_FALLING`
 
 
 
@@ -11313,7 +11312,7 @@ dmm.SLOPE_RISING = nil
 --- --Set the level to be detected on a falling edge.
 --- ```
 ---@type dmmmeasureanalogtriggeredgeslopevalue
-dmm.measure.analogtrigger.edge.slope = dmm.SLOPE_FALLING
+dmm.measure.analogtrigger.edge.slope = dmm.SLOPE_RISING
 ---@class dmm.measure.analogtrigger.window
 dmm.measure.analogtrigger.window = {}
 
@@ -11907,56 +11906,56 @@ function available(functionality) end
 --- ```
 ---@param loadFunConst loadFunConstParam
 function trigger.model.load(loadFunConst,...) end
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_FAHRENHEIT = nil
-buffer.UNIT_SECOND = nil
-buffer.UNIT_RATIO = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_AMP_AC = nil
-buffer.UNIT_OHM = nil
-buffer.UNIT_NONE = nil
 buffer.UNIT_AMP = nil
-buffer.UNIT_PERCENT = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_AMP_AC = nil
 buffer.UNIT_CELSIUS = nil
-buffer.UNIT_TOT = nil
+buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_CUSTOM3 = nil
 buffer.UNIT_DAC = nil
+buffer.UNIT_DBM = nil
 buffer.UNIT_DECIBEL = nil
-buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_DIO = nil
+buffer.UNIT_FAHRENHEIT = nil
 buffer.UNIT_FARAD = nil
 buffer.UNIT_HERTZ = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_RATIO = nil
 buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_VOLT_AC = nil
 buffer.UNIT_WATT = nil
 buffer.UNIT_X = nil
 
 ---@alias buffermathunit
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_FAHRENHEIT`
----|`buffer.UNIT_SECOND`
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_AMP_AC`
----|`buffer.UNIT_OHM`
----|`buffer.UNIT_NONE`
 ---|`buffer.UNIT_AMP`
----|`buffer.UNIT_PERCENT`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_AMP_AC`
 ---|`buffer.UNIT_CELSIUS`
----|`buffer.UNIT_TOT`
+---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_CUSTOM3`
 ---|`buffer.UNIT_DAC`
+---|`buffer.UNIT_DBM`
 ---|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_DIO`
+---|`buffer.UNIT_FAHRENHEIT`
 ---|`buffer.UNIT_FARAD`
 ---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_RATIO`
 ---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_VOLT_AC`
 ---|`buffer.UNIT_WATT`
 ---|`buffer.UNIT_X`
 

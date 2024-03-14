@@ -1,7 +1,7 @@
 ---@meta
 
----@class 2470
-2470 = {dataqueue = dataqueue,
+---@class model2470
+model2470 = {dataqueue = dataqueue,
  fs = fs,
  lan = lan,
  localnode = localnode,

@@ -429,27 +429,27 @@ tspnet.timeout = 0
 ---@param inputString string The string to be written
 function tspnet.write(connectionID, inputString) end
 
-tspnet.TERM_CRLF = nil
 tspnet.TERM_LF = nil
 tspnet.TERM_CR = nil
+tspnet.TERM_CRLF = nil
 tspnet.TERM_LFCR = nil
 
 ---@alias tspnetterminationtype
----|`tspnet.TERM_CRLF`
 ---|`tspnet.TERM_LF`
 ---|`tspnet.TERM_CR`
+---|`tspnet.TERM_CRLF`
 ---|`tspnet.TERM_LFCR`
 
 
-tspnet.TERM_CRLF = nil
 tspnet.TERM_LF = nil
 tspnet.TERM_CR = nil
+tspnet.TERM_CRLF = nil
 tspnet.TERM_LFCR = nil
 
 ---@alias tspnetterminationtermSequence
----|`tspnet.TERM_CRLF`
 ---|`tspnet.TERM_LF`
 ---|`tspnet.TERM_CR`
+---|`tspnet.TERM_CRLF`
 ---|`tspnet.TERM_LFCR`
 
 
@@ -910,12 +910,12 @@ lan = {}
 ---@type number
 lan.lxidomain = 0
 
-lan.MODE_MANUAL = nil
 lan.MODE_AUTO = nil
+lan.MODE_MANUAL = nil
 
 ---@alias lanipconfigmethod
----|`lan.MODE_MANUAL`
 ---|`lan.MODE_AUTO`
+---|`lan.MODE_MANUAL`
 
 
 
@@ -1113,16 +1113,16 @@ localnode.model = ''
 ---@overload fun()
 function localnode.settime(year, month, day, hour, minute, second) end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ALL = nil
 
 ---@alias localnodeshoweventserrorMode
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -1145,7 +1145,7 @@ eventlog.SEV_WARN = nil
 --- --1805, Settings conflict: setting input edge when line 3 set for digital
 --- ```
 ---@type localnodeshoweventserrorMode
-localnode.showevents = eventlog.SEV_INFO
+localnode.showevents = eventlog.SEV_ERROR
 
 
 --- **This function retrieves the instrument date and time.**
@@ -1228,16 +1228,16 @@ localnode.serialno = ''
 ---@type number
 localnode.linefreq = 0
 
-localnode.ACCESS_LOCKOUT = nil
-localnode.ACCESS_PROTECTED = nil
 localnode.ACCESS_FULL = nil
 localnode.ACCESS_EXCLUSIVE = nil
+localnode.ACCESS_PROTECTED = nil
+localnode.ACCESS_LOCKOUT = nil
 
 ---@alias localnodeaccessaccessType
----|`localnode.ACCESS_LOCKOUT`
----|`localnode.ACCESS_PROTECTED`
 ---|`localnode.ACCESS_FULL`
 ---|`localnode.ACCESS_EXCLUSIVE`
+---|`localnode.ACCESS_PROTECTED`
+---|`localnode.ACCESS_LOCKOUT`
 
 
 
@@ -1261,7 +1261,7 @@ localnode.ACCESS_EXCLUSIVE = nil
 --- --Log out of the interface.
 --- ```
 ---@type localnodeaccessaccessType
-localnode.access = localnode.ACCESS_LOCKOUT
+localnode.access = localnode.ACCESS_FULL
 
 localnode.DISABLE = nil
 localnode.ENABLE = nil
@@ -1461,9 +1461,9 @@ function tsplink.writeport(data) end
 --- --Example output if two nodes are found:Nodes found = 2
 --- --Example output if fewer nodes are found and if localnode.showevents = 7:1219, TSP-Link found fewer nodes than expectedNodes found = 1
 --- ```
----@param expectedNodes integer The number of nodes expected on the system (1 to 32)
----@overload fun()
-function tsplink.initialize(expectedNodes) end
+---@return integer nodesFound The number of nodes found on the system, including the node on which the command is running
+---@overload fun(expectedNodes:integer):nodesFound:integer
+function tsplink.initialize() end
 
 
 --- **This attribute reads the node number assigned to the master node.**
@@ -1569,12 +1569,12 @@ trigger.CLEAR_NEVER = nil
 ---|`trigger.CLEAR_NEVER`
 
 
-trigger.WAIT_OR = nil
 trigger.WAIT_AND = nil
+trigger.WAIT_OR = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_WAITlogic
----|`trigger.WAIT_OR`
 ---|`trigger.WAIT_AND`
+---|`trigger.WAIT_OR`
 
 
 
@@ -1599,8 +1599,8 @@ trigger.WAIT_AND = nil
 ---    ```trigger.CLEAR_ENTER```<br>
 ---    ```trigger.CLEAR_NEVER```<br>
 --- - *logic*: If each event must occur before the trigger model continues<br>
----    ```trigger.WAIT_OR```<br>
 ---    ```trigger.WAIT_AND```<br>
+---    ```trigger.WAIT_OR```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_WAIT, event)
@@ -1609,14 +1609,14 @@ trigger.WAIT_AND = nil
 trigger.BLOCK_WAIT = 0
 
 
+trigger.COUNT_INFINITE = nil
 trigger.COUNT_STOP = nil
 trigger.COUNT_AUTO = nil
-trigger.COUNT_INFINITE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_MEASURE_DIGITIZEcount
+---|`trigger.COUNT_INFINITE`
 ---|`trigger.COUNT_STOP`
 ---|`trigger.COUNT_AUTO`
----|`trigger.COUNT_INFINITE`
 
 
 
@@ -1689,9 +1689,9 @@ trigger.COUNT_INFINITE = nil
 --- Additional paramteres are:
 --- - *bufferName*: The name of the buffer, which must be an existing buffer; if no buffer is defined, defbuffer1 is used<br>
 --- - *count*: The number of measure or digitize readings to make before moving to the next block in the trigger model; set to<br>
+---    ```trigger.COUNT_INFINITE```<br>
 ---    ```trigger.COUNT_STOP```<br>
 ---    ```trigger.COUNT_AUTO```<br>
----    ```trigger.COUNT_INFINITE```<br>
 --
 --- Overloads are:
 --- - trigger.model.setblock(blockNumber, trigger.BLOCK_MEASURE_DIGITIZE)
@@ -1851,12 +1851,12 @@ trigger.BLOCK_CONFIG_NEXT = 0
 trigger.BLOCK_CONFIG_PREV = 0
 
 
-trigger.USER_DELAY_S = nil
 trigger.USER_DELAY_M = nil
+trigger.USER_DELAY_S = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_DELAY_DYNAMICuserDelay
----|`trigger.USER_DELAY_S`
 ---|`trigger.USER_DELAY_M`
+---|`trigger.USER_DELAY_S`
 
 
 
@@ -1889,8 +1889,8 @@ trigger.USER_DELAY_M = nil
 --- ```
 --- Additional paramteres are:
 --- - *userDelay*: The number of the user delay<br>
----    ```trigger.USER_DELAY_S```<br>
 ---    ```trigger.USER_DELAY_M```<br>
+---    ```trigger.USER_DELAY_S```<br>
 trigger.BLOCK_DELAY_DYNAMIC = 0
 
 
@@ -1964,40 +1964,40 @@ trigger.BLOCK_BRANCH_COUNTER = 0
 trigger.BLOCK_BRANCH_ON_EVENT = 0
 
 
-trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_BELOW = nil
-trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitType
----|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_BELOW`
----|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
-trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_BELOW = nil
-trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitA
----|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_BELOW`
----|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
-trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_BELOW = nil
-trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_CONSTANTlimitB
----|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_BELOW`
----|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
 
@@ -2018,20 +2018,20 @@ trigger.LIMIT_ABOVE = nil
 --- ```
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
----    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_BELOW```<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *limitA*: The lower limit that the measurement is tested against; if limitType is set to<br>
----    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_BELOW```<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *limitB*: The upper limit that the measurement is tested against; if limitType is set to<br>
----    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_BELOW```<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the defined criteria<br>
 --- - *measureBlock*: The block number of the measure/digitize block that makes the measurements to be compared; if this is 0 or undefined, the trigger model uses the previous measure/digitize block<br>
 --
@@ -2152,16 +2152,16 @@ trigger.BLOCK_NOTIFY = 0
 trigger.BLOCK_BRANCH_ALWAYS = 0
 
 
-trigger.LIMIT_INSIDE = nil
-trigger.LIMIT_BELOW = nil
-trigger.LIMIT_OUTSIDE = nil
 trigger.LIMIT_ABOVE = nil
+trigger.LIMIT_BELOW = nil
+trigger.LIMIT_INSIDE = nil
+trigger.LIMIT_OUTSIDE = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_BRANCH_LIMIT_DYNAMIClimitType
----|`trigger.LIMIT_INSIDE`
----|`trigger.LIMIT_BELOW`
----|`trigger.LIMIT_OUTSIDE`
 ---|`trigger.LIMIT_ABOVE`
+---|`trigger.LIMIT_BELOW`
+---|`trigger.LIMIT_INSIDE`
+---|`trigger.LIMIT_OUTSIDE`
 
 
 
@@ -2182,10 +2182,10 @@ trigger.LIMIT_ABOVE = nil
 --- ```
 --- Additional paramteres are:
 --- - *limitType*: The type of limit, which can be one of the following types<br>
----    ```trigger.LIMIT_INSIDE```<br>
----    ```trigger.LIMIT_BELOW```<br>
----    ```trigger.LIMIT_OUTSIDE```<br>
 ---    ```trigger.LIMIT_ABOVE```<br>
+---    ```trigger.LIMIT_BELOW```<br>
+---    ```trigger.LIMIT_INSIDE```<br>
+---    ```trigger.LIMIT_OUTSIDE```<br>
 --- - *limitNumber*: The limit number (1 or 2)<br>
 --- - *branchToBlock*: The block number of the trigger model block to execute when the measurement meets the criteria set in the configuration list<br>
 --- - *measureBlock*: The block number of the measure/digitize block that makes the measurements to be compared; if this is 0 or undefined, the trigger model uses the previous measure/digitize block<br>
@@ -2218,14 +2218,14 @@ trigger.BLOCK_DELAY_CONSTANT = 0
 
 trigger.LOG_INFO = nil
 trigger.LOG_WARN = nil
-trigger.LOG_WARN_ABORT = nil
 trigger.LOG_ERROR = nil
+trigger.LOG_WARN_ABORT = nil
 
 ---@alias triggermodelsetblocktriggerBLOCK_LOG_EVENTeventNumber
 ---|`trigger.LOG_INFO`
 ---|`trigger.LOG_WARN`
----|`trigger.LOG_WARN_ABORT`
 ---|`trigger.LOG_ERROR`
+---|`trigger.LOG_WARN_ABORT`
 
 
 
@@ -2249,8 +2249,8 @@ trigger.LOG_ERROR = nil
 --- - *eventNumber*: The event number<br>
 ---    ```trigger.LOG_INFO```<br>
 ---    ```trigger.LOG_WARN```<br>
----    ```trigger.LOG_WARN_ABORT```<br>
 ---    ```trigger.LOG_ERROR```<br>
+---    ```trigger.LOG_WARN_ABORT```<br>
 --- - *message*: A string up to 31 characters<br>
 trigger.BLOCK_LOG_EVENT = 0
 
@@ -2314,14 +2314,14 @@ trigger.BLOCK_NOP = 0
 trigger.BLOCK_RESET_BRANCH_COUNT = 0
 
 
-trigger.CONT_RESTART = nil
 trigger.CONT_OFF = nil
 trigger.CONT_AUTO = nil
+trigger.CONT_RESTART = nil
 
 ---@alias triggercontinuoussetting
----|`trigger.CONT_RESTART`
 ---|`trigger.CONT_OFF`
 ---|`trigger.CONT_AUTO`
+---|`trigger.CONT_RESTART`
 
 
 
@@ -2341,7 +2341,7 @@ trigger.CONT_AUTO = nil
 --- --When the instrument starts up, the measurement method is set to idle.
 --- ```
 ---@type triggercontinuoussetting
-trigger.continuous = trigger.CONT_RESTART
+trigger.continuous = trigger.CONT_OFF
 
 
 
@@ -2540,17 +2540,17 @@ buffer = {}
 ---@overload fun(bufferVar:bufferVar,relStartTime:number,relEndTime:number):statsVar:statsVar
 function buffer.getstats(bufferVar, absStartTime, absStartFractional, absEndTime, absEndFractional) end
 
-buffer.STYLE_WRITABLE = nil
+buffer.STYLE_COMPACT = nil
 buffer.STYLE_STANDARD = nil
 buffer.STYLE_FULL = nil
-buffer.STYLE_COMPACT = nil
+buffer.STYLE_WRITABLE = nil
 buffer.STYLE_WRITABLE_FULL = nil
 
 ---@alias buffermakestyle
----|`buffer.STYLE_WRITABLE`
+---|`buffer.STYLE_COMPACT`
 ---|`buffer.STYLE_STANDARD`
 ---|`buffer.STYLE_FULL`
----|`buffer.STYLE_COMPACT`
+---|`buffer.STYLE_WRITABLE`
 ---|`buffer.STYLE_WRITABLE_FULL`
 
 
@@ -2576,16 +2576,16 @@ buffer.STYLE_WRITABLE_FULL = nil
 ---@overload fun(bufferSize:integer):bufferVar:bufferVar
 function buffer.make(bufferSize, style) end
 
-buffer.SAVE_TIMESTAMP_TIME = nil
-buffer.SAVE_RAW_TIME = nil
 buffer.SAVE_FORMAT_TIME = nil
 buffer.SAVE_RELATIVE_TIME = nil
+buffer.SAVE_RAW_TIME = nil
+buffer.SAVE_TIMESTAMP_TIME = nil
 
 ---@alias buffersaveappendtimeFormat
----|`buffer.SAVE_TIMESTAMP_TIME`
----|`buffer.SAVE_RAW_TIME`
 ---|`buffer.SAVE_FORMAT_TIME`
 ---|`buffer.SAVE_RELATIVE_TIME`
+---|`buffer.SAVE_RAW_TIME`
+---|`buffer.SAVE_TIMESTAMP_TIME`
 
 
 
@@ -2747,16 +2747,16 @@ function buffer.clearstats(bufferVar) end
 ---@param unitOfMeasure string A string that defines the custom unit; up to three characters; defaults are X for custom unit 1, Y for unit 2, and Z for unit 3
 function buffer.unit(UNIT_CUSTOMN, unitOfMeasure) end
 
-buffer.SAVE_TIMESTAMP_TIME = nil
-buffer.SAVE_RAW_TIME = nil
 buffer.SAVE_FORMAT_TIME = nil
 buffer.SAVE_RELATIVE_TIME = nil
+buffer.SAVE_RAW_TIME = nil
+buffer.SAVE_TIMESTAMP_TIME = nil
 
 ---@alias buffersavetimeFormat
----|`buffer.SAVE_TIMESTAMP_TIME`
----|`buffer.SAVE_RAW_TIME`
 ---|`buffer.SAVE_FORMAT_TIME`
 ---|`buffer.SAVE_RELATIVE_TIME`
+---|`buffer.SAVE_RAW_TIME`
+---|`buffer.SAVE_TIMESTAMP_TIME`
 
 
 
@@ -3182,12 +3182,12 @@ function bufferVar.clear() end
 ---@type string[]
 bufferVar.dates = {}
 
-buffer.FILL_CONTINUOUS = nil
 buffer.FILL_ONCE = nil
+buffer.FILL_CONTINUOUS = nil
 
 ---@alias bufferVarfillmodefillMode
----|`buffer.FILL_CONTINUOUS`
 ---|`buffer.FILL_ONCE`
+---|`buffer.FILL_CONTINUOUS`
 
 
 
@@ -3217,7 +3217,7 @@ buffer.FILL_ONCE = nil
 --- --1
 --- ```
 ---@type bufferVarfillmodefillMode
-bufferVar.fillmode = buffer.FILL_CONTINUOUS
+bufferVar.fillmode = buffer.FILL_ONCE
 
 
 --- **This attribute contains the source levels formatted as they appear on the front-panel display when the readings in the reading buffer were acquired.**
@@ -3399,18 +3399,18 @@ bufferVar.logstate = buffer.OFF
 ---@type bufferVarstatuses
 bufferVar.statuses = 0
 
+buffer.STAT_PROTECTION = nil
 buffer.STAT_READBACK = nil
 buffer.STAT_OVER_TEMP = nil
 buffer.STAT_LIMIT = nil
-buffer.STAT_PROTECTION = nil
 buffer.STAT_SENSE = nil
 buffer.STAT_OUTPUT = nil
 
 ---@alias bufferVarsourcestatusesstatusInfo
+---|`buffer.STAT_PROTECTION`
 ---|`buffer.STAT_READBACK`
 ---|`buffer.STAT_OVER_TEMP`
 ---|`buffer.STAT_LIMIT`
----|`buffer.STAT_PROTECTION`
 ---|`buffer.STAT_SENSE`
 ---|`buffer.STAT_OUTPUT`
 
@@ -3443,7 +3443,7 @@ buffer.STAT_OUTPUT = nil
 --- --Indicating that the status is buffer.STAT_READBACK and buffer.STAT_OUTPUT.
 --- ```
 ---@type bufferVarsourcestatusesstatusInfo
-bufferVar.sourcestatuses = buffer.STAT_READBACK
+bufferVar.sourcestatuses = buffer.STAT_PROTECTION
 
 
 --- **This attribute contains the additional values in a reading buffer.**
@@ -3672,16 +3672,16 @@ eventlog = {}
 
 
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventlogsaveeventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -3720,16 +3720,16 @@ function eventlog.save(filename, eventType) end
 --- ```
 function eventlog.clear() end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventlognexteventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -3760,16 +3760,16 @@ eventlog.SEV_WARN = nil
 ---@overload fun():eventNumber:integer, message:string, severity:integer, nodeID:integer, timeSeconds:integer, timeNanoSeconds:integer
 function eventlog.next(eventType) end
 
-eventlog.SEV_INFO = nil
 eventlog.SEV_ERROR = nil
-eventlog.SEV_ALL = nil
 eventlog.SEV_WARN = nil
+eventlog.SEV_INFO = nil
+eventlog.SEV_ALL = nil
 
 ---@alias eventloggetcounteventType
----|`eventlog.SEV_INFO`
 ---|`eventlog.SEV_ERROR`
----|`eventlog.SEV_ALL`
 ---|`eventlog.SEV_WARN`
+---|`eventlog.SEV_INFO`
+---|`eventlog.SEV_ALL`
 
 
 
@@ -3834,12 +3834,12 @@ display = {}
 
 
 
-display.FORMAT_PREFIX = nil
 display.FORMAT_EXPONENT = nil
+display.FORMAT_PREFIX = nil
 
 ---@alias displayreadingformatformat
----|`display.FORMAT_PREFIX`
 ---|`display.FORMAT_EXPONENT`
+---|`display.FORMAT_PREFIX`
 
 
 
@@ -3859,7 +3859,7 @@ display.FORMAT_EXPONENT = nil
 --- --Change front-panel display to show readings in exponential format.
 --- ```
 ---@type displayreadingformatformat
-display.readingformat = display.FORMAT_PREFIX
+display.readingformat = display.FORMAT_EXPONENT
 
 display.TEXT1 = nil
 display.TEXT2 = nil
@@ -3918,29 +3918,29 @@ function display.settext(displayArea, text) end
 function display.clear() end
 
 display.SCREEN_HOME = nil
-display.SCREEN_HISTOGRAM = nil
-display.SCREEN_PROCESSING = nil
-display.SCREEN_READING_TABLE = nil
 display.SCREEN_HOME_LARGE_READING = nil
+display.SCREEN_READING_TABLE = nil
+display.SCREEN_GRAPH = nil
+display.SCREEN_HISTOGRAM = nil
+display.SCREEN_GRAPH_SWIPE = nil
 display.SCREEN_SETTINGS_SWIPE = nil
 display.SCREEN_SOURCE_SWIPE = nil
 display.SCREEN_STATS_SWIPE = nil
 display.SCREEN_USER_SWIPE = nil
-display.SCREEN_GRAPH_SWIPE = nil
-display.SCREEN_GRAPH = nil
+display.SCREEN_PROCESSING = nil
 
 ---@alias displaychangescreenscreenName
 ---|`display.SCREEN_HOME`
----|`display.SCREEN_HISTOGRAM`
----|`display.SCREEN_PROCESSING`
----|`display.SCREEN_READING_TABLE`
 ---|`display.SCREEN_HOME_LARGE_READING`
+---|`display.SCREEN_READING_TABLE`
+---|`display.SCREEN_GRAPH`
+---|`display.SCREEN_HISTOGRAM`
+---|`display.SCREEN_GRAPH_SWIPE`
 ---|`display.SCREEN_SETTINGS_SWIPE`
 ---|`display.SCREEN_SOURCE_SWIPE`
 ---|`display.SCREEN_STATS_SWIPE`
 ---|`display.SCREEN_USER_SWIPE`
----|`display.SCREEN_GRAPH_SWIPE`
----|`display.SCREEN_GRAPH`
+---|`display.SCREEN_PROCESSING`
 
 
 
@@ -3968,20 +3968,20 @@ display.SCREEN_GRAPH = nil
 ---@param screenName displaychangescreenscreenName The screen to display
 function display.changescreen(screenName) end
 
-display.BUTTONS_CANCEL = nil
-display.BUTTONS_OK = nil
-display.BUTTONS_OKCANCEL = nil
-display.BUTTONS_YESNOCANCEL = nil
 display.BUTTONS_NONE = nil
+display.BUTTONS_OK = nil
+display.BUTTONS_CANCEL = nil
+display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_YESNO = nil
+display.BUTTONS_YESNOCANCEL = nil
 
 ---@alias displaypromptbuttonID
----|`display.BUTTONS_CANCEL`
----|`display.BUTTONS_OK`
----|`display.BUTTONS_OKCANCEL`
----|`display.BUTTONS_YESNOCANCEL`
 ---|`display.BUTTONS_NONE`
+---|`display.BUTTONS_OK`
+---|`display.BUTTONS_CANCEL`
+---|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_YESNOCANCEL`
 
 
 
@@ -4021,16 +4021,16 @@ display.BUTTONS_YESNO = nil
 ---@param promptText string A string that contains the text that is displayed above the prompts
 function display.prompt(buttonID, promptText) end
 
-display.BUTTON_CANCEL = nil
 display.BUTTON_YES = nil
-display.BUTTON_OK = nil
 display.BUTTON_NO = nil
+display.BUTTON_OK = nil
+display.BUTTON_CANCEL = nil
 
 ---@alias displaywaiteventsubID
----|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_YES`
----|`display.BUTTON_OK`
 ---|`display.BUTTON_NO`
+---|`display.BUTTON_OK`
+---|`display.BUTTON_CANCEL`
 
 
 
@@ -4071,20 +4071,20 @@ display.BUTTON_NO = nil
 ---@overload fun():objectID:number, subID:displaywaiteventsubID
 function display.waitevent(timeout) end
 
-display.STATE_LCD_75 = nil
-display.STATE_BLACKOUT = nil
 display.STATE_LCD_100 = nil
+display.STATE_LCD_75 = nil
 display.STATE_LCD_50 = nil
 display.STATE_LCD_25 = nil
 display.STATE_LCD_OFF = nil
+display.STATE_BLACKOUT = nil
 
 ---@alias displaylightstatebrightness
----|`display.STATE_LCD_75`
----|`display.STATE_BLACKOUT`
 ---|`display.STATE_LCD_100`
+---|`display.STATE_LCD_75`
 ---|`display.STATE_LCD_50`
 ---|`display.STATE_LCD_25`
 ---|`display.STATE_LCD_OFF`
+---|`display.STATE_BLACKOUT`
 
 
 
@@ -4104,7 +4104,7 @@ display.STATE_LCD_OFF = nil
 --- --Set the display brightness to 50%.
 --- ```
 ---@type displaylightstatebrightness
-display.lightstate = display.STATE_LCD_75
+display.lightstate = display.STATE_LCD_100
 
 
 --- **This function allows you to remove a prompt on the front-panel display that was created with display.prompt().**
@@ -4170,14 +4170,14 @@ file = {}
 ---@param path string A string that contains the path of the directory
 function file.mkdir(path) end
 
-file.MODE_WRITE = nil
-file.MODE_READ = nil
 file.MODE_APPEND = nil
+file.MODE_READ = nil
+file.MODE_WRITE = nil
 
 ---@alias fileopenaccessType
----|`file.MODE_WRITE`
----|`file.MODE_READ`
 ---|`file.MODE_APPEND`
+---|`file.MODE_READ`
+---|`file.MODE_WRITE`
 
 
 
@@ -4205,14 +4205,14 @@ file.MODE_APPEND = nil
 ---@param accessType fileopenaccessType The type of action to do
 function file.open(fileName, accessType) end
 
+file.READ_LINE = nil
 file.READ_NUMBER = nil
 file.READ_ALL = nil
-file.READ_LINE = nil
 
 ---@alias filereadreadAction
+---|`file.READ_LINE`
 ---|`file.READ_NUMBER`
 ---|`file.READ_ALL`
----|`file.READ_LINE`
 
 
 
@@ -5167,13 +5167,13 @@ smu.measure = {}
 
 
 smu.FUNC_DC_VOLTAGE = nil
-smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_RESISTANCE = nil
 
 ---@alias smumeasurefuncmFunction
 ---|`smu.FUNC_DC_VOLTAGE`
----|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_RESISTANCE`
 
 
 
@@ -5261,16 +5261,16 @@ smu.SENSE_4WIRE = nil
 ---@type smumeasuresensesensing
 smu.measure.sense = smu.SENSE_2WIRE
 
+smu.DIGITS_6_5 = nil
 smu.DIGITS_5_5 = nil
 smu.DIGITS_4_5 = nil
 smu.DIGITS_3_5 = nil
-smu.DIGITS_6_5 = nil
 
 ---@alias smumeasuredisplaydigitsdigits
+---|`smu.DIGITS_6_5`
 ---|`smu.DIGITS_5_5`
 ---|`smu.DIGITS_4_5`
 ---|`smu.DIGITS_3_5`
----|`smu.DIGITS_6_5`
 
 
 
@@ -5291,7 +5291,7 @@ smu.DIGITS_6_5 = nil
 --- --Set the measurement function to voltage with a front-panel display resolution of 6½.
 --- ```
 ---@type smumeasuredisplaydigitsdigits
-smu.measure.displaydigits = smu.DIGITS_5_5
+smu.measure.displaydigits = smu.DIGITS_6_5
 
 
 --- **This command sets the time that the input signal is measured for the selected function.**
@@ -5422,13 +5422,13 @@ smu.measure.range = 0
 smu.measure.autorangelow = 0
 
 smu.FUNC_DC_VOLTAGE = nil
-smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_RESISTANCE = nil
 
 ---@alias smumeasureautorangehighfunction
 ---|`smu.FUNC_DC_VOLTAGE`
----|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_RESISTANCE`
 
 
 
@@ -5549,15 +5549,15 @@ smu.measure.autorangehigh = 0
 ---@type any
 smu.measure.count = 0
 
-smu.UNIT_VOLT = nil
-smu.UNIT_OHM = nil
 smu.UNIT_AMP = nil
+smu.UNIT_OHM = nil
+smu.UNIT_VOLT = nil
 smu.UNIT_WATT = nil
 
 ---@alias smumeasureunitunitOfMeasure
----|`smu.UNIT_VOLT`
----|`smu.UNIT_OHM`
 ---|`smu.UNIT_AMP`
+---|`smu.UNIT_OHM`
+---|`smu.UNIT_VOLT`
 ---|`smu.UNIT_WATT`
 
 
@@ -5579,7 +5579,7 @@ smu.UNIT_WATT = nil
 --- --Changes the front-panel display and buffer readings for voltage measurements to be displayed as power readings in watts.
 --- ```
 ---@type smumeasureunitunitOfMeasure
-smu.measure.unit = smu.UNIT_VOLT
+smu.measure.unit = smu.UNIT_AMP
 
 
 --- **This attribute sets a user-defined delay that you can use in the trigger model.**
@@ -5667,13 +5667,13 @@ smu.ON = nil
 smu.measure.autorangerebound = smu.OFF
 
 smu.FUNC_DC_VOLTAGE = nil
-smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_RESISTANCE = nil
 
 ---@alias smumeasuregetattributefunction
 ---|`smu.FUNC_DC_VOLTAGE`
----|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_RESISTANCE`
 
 
 
@@ -5704,13 +5704,13 @@ smu.FUNC_DC_CURRENT = nil
 function smu.measure.getattribute(function, setting) end
 
 smu.FUNC_DC_VOLTAGE = nil
-smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_RESISTANCE = nil
 
 ---@alias smumeasuresetattributefunction
 ---|`smu.FUNC_DC_VOLTAGE`
----|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_RESISTANCE`
 
 
 
@@ -5762,24 +5762,24 @@ trigger.model = {}
 --- ```
 function trigger.model.abort() end
 
-trigger.STATE_RUNNING = nil
-trigger.STATE_IDLE = nil
-trigger.STATE_WAITING = nil
-trigger.STATE_ABORTING = nil
-trigger.STATE_FAILED = nil
-trigger.STATE_EMPTY = nil
 trigger.STATE_ABORTED = nil
+trigger.STATE_ABORTING = nil
 trigger.STATE_BUILDING = nil
+trigger.STATE_EMPTY = nil
+trigger.STATE_FAILED = nil
+trigger.STATE_IDLE = nil
+trigger.STATE_RUNNING = nil
+trigger.STATE_WAITING = nil
 
 ---@alias triggermodelstatestatus
----|`trigger.STATE_RUNNING`
----|`trigger.STATE_IDLE`
----|`trigger.STATE_WAITING`
----|`trigger.STATE_ABORTING`
----|`trigger.STATE_FAILED`
----|`trigger.STATE_EMPTY`
 ---|`trigger.STATE_ABORTED`
+---|`trigger.STATE_ABORTING`
 ---|`trigger.STATE_BUILDING`
+---|`trigger.STATE_EMPTY`
+---|`trigger.STATE_FAILED`
+---|`trigger.STATE_IDLE`
+---|`trigger.STATE_RUNNING`
+---|`trigger.STATE_WAITING`
 
 
 
@@ -5990,16 +5990,16 @@ smu.source.output = smu.OFF
 ---@type number
 smu.source.delay = 0
 
-smu.OFFMODE_GUARD = nil
 smu.OFFMODE_NORMAL = nil
 smu.OFFMODE_ZERO = nil
 smu.OFFMODE_HIGHZ = nil
+smu.OFFMODE_GUARD = nil
 
 ---@alias smusourceoffmodesourceOffMode
----|`smu.OFFMODE_GUARD`
 ---|`smu.OFFMODE_NORMAL`
 ---|`smu.OFFMODE_ZERO`
 ---|`smu.OFFMODE_HIGHZ`
+---|`smu.OFFMODE_GUARD`
 
 
 
@@ -6019,14 +6019,14 @@ smu.OFFMODE_HIGHZ = nil
 --- --Sets the output-off state so that the instrument opens the output relay when the output is turned off.
 --- ```
 ---@type smusourceoffmodesourceOffMode
-smu.source.offmode = smu.OFFMODE_GUARD
+smu.source.offmode = smu.OFFMODE_NORMAL
 
-smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_DC_VOLTAGE = nil
 
 ---@alias smusourcefuncsFunction
----|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -6046,7 +6046,7 @@ smu.FUNC_DC_CURRENT = nil
 --- --Sets the source function of the instrument to be a current source.
 --- ```
 ---@type smusourcefuncsFunction
-smu.source.func = smu.FUNC_DC_VOLTAGE
+smu.source.func = smu.FUNC_DC_CURRENT
 
 
 --- **This attribute selects the range for the source for the selected source function.**
@@ -6132,13 +6132,13 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
-smu.RANGE_BEST = nil
 smu.RANGE_AUTO = nil
+smu.RANGE_BEST = nil
 smu.RANGE_FIXED = nil
 
 ---@alias smusourcesweeplinearrangeType
----|`smu.RANGE_BEST`
 ---|`smu.RANGE_AUTO`
+---|`smu.RANGE_BEST`
 ---|`smu.RANGE_FIXED`
 
 
@@ -6216,13 +6216,13 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
-smu.RANGE_BEST = nil
 smu.RANGE_AUTO = nil
+smu.RANGE_BEST = nil
 smu.RANGE_FIXED = nil
 
 ---@alias smusourcesweeplinearsteprangeType
----|`smu.RANGE_BEST`
 ---|`smu.RANGE_AUTO`
+---|`smu.RANGE_BEST`
 ---|`smu.RANGE_FIXED`
 
 
@@ -6298,13 +6298,13 @@ smu.INFINITE = nil
 ---|`smu.INFINITE`
 
 
-smu.RANGE_BEST = nil
 smu.RANGE_AUTO = nil
+smu.RANGE_BEST = nil
 smu.RANGE_FIXED = nil
 
 ---@alias smusourcesweeplograngeType
----|`smu.RANGE_BEST`
 ---|`smu.RANGE_AUTO`
+---|`smu.RANGE_BEST`
 ---|`smu.RANGE_FIXED`
 
 
@@ -6579,12 +6579,12 @@ smu.source.autodelay = smu.OFF
 ---@type number[]
 smu.source.userdelay = {}
 
-smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_DC_VOLTAGE = nil
 
 ---@alias smusourcesetattributefunction
----|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -6610,12 +6610,12 @@ smu.FUNC_DC_CURRENT = nil
 ---@param value any The function or setting value
 function smu.source.setattribute(function, setting, value) end
 
-smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_DC_VOLTAGE = nil
 
 ---@alias smusourcegetattributefunction
----|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -6876,12 +6876,12 @@ function triggerdigoutArr.assert() end
 function triggerdigoutArr.release() end
 
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
 ---@alias triggerdigoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -6902,7 +6902,7 @@ trigger.LOGIC_POSITIVE = nil
 --- --Sets line 4 mode to be a trigger output and sets the output logic of the trigger event generator to negative (asserts a low pulse).
 --- ```
 ---@type triggerdigoutlogiclogicType
-triggerdigoutArr.logic = trigger.LOGIC_NEGATIVE
+triggerdigoutArr.logic = trigger.LOGIC_POSITIVE
 ---@class status.operation
 status.operation = {}
 
@@ -7224,24 +7224,24 @@ digio.STATE_HIGH = nil
 ---@type digiolinestatestate
 digiolineArr.state = digio.STATE_LOW
 
-digio.MODE_DIGITAL_OPEN_DRAIN = nil
 digio.MODE_DIGITAL_IN = nil
+digio.MODE_DIGITAL_OUT = nil
+digio.MODE_DIGITAL_OPEN_DRAIN = nil
+digio.MODE_TRIGGER_IN = nil
 digio.MODE_TRIGGER_OUT = nil
 digio.MODE_TRIGGER_OPEN_DRAIN = nil
-digio.MODE_DIGITAL_OUT = nil
 digio.MODE_SYNCHRONOUS_MASTER = nil
 digio.MODE_SYNCHRONOUS_ACCEPTOR = nil
-digio.MODE_TRIGGER_IN = nil
 
 ---@alias digiolinemodelineMode
----|`digio.MODE_DIGITAL_OPEN_DRAIN`
 ---|`digio.MODE_DIGITAL_IN`
+---|`digio.MODE_DIGITAL_OUT`
+---|`digio.MODE_DIGITAL_OPEN_DRAIN`
+---|`digio.MODE_TRIGGER_IN`
 ---|`digio.MODE_TRIGGER_OUT`
 ---|`digio.MODE_TRIGGER_OPEN_DRAIN`
----|`digio.MODE_DIGITAL_OUT`
 ---|`digio.MODE_SYNCHRONOUS_MASTER`
 ---|`digio.MODE_SYNCHRONOUS_ACCEPTOR`
----|`digio.MODE_TRIGGER_IN`
 
 
 
@@ -7261,7 +7261,7 @@ digio.MODE_TRIGGER_IN = nil
 --- --Set digital I/O line 1 to be an output trigger line.
 --- ```
 ---@type digiolinemodelineMode
-digiolineArr.mode = digio.MODE_DIGITAL_OPEN_DRAIN
+digiolineArr.mode = digio.MODE_DIGITAL_IN
 
 
 --- **This function resets digital I/O line values to their factory defaults.**
@@ -7305,14 +7305,14 @@ trigger.digin = {}
 
 
 
+trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
 trigger.EDGE_EITHER = nil
-trigger.EDGE_FALLING = nil
 
 ---@alias triggerdiginedgedetectedEdge
+---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
 ---|`trigger.EDGE_EITHER`
----|`trigger.EDGE_FALLING`
 
 
 
@@ -7333,7 +7333,7 @@ trigger.EDGE_FALLING = nil
 --- --Sets the trigger mode for digital I/O line 4 to detect a rising-edge trigger as an input.
 --- ```
 ---@type triggerdiginedgedetectedEdge
-triggerdiginArr.edge = trigger.EDGE_RISING
+triggerdiginArr.edge = trigger.EDGE_FALLING
 
 
 --- **This function clears the trigger event on a digital input line.**
@@ -7510,13 +7510,13 @@ triggerlanoutArr.connected = true
 triggerlanoutArr.ipaddress = ''
 
 lan.PROTOCOL_TCP = nil
-lan.PROTOCOL_MULTICAST = nil
 lan.PROTOCOL_UDP = nil
+lan.PROTOCOL_MULTICAST = nil
 
 ---@alias triggerlanoutprotocolprotocol
 ---|`lan.PROTOCOL_TCP`
----|`lan.PROTOCOL_MULTICAST`
 ---|`lan.PROTOCOL_UDP`
+---|`lan.PROTOCOL_MULTICAST`
 
 
 
@@ -7558,12 +7558,12 @@ triggerlanoutArr.protocol = lan.PROTOCOL_TCP
 triggerlanoutArr.stimulus= trigger.EVENT_NONE
 
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
 ---@alias triggerlanoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -7583,7 +7583,7 @@ trigger.LOGIC_POSITIVE = nil
 --- --Set the logic for LAN trigger line 2 to positive.
 --- ```
 ---@type triggerlanoutlogiclogicType
-triggerlanoutArr.logic = trigger.LOGIC_NEGATIVE
+triggerlanoutArr.logic = trigger.LOGIC_POSITIVE
 ---@class tsplinklineArr
 local tsplinklineArr = {}
 
@@ -7667,14 +7667,14 @@ trigger.tsplinkin = {}
 
 
 
+trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
 trigger.EDGE_EITHER = nil
-trigger.EDGE_FALLING = nil
 
 ---@alias triggertsplinkinedgedetectedEdge
+---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
 ---|`trigger.EDGE_EITHER`
----|`trigger.EDGE_FALLING`
 
 
 
@@ -7695,7 +7695,7 @@ trigger.EDGE_FALLING = nil
 --- --Sets synchronization line 3 to detect rising edge triggers as input.
 --- ```
 ---@type triggertsplinkinedgedetectedEdge
-triggertsplinkinArr.edge = trigger.EDGE_RISING
+triggertsplinkinArr.edge = trigger.EDGE_FALLING
 
 
 --- **This function clears the event detector for a LAN trigger.**
@@ -7768,12 +7768,12 @@ trigger.tsplinkout = {}
 
 
 
-trigger.LOGIC_NEGATIVE = nil
 trigger.LOGIC_POSITIVE = nil
+trigger.LOGIC_NEGATIVE = nil
 
 ---@alias triggertsplinkoutlogiclogicType
----|`trigger.LOGIC_NEGATIVE`
 ---|`trigger.LOGIC_POSITIVE`
+---|`trigger.LOGIC_NEGATIVE`
 
 
 
@@ -7794,7 +7794,7 @@ trigger.LOGIC_POSITIVE = nil
 --- --Sets the trigger logic for synchronization line 3 to output a positive pulse.
 --- ```
 ---@type triggertsplinkoutlogiclogicType
-triggertsplinkoutArr.logic = trigger.LOGIC_NEGATIVE
+triggertsplinkoutArr.logic = trigger.LOGIC_POSITIVE
 
 
 --- **This function simulates the occurrence of the trigger and generates the corresponding trigger event.**
@@ -7880,15 +7880,15 @@ display.input = {}
 
 
 
-display.NFORMAT_EXPONENT = nil
 display.NFORMAT_INTEGER = nil
 display.NFORMAT_DECIMAL = nil
+display.NFORMAT_EXPONENT = nil
 display.NFORMAT_PREFIX = nil
 
 ---@alias displayinputnumbernumberFormat
----|`display.NFORMAT_EXPONENT`
 ---|`display.NFORMAT_INTEGER`
 ---|`display.NFORMAT_DECIMAL`
+---|`display.NFORMAT_EXPONENT`
 ---|`display.NFORMAT_PREFIX`
 
 
@@ -7942,35 +7942,34 @@ function display.input.number(dialogTitle, numberFormat, defaultValue, minimumVa
 --- --
 --- --If the user selects Peach, the return is display.BUTTON_OPTION8.
 --- ```
----@return display_BUTTON_OPTIONs | nil n The number of the button that is selected from the front-panel display; nil if Cancel is pressed on the keypad; buttons are numbered top to bottom, left to right
----@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
+---@return displayInputOption displayOption---@param dialogTitle string A string that contains the text to be displayed as the title of the dialog box on the front-panel display; up to 32 characters
 ---@param buttonTitle1 string A string that contains the name of the first button; up to 15 characters
 ---@return displayInputOption displayOption---@return displayInputOption displayOptionfunction display.input.option(dialogTitle, buttonTitle1, ...) end
 
-display.BUTTON_NO = nil
-display.BUTTON_YES = nil
-display.BUTTON_CANCEL = nil
 display.BUTTON_OK = nil
+display.BUTTON_CANCEL = nil
+display.BUTTON_YES = nil
+display.BUTTON_NO = nil
 
 ---@alias displayinputpromptbuttonReturn
----|`display.BUTTON_NO`
----|`display.BUTTON_YES`
----|`display.BUTTON_CANCEL`
 ---|`display.BUTTON_OK`
+---|`display.BUTTON_CANCEL`
+---|`display.BUTTON_YES`
+---|`display.BUTTON_NO`
 
 
-display.BUTTONS_CANCEL = nil
 display.BUTTONS_OK = nil
-display.BUTTONS_YESNOCANCEL = nil
+display.BUTTONS_CANCEL = nil
 display.BUTTONS_OKCANCEL = nil
 display.BUTTONS_YESNO = nil
+display.BUTTONS_YESNOCANCEL = nil
 
 ---@alias displayinputpromptbuttonSet
----|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_OK`
----|`display.BUTTONS_YESNOCANCEL`
+---|`display.BUTTONS_CANCEL`
 ---|`display.BUTTONS_OKCANCEL`
 ---|`display.BUTTONS_YESNO`
+---|`display.BUTTONS_YESNOCANCEL`
 
 
 
@@ -8001,14 +8000,14 @@ function display.input.prompt(buttonSet, dialogTitle) end
 
 display.SFORMAT_ANY = nil
 display.SFORMAT_UPPER_LOWER = nil
-display.SFORMAT_BUFFER_NAME = nil
 display.SFORMAT_UPPER = nil
+display.SFORMAT_BUFFER_NAME = nil
 
 ---@alias displayinputstringtextFormat
 ---|`display.SFORMAT_ANY`
 ---|`display.SFORMAT_UPPER_LOWER`
----|`display.SFORMAT_BUFFER_NAME`
 ---|`display.SFORMAT_UPPER`
+---|`display.SFORMAT_BUFFER_NAME`
 
 
 
@@ -8040,74 +8039,74 @@ buffer.write = {}
 
 
 
-buffer.UNIT_WATT = nil
-buffer.UNIT_RATIO = nil
-buffer.UNIT_TOT = nil
-buffer.UNIT_HERTZ = nil
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_PERCENT = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_X = nil
-buffer.UNIT_NONE = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_OHM = nil
 buffer.UNIT_AMP = nil
-buffer.UNIT_RECIPROCAL = nil
-buffer.UNIT_DECIBEL = nil
-buffer.UNIT_VOLT_AC = nil
-buffer.UNIT_SECOND = nil
+buffer.UNIT_AMP_AC = nil
 buffer.UNIT_CELSIUS = nil
 buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_CUSTOM3 = nil
 buffer.UNIT_DAC = nil
-buffer.UNIT_AMP_AC = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_DECIBEL = nil
+buffer.UNIT_DIO = nil
 buffer.UNIT_FAHRENHEIT = nil
 buffer.UNIT_FARAD = nil
+buffer.UNIT_HERTZ = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_RATIO = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_WATT = nil
+buffer.UNIT_X = nil
 
 ---@alias bufferwriteformatunits
----|`buffer.UNIT_WATT`
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_TOT`
----|`buffer.UNIT_HERTZ`
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_PERCENT`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_X`
----|`buffer.UNIT_NONE`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_OHM`
 ---|`buffer.UNIT_AMP`
----|`buffer.UNIT_RECIPROCAL`
----|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_VOLT_AC`
----|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_AMP_AC`
 ---|`buffer.UNIT_CELSIUS`
 ---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_CUSTOM3`
 ---|`buffer.UNIT_DAC`
----|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_DIO`
 ---|`buffer.UNIT_FAHRENHEIT`
 ---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_RATIO`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_WATT`
+---|`buffer.UNIT_X`
 
 
-buffer.DIGITS_6_5 = nil
-buffer.DIGITS_8_5 = nil
-buffer.DIGITS_4_5 = nil
-buffer.DIGITS_7_5 = nil
 buffer.DIGITS_3_5 = nil
+buffer.DIGITS_4_5 = nil
 buffer.DIGITS_5_5 = nil
+buffer.DIGITS_6_5 = nil
+buffer.DIGITS_7_5 = nil
+buffer.DIGITS_8_5 = nil
 
 ---@alias bufferwriteformatdisplayDigits
----|`buffer.DIGITS_6_5`
----|`buffer.DIGITS_8_5`
----|`buffer.DIGITS_4_5`
----|`buffer.DIGITS_7_5`
 ---|`buffer.DIGITS_3_5`
+---|`buffer.DIGITS_4_5`
 ---|`buffer.DIGITS_5_5`
+---|`buffer.DIGITS_6_5`
+---|`buffer.DIGITS_7_5`
+---|`buffer.DIGITS_8_5`
 
 
 
@@ -8261,14 +8260,14 @@ smu.ON = nil
 ---@type smumeasuremathenablevalue
 smu.measure.math.enable = smu.OFF
 
-smu.MATH_RECIPROCAL = nil
-smu.MATH_PERCENT = nil
 smu.MATH_MXB = nil
+smu.MATH_PERCENT = nil
+smu.MATH_RECIPROCAL = nil
 
 ---@alias smumeasuremathformatoperation
----|`smu.MATH_RECIPROCAL`
----|`smu.MATH_PERCENT`
 ---|`smu.MATH_MXB`
+---|`smu.MATH_PERCENT`
+---|`smu.MATH_RECIPROCAL`
 
 
 
@@ -8290,7 +8289,7 @@ smu.MATH_MXB = nil
 --- --Enables the reciprocal math operation on voltage measurements.
 --- ```
 ---@type smumeasuremathformatoperation
-smu.measure.math.format = smu.MATH_RECIPROCAL
+smu.measure.math.format = smu.MATH_MXB
 
 
 --- **This attribute specifies the reference constant that is used when math operations are set to percent.**
@@ -8555,13 +8554,13 @@ smu.ON = nil
 ---@type smumeasurelimitenablestate
 smumeasurelimitArr.enable = smu.OFF
 
-smu.AUDIBLE_FAIL = nil
 smu.AUDIBLE_NONE = nil
+smu.AUDIBLE_FAIL = nil
 smu.AUDIBLE_PASS = nil
 
 ---@alias smumeasurelimitaudiblestate
----|`smu.AUDIBLE_FAIL`
 ---|`smu.AUDIBLE_NONE`
+---|`smu.AUDIBLE_FAIL`
 ---|`smu.AUDIBLE_PASS`
 
 
@@ -8582,7 +8581,7 @@ smu.AUDIBLE_PASS = nil
 --- --When the beeper sounds:
 --- --Never: smu.AUDIBLE_NONEOn test failure: smu.AUDIBLE_FAILOn test pass: smu.AUDIBL--- ```
 ---@type smumeasurelimitaudiblestate
-smumeasurelimitArr.audible = smu.AUDIBLE_FAIL
+smumeasurelimitArr.audible = smu.AUDIBLE_NONE
 ---@class smu.measure.configlist
 smu.measure.configlist = {}
 
@@ -8774,13 +8773,13 @@ function smu.measure.configlist.store(listName, index) end
 function smu.measure.configlist.size(listName) end
 
 smu.FUNC_DC_VOLTAGE = nil
-smu.FUNC_RESISTANCE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_RESISTANCE = nil
 
 ---@alias smumeasureconfigliststorefuncfunction
 ---|`smu.FUNC_DC_VOLTAGE`
----|`smu.FUNC_RESISTANCE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_RESISTANCE`
 
 
 
@@ -8985,12 +8984,12 @@ function smu.source.configlist.size(listName) end
 ---@overload fun(listName:string,index:integer,measureListName:string)
 function smu.source.configlist.recall(listName, index, measureListName, measureIndex) end
 
-smu.FUNC_DC_VOLTAGE = nil
 smu.FUNC_DC_CURRENT = nil
+smu.FUNC_DC_VOLTAGE = nil
 
 ---@alias smusourceconfigliststorefuncfunction
----|`smu.FUNC_DC_VOLTAGE`
 ---|`smu.FUNC_DC_CURRENT`
+---|`smu.FUNC_DC_VOLTAGE`
 
 
 
@@ -9071,24 +9070,24 @@ smu.source.protect = {}
 
 
 
-smu.PROTECT_40V = nil
 smu.PROTECT_20V = nil
-smu.PROTECT_300V = nil
-smu.PROTECT_500V = nil
-smu.PROTECT_400V = nil
+smu.PROTECT_40V = nil
 smu.PROTECT_100V = nil
-smu.PROTECT_NONE = nil
 smu.PROTECT_200V = nil
+smu.PROTECT_300V = nil
+smu.PROTECT_400V = nil
+smu.PROTECT_500V = nil
+smu.PROTECT_NONE = nil
 
 ---@alias smusourceprotectlevelPROTECT_x
----|`smu.PROTECT_40V`
 ---|`smu.PROTECT_20V`
----|`smu.PROTECT_300V`
----|`smu.PROTECT_500V`
----|`smu.PROTECT_400V`
+---|`smu.PROTECT_40V`
 ---|`smu.PROTECT_100V`
----|`smu.PROTECT_NONE`
 ---|`smu.PROTECT_200V`
+---|`smu.PROTECT_300V`
+---|`smu.PROTECT_400V`
+---|`smu.PROTECT_500V`
+---|`smu.PROTECT_NONE`
 
 
 
@@ -9109,7 +9108,7 @@ smu.PROTECT_200V = nil
 --- --Sets the maximum voltage limit of the instrument to 40 V.
 --- ```
 ---@type smusourceprotectlevelPROTECT_x
-smu.source.protect.level = smu.PROTECT_40V
+smu.source.protect.level = smu.PROTECT_20V
 
 smu.OFF = nil
 smu.ON = nil
@@ -9167,12 +9166,12 @@ smu.measure.filter = {}
 ---@type any
 smu.measure.filter.count = 0
 
-smu.FILTER_REPEAT_AVG = nil
 smu.FILTER_MOVING_AVG = nil
+smu.FILTER_REPEAT_AVG = nil
 
 ---@alias smumeasurefiltertypefilterType
----|`smu.FILTER_REPEAT_AVG`
 ---|`smu.FILTER_MOVING_AVG`
+---|`smu.FILTER_REPEAT_AVG`
 
 
 
@@ -9197,7 +9196,7 @@ smu.FILTER_MOVING_AVG = nil
 --- --Enable the averaging filter.
 --- ```
 ---@type smumeasurefiltertypefilterType
-smu.measure.filter.type = smu.FILTER_REPEAT_AVG
+smu.measure.filter.type = smu.FILTER_MOVING_AVG
 
 smu.OFF = nil
 smu.ON = nil
@@ -10031,58 +10030,58 @@ function available(functionality) end
 --- ```
 ---@param loadFunConst loadFunConstParam
 function trigger.model.load(loadFunConst,...) end
-buffer.UNIT_WATT = nil
-buffer.UNIT_RATIO = nil
-buffer.UNIT_TOT = nil
-buffer.UNIT_HERTZ = nil
-buffer.UNIT_CUSTOM3 = nil
-buffer.UNIT_DBM = nil
-buffer.UNIT_PERCENT = nil
-buffer.UNIT_DIO = nil
-buffer.UNIT_VOLT = nil
-buffer.UNIT_X = nil
-buffer.UNIT_NONE = nil
-buffer.UNIT_CUSTOM2 = nil
-buffer.UNIT_KELVIN = nil
-buffer.UNIT_OHM = nil
 buffer.UNIT_AMP = nil
-buffer.UNIT_RECIPROCAL = nil
-buffer.UNIT_DECIBEL = nil
-buffer.UNIT_VOLT_AC = nil
-buffer.UNIT_SECOND = nil
+buffer.UNIT_AMP_AC = nil
 buffer.UNIT_CELSIUS = nil
 buffer.UNIT_CUSTOM1 = nil
+buffer.UNIT_CUSTOM2 = nil
+buffer.UNIT_CUSTOM3 = nil
 buffer.UNIT_DAC = nil
-buffer.UNIT_AMP_AC = nil
+buffer.UNIT_DBM = nil
+buffer.UNIT_DECIBEL = nil
+buffer.UNIT_DIO = nil
 buffer.UNIT_FAHRENHEIT = nil
 buffer.UNIT_FARAD = nil
+buffer.UNIT_HERTZ = nil
+buffer.UNIT_KELVIN = nil
+buffer.UNIT_NONE = nil
+buffer.UNIT_OHM = nil
+buffer.UNIT_PERCENT = nil
+buffer.UNIT_RATIO = nil
+buffer.UNIT_RECIPROCAL = nil
+buffer.UNIT_SECOND = nil
+buffer.UNIT_TOT = nil
+buffer.UNIT_VOLT = nil
+buffer.UNIT_VOLT_AC = nil
+buffer.UNIT_WATT = nil
+buffer.UNIT_X = nil
 
 ---@alias buffermathunit
----|`buffer.UNIT_WATT`
----|`buffer.UNIT_RATIO`
----|`buffer.UNIT_TOT`
----|`buffer.UNIT_HERTZ`
----|`buffer.UNIT_CUSTOM3`
----|`buffer.UNIT_DBM`
----|`buffer.UNIT_PERCENT`
----|`buffer.UNIT_DIO`
----|`buffer.UNIT_VOLT`
----|`buffer.UNIT_X`
----|`buffer.UNIT_NONE`
----|`buffer.UNIT_CUSTOM2`
----|`buffer.UNIT_KELVIN`
----|`buffer.UNIT_OHM`
 ---|`buffer.UNIT_AMP`
----|`buffer.UNIT_RECIPROCAL`
----|`buffer.UNIT_DECIBEL`
----|`buffer.UNIT_VOLT_AC`
----|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_AMP_AC`
 ---|`buffer.UNIT_CELSIUS`
 ---|`buffer.UNIT_CUSTOM1`
+---|`buffer.UNIT_CUSTOM2`
+---|`buffer.UNIT_CUSTOM3`
 ---|`buffer.UNIT_DAC`
----|`buffer.UNIT_AMP_AC`
+---|`buffer.UNIT_DBM`
+---|`buffer.UNIT_DECIBEL`
+---|`buffer.UNIT_DIO`
 ---|`buffer.UNIT_FAHRENHEIT`
 ---|`buffer.UNIT_FARAD`
+---|`buffer.UNIT_HERTZ`
+---|`buffer.UNIT_KELVIN`
+---|`buffer.UNIT_NONE`
+---|`buffer.UNIT_OHM`
+---|`buffer.UNIT_PERCENT`
+---|`buffer.UNIT_RATIO`
+---|`buffer.UNIT_RECIPROCAL`
+---|`buffer.UNIT_SECOND`
+---|`buffer.UNIT_TOT`
+---|`buffer.UNIT_VOLT`
+---|`buffer.UNIT_VOLT_AC`
+---|`buffer.UNIT_WATT`
+---|`buffer.UNIT_X`
 
 
 ---**buffer.math()**
