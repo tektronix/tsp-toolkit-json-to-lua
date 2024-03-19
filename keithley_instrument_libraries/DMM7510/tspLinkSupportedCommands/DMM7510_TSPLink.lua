@@ -98,7 +98,7 @@ function dataqueue.clear() end
 
 dataqueue.CAPACITY = nil
 
----@alias dataqueue.CAPACITY
+---@alias dataqueueCAPACITYcount
 ---|`dataqueue.CAPACITY`
 
 
@@ -125,7 +125,7 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
----@type dataqueue.CAPACITY | integer
+---@type dataqueueCAPACITYcount | integer
 dataqueue.CAPACITY = dataqueue.CAPACITY
 
 
@@ -155,7 +155,7 @@ dataqueue.CAPACITY = dataqueue.CAPACITY
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
----@type number
+---@type integer
 dataqueue.count = 0
 
 
@@ -3363,7 +3363,7 @@ acal.ACTION_RUN = nil
 acal.ACTION_NOTIFY = nil
 acal.ACTION_NONE = nil
 
----@alias any
+---@alias acalscheduleaction
 ---|`acal.ACTION_RUN`
 ---|`acal.ACTION_NOTIFY`
 ---|`acal.ACTION_NONE`
@@ -3377,7 +3377,7 @@ acal.INTERVAL_14DAY = nil
 acal.INTERVAL_30DAY = nil
 acal.INTERVAL_90DAY = nil
 
----@alias any
+---@alias acalscheduleinterval
 ---|`acal.INTERVAL_8HR`
 ---|`acal.INTERVAL_16HR`
 ---|`acal.INTERVAL_1DAY`
@@ -3403,12 +3403,12 @@ acal.INTERVAL_90DAY = nil
 --- 
 --- --Sets autocalibration to run every day at 8 am.
 --- ```
----@param action any Determines when and if the instrument automatically runs autocalibration
----@param interval any Determines how often autocalibration should be run or notification should occur
----@param hour any Specify when the autocalibration should occur; specify in 24-hour time format (0 to 23; default is 0); not available for the 8-hour or 16-hour interval
+---@param action acalscheduleaction Determines when and if the instrument automatically runs autocalibration
+---@param interval acalscheduleinterval Determines how often autocalibration should be run or notification should occur
+---@param hour integer Specify when the autocalibration should occur; specify in 24-hour time format (0 to 23; default is 0); not available for the 8-hour or 16-hour interval
 ---@overload fun()
----@overload fun(action:any)
----@overload fun(action:any,interval:any)
+---@overload fun(action:acalscheduleaction)
+---@overload fun(action:acalscheduleaction,interval:acalscheduleinterval)
 function acal.schedule(action, interval, hour) end
 
 
@@ -3452,7 +3452,7 @@ fan = {}
 fan.LEVEL_NORMAL = nil
 fan.LEVEL_QUIET = nil
 
----@alias any
+---@alias fanlevelfanLevel
 ---|`fan.LEVEL_NORMAL`
 ---|`fan.LEVEL_QUIET`
 
@@ -3473,7 +3473,7 @@ fan.LEVEL_QUIET = nil
 --- 
 --- --Set the fan speed to the quiet level. The audible noise of the fan decreases.
 --- ```
----@type any
+---@type fanlevelfanLevel
 fan.level = fan.LEVEL_NORMAL
 ---@class triggerblenderArr
 local triggerblenderArr = {}
@@ -4083,7 +4083,7 @@ dmm.measure.detectorbandwidth = dmm.DETECTBW_3HZ
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmmeasuredrycircuitstate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -4105,7 +4105,7 @@ dmm.ON = nil
 --- 
 --- --Set the measure function to 4-wire resistance and enable dry circuit.
 --- ```
----@type any
+---@type dmmmeasuredrycircuitstate
 dmm.measure.drycircuit = dmm.OFF
 
 dmm.RTD_PT100 = nil
@@ -4405,7 +4405,7 @@ dmm.REFJUNCTION_SIMULATED = nil
 dmm.REFJUNCTION_INTERNAL = nil
 dmm.REFJUNCTION_EXTERNAL = nil
 
----@alias any
+---@alias dmmmeasurerefjunctionstate
 ---|`dmm.REFJUNCTION_SIMULATED`
 ---|`dmm.REFJUNCTION_INTERNAL`
 ---|`dmm.REFJUNCTION_EXTERNAL`
@@ -4429,13 +4429,13 @@ dmm.REFJUNCTION_EXTERNAL = nil
 --- 
 --- --Describe
 --- ```
----@type any
+---@type dmmmeasurerefjunctionstate
 dmm.measure.refjunction = dmm.REFJUNCTION_SIMULATED
 
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmmeasureinputdividerstate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -4456,7 +4456,7 @@ dmm.ON = nil
 --- 
 --- --Describe
 --- ```
----@type any
+---@type dmmmeasureinputdividerstate
 dmm.measure.inputdivider = dmm.OFF
 
 dmm.OFF = nil
@@ -4531,7 +4531,7 @@ dmm.measure.nplc = 0
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmmeasureopendetectorstate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -4556,7 +4556,7 @@ dmm.ON = nil
 --- --Set the transducer type to thermocouple.
 --- --Set open lead detection off.
 --- ```
----@type any
+---@type dmmmeasureopendetectorstate
 dmm.measure.opendetector = dmm.OFF
 
 
@@ -4875,7 +4875,7 @@ function trigger.model.getblocklist() end
 --- --At end of execution, 10 readings are stored in defbuffer1.
 --- ```
 ---@param blockNumber number The sequence of the block in the trigger model
----@return any output Returns the count value of the trigger model counter block.
+---@return integer output Returns the count value of the trigger model counter block.
 function trigger.model.getbranchcount(blockNumber) end
 
 
@@ -6329,7 +6329,7 @@ dmm.digitize.displaydigits = dmm.DIGITS_6_5
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmdigitizeinputdividervalue
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -6351,7 +6351,7 @@ dmm.ON = nil
 --- 
 --- --Describe
 --- ```
----@type any
+---@type dmmdigitizeinputdividervalue
 dmm.digitize.inputdivider = dmm.OFF
 
 
@@ -6425,7 +6425,7 @@ dmm.FUNC_DIGITIZE_CURRENT = nil
 dmm.FUNC_DIGITIZE_VOLTAGE = nil
 dmm.FUNC_NONE = nil
 
----@alias dmmdigitizefunc
+---@alias dmmdigitizefuncvalue
 ---|`dmm.FUNC_DIGITIZE_CURRENT`
 ---|`dmm.FUNC_DIGITIZE_VOLTAGE`
 ---|`dmm.FUNC_NONE`
@@ -6447,12 +6447,12 @@ dmm.FUNC_NONE = nil
 --- 
 --- --Set the measurement function to digitize current.
 --- ```
----@type dmmdigitizefunc
+---@type dmmdigitizefuncvalue
 dmm.digitize.func = dmm.FUNC_DIGITIZE_CURRENT
 
 dmm.APERTURE_AUTO = nil
 
----@alias any
+---@alias dmmdigitizeaperturetime
 ---|`dmm.APERTURE_AUTO`
 
 
@@ -6477,7 +6477,7 @@ dmm.APERTURE_AUTO = nil
 --- --Set the digitize function to measure current. Set the sample rate to 200,000, with a count of 1, and automatic aperture.
 --- --Make a digitize measurement.
 --- ```
----@type any
+---@type dmmdigitizeaperturetime
 dmm.digitize.aperture = dmm.APERTURE_AUTO
 
 
@@ -6655,7 +6655,7 @@ trigger.EDGE_FALLING = nil
 trigger.EDGE_RISING = nil
 trigger.EDGE_EITHER = nil
 
----@alias any
+---@alias triggerextinedgedetectedEdge
 ---|`trigger.EDGE_FALLING`
 ---|`trigger.EDGE_RISING`
 ---|`trigger.EDGE_EITHER`
@@ -6677,7 +6677,7 @@ trigger.EDGE_EITHER = nil
 --- 
 --- --Sets the external I/O input line to detect rising-edge triggers as inputs.
 --- ```
----@type any
+---@type triggerextinedgedetectedEdge
 trigger.extin.edge = trigger.EDGE_FALLING
 
 
@@ -6749,7 +6749,7 @@ function trigger.extout.assert() end
 trigger.LOGIC_POSITIVE = nil
 trigger.LOGIC_NEGATIVE = nil
 
----@alias any
+---@alias triggerextoutlogiclogicType
 ---|`trigger.LOGIC_POSITIVE`
 ---|`trigger.LOGIC_NEGATIVE`
 
@@ -6778,7 +6778,7 @@ trigger.LOGIC_NEGATIVE = nil
 --- --Set the stimulus to the external I/O input.
 --- --Set the external input to detect a falling edge.
 --- ```
----@type any
+---@type triggerextoutlogiclogicType
 trigger.extout.logic = trigger.LOGIC_POSITIVE
 
 
@@ -7232,7 +7232,7 @@ function dmm.measure.configlist.create(listName) end
 --- 
 --- --Request the name of one measure configuration list that is stored in the instrument. Send the command again until it returns nil to get all stored lists.
 --- ```
----@return any output Returns the name of one measure configuration list that is stored on the instrument
+---@return string output Returns the name of one measure configuration list that is stored on the instrument
 function dmm.measure.configlist.catalog() end
 
 
@@ -7269,8 +7269,8 @@ function dmm.measure.configlist.catalog() end
 ---@param listName string A string that represents the name of a measure configuration list
 ---@param index integer A number that defines a specific configuration index in the configuration list
 ---@param fieldSeparator string String that represents the separator for the data; use one of the following
----@return any output Returns a list of TSP commands and parameter settings that are stored in the specified configuration index
----@overload fun(listName:string,index:integer):output:any
+---@return string[] output Returns a list of TSP commands and parameter settings that are stored in the specified configuration index
+---@overload fun(listName:string,index:integer):output:string[]
 function dmm.measure.configlist.query(listName, index, fieldSeparator) end
 
 
@@ -7694,7 +7694,7 @@ dmm.digitize.filter.count = 0
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias any
+---@alias dmmdigitizefilterenablevalue
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -7715,13 +7715,13 @@ dmm.OFF = nil
 --- 
 --- --Describe
 --- ```
----@type any
+---@type dmmdigitizefilterenablevalue
 dmm.digitize.filter.enable = dmm.ON
 
 dmm.FILTER_REPEAT_AVG = nil
 dmm.FILTER_MOVING_AVG = nil
 
----@alias any
+---@alias dmmdigitizefiltertypevalue
 ---|`dmm.FILTER_REPEAT_AVG`
 ---|`dmm.FILTER_MOVING_AVG`
 
@@ -7744,7 +7744,7 @@ dmm.FILTER_MOVING_AVG = nil
 --- 
 --- --Set the filter type for 2-wire ohms to moving average and enable filtered measurements.
 --- ```
----@type any
+---@type dmmdigitizefiltertypevalue
 dmm.digitize.filter.type = dmm.FILTER_REPEAT_AVG
 
 
@@ -7775,7 +7775,7 @@ dmm.measure.limit = {}
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias dmmmeasurelimitArrautoclearvalue
+---@alias dmmmeasurelimitautoclearvalue
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -7796,7 +7796,7 @@ dmm.ON = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitArrautoclearvalue
+---@type dmmmeasurelimitautoclearvalue
 dmmmeasurelimitArr.autoclear = dmm.OFF
 
 
@@ -7823,7 +7823,7 @@ dmm.FAIL_HIGH = nil
 dmm.FAIL_LOW = nil
 dmm.FAIL_BOTH = nil
 
----@alias dmmmeasurelimitArrfailvalue
+---@alias dmmmeasurelimitfailvalue
 ---|`dmm.FAIL_NONE`
 ---|`dmm.FAIL_HIGH`
 ---|`dmm.FAIL_LOW`
@@ -7846,13 +7846,13 @@ dmm.FAIL_BOTH = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitArrfailvalue
+---@type dmmmeasurelimitfailvalue
 dmmmeasurelimitArr.fail = dmm.FAIL_NONE
 
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias dmmmeasurelimitArrenablestate
+---@alias dmmmeasurelimitenablestate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -7873,14 +7873,14 @@ dmm.ON = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitArrenablestate
+---@type dmmmeasurelimitenablestate
 dmmmeasurelimitArr.enable = dmm.OFF
 
 dmm.AUDIBLE_NONE = nil
 dmm.AUDIBLE_FAIL = nil
 dmm.AUDIBLE_PASS = nil
 
----@alias dmmmeasurelimitArraudiblestate
+---@alias dmmmeasurelimitaudiblestate
 ---|`dmm.AUDIBLE_NONE`
 ---|`dmm.AUDIBLE_FAIL`
 ---|`dmm.AUDIBLE_PASS`
@@ -7902,7 +7902,7 @@ dmm.AUDIBLE_PASS = nil
 --- 
 --- --dmm.FUNC_RESISTANCE
 --- ```
----@type dmmmeasurelimitArraudiblestate
+---@type dmmmeasurelimitaudiblestate
 dmmmeasurelimitArr.audible = dmm.AUDIBLE_NONE
 ---@class dmmdigitizelimitArr
 local dmmdigitizelimitArr = {}
@@ -7913,7 +7913,7 @@ dmm.digitize.limit = {}
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias dmmdigitizelimitArrautoclearstate
+---@alias dmmdigitizelimitautoclearstate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -7935,7 +7935,7 @@ dmm.ON = nil
 --- 
 --- --Turns off autoclear for limit 1 when measuring digitize voltage.
 --- ```
----@type dmmdigitizelimitArrautoclearstate
+---@type dmmdigitizelimitautoclearstate
 dmmdigitizelimitArr.autoclear = dmm.OFF
 
 
@@ -7964,7 +7964,7 @@ dmm.FAIL_HIGH = nil
 dmm.FAIL_LOW = nil
 dmm.FAIL_BOTH = nil
 
----@alias dmmdigitizelimitArrfailvalue
+---@alias dmmdigitizelimitfailvalue
 ---|`dmm.FAIL_NONE`
 ---|`dmm.FAIL_HIGH`
 ---|`dmm.FAIL_LOW`
@@ -7987,13 +7987,13 @@ dmm.FAIL_BOTH = nil
 --- 
 --- --The results of the limit test for limit Y:
 --- --dmm.FAIL_NONE: Test passed; measurement under or equal to the high limitdmm.FAIL_HIGH: Test failed; measurement exceeded high limitdmm.FAIL_LOW: Test failed; measurement exceeded low limitdmm.FAIL_BOTH: Test failed; measurement exceeded both --- ```
----@type dmmdigitizelimitArrfailvalue
+---@type dmmdigitizelimitfailvalue
 dmmdigitizelimitArr.fail = dmm.FAIL_NONE
 
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias dmmdigitizelimitArrenablestate
+---@alias dmmdigitizelimitenablestate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -8014,14 +8014,14 @@ dmm.ON = nil
 --- 
 --- --Limit Y testing:
 --- --Disable: dmm.OFFEnable: --- ```
----@type dmmdigitizelimitArrenablestate
+---@type dmmdigitizelimitenablestate
 dmmdigitizelimitArr.enable = dmm.OFF
 
 dmm.AUDIBLE_NONE = nil
 dmm.AUDIBLE_FAIL = nil
 dmm.AUDIBLE_PASS = nil
 
----@alias dmmdigitizelimitArraudiblevalue
+---@alias dmmdigitizelimitaudiblevalue
 ---|`dmm.AUDIBLE_NONE`
 ---|`dmm.AUDIBLE_FAIL`
 ---|`dmm.AUDIBLE_PASS`
@@ -8043,7 +8043,7 @@ dmm.AUDIBLE_PASS = nil
 --- 
 --- --When the beeper sounds:
 --- --Never: dmm.AUDIBLE_NONEOn test failure: dmm.AUDIBLE_FAILOn test pass: dmm.AUDIBL--- ```
----@type dmmdigitizelimitArraudiblevalue
+---@type dmmdigitizelimitaudiblevalue
 dmmdigitizelimitArr.audible = dmm.AUDIBLE_NONE
 ---@class dmm.measure.math
 dmm.measure.math = {}
@@ -8344,7 +8344,7 @@ dmm.OFF = 4
 dmm.ON = nil
 dmm.OCOMP_AUTO = nil
 
----@alias any
+---@alias dmmmeasureoffsetcompensationenablestate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 ---|`dmm.OCOMP_AUTO`
@@ -8370,7 +8370,7 @@ dmm.OCOMP_AUTO = nil
 --- --Sets the measurement function to resistance. Set the instrument for 4-wire RTD and turn offset compensation on.
 --- --Make a measurement.
 --- ```
----@type any
+---@type dmmmeasureoffsetcompensationenablestate
 dmm.measure.offsetcompensation.enable = dmm.OFF
 ---@class dmm.measure.rel
 dmm.measure.rel = {}
@@ -8556,7 +8556,7 @@ dmm.digitize.coupling = {}
 dmm.COUPLING_AC = nil
 dmm.COUPLING_DC = nil
 
----@alias any
+---@alias dmmdigitizecouplingtypecouplingType
 ---|`dmm.COUPLING_AC`
 ---|`dmm.COUPLING_DC`
 
@@ -8578,13 +8578,13 @@ dmm.COUPLING_DC = nil
 --- 
 --- --Set the digitize voltage coupling to AC.
 --- ```
----@type any
+---@type dmmdigitizecouplingtypecouplingType
 dmm.digitize.coupling.type = dmm.COUPLING_AC
 
 dmm.AC_FILTER_SLOW = nil
 dmm.AC_FILTER_FAST = nil
 
----@alias any
+---@alias dmmdigitizecouplingacfiltertype
 ---|`dmm.AC_FILTER_SLOW`
 ---|`dmm.AC_FILTER_FAST`
 
@@ -8609,7 +8609,7 @@ dmm.AC_FILTER_FAST = nil
 --- --Set the coupling type to AC.
 --- --Set the filter to fast.
 --- ```
----@type any
+---@type dmmdigitizecouplingacfiltertype
 dmm.digitize.coupling.acfilter = dmm.AC_FILTER_SLOW
 
 
@@ -8679,7 +8679,7 @@ dmm.digitize.analogtrigger.mode = dmm.MODE_EDGE
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmdigitizeanalogtriggerhighfreqrejectsetting
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -8701,7 +8701,7 @@ dmm.ON = nil
 --- 
 --- --Set the measure function to DC voltage and turn high frequency rejection for the analog trigger to on.
 --- ```
----@type any
+---@type dmmdigitizeanalogtriggerhighfreqrejectsetting
 dmm.digitize.analogtrigger.highfreqreject = dmm.OFF
 ---@class dmm.measure.analogtrigger
 dmm.measure.analogtrigger = {}
@@ -8750,7 +8750,7 @@ dmm.measure.analogtrigger.mode = dmm.MODE_EDGE
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmmeasureanalogtriggerhighfreqrejectsetting
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -8772,7 +8772,7 @@ dmm.ON = nil
 --- 
 --- --Set the measure function to DC voltage and turn high frequency rejection for the analog trigger to on.
 --- ```
----@type any
+---@type dmmmeasureanalogtriggerhighfreqrejectsetting
 dmm.measure.analogtrigger.highfreqreject = dmm.OFF
 ---@class dmm.digitize.comparator
 dmm.digitize.comparator = {}
@@ -8780,7 +8780,7 @@ dmm.digitize.comparator = {}
 dmm.EDGE_RISING = nil
 dmm.EDGE_FALLING = nil
 
----@alias any
+---@alias dmmdigitizecomparatoredgevalue
 ---|`dmm.EDGE_RISING`
 ---|`dmm.EDGE_FALLING`
 
@@ -8803,7 +8803,7 @@ dmm.EDGE_FALLING = nil
 --- 
 --- -- 
 --- ```
----@type any
+---@type dmmdigitizecomparatoredgevalue
 dmm.digitize.comparator.edge = dmm.EDGE_RISING
 ---@class dmm.measure.sense
 dmm.measure.sense = {}
@@ -8811,7 +8811,7 @@ dmm.measure.sense = {}
 dmm.ON = nil
 dmm.OFF = nil
 
----@alias any
+---@alias dmmmeasuresenseautorangevalue
 ---|`dmm.ON`
 ---|`dmm.OFF`
 
@@ -8834,7 +8834,7 @@ dmm.OFF = nil
 --- --Select the DC voltage ratio function.
 --- --Set the sense range to be set manually.
 --- ```
----@type any
+---@type dmmmeasuresenseautorangevalue
 dmm.measure.sense.autorange = dmm.ON
 
 
@@ -9252,7 +9252,7 @@ dmm.measure.offsetcompensation.delay = {}
 dmm.OFF = nil
 dmm.ON = nil
 
----@alias any
+---@alias dmmmeasureoffsetcompensationdelayautostate
 ---|`dmm.OFF`
 ---|`dmm.ON`
 
@@ -9275,7 +9275,7 @@ dmm.ON = nil
 --- 
 --- --Describe
 --- ```
----@type any
+---@type dmmmeasureoffsetcompensationdelayautostate
 dmm.measure.offsetcompensation.delay.auto = dmm.OFF
 
 
@@ -9323,7 +9323,7 @@ dmm.digitize.analogtrigger.pulse = {}
 dmm.CONDITION_GREATER = nil
 dmm.CONDITION_LESS = nil
 
----@alias any
+---@alias dmmdigitizeanalogtriggerpulseconditionvalue
 ---|`dmm.CONDITION_GREATER`
 ---|`dmm.CONDITION_LESS`
 
@@ -9354,7 +9354,7 @@ dmm.CONDITION_LESS = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type any
+---@type dmmdigitizeanalogtriggerpulseconditionvalue
 dmm.digitize.analogtrigger.pulse.condition = dmm.CONDITION_GREATER
 
 
@@ -9389,7 +9389,7 @@ dmm.digitize.analogtrigger.pulse.width = 0
 dmm.POLARITY_ABOVE = nil
 dmm.POLARITY_BELOW = nil
 
----@alias any
+---@alias dmmdigitizeanalogtriggerpulsepolarityvalue
 ---|`dmm.POLARITY_ABOVE`
 ---|`dmm.POLARITY_BELOW`
 
@@ -9420,7 +9420,7 @@ dmm.POLARITY_BELOW = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type any
+---@type dmmdigitizeanalogtriggerpulsepolarityvalue
 dmm.digitize.analogtrigger.pulse.polarity = dmm.POLARITY_ABOVE
 
 
@@ -9457,7 +9457,7 @@ dmm.measure.analogtrigger.pulse = {}
 dmm.CONDITION_GREATER = nil
 dmm.CONDITION_LESS = nil
 
----@alias any
+---@alias dmmmeasureanalogtriggerpulseconditionvalue
 ---|`dmm.CONDITION_GREATER`
 ---|`dmm.CONDITION_LESS`
 
@@ -9492,7 +9492,7 @@ dmm.CONDITION_LESS = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type any
+---@type dmmmeasureanalogtriggerpulseconditionvalue
 dmm.measure.analogtrigger.pulse.condition = dmm.CONDITION_GREATER
 
 
@@ -9564,7 +9564,7 @@ dmm.measure.analogtrigger.pulse.width = 0
 dmm.POLARITY_ABOVE = nil
 dmm.POLARITY_BELOW = nil
 
----@alias any
+---@alias dmmmeasureanalogtriggerpulsepolarityvalue
 ---|`dmm.POLARITY_ABOVE`
 ---|`dmm.POLARITY_BELOW`
 
@@ -9599,7 +9599,7 @@ dmm.POLARITY_BELOW = nil
 --- --Set the condition to be detect trigger within the pulse width.
 --- --Set the trigger to occur when the pulse is below the level.
 --- ```
----@type any
+---@type dmmmeasureanalogtriggerpulsepolarityvalue
 dmm.measure.analogtrigger.pulse.polarity = dmm.POLARITY_ABOVE
 ---@class dmm.digitize.analogtrigger.edge
 dmm.digitize.analogtrigger.edge = {}

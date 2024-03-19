@@ -98,7 +98,7 @@ function dataqueue.clear() end
 
 dataqueue.CAPACITY = nil
 
----@alias dataqueue.CAPACITY
+---@alias dataqueueCAPACITYcount
 ---|`dataqueue.CAPACITY`
 
 
@@ -125,7 +125,7 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
----@type dataqueue.CAPACITY | integer
+---@type dataqueueCAPACITYcount | integer
 dataqueue.CAPACITY = dataqueue.CAPACITY
 
 
@@ -155,7 +155,7 @@ dataqueue.CAPACITY = dataqueue.CAPACITY
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
----@type number
+---@type integer
 dataqueue.count = 0
 
 
@@ -2948,8 +2948,8 @@ eventlog.SEV_ALL = nil
 --- --3
 --- ```
 ---@param eventType eventloggetcounteventType Limits the return to specific event log types; set a cumulative integer value that represents the event log types to
----@return any count A count finds the number of unread events in the event log
----@overload fun():count:any
+---@return integer count A count finds the number of unread events in the event log
+---@overload fun():count:integer
 function eventlog.getcount(eventType) end
 
 eventlog.SEV_INFO = nil
@@ -4184,7 +4184,7 @@ smu.measure.autorangehigh = 0
 --- --199   30.067648716   1.4131290582142e-10
 --- --200   30.219497716   1.5521067764368e-10
 --- ```
----@type any
+---@type integer
 smu.measure.count = 0
 
 smu.UNIT_AMP = nil
@@ -4495,7 +4495,7 @@ function trigger.model.getblocklist() end
 --- --At end of execution, 10 readings are stored in defbuffer1.
 --- ```
 ---@param blockNumber number The sequence of the block in the trigger model
----@return any output Returns the count value of the trigger model counter block.
+---@return integer output Returns the count value of the trigger model counter block.
 function trigger.model.getbranchcount(blockNumber) end
 
 
@@ -6917,7 +6917,7 @@ smu.measure.math.format = smu.MATH_MXB
 --- --Set the percentage value to 50 for voltage measurements.
 --- --Enable math operations.
 --- ```
----@type any
+---@type number
 smu.measure.math.percent = 0
 ---@class smu.measure.rel
 smu.measure.rel = {}
@@ -6990,7 +6990,7 @@ smu.measure.rel.enable = smu.OFF
 --- 
 --- --Sets the measurement function to current, performs a current measurement, uses it as the relative offset value, and enables the relative offset for current measurements.
 --- ```
----@type any
+---@type number
 smu.measure.rel.level = 0
 ---@class smumeasurelimitArr
 local smumeasurelimitArr = {}
@@ -7753,7 +7753,7 @@ smu.measure.filter = {}
 --- --Set the averaging filter type to moving average, with a filter count of 10.
 --- --Enable the averaging filter.
 --- ```
----@type any
+---@type integer
 smu.measure.filter.count = 0
 
 smu.FILTER_MOVING_AVG = nil

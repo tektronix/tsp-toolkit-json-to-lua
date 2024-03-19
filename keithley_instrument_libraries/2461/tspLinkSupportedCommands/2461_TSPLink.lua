@@ -98,7 +98,7 @@ function dataqueue.clear() end
 
 dataqueue.CAPACITY = nil
 
----@alias dataqueue.CAPACITY
+---@alias dataqueueCAPACITYcount
 ---|`dataqueue.CAPACITY`
 
 
@@ -125,7 +125,7 @@ dataqueue.CAPACITY = nil
 --- --Output:
 --- --There are 128 items in the data queue
 --- ```
----@type dataqueue.CAPACITY | integer
+---@type dataqueueCAPACITYcount | integer
 dataqueue.CAPACITY = dataqueue.CAPACITY
 
 
@@ -155,7 +155,7 @@ dataqueue.CAPACITY = dataqueue.CAPACITY
 --- --There are 128 items in the data queue
 --- --There are 0 items in the data queue
 --- ```
----@type number
+---@type integer
 dataqueue.count = 0
 
 
@@ -1584,7 +1584,7 @@ trigger.BLOCK_RESET_BRANCH_COUNT = 0
 smu.OFF = nil
 smu.ON = nil
 
----@alias any
+---@alias triggermodelsetblocktriggerBLOCK_SOURCE_PULSE_OUTPUTstate
 ---|`smu.OFF`
 ---|`smu.ON`
 
@@ -1723,7 +1723,7 @@ smu.FASTRANGE_ON = nil
 smu.FASTRANGE_PERSIST = nil
 smu.ON = nil
 
----@alias any
+---@alias smufastrangechangestate
 ---|`smu.FASTRANGE_OFF`
 ---|`smu.FASTRANGE_ON`
 ---|`smu.FASTRANGE_PERSIST`
@@ -1755,13 +1755,13 @@ smu.ON = nil
 --- 
 --- --This example demonstrates the difference between the smu.FASTRANGE_ON and smu.FASTRANGE_PERSIST options.
 --- ```
----@type any
+---@type smufastrangechangestate
 smu.fastrangechange = smu.FASTRANGE_OFF
 
 smu.OFF = nil
 smu.ON = nil
 
----@alias any
+---@alias smupriorityvoltagestate
 ---|`smu.OFF`
 ---|`smu.ON`
 
@@ -1782,7 +1782,7 @@ smu.ON = nil
 --- 
 --- --Use the voltage range to select the rail.
 --- ```
----@type any
+---@type smupriorityvoltagestate
 smu.priorityvoltage = smu.OFF
 ---@class buffer
 buffer = {}
@@ -3002,8 +3002,8 @@ eventlog.SEV_ALL = nil
 --- --3
 --- ```
 ---@param eventType eventloggetcounteventType Limits the return to specific event log types; set a cumulative integer value that represents the event log types to
----@return any count A count finds the number of unread events in the event log
----@overload fun():count:any
+---@return integer count A count finds the number of unread events in the event log
+---@overload fun():count:integer
 function eventlog.getcount(eventType) end
 
 eventlog.SEV_INFO = nil
@@ -4281,7 +4281,7 @@ smu.measure.autorangehigh = 0
 --- --199   30.067648716   1.4131290582142e-10
 --- --200   30.219497716   1.5521067764368e-10
 --- ```
----@type any
+---@type integer
 smu.measure.count = 0
 
 smu.UNIT_AMP = nil
@@ -4600,7 +4600,7 @@ function trigger.model.getblocklist() end
 --- --At end of execution, 10 readings are stored in defbuffer1.
 --- ```
 ---@param blockNumber number The sequence of the block in the trigger model
----@return any output Returns the count value of the trigger model counter block.
+---@return integer output Returns the count value of the trigger model counter block.
 function trigger.model.getbranchcount(blockNumber) end
 
 
@@ -7196,7 +7196,7 @@ smu.DIGITS_5_5 = nil
 smu.DIGITS_4_5 = nil
 smu.DIGITS_3_5 = nil
 
----@alias any
+---@alias smudigitizedisplaydigitsvalue
 ---|`smu.DIGITS_6_5`
 ---|`smu.DIGITS_5_5`
 ---|`smu.DIGITS_4_5`
@@ -7221,7 +7221,7 @@ smu.DIGITS_3_5 = nil
 --- --Set the instrument to use the digitize current measure function.
 --- --Set the front panel to display 3½ digits.
 --- ```
----@type any
+---@type smudigitizedisplaydigitsvalue
 smu.digitize.displaydigits = smu.DIGITS_6_5
 
 
@@ -7295,7 +7295,7 @@ smu.FUNC_DIGITIZE_CURRENT = nil
 smu.FUNC_DIGITIZE_VOLTAGE = nil
 smu.FUNC_NONE = nil
 
----@alias any
+---@alias smudigitizefuncvalue
 ---|`smu.FUNC_DIGITIZE_CURRENT`
 ---|`smu.FUNC_DIGITIZE_VOLTAGE`
 ---|`smu.FUNC_NONE`
@@ -7317,12 +7317,12 @@ smu.FUNC_NONE = nil
 --- 
 --- --Set the measurement function to digitize current.
 --- ```
----@type any
+---@type smudigitizefuncvalue
 smu.digitize.func = smu.FUNC_DIGITIZE_CURRENT
 
 smu.APERTURE_AUTO = nil
 
----@alias any
+---@alias smudigitizeaperturetime
 ---|`smu.APERTURE_AUTO`
 
 
@@ -7347,7 +7347,7 @@ smu.APERTURE_AUTO = nil
 --- --Set the digitize function to measure current. Set the sample rate to 200,000, with a count of 1, and automatic aperture.
 --- --Make a digitize measurement.
 --- ```
----@type any
+---@type smudigitizeaperturetime
 smu.digitize.aperture = smu.APERTURE_AUTO
 
 
@@ -7403,7 +7403,7 @@ smu.UNIT_OHM = nil
 smu.UNIT_WATT = nil
 smu.UNIT_AMP = nil
 
----@alias any
+---@alias smudigitizeunitvalue
 ---|`smu.UNIT_VOLT`
 ---|`smu.UNIT_OHM`
 ---|`smu.UNIT_WATT`
@@ -7428,13 +7428,13 @@ smu.UNIT_AMP = nil
 --- --Set the measure function to digitize voltage.
 --- --Set the units to display as watts.
 --- ```
----@type any
+---@type smudigitizeunitvalue
 smu.digitize.unit = smu.UNIT_VOLT
 
 smu.SENSE_2WIRE = nil
 smu.SENSE_4WIRE = nil
 
----@alias any
+---@alias smudigitizesensesensing
 ---|`smu.SENSE_2WIRE`
 ---|`smu.SENSE_4WIRE`
 
@@ -7457,7 +7457,7 @@ smu.SENSE_4WIRE = nil
 --- --Set the measurement function to digitize current.
 --- --Set the sense to 4-wire remote.
 --- ```
----@type any
+---@type smudigitizesensesensing
 smu.digitize.sense = smu.SENSE_2WIRE
 ---@class acal.lastrun
 acal.lastrun = {}
@@ -7720,7 +7720,7 @@ smu.contact = {}
 smu.ON = nil
 smu.OFF = nil
 
----@alias any
+---@alias smucontactenablestate
 ---|`smu.ON`
 ---|`smu.OFF`
 
@@ -7748,14 +7748,14 @@ smu.OFF = nil
 --- --smu.ON
 --- --Indicates contact check is enabled.
 --- ```
----@type any
+---@type smucontactenablestate
 smu.contact.enable = smu.ON
 
 smu.THRESHOLD_2_OHM = nil
 smu.THRESHOLD_15_OHM = nil
 smu.THRESHOLD_50_OHM = nil
 
----@alias any
+---@alias smucontactthresholdlevel
 ---|`smu.THRESHOLD_2_OHM`
 ---|`smu.THRESHOLD_15_OHM`
 ---|`smu.THRESHOLD_50_OHM`
@@ -7783,7 +7783,7 @@ smu.THRESHOLD_50_OHM = nil
 --- --smu.THRESHOLD_15_OHM
 --- --Indicates that the contact check threshold is set to 15 Ω.
 --- ```
----@type any
+---@type smucontactthresholdlevel
 smu.contact.threshold = smu.THRESHOLD_2_OHM
 
 
@@ -7807,7 +7807,7 @@ smu.contact.threshold = smu.THRESHOLD_2_OHM
 --- --true
 --- --Indicates that all connections passed the contact check operation.
 --- ```
----@return any result The result of the contact check operation
+---@return boolean result The result of the contact check operation
 function smu.contact.check() end
 
 
@@ -7831,9 +7831,9 @@ function smu.contact.check() end
 --- --false false true
 --- --Indicates that the high and low connections exceeded the specified contact check resistance threshold value, but the guard connection did not exceed that value.
 --- ```
----@return any high The result of the contact check operation for the high connection
----@return any low The result of the contact check operation for the low connection
----@return any guard The result of the contact check operation for the guard connection
+---@return boolean high The result of the contact check operation for the high connection
+---@return boolean low The result of the contact check operation for the low connection
+---@return boolean guard The result of the contact check operation for the guard connection
 function smu.contact.checkall() end
 ---@class smu.measure.math
 smu.measure.math = {}
@@ -7920,7 +7920,7 @@ smu.measure.math.format = smu.MATH_MXB
 --- --Set the percentage value to 50 for voltage measurements.
 --- --Enable math operations.
 --- ```
----@type any
+---@type number
 smu.measure.math.percent = 0
 ---@class smu.measure.rel
 smu.measure.rel = {}
@@ -7993,7 +7993,7 @@ smu.measure.rel.enable = smu.OFF
 --- 
 --- --Sets the measurement function to current, performs a current measurement, uses it as the relative offset value, and enables the relative offset for current measurements.
 --- ```
----@type any
+---@type number
 smu.measure.rel.level = 0
 ---@class smumeasurelimitArr
 local smumeasurelimitArr = {}
@@ -8766,7 +8766,7 @@ smu.measure.filter = {}
 --- --Set the averaging filter type to moving average, with a filter count of 10.
 --- --Enable the averaging filter.
 --- ```
----@type any
+---@type integer
 smu.measure.filter.count = 0
 
 smu.FILTER_MOVING_AVG = nil
@@ -9051,7 +9051,7 @@ smu.digitize.limit = {}
 smu.OFF = nil
 smu.ON = nil
 
----@alias any
+---@alias smudigitizelimitautoclearstate
 ---|`smu.OFF`
 ---|`smu.ON`
 
@@ -9073,7 +9073,7 @@ smu.ON = nil
 --- 
 --- --Turns off autoclear for limit 1 when measuring digitize voltage.
 --- ```
----@type any
+---@type smudigitizelimitautoclearstate
 smudigitizelimitArr.autoclear = smu.OFF
 
 
@@ -9102,7 +9102,7 @@ smu.FAIL_HIGH = nil
 smu.FAIL_LOW = nil
 smu.FAIL_BOTH = nil
 
----@alias any
+---@alias smudigitizelimitfailvalue
 ---|`smu.FAIL_NONE`
 ---|`smu.FAIL_HIGH`
 ---|`smu.FAIL_LOW`
@@ -9125,13 +9125,13 @@ smu.FAIL_BOTH = nil
 --- 
 --- --The results of the limit test for limit Y:
 --- --smu.FAIL_NONE: Test passed; measurement under or equal to the high limitsmu.FAIL_HIGH: Test failed; measurement exceeded high limitsmu.FAIL_LOW: Test failed; measurement exceeded low limitsmu.FAIL_BOTH: Test failed; measurement exceeded both --- ```
----@type any
+---@type smudigitizelimitfailvalue
 smudigitizelimitArr.fail = smu.FAIL_NONE
 
 smu.OFF = nil
 smu.ON = nil
 
----@alias any
+---@alias smudigitizelimitenablestate
 ---|`smu.OFF`
 ---|`smu.ON`
 
@@ -9152,14 +9152,14 @@ smu.ON = nil
 --- 
 --- --Limit Y testing:
 --- --Disable: smu.OFFEnable: --- ```
----@type any
+---@type smudigitizelimitenablestate
 smudigitizelimitArr.enable = smu.OFF
 
 smu.AUDIBLE_NONE = nil
 smu.AUDIBLE_FAIL = nil
 smu.AUDIBLE_PASS = nil
 
----@alias any
+---@alias smudigitizelimitaudiblevalue
 ---|`smu.AUDIBLE_NONE`
 ---|`smu.AUDIBLE_FAIL`
 ---|`smu.AUDIBLE_PASS`
@@ -9181,7 +9181,7 @@ smu.AUDIBLE_PASS = nil
 --- 
 --- --When the beeper sounds:
 --- --Never: smu.AUDIBLE_NONEOn test failure: smu.AUDIBLE_FAILOn test pass: smu.AUDIBL--- ```
----@type any
+---@type smudigitizelimitaudiblevalue
 smudigitizelimitArr.audible = smu.AUDIBLE_NONE
 ---@class smu.digitize.rel
 smu.digitize.rel = {}
@@ -9234,7 +9234,7 @@ smu.digitize.rel.level = 0
 smu.ON = nil
 smu.OFF = nil
 
----@alias any
+---@alias smudigitizerelenablestate
 ---|`smu.ON`
 ---|`smu.OFF`
 
@@ -9257,7 +9257,7 @@ smu.OFF = nil
 --- 
 --- --Enables the relative measurements for digitize current after using the acquire command to set the relative level.
 --- ```
----@type any
+---@type smudigitizerelenablestate
 smu.digitize.rel.enable = smu.ON
 ---@class smu.digitize.math
 smu.digitize.math = {}
@@ -9265,7 +9265,7 @@ smu.digitize.math = {}
 smu.OFF = nil
 smu.ON = nil
 
----@alias any
+---@alias smudigitizemathenablevalue
 ---|`smu.OFF`
 ---|`smu.ON`
 
@@ -9309,14 +9309,14 @@ smu.ON = nil
 --- ---99.999126228
 --- ---99.998932056
 --- ```
----@type any
+---@type smudigitizemathenablevalue
 smu.digitize.math.enable = smu.OFF
 
 smu.MATH_MXB = nil
 smu.MATH_PERCENT = nil
 smu.MATH_RECIPROCAL = nil
 
----@alias any
+---@alias smudigitizemathformatoperation
 ---|`smu.MATH_MXB`
 ---|`smu.MATH_PERCENT`
 ---|`smu.MATH_RECIPROCAL`
@@ -9340,7 +9340,7 @@ smu.MATH_RECIPROCAL = nil
 --- 
 --- --Enables the reciprocal math operation on digitize voltage measurements.
 --- ```
----@type any
+---@type smudigitizemathformatoperation
 smu.digitize.math.format = smu.MATH_MXB
 
 
