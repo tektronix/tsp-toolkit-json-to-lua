@@ -1,5 +1,5 @@
 {
-  "name": "@tek-engineering/keithley_instrument_libraries",
+  "name": "@tektronix/keithley_instrument_libraries",
   "version": "0.15.0",
   "description": "",
   "main": "index.js",
