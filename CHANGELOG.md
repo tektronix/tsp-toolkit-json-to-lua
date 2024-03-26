@@ -47,7 +47,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Language feature has been added for 24XX and DMM7510 command set(TSP-232)
 
 
-[0.15.0]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.15.0
-[0.14.2]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.14.2
-[0.14.1]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.14.1
-[0.11.2]: https://github.com/TEK-Engineering/tsp-toolkit-json-to-lua/releases/tag/v0.11.2
+[0.15.0]: https://github.com/tektronix/tsp-toolkit-json-to-lua/releases/tag/v0.15.0
+[0.14.2]: https://github.com/tektronix/tsp-toolkit-json-to-lua/releases/tag/v0.14.2
+[0.14.1]: https://github.com/tektronix/tsp-toolkit-json-to-lua/releases/tag/v0.14.1
+[0.11.2]: https://github.com/tektronix/tsp-toolkit-json-to-lua/releases/tag/v0.11.2
